@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
+import 'package:onde_gastei_app/app/core/ui/extensions/theme_extension.dart';
+import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 
-class AuthHomePage extends StatefulWidget {
-  const AuthHomePage({Key? key}) : super(key: key);
+class AuthPage extends StatefulWidget {
+  const AuthPage({required this.authController, Key? key}) : super(key: key);
+
+  static const router = '/auth';
+
+  final AuthController authController;
 
   @override
-  State<AuthHomePage> createState() => _AuthHomePageState();
+  _AuthPageState createState() => _AuthPageState();
 }
 
-class _AuthHomePageState extends State<AuthHomePage> {
+class _AuthPageState extends State<AuthPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      if (await widget.authController.isLogged()) {
+        await Navigator.of(context).pushReplacementNamed('/login');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +37,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
               'Onde',
               style: TextStyle(
                 fontSize: 36.sp,
-                color: Theme.of(context).primaryColor,
+                color: context.primaryColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -28,7 +45,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
               '?',
               style: TextStyle(
                 fontSize: 72.sp,
-                color: Theme.of(context).primaryColor,
+                color: context.primaryColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -36,7 +53,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
               'Gastei',
               style: TextStyle(
                 fontSize: 36.sp,
-                color: Theme.of(context).primaryColor,
+                color: context.primaryColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
