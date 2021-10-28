@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UiConfig {
@@ -8,7 +9,12 @@ class UiConfig {
   static String get title => 'OndeGastei';
 
   static ThemeData get theme => ThemeData(
-        primaryColorBrightness: Brightness.light,
+        appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+          ),
+        ),
         primaryColor: const Color(0xFF32B768),
         primaryColorDark: const Color(0xff278F51),
         primaryColorLight: const Color(0xffDAF2E4),

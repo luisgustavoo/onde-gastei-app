@@ -37,6 +37,9 @@ dependencies:
   provider: ^6.0.1
   google_fonts: ^2.1.0
   flutter_screenutil: ^5.0.0+2
+  dio: ^4.0.1
+  flutter_secure_storage: ^4.2.1
+  shared_preferences: ^2.0.8
 
 dev_dependencies:
   flutter_test:

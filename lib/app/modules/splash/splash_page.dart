@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
 import 'package:onde_gastei_app/app/core/ui/extensions/theme_extension.dart';
-import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
+import 'package:onde_gastei_app/app/modules/login/controllers/login_controller.dart';
 
-class AuthPage extends StatefulWidget {
-  const AuthPage({required this.authController, Key? key}) : super(key: key);
+class SplashPage extends StatefulWidget {
+  const SplashPage({required this.loginController, Key? key}) : super(key: key);
 
-  static const router = '/auth';
+  static const router = '/splash';
 
-  final AuthController authController;
+  final LoginController loginController;
 
   @override
-  _AuthPageState createState() => _AuthPageState();
+  _SplashPageState createState() => _SplashPageState();
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      if (await widget.authController.isLogged()) {
-        await Navigator.of(context).pushReplacementNamed('/login');
-      }
-    });
+    Future<void>.delayed(
+      const Duration(seconds: 2),
+    ).whenComplete(
+      () => Navigator.of(context).pushNamed('/login'),
+    );
   }
 
   @override
