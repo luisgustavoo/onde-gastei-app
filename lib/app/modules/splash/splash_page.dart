@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
-import 'package:onde_gastei_app/app/core/ui/extensions/theme_extension.dart';
-import 'package:onde_gastei_app/app/modules/login/controllers/login_controller.dart';
+import 'package:onde_gastei_app/app/core/ui/logo.dart';
+import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({required this.loginController, Key? key}) : super(key: key);
+  const SplashPage({required this.authController, Key? key}) : super(key: key);
 
   static const router = '/splash';
 
-  final LoginController loginController;
+  final AuthController authController;
 
   @override
   _SplashPageState createState() => _SplashPageState();
@@ -18,46 +17,21 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    Future<void>.delayed(
-      const Duration(seconds: 2),
-    ).whenComplete(
-      () => Navigator.of(context).pushNamed('/login'),
-    );
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      await Future<void>.delayed(const Duration(seconds: 2));
+      if (await widget.authController.isLogged()) {
+        await Navigator.of(context).pushReplacementNamed('/home');
+      } else {
+        await Navigator.of(context).pushReplacementNamed('/login');
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Onde',
-              style: TextStyle(
-                fontSize: 36.sp,
-                color: context.primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              '?',
-              style: TextStyle(
-                fontSize: 72.sp,
-                color: context.primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Gastei',
-              style: TextStyle(
-                fontSize: 36.sp,
-                color: context.primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+        child: Logo(),
       ),
     );
   }

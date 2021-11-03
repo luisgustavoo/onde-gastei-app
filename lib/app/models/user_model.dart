@@ -1,12 +1,27 @@
 class UserModel {
-  UserModel({required this.id, required this.name, required this.email});
+  UserModel({
+    required this.id,
+    required this.name,
+    required this.email,
+  });
 
-  UserModel.empty()
-      : id = 0,
-        name = '',
-        email = '';
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      id: map['id'] as int,
+      name: map['name'] as String,
+      email: map['email'] as String,
+    );
+  }
 
   final int id;
-  final String name;
+  String name;
   final String email;
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'email': email,
+    };
+  }
 }
