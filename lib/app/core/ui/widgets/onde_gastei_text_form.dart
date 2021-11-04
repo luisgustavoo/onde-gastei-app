@@ -7,6 +7,8 @@ class OndeGasteiTextForm extends StatelessWidget {
       this.validator,
       this.obscureText = false,
       this.suffixIcon,
+      this.prefixIcon,
+      this.textInputType = TextInputType.text,
       Key? key})
       : _obscureTextNotifier = ValueNotifier<bool>(obscureText),
         assert(!(obscureText == true && suffixIcon != null),
@@ -18,7 +20,9 @@ class OndeGasteiTextForm extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final bool obscureText;
   final IconButton? suffixIcon;
+  final Icon? prefixIcon;
   final ValueNotifier<bool> _obscureTextNotifier;
+  final TextInputType textInputType;
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +30,20 @@ class OndeGasteiTextForm extends StatelessWidget {
       valueListenable: _obscureTextNotifier,
       builder: (context, value, child) {
         return TextFormField(
+          key: key,
           obscureText: value,
           controller: controller,
           validator: validator,
+          keyboardType: textInputType,
           decoration: InputDecoration(
             hintText: label,
+            prefixIcon: prefixIcon,
             suffixIcon: obscureText
                 ? IconButton(
                     onPressed: () {
                       _obscureTextNotifier.value = !_obscureTextNotifier.value;
                     },
-                    icon: Icon(value ? Icons.visibility : Icons.visibility_off),
+                    icon: Icon(value ? Icons.visibility_off : Icons.visibility),
                     splashRadius: 10,
                   )
                 : suffixIcon,

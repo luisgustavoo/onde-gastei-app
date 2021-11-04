@@ -12,16 +12,12 @@ import 'package:onde_gastei_app/app/modules/home/page/home_page.dart';
 import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
 import 'package:provider/provider.dart';
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
   @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  @override
   Widget build(BuildContext context) {
+
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,
@@ -53,12 +49,12 @@ class _AppState extends State<App> {
           theme: UiConfig.theme,
           routes: {
             SplashPage.router: (context) => SplashPage(
-                  authController: context.read<AuthController>(),
-                ),
+              authController: context.read<AuthController>(),
+            ),
             LoginPage.router: (context) => const LoginPage(),
             HomePage.router: (context) => HomePage(
-                  homeController: context.read<HomeController>(),
-                ),
+              homeController: context.read<HomeController>(),
+            ),
             RegisterPage.router: (context) => const RegisterPage(),
           },
         ),
@@ -66,3 +62,4 @@ class _AppState extends State<App> {
     );
   }
 }
+

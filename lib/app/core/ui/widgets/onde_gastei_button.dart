@@ -9,7 +9,7 @@ class OndeGasteiButton extends StatelessWidget {
     double height = 60,
     double borderRadius = 20,
     Color? color,
-    VoidCallback? onPressed,
+        VoidCallback? onPressed,
     Key? key,
   })  : _child = child,
         _height = height,

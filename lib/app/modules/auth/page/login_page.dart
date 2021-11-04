@@ -14,6 +14,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  //final _emailKey = GlobalKey<FormFieldState>();
+  //final _passwordKey = GlobalKey<FormFieldState>();
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +37,88 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: 60.h,
                 ),
-                const BuildLoginForm(),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      OndeGasteiTextForm(
+                        label: 'E-mail',
+                        prefixIcon: const Icon(Icons.email_outlined),
+                        controller: _emailController,
+                        textInputType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value != null) {
+                            if (value.isEmpty) {
+                              return 'Informe o email';
+                            }
+
+                            if (!value.contains('@')) {
+                              return 'Email inválirdo';
+                            }
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 32.h,
+                      ),
+                      OndeGasteiTextForm(
+                        label: 'Senha',
+                        obscureText: true,
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        controller: _passwordController,
+                        validator: (value) {
+                          if (value != null) {
+                            if (value.isEmpty) {
+                              return 'Informe a senha';
+                            }
+                            if (value.length < 4) {
+                              return 'A senha deve no mínimo 4 caracteres';
+                            }
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 16.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'Esqueceu a senha?',
+                              style: TextStyle(fontSize: 12.sp),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 32.h,
+                      ),
+                      OndeGasteiButton(
+                        Text(
+                          'Entrar',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17.sp,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        onPressed: () {
+                          _formKey.currentState!.validate();
+                        },
+                      ),
+                      SizedBox(
+                        height: 32.h,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/register');
+                        },
+                        child: const Text('Cadastre-se'),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           )
@@ -38,89 +126,11 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-}
-
-class BuildLoginForm extends StatefulWidget {
-  const BuildLoginForm({Key? key}) : super(key: key);
 
   @override
-  _BuildLoginFormState createState() => _BuildLoginFormState();
-}
-
-class _BuildLoginFormState extends State<BuildLoginForm> {
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          OndeGasteiTextForm(
-            label: 'E-mail',
-            validator: (value) {
-              if (value != null) {
-                if (value.isEmpty) {
-                  return 'Informe o email';
-                }
-              }
-            },
-          ),
-          SizedBox(
-            height: 32.h,
-          ),
-          OndeGasteiTextForm(
-            label: 'Senha',
-            obscureText: true,
-            validator: (value) {
-              if (value != null) {
-                if (value.isEmpty) {
-                  return 'Informe a senha';
-                }
-                if (value.length < 4) {
-                  return 'A senha deve no mínimo 4 caracteres';
-                }
-              }
-            },
-          ),
-          SizedBox(
-            height: 16.h,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  'Esqueceu a senha?',
-                  style: TextStyle(fontSize: 12.sp),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 32.h,
-          ),
-          OndeGasteiButton(
-            const Text(
-              'Entrar',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () {},
-          ),
-          SizedBox(
-            height: 32.h,
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed('/register');
-            },
-            child: const Text('Cadastre-se'),
-          ),
-        ],
-      ),
-    );
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

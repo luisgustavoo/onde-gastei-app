@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
 import 'package:onde_gastei_app/app/core/ui/onde_gastei_material_color.dart';
 
 class UiConfig {
@@ -10,12 +11,23 @@ class UiConfig {
   static String get title => 'OndeGastei';
 
   static ThemeData get theme => ThemeData(
-        appBarTheme: const AppBarTheme(
-          systemOverlayStyle: SystemUiOverlayStyle(
+        appBarTheme: AppBarTheme(
+          systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.light,
-
+            statusBarIconBrightness: Brightness.dark,
+            //statusBarBrightness: Brightness.light
           ),
+          color: Colors.transparent,
+          elevation: 0,
+          iconTheme: const IconThemeData(
+            color: Color(0xFF585666),
+          ),
+          titleTextStyle: GoogleFonts.jost(
+            color: const Color(0xFF585666),
+            fontSize: 23.sp,
+            fontWeight: FontWeight.w500
+          ),
+          centerTitle: true,
         ),
         primaryColor: const Color(0xFF32B768),
         primaryColorDark: const Color(0xff278F51),
