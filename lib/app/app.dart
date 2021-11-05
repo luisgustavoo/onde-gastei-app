@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/local_storages/flutter_secure_storage_local_storage_impl.dart';
 import 'package:onde_gastei_app/app/core/local_storages/shared_preferences_local_storage_impl.dart';
+import 'package:onde_gastei_app/app/core/ui/rest_client/dio_rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/page/login_page.dart';
@@ -17,7 +18,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,
@@ -33,6 +33,9 @@ class App extends StatelessWidget {
           ),
           Provider(
             create: (_) => FlutterSecureStorageLocalStorageImpl(),
+          ),
+          Provider(
+            create: (context) => DioRestClient(),
           ),
           ChangeNotifierProvider(
             create: (context) => AuthController(
@@ -50,12 +53,12 @@ class App extends StatelessWidget {
           theme: UiConfig.theme,
           routes: {
             SplashPage.router: (context) => SplashPage(
-              authController: context.read<AuthController>(),
-            ),
+                  authController: context.read<AuthController>(),
+                ),
             LoginPage.router: (context) => const LoginPage(),
             HomePage.router: (context) => HomePage(
-              homeController: context.read<HomeController>(),
-            ),
+                  homeController: context.read<HomeController>(),
+                ),
             RegisterPage.router: (context) => const RegisterPage(),
           },
         ),
@@ -63,4 +66,3 @@ class App extends StatelessWidget {
     );
   }
 }
-

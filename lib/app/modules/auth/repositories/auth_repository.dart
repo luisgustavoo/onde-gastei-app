@@ -1,5 +1,1 @@
-class AuthRepository {
-  void teste() {
-    var a = 1;
-  }
-}
+class AuthRepository {}
