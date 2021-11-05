@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:onde_gastei_app/app/core/helpers/environments.dart';
 import 'package:onde_gastei_app/app/core/ui/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/rest_client/rest_client_exception.dart';
 import 'package:onde_gastei_app/app/core/ui/rest_client/rest_client_response.dart';
-import 'package:onde_gastei_app/helpers/environments.dart';
 
 class DioRestClient implements RestClient {
   DioRestClient({BaseOptions? options}) {

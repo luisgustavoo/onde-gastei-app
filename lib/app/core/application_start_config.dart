@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/helpers/environments.dart';
+import 'package:onde_gastei_app/app/core/helpers/environments.dart';
 
 class ApplicationStartConfig {
   Future<void> congifureApp() async {
