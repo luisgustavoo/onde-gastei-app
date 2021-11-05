@@ -25,7 +25,7 @@ class UiConfig {
           titleTextStyle: GoogleFonts.jost(
             color: const Color(0xFF585666),
             fontSize: 23.sp,
-            fontWeight: FontWeight.w500
+            fontWeight: FontWeight.w500,
           ),
           centerTitle: true,
         ),
@@ -51,20 +51,20 @@ class UiConfig {
           selectionHandleColor: const Color(0xFF32B768),
         ),
         inputDecorationTheme: InputDecorationTheme(
-          hintStyle: const TextStyle(
-            color: Color(0xFFC0C2D1),
-          ),
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          fillColor: const Color(0xFFEFEFEF),
-          filled: true,
-          labelStyle: const TextStyle(
-            color: Color(0xFFC0C2D1),
-            fontSize: 12,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
-          ),
-        ),
+            hintStyle: const TextStyle(
+              color: Color(0xFFC0C2D1),
+            ),
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            fillColor: const Color(0xFFEFEFEF),
+            filled: true,
+            labelStyle: TextStyle(
+              color: const Color(0xFFC0C2D1),
+              fontSize: 12.sp,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: BorderSide.none,
+            ),
+            contentPadding: EdgeInsets.symmetric(vertical: 16.h)),
       );
 }

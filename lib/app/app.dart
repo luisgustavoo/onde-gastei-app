@@ -44,6 +44,7 @@ class App extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: UiConfig.title,
           initialRoute: '/splash',
           theme: UiConfig.theme,

@@ -20,7 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
         leading: IconButton(
           splashRadius: 20,
           icon: const Icon(Icons.close),
-          onPressed: () {
+            onPressed: () {
             if (Navigator.of(context).canPop()) {
               Navigator.of(context).pop();
             }

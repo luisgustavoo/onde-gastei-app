@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "178710813676",
+    "project_id": "onde-gastei-d5360",
+    "storage_bucket": "onde-gastei-d5360.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178710813676:android:d5b5d5c7902a1da084bec9",
+        "android_client_info": {
+          "package_name": "br.app.ondegastei.onde_gastei_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "178710813676-or7vqevg0jjoh9no700o3d6johu52lnd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.app.ondegastei.onde_gastei_app",
+            "certificate_hash": "2a0fe49d724b2e92883381b058fc8dfb1908f694"
+          }
+        },
+        {
+          "client_id": "178710813676-7d1cc1m954nlak6lf3r0d6fbdkc8u7nj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj22RLL3gML9sg4USTTPhoHso09J8VkPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "178710813676-7d1cc1m954nlak6lf3r0d6fbdkc8u7nj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

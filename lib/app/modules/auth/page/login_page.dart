@@ -15,6 +15,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+
   //final _emailKey = GlobalKey<FormFieldState>();
   //final _passwordKey = GlobalKey<FormFieldState>();
 
@@ -31,11 +32,11 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 100.h,
+                  height: 128.h,
                 ),
                 const Logo(),
                 SizedBox(
-                  height: 60.h,
+                  height: 64.h,
                 ),
                 Form(
                   key: _formKey,
@@ -53,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                             }
 
                             if (!value.contains('@')) {
-                              return 'Email inválirdo';
+                              return 'Email inválido';
                             }
                           }
                         },
@@ -84,11 +85,16 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size.zero,
+                              padding: const EdgeInsets.all(5),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
                             child: Text(
                               'Esqueceu a senha?',
                               style: TextStyle(fontSize: 12.sp),
                             ),
+                            onPressed: () {},
                           ),
                         ],
                       ),
@@ -111,6 +117,11 @@ class _LoginPageState extends State<LoginPage> {
                         height: 32.h,
                       ),
                       TextButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: const EdgeInsets.all(5),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
                         onPressed: () {
                           Navigator.of(context).pushNamed('/register');
                         },
