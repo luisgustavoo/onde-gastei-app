@@ -1,4 +1,4 @@
-import 'package:onde_gastei_app/app/core/ui/rest_client/rest_client_response.dart';
+import 'package:onde_gastei_app/app/core/rest_client/rest_client_response.dart';
 
 class RestClientException implements Exception {
   RestClientException({
