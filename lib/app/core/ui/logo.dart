@@ -17,11 +17,11 @@ class Logo extends StatelessWidget {
               fontSize: 45.sp,
               color: context.primaryColor,
               fontWeight: FontWeight.bold,
-              height: 0.999.h,
+              // height: 0.999.h,
             ),
-            textHeightBehavior: const TextHeightBehavior(
-              leadingDistribution: TextLeadingDistribution.even,
-            ),
+            // textHeightBehavior: const TextHeightBehavior(
+            //   leadingDistribution: TextLeadingDistribution.even,
+            // ),
           ),
         ),
         Text(
@@ -30,11 +30,11 @@ class Logo extends StatelessWidget {
             fontSize: 85.sp,
             color: context.primaryColor,
             fontWeight: FontWeight.bold,
-            height: 0.8.h,
+            // height: 0.8.h,
           ),
-          textHeightBehavior: const TextHeightBehavior(
-            leadingDistribution: TextLeadingDistribution.even,
-          ),
+          // textHeightBehavior: const TextHeightBehavior(
+          //   leadingDistribution: TextLeadingDistribution.even,
+          // ),
         ),
         Text(
           'Gastei',
@@ -42,11 +42,11 @@ class Logo extends StatelessWidget {
             fontSize: 45.sp,
             color: context.primaryColor,
             fontWeight: FontWeight.bold,
-            height: 0.8.h,
+            // height: 0.8.h,
           ),
-          textHeightBehavior: const TextHeightBehavior(
-            leadingDistribution: TextLeadingDistribution.even,
-          ),
+          // textHeightBehavior: const TextHeightBehavior(
+          //   leadingDistribution: TextLeadingDistribution.even,
+          // ),
         ),
       ],
     );

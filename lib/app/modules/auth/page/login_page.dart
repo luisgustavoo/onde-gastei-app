@@ -32,11 +32,11 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 128.h,
+                  height: 100.h,
                 ),
                 const Logo(),
                 SizedBox(
-                  height: 64.h,
+                  height: 32.h,
                 ),
                 Form(
                   key: _formKey,

@@ -1,8 +1,10 @@
+import 'package:asuka/asuka.dart' as asuka;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/local_storages/flutter_secure_storage_local_storage_impl.dart';
 import 'package:onde_gastei_app/app/core/local_storages/shared_preferences_local_storage_impl.dart';
+import 'package:onde_gastei_app/app/core/logs/log_impl.dart';
 import 'package:onde_gastei_app/app/core/rest_client/dio_rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
@@ -29,13 +31,16 @@ class App extends StatelessWidget {
       builder: () => MultiProvider(
         providers: [
           Provider(
-            create: (_) => SharedPreferencesLocalStorageImpl(),
+            create: (context) => SharedPreferencesLocalStorageImpl(),
           ),
           Provider(
-            create: (_) => FlutterSecureStorageLocalStorageImpl(),
+            create: (context) => FlutterSecureStorageLocalStorageImpl(),
           ),
           Provider(
             create: (context) => DioRestClient(),
+          ),
+          Provider(
+            create: (context) => LogImpl(),
           ),
           ChangeNotifierProvider(
             create: (context) => AuthController(
@@ -49,8 +54,9 @@ class App extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: UiConfig.title,
-          initialRoute: '/splash',
+          initialRoute: SplashPage.router,
           theme: UiConfig.theme,
+          builder: asuka.builder,
           routes: {
             SplashPage.router: (context) => SplashPage(
                   authController: context.read<AuthController>(),
