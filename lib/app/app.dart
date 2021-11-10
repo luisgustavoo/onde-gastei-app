@@ -7,9 +7,11 @@ import 'package:onde_gastei_app/app/core/local_storages/shared_preferences_local
 import 'package:onde_gastei_app/app/core/logs/log_impl.dart';
 import 'package:onde_gastei_app/app/core/rest_client/dio_rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
-import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
+import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/page/login_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/page/register_page.dart';
+import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository_impl.dart';
+import 'package:onde_gastei_app/app/modules/auth/services/auth_services_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/page/home_page.dart';
 import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
@@ -42,13 +44,24 @@ class App extends StatelessWidget {
           Provider(
             create: (context) => LogImpl(),
           ),
-          ChangeNotifierProvider(
-            create: (context) => AuthController(
-              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+          Provider(
+            create: (context) => AuthRepositoryImpl(
+              restClient: context.read<DioRestClient>(),
+              log: context.read<LogImpl>(),
+            ),
+          ),
+          Provider(
+            create: (context) => AuthServicesImpl(
+              repository: context.read<AuthRepositoryImpl>(),
+              log: context.read<LogImpl>(),
             ),
           ),
           ChangeNotifierProvider(
-            create: (context) => HomeController(),
+            create: (context) => AuthControllerImpl(
+              service: context.read<AuthServicesImpl>(),
+              log: context.read<LogImpl>(),
+              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+            ),
           ),
         ],
         child: MaterialApp(
@@ -59,13 +72,15 @@ class App extends StatelessWidget {
           builder: asuka.builder,
           routes: {
             SplashPage.router: (context) => SplashPage(
-                  authController: context.read<AuthController>(),
+                  authController: context.read<AuthControllerImpl>(),
                 ),
             LoginPage.router: (context) => const LoginPage(),
             HomePage.router: (context) => HomePage(
                   homeController: context.read<HomeController>(),
                 ),
-            RegisterPage.router: (context) => const RegisterPage(),
+            RegisterPage.router: (context) => RegisterPage(
+                  authController: context.read<AuthControllerImpl>(),
+                ),
           },
         ),
       ),
