@@ -1,12 +1,30 @@
 import 'package:dio/dio.dart';
 import 'package:onde_gastei_app/app/core/helpers/environments.dart';
+import 'package:onde_gastei_app/app/core/local_storages/local_security_storage.dart';
+import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
+import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/core/rest_client/interceptors/auth_interceptor.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_response.dart';
 
 class DioRestClient implements RestClient {
-  DioRestClient({BaseOptions? options}) {
-    _dio = Dio(options ?? _options);
+  DioRestClient({
+    required LocalStorage localStorage,
+    required LocalSecurityStorage localSecurityStorage,
+    required Log log,
+    BaseOptions? options,
+  }) {
+    _dio = Dio(options ?? _options)
+      ..interceptors.addAll([
+        //LogInterceptor(),
+        AuthInterceptor(
+          dioRestClient: this,
+          localStorage: localStorage,
+          localSecurityStorage: localSecurityStorage,
+          log: log,
+        ),
+      ]);
   }
 
   late Dio _dio;

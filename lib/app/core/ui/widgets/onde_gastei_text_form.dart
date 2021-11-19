@@ -30,7 +30,7 @@ class OndeGasteiTextForm extends StatelessWidget {
       valueListenable: _obscureTextNotifier,
       builder: (context, value, child) {
         return TextFormField(
-          key: key,
+          key: key,          
           obscureText: value,
           controller: controller,
           validator: validator,

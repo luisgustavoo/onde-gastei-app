@@ -13,7 +13,12 @@ import 'package:onde_gastei_app/app/modules/auth/page/register_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_services_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
+import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/page/home_page.dart';
+import 'package:onde_gastei_app/app/modules/home/repositories/home_repository.dart';
+import 'package:onde_gastei_app/app/modules/home/repositories/home_repository_impl.dart';
+import 'package:onde_gastei_app/app/modules/home/services/home_service.dart';
+import 'package:onde_gastei_app/app/modules/home/services/home_service_impl.dart';
 import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
 import 'package:provider/provider.dart';
 
@@ -39,10 +44,15 @@ class App extends StatelessWidget {
             create: (context) => FlutterSecureStorageLocalStorageImpl(),
           ),
           Provider(
-            create: (context) => DioRestClient(),
+            create: (context) => LogImpl(),
           ),
           Provider(
-            create: (context) => LogImpl(),
+            create: (context) => DioRestClient(
+              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+              localSecurityStorage:
+                  context.read<FlutterSecureStorageLocalStorageImpl>(),
+              log: context.read<LogImpl>(),
+            ),
           ),
           Provider(
             create: (context) => AuthRepositoryImpl(
@@ -53,6 +63,9 @@ class App extends StatelessWidget {
           Provider(
             create: (context) => AuthServicesImpl(
               repository: context.read<AuthRepositoryImpl>(),
+              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+              localSecurityStorage:
+                  context.read<FlutterSecureStorageLocalStorageImpl>(),
               log: context.read<LogImpl>(),
             ),
           ),
@@ -61,6 +74,22 @@ class App extends StatelessWidget {
               service: context.read<AuthServicesImpl>(),
               log: context.read<LogImpl>(),
               localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+            ),
+          ),
+          Provider(
+            create: (context) => HomeRepositoryImpl(
+              restClient: context.read<DioRestClient>(),
+              log: context.read<LogImpl>(),
+            ),
+          ),
+          Provider(
+            create: (context) => HomeServiceImpl(
+              repository: context.read<HomeRepositoryImpl>(),
+            ),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => HomeControllerImpl(
+              service: context.read<HomeServiceImpl>(),
             ),
           ),
         ],
@@ -74,9 +103,11 @@ class App extends StatelessWidget {
             SplashPage.router: (context) => SplashPage(
                   authController: context.read<AuthControllerImpl>(),
                 ),
-            LoginPage.router: (context) => const LoginPage(),
+            LoginPage.router: (context) => LoginPage(
+                  authController: context.read<AuthControllerImpl>(),
+                ),
             HomePage.router: (context) => HomePage(
-                  homeController: context.read<HomeController>(),
+                  homeController: context.read<HomeControllerImpl>(),
                 ),
             RegisterPage.router: (context) => RegisterPage(
                   authController: context.read<AuthControllerImpl>(),

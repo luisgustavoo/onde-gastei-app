@@ -20,22 +20,26 @@ class SharedPreferencesLocalStorageImpl implements LocalStorage {
   Future<T?> read<T>(String key) async {
     final sp = await _instance;
 
+    dynamic value;
+
     switch (T) {
       case String:
-        sp.getString(key);
-        break;
+        value = sp.getString(key) ?? '';
+        return value as T;
       case int:
-        sp.getInt(key);
-        break;
+        value = sp.getInt(key) ?? 0;
+        return value as T;
       case double:
-        sp.getDouble(key);
-        break;
+        value = sp.getDouble(key) ?? 0;
+        return value as T;
       case bool:
-        sp.getBool(key);
-        break;
+        value = sp.getBool(key) ?? false;
+        return value as T;
       case List:
-        sp.getStringList(key);
-        break;
+        value = sp.getStringList(key) ?? <String>[];
+        return value as T;
+      default:
+        return value as T;
     }
   }
 

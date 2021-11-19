@@ -11,7 +11,7 @@ class FlutterSecureStorageLocalStorageImpl implements LocalSecurityStorage {
   Future<bool> contains(String key) => _instance.containsKey(key: key);
 
   @override
-  Future<String?> read(String key) => read(key);
+  Future<String?> read(String key) => _instance.read(key: key);
 
   @override
   Future<void> remove(String key) => _instance.delete(key: key);

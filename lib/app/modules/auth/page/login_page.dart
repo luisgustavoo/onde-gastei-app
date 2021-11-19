@@ -3,11 +3,17 @@ import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dar
 import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
+import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
+import 'package:validatorless/validatorless.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({required AuthController authController, Key? key})
+      : _authController = authController,
+        super(key: key);
 
   static const router = '/login';
+
+  final AuthController _authController;
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -15,9 +21,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-
-  //final _emailKey = GlobalKey<FormFieldState>();
-  //final _passwordKey = GlobalKey<FormFieldState>();
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -43,40 +46,28 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       OndeGasteiTextForm(
+                        controller: _emailController,
                         label: 'E-mail',
                         prefixIcon: const Icon(Icons.email_outlined),
-                        controller: _emailController,
                         textInputType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value != null) {
-                            if (value.isEmpty) {
-                              return 'Informe o email';
-                            }
-
-                            if (!value.contains('@')) {
-                              return 'Email inválido';
-                            }
-                          }
-                        },
+                        validator: Validatorless.multiple([
+                          Validatorless.required('Email obrigatório'),
+                          Validatorless.email('E-mail inválido'),
+                        ]),
                       ),
                       SizedBox(
                         height: 32.h,
                       ),
                       OndeGasteiTextForm(
+                        controller: _passwordController,
                         label: 'Senha',
                         obscureText: true,
                         prefixIcon: const Icon(Icons.lock_outline),
-                        controller: _passwordController,
-                        validator: (value) {
-                          if (value != null) {
-                            if (value.isEmpty) {
-                              return 'Informe a senha';
-                            }
-                            if (value.length < 4) {
-                              return 'A senha deve no mínimo 4 caracteres';
-                            }
-                          }
-                        },
+                        validator: Validatorless.multiple([
+                          Validatorless.required('Senha obrigatória'),
+                          Validatorless.min(
+                              6, 'A senha tem que ter no mínimo 6 caracteres'),
+                        ]),
                       ),
                       SizedBox(
                         height: 16.h,
@@ -109,8 +100,17 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 17.sp,
                               fontWeight: FontWeight.w500),
                         ),
-                        onPressed: () {
-                          _formKey.currentState!.validate();
+                        onPressed: () async {
+                          final formValid =
+                              _formKey.currentState?.validate() ?? false;
+                          if (formValid) {
+                            final logged = await widget._authController.login(
+                                _emailController.text,
+                                _passwordController.text);
+                            if (logged) {
+                              await Navigator.of(context).pushNamed('/home');
+                            }
+                          }
                         },
                       ),
                       SizedBox(
@@ -140,8 +140,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+    super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    super.dispose();
   }
 }

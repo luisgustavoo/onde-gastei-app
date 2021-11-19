@@ -1,3 +1,3 @@
-import 'package:flutter/foundation.dart';
-
-class HomeController extends ChangeNotifier {}
+abstract class HomeController {
+  Future<void> fetchUserData();
+}

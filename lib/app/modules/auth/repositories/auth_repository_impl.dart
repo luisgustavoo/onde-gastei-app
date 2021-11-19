@@ -1,8 +1,10 @@
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
+import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
+import 'package:onde_gastei_app/app/models/confirm_login_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -36,6 +38,39 @@ class AuthRepositoryImpl implements AuthRepository {
 
       _log.error('Erro ao registrar usuário', e, s);
       throw Failure();
+    }
+  }
+
+  @override
+  Future<String> login(String email, String password) async {
+    try {
+      final result = await _restClient.unAuth().post<Map<String, dynamic>>(
+        '/auth/',
+        data: {'email': email, 'password': password},
+      );
+      return result.data!['access_token'].toString();
+    } on RestClientException catch (e, s) {
+      _log.error('Erro ao realizar login', e, s);
+      if (e.response != null) {
+        if (e.response!.statusCode == 403) {
+          _log.error('Usuário não encontrado', e, s);
+          throw UserNotFoundException();
+        }
+      }
+
+      throw Failure(message: 'Erro ao realizar login');
+    }
+  }
+
+  @override
+  Future<ConfirmLoginModel> confirmLogin() async {
+    try {
+      final result =
+          await _restClient.auth().patch<Map<String, dynamic>>('/auth/confirm');
+      return ConfirmLoginModel.fromMap(result.data!);
+    } on RestClientException catch (e, s) {
+      _log.error('Usuário não encontrado', e, s);
+      throw Failure(message: 'Erro ao confirmar login');
     }
   }
 }
