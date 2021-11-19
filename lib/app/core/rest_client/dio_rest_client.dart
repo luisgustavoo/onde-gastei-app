@@ -19,7 +19,7 @@ class DioRestClient implements RestClient {
       ..interceptors.addAll([
         //LogInterceptor(),
         AuthInterceptor(
-          dioRestClient: this,
+          restClient: this,
           localStorage: localStorage,
           localSecurityStorage: localSecurityStorage,
           log: log,
@@ -113,7 +113,7 @@ class DioRestClient implements RestClient {
       Map<String, dynamic>? queryParameters,
       Map<String, dynamic>? headers}) async {
     try {
-      final response = await _dio.post<T>(
+      final response = await _dio.put<T>(
         path,
         data: data,
         queryParameters: queryParameters,

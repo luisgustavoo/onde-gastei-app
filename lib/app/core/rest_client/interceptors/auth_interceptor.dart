@@ -4,15 +4,15 @@ import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_security_storage.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
-import 'package:onde_gastei_app/app/core/rest_client/dio_rest_client.dart';
+import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 
 class AuthInterceptor extends Interceptor {
   AuthInterceptor({
-    required DioRestClient dioRestClient,
+    required RestClient restClient,
     required LocalStorage localStorage,
     required LocalSecurityStorage localSecurityStorage,
     required Log log,
-  })  : _dioRestClient = dioRestClient,
+  })  : _restClient = restClient,
         _localStorage = localStorage,
         _localSecurityStorage = localSecurityStorage,
         _log = log;
@@ -23,7 +23,7 @@ class AuthInterceptor extends Interceptor {
 
   final Log _log;
 
-  final DioRestClient _dioRestClient;
+  final RestClient _restClient;
 
   @override
   Future<void> onRequest(
@@ -84,10 +84,9 @@ class AuthInterceptor extends Interceptor {
     if (err.response?.statusCode == 403 || err.response?.statusCode == 401) {
       await _refreshToken();
 
-      await _dioRestClient.auth().request<Map<String, dynamic>>(
+      await _restClient.auth().request<Map<String, dynamic>>(
             err.requestOptions.path,
             method: err.requestOptions.method,
-            data: err.response?.data,
           );
     }
 
@@ -106,17 +105,22 @@ class AuthInterceptor extends Interceptor {
       final refreshToken =
           await _localSecurityStorage.read(Constants.refreshToken);
 
-      final refreshTokenResult = await _dioRestClient.put<Map<String, dynamic>>(
+      final refreshTokenResult =
+          await _restClient.auth().put<Map<String, dynamic>>(
         '/auth/refresh',
         data: {'refresh_token': refreshToken},
       );
 
-      await _localStorage.write(Constants.accessToken,
-          refreshTokenResult.data?['access_token'].toString());
-      await _localSecurityStorage.write(
-        Constants.refreshToken,
-        refreshTokenResult.data!['refresh_token'].toString(),
-      );
+      if (refreshTokenResult.data != null) {
+        await _localSecurityStorage.write(
+          Constants.refreshToken,
+          refreshTokenResult.data!['refresh_token'].toString(),
+        );
+        await _localStorage.write(
+          Constants.accessToken,
+          refreshTokenResult.data!['access_token'].toString(),
+        );
+      }
     } on Exception catch (e) {
       print(e);
     }
