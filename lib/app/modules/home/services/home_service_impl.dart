@@ -10,4 +10,7 @@ class HomeServiceImpl implements HomeService {
 
   @override
   Future<UserModel> fetchUserData() => _repository.fetchUserData();
+
+  @override
+  Future<void> refreshToken() => _repository.refreshToken();
 }

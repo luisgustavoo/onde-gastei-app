@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
-import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({required this.homeController, Key? key}) : super(key: key);
@@ -30,6 +27,12 @@ class _HomePageState extends State<HomePage> {
             child: const Text('Get User Data'),
             onPressed: () async {
               await widget.homeController.fetchUserData();
+            },
+          ),
+          ElevatedButton(
+            child: const Text('Refresh Token'),
+            onPressed: () async {
+              await widget.homeController.refreshToken();
             },
           ),
           // Selector<HomeControllerImpl, UserModel>(

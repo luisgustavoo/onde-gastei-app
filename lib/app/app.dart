@@ -80,6 +80,9 @@ class App extends StatelessWidget {
             create: (context) => HomeRepositoryImpl(
               restClient: context.read<DioRestClient>(),
               log: context.read<LogImpl>(),
+              localSecurityStorage:
+                  context.read<FlutterSecureStorageLocalStorageImpl>(),
+              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
             ),
           ),
           Provider(
