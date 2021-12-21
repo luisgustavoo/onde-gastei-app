@@ -16,19 +16,7 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
       userModel = await _service.fetchUserData();
       Loader.hide();
       notifyListeners();
-    } on Exception catch (e) {
-      Loader.hide();
-    }
-  }
-
-  @override
-  Future<void> refreshToken() async {
-    try {
-      Loader.show();
-      await _service.refreshToken();
-      Loader.hide();
-      notifyListeners();
-    } on Exception catch (e) {
+    } on Exception {
       Loader.hide();
     }
   }

@@ -5,19 +5,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/local_storages/flutter_secure_storage_local_storage_impl.dart';
 import 'package:onde_gastei_app/app/core/local_storages/shared_preferences_local_storage_impl.dart';
 import 'package:onde_gastei_app/app/core/logs/log_impl.dart';
+import 'package:onde_gastei_app/app/core/navigator/onde_gastei_navigator.dart';
 import 'package:onde_gastei_app/app/core/rest_client/dio_rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
-import 'package:onde_gastei_app/app/modules/auth/page/login_page.dart';
-import 'package:onde_gastei_app/app/modules/auth/page/register_page.dart';
+import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
+import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_services_impl.dart';
-import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
-import 'package:onde_gastei_app/app/modules/home/page/home_page.dart';
-import 'package:onde_gastei_app/app/modules/home/repositories/home_repository.dart';
+import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:onde_gastei_app/app/modules/home/repositories/home_repository_impl.dart';
-import 'package:onde_gastei_app/app/modules/home/services/home_service.dart';
 import 'package:onde_gastei_app/app/modules/home/services/home_service_impl.dart';
 import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
 import 'package:provider/provider.dart';
@@ -80,9 +78,6 @@ class App extends StatelessWidget {
             create: (context) => HomeRepositoryImpl(
               restClient: context.read<DioRestClient>(),
               log: context.read<LogImpl>(),
-              localSecurityStorage:
-                  context.read<FlutterSecureStorageLocalStorageImpl>(),
-              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
             ),
           ),
           Provider(
@@ -102,6 +97,7 @@ class App extends StatelessWidget {
           initialRoute: SplashPage.router,
           theme: UiConfig.theme,
           builder: asuka.builder,
+          navigatorKey: OndeGasteiNavigator.navigatorKey,
           routes: {
             SplashPage.router: (context) => SplashPage(
                   authController: context.read<AuthControllerImpl>(),

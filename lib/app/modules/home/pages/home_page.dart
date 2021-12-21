@@ -29,12 +29,6 @@ class _HomePageState extends State<HomePage> {
               await widget.homeController.fetchUserData();
             },
           ),
-          ElevatedButton(
-            child: const Text('Refresh Token'),
-            onPressed: () async {
-              await widget.homeController.refreshToken();
-            },
-          ),
           // Selector<HomeControllerImpl, UserModel>(
           //   selector: (context, homeController) => homeController.userModel,
           //   builder: (context, userModel, _) => Text(userModel.name),

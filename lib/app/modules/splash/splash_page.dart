@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onde_gastei_app/app/core/navigator/onde_gastei_navigator.dart';
 import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 
@@ -20,9 +21,9 @@ class _SplashPageState extends State<SplashPage> {
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
       await Future<void>.delayed(const Duration(seconds: 2));
       if (await widget.authController.isLogged()) {
-        await Navigator.of(context).pushReplacementNamed('/home');
+        await OndeGasteiNavigator.to!.pushReplacementNamed('/home');
       } else {
-        await Navigator.of(context).pushReplacementNamed('/login');
+        await OndeGasteiNavigator.to!.pushReplacementNamed('/login');
       }
     });
   }
