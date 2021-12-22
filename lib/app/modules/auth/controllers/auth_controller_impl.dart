@@ -9,6 +9,7 @@ import 'package:onde_gastei_app/app/core/ui/widgets/loader.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/messages.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
+import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
 
 class AuthControllerImpl extends ChangeNotifier implements AuthController {
@@ -53,27 +54,24 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
   }
 
   @override
-  Future<bool> login(String email, String password) async {
+  Future<void> login(String email, String password) async {
     try {
       Loader.show();
       await _service.login(email, password);
       Loader.hide();
-      return true;
+      await OndeGasteiNavigator.to!.pushReplacementNamed(HomePage.router);
     } on UserNotFoundException catch (e, s) {
       Loader.hide();
       _log.error('Login e senha inválidos', e, s);
       Messages.alert('Login e senha inválidos');
-      return false;
     } on UnverifiedEmailException catch (e, s) {
       Loader.hide();
       Messages.alert('E-mail não verificado!');
       _log.error('E-mail não verificado!', e, s);
-      return false;
     } on Exception catch (e, s) {
       Loader.hide();
       Messages.alert('Erro ao realizar login');
       _log.error('Erro ao realizar login tente novamente mais tarde!!!', e, s);
-      return false;
     }
   }
 

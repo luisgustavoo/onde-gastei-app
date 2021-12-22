@@ -4,6 +4,7 @@ import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
+import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
 import 'package:validatorless/validatorless.dart';
 
 class LoginPage extends StatefulWidget {
@@ -104,12 +105,9 @@ class _LoginPageState extends State<LoginPage> {
                           final formValid =
                               _formKey.currentState?.validate() ?? false;
                           if (formValid) {
-                            final logged = await widget._authController.login(
+                            await widget._authController.login(
                                 _emailController.text,
                                 _passwordController.text);
-                            if (logged) {
-                              await Navigator.of(context).pushNamed('/home');
-                            }
                           }
                         },
                       ),
@@ -123,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                         onPressed: () {
-                          Navigator.of(context).pushNamed('/register');
+                          Navigator.of(context).pushNamed(RegisterPage.router);
                         },
                         child: const Text('Cadastre-se'),
                       ),
