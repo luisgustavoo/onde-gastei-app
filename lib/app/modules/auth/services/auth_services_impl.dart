@@ -5,6 +5,7 @@ import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_security_storage.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
 

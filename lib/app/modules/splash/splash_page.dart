@@ -19,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
-      await Future<void>.delayed(const Duration(seconds: 2));
+      //await Future<void>.delayed(const Duration(seconds: 2));
       if (await widget.authController.isLogged()) {
         await OndeGasteiNavigator.to!.pushReplacementNamed('/home');
       } else {
