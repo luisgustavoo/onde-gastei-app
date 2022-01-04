@@ -48,6 +48,7 @@ class AuthRepositoryImpl implements AuthRepository {
         '/auth/',
         data: <String, dynamic>{'email': email, 'password': password},
       );
+
       if (result.data != null) {
         return result.data!['access_token'].toString();
       }
@@ -73,7 +74,7 @@ class AuthRepositoryImpl implements AuthRepository {
           await _restClient.auth().patch<Map<String, dynamic>>('/auth/confirm');
       return ConfirmLoginModel.fromMap(result.data!);
     } on RestClientException catch (e, s) {
-      _log.error('Usuário não encontrado', e, s);
+      _log.error('Erro ao confirmar login', e, s);
       throw Failure(message: 'Erro ao confirmar login');
     }
   }
