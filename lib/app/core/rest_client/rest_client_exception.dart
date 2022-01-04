@@ -4,17 +4,17 @@ class RestClientException implements Exception {
   RestClientException({
     required this.error,
     this.message,
-    this.stausCode,
+    this.statusCode,
     this.response,
   });
 
   final String? message;
-  final int? stausCode;
+  final int? statusCode;
   final dynamic error;
   final RestClientResponse? response;
 
   @override
   String toString() {
-    return 'RestClientException(message: $message, stausCode: $stausCode, error: $error, response: $response)';
+    return 'RestClientException(message: $message, statusCode: $statusCode, error: $error, response: $response)';
   }
 }

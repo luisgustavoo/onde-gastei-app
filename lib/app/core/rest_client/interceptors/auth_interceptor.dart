@@ -113,7 +113,7 @@ class AuthInterceptor extends Interceptor {
       final refreshTokenResult =
           await _restClient.auth().put<Map<String, dynamic>>(
         '/auth/refresh',
-        data: {'refresh_token': refreshToken},
+        data: <String, dynamic>{'refresh_token': refreshToken},
       );
 
       if (refreshTokenResult.data != null) {

@@ -6,6 +6,7 @@ import 'package:onde_gastei_app/app/core/local_storages/flutter_secure_storage_l
 import 'package:onde_gastei_app/app/core/local_storages/shared_preferences_local_storage_impl.dart';
 import 'package:onde_gastei_app/app/core/logs/log_impl.dart';
 import 'package:onde_gastei_app/app/core/navigator/onde_gastei_navigator.dart';
+import 'package:onde_gastei_app/app/core/pages/app_page.dart';
 import 'package:onde_gastei_app/app/core/rest_client/dio_rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
@@ -78,6 +79,7 @@ class App extends StatelessWidget {
             create: (context) => HomeRepositoryImpl(
               restClient: context.read<DioRestClient>(),
               log: context.read<LogImpl>(),
+              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
             ),
           ),
           Provider(
@@ -88,6 +90,7 @@ class App extends StatelessWidget {
           ChangeNotifierProvider(
             create: (context) => HomeControllerImpl(
               service: context.read<HomeServiceImpl>(),
+              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
             ),
           ),
         ],
@@ -101,12 +104,13 @@ class App extends StatelessWidget {
           routes: {
             SplashPage.router: (context) => SplashPage(
                   authController: context.read<AuthControllerImpl>(),
+                  homeController: context.read<HomeControllerImpl>(),
+                ),
+            AppPage.router: (context) => AppPage(
+                  homeController: context.read<HomeControllerImpl>(),
                 ),
             LoginPage.router: (context) => LoginPage(
                   authController: context.read<AuthControllerImpl>(),
-                ),
-            HomePage.router: (context) => HomePage(
-                  homeController: context.read<HomeControllerImpl>(),
                 ),
             RegisterPage.router: (context) => RegisterPage(
                   authController: context.read<AuthControllerImpl>(),

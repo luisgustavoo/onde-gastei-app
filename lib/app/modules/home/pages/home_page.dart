@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:provider/provider.dart';
+import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({required this.homeController, Key? key}) : super(key: key);
@@ -17,54 +16,119 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  UserModel? user;
+/*  final initialDate = DateTime(DateTime.now().year, DateTime.now().month);
+  final finalDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month + 1,
+  ).subtract(
+    const Duration(days: 1),
+  );*/
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() async {
-      user = await widget.homeController.fetchUserData();
-
-      final dateFormat = DateFormat('yyyy-MM-dd');
-
-      final firstDay = DateTime(DateTime.now().year, DateTime.now().month);
-
-      final initialDate = dateFormat.format(firstDay);
+/*    Future.microtask(() async {
+      final user = await widget.homeController.fetchUserData();
 
       await widget.homeController.fetchHomeData(
-        userId: user!.userId,
-        initialDate: DateTime(DateTime.now().year, DateTime.now().month),
-        finalDate: DateTime(
-          DateTime.now().year,
-          DateTime.now().month + 1,
-        ).subtract(const Duration(days: 1)),
+        userId: user.userId,
+        initialDate: initialDate,
+        finalDate: finalDate,
       );
-    });
+    });*/
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('HomePage'),
-      ),
-      body: Consumer<HomeControllerImpl>(
-        builder: (context, homeController, _) {
-          if (user == null) {
-            return const Center(
-              child: SizedBox(),
-            );
-          }
+    return Consumer<HomeControllerImpl>(
+      builder: (context, homeController, _) {
+        return SafeArea(
+          child: Scaffold(
+            body: homeController.isLoading
+                ? const SizedBox()
+                : ListView(
+                    padding: EdgeInsets.only(
+                      left: 16.w,
+                      right: 16.w,
+                    ),
+                    children: [
+                      BuildAppBarHomePage(
+                        homeController: homeController,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 16.h,
+                          ),
+                          Text.rich(
+                            TextSpan(
+                              text: r'R$, ',
+                              style: TextStyle(fontSize: 20.sp),
+                              children: [
+                                TextSpan(
+                                  text: '100,00',
+                                  style: TextStyle(
+                                    fontSize: 50.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+          ),
+        );
+      },
+    );
+  }
+}
 
-          return ListView(
-            children: [
-              Row(
-                children: [Text('Olá ${user!.name}')],
-              )
-            ],
-          );
-        },
-      ),
+class BuildAppBarHomePage extends StatelessWidget {
+  const BuildAppBarHomePage({
+    required this.homeController,
+    Key? key,
+  }) : super(key: key);
+
+  final HomeControllerImpl homeController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text.rich(
+              TextSpan(
+                text: 'Olá, ',
+                style: TextStyle(fontSize: 17.sp),
+                children: [
+                  TextSpan(
+                    text: homeController.userModel.name,
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const Spacer(),
+            IconButton(
+              splashRadius: 25,
+              onPressed: () {},
+              icon: const Icon(
+                Icons.date_range,
+                size: 22,
+              ),
+            ),
+          ],
+        )
+      ],
     );
   }
 }

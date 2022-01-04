@@ -54,7 +54,7 @@ class DioRestClient implements RestClient {
   @override
   Future<RestClientResponse<T>> post<T>(
     String path, {
-    dynamic data,
+    T? data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
   }) async {
@@ -75,16 +75,18 @@ class DioRestClient implements RestClient {
       throw RestClientException(
         error: e.error,
         message: e.response?.statusMessage,
-        stausCode: e.response?.statusCode,
+        statusCode: e.response?.statusCode,
         response: _dioErrorConvert(e.response),
       );
     }
   }
 
   @override
-  Future<RestClientResponse<T>> get<T>(String path,
-      {Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) async {
+  Future<RestClientResponse<T>> get<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  }) async {
     try {
       final response = await _dio.get<T>(
         path,
@@ -101,17 +103,19 @@ class DioRestClient implements RestClient {
       throw RestClientException(
         error: e.error,
         message: e.response?.statusMessage,
-        stausCode: e.response?.statusCode,
+        statusCode: e.response?.statusCode,
         response: _dioErrorConvert(e.response),
       );
     }
   }
 
   @override
-  Future<RestClientResponse<T>> put<T>(String path,
-      {dynamic data,
-      Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) async {
+  Future<RestClientResponse<T>> put<T>(
+    String path, {
+    T? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  }) async {
     try {
       final response = await _dio.put<T>(
         path,
@@ -129,17 +133,19 @@ class DioRestClient implements RestClient {
       throw RestClientException(
         error: e.error,
         message: e.response?.statusMessage,
-        stausCode: e.response?.statusCode,
+        statusCode: e.response?.statusCode,
         response: _dioErrorConvert(e.response),
       );
     }
   }
 
   @override
-  Future<RestClientResponse<T>> delete<T>(String path,
-      {dynamic data,
-      Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) async {
+  Future<RestClientResponse<T>> delete<T>(
+    String path, {
+    T? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  }) async {
     try {
       final response = await _dio.delete<T>(
         path,
@@ -157,17 +163,19 @@ class DioRestClient implements RestClient {
       throw RestClientException(
         error: e.error,
         message: e.response?.statusMessage,
-        stausCode: e.response?.statusCode,
+        statusCode: e.response?.statusCode,
         response: _dioErrorConvert(e.response),
       );
     }
   }
 
   @override
-  Future<RestClientResponse<T>> patch<T>(String path,
-      {dynamic data,
-      Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) async {
+  Future<RestClientResponse<T>> patch<T>(
+    String path, {
+    T? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  }) async {
     try {
       final response = await _dio.patch<T>(
         path,
@@ -185,18 +193,20 @@ class DioRestClient implements RestClient {
       throw RestClientException(
         error: e.error,
         message: e.response?.statusMessage,
-        stausCode: e.response?.statusCode,
+        statusCode: e.response?.statusCode,
         response: _dioErrorConvert(e.response),
       );
     }
   }
 
   @override
-  Future<RestClientResponse<T>> request<T>(String path,
-      {required String method,
-      dynamic data,
-      Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) async {
+  Future<RestClientResponse<T>> request<T>(
+    String path, {
+    required String method,
+    T? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  }) async {
     try {
       final response = await _dio.request<T>(
         path,
@@ -217,7 +227,7 @@ class DioRestClient implements RestClient {
       throw RestClientException(
         error: e.error,
         message: e.response?.statusMessage,
-        stausCode: e.response?.statusCode,
+        statusCode: e.response?.statusCode,
         response: _dioErrorConvert(e.response),
       );
     }

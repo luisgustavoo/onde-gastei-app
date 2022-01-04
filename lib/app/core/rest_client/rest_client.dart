@@ -6,7 +6,7 @@ abstract class RestClient {
 
   Future<RestClientResponse<T>> post<T>(
     String path, {
-    dynamic data,
+    T data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
   });
@@ -19,21 +19,21 @@ abstract class RestClient {
 
   Future<RestClientResponse<T>> put<T>(
     String path, {
-    dynamic data,
+    T data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
   });
 
   Future<RestClientResponse<T>> delete<T>(
     String path, {
-    dynamic data,
+    T data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
   });
 
   Future<RestClientResponse<T>> patch<T>(
     String path, {
-    dynamic data,
+    T data,
     Map<String, dynamic> queryParameters,
     Map<String, dynamic> headers,
   });
@@ -41,7 +41,7 @@ abstract class RestClient {
   Future<RestClientResponse<T>> request<T>(
     String path, {
     required String method,
-    dynamic data,
+    T data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
   });

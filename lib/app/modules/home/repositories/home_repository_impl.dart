@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
+import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
@@ -9,12 +12,17 @@ import 'package:onde_gastei_app/app/modules/home/view_model/percentage_categorie
 import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categories_view_model.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
-  HomeRepositoryImpl({required RestClient restClient, required Log log})
+  HomeRepositoryImpl(
+      {required RestClient restClient,
+      required Log log,
+      required LocalStorage localStorage})
       : _restClient = restClient,
-        _log = log;
+        _log = log,
+        _localStorage = localStorage;
 
   final RestClient _restClient;
   final Log _log;
+  final LocalStorage _localStorage;
 
   @override
   Future<UserModel> fetchUserData() async {
@@ -27,12 +35,23 @@ class HomeRepositoryImpl implements HomeRepository {
         throw UserNotFoundException();
       }
 
+      await _saveLocalUserData(UserModel.fromMap(result.data!));
+
       return UserModel.fromMap(result.data!);
     } on RestClientException catch (e, s) {
       _log.error('Erro ao buscar dados do usuario', e, s);
 
       throw Failure(message: 'Erro ao buscar dados do usuario');
     }
+  }
+
+  Future<void> _saveLocalUserData(UserModel user) async {
+    final userMap = <String, dynamic>{
+      'id_usuario': user.userId,
+      'nome': user.name,
+      'email': user.email
+    };
+    await _localStorage.write<String>('user', jsonEncode(userMap));
   }
 
   @override

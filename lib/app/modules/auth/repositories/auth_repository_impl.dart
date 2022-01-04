@@ -20,14 +20,14 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await _restClient.unAuth().post<Map<String, dynamic>>(
         '/auth/register',
-        data: {
+        data: <String, dynamic>{
           'name': name,
           'email': email,
           'password': password,
         },
       );
     } on RestClientException catch (e, s) {
-      if (e.stausCode == 400 &&
+      if (e.statusCode == 400 &&
           e.response!.data['message']
               .toString()
               .toLowerCase()
@@ -46,9 +46,13 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final result = await _restClient.unAuth().post<Map<String, dynamic>>(
         '/auth/',
-        data: {'email': email, 'password': password},
+        data: <String, dynamic>{'email': email, 'password': password},
       );
-      return result.data!['access_token'].toString();
+      if (result.data != null) {
+        return result.data!['access_token'].toString();
+      }
+
+      return '';
     } on RestClientException catch (e, s) {
       _log.error('Erro ao realizar login', e, s);
       if (e.response != null) {

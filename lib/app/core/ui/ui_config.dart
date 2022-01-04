@@ -28,6 +28,9 @@ class UiConfig {
           ),
           centerTitle: true,
         ),
+        iconTheme: const IconThemeData(
+          color: Color(0xFF585666),
+        ),
         primaryColor: const Color(0xFF32B768),
         primaryColorDark: const Color(0xff278F51),
         primaryColorLight: const Color(0xffDAF2E4),

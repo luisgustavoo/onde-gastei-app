@@ -5,7 +5,6 @@ import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_security_storage.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
 
@@ -45,7 +44,7 @@ class AuthServicesImpl implements AuthService {
   Future<void> login(String email, String password) async {
     try {
       final accessToken = await _repository.login(email, password);
-      _log.info('accessToken $accessToken');
+
       final firebaseAuth = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
@@ -55,8 +54,8 @@ class AuthServicesImpl implements AuthService {
         }
       }
       await _saveAccessToken(accessToken);
+
       await _confirmLogin();
-      _log.info('Login realizado com sucesso');
     } on FirebaseAuthException catch (e, s) {
       _log.error('Erro ao realizar login no FirebaseAuth', e, s);
       throw Failure(message: 'Erro ao realizar login no FirebaseAuth');
