@@ -49,7 +49,7 @@ class AuthServicesImpl implements AuthService {
     try {
       final accessToken = await _repository.login(email, password);
 
-      final firebaseAuth = await FirebaseAuth.instance
+      final firebaseAuth = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
 
       if (firebaseAuth.user != null) {
