@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:provider/provider.dart';
-import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({required this.homeController, Key? key}) : super(key: key);
@@ -119,7 +119,7 @@ class BuildAppBarHomePage extends StatelessWidget {
             ),
             const Spacer(),
             IconButton(
-              splashRadius: 25,
+              splashRadius: 25.r,
               onPressed: () {},
               icon: const Icon(
                 Icons.date_range,

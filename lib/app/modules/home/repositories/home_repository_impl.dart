@@ -39,9 +39,9 @@ class HomeRepositoryImpl implements HomeRepository {
 
       return UserModel.fromMap(result.data!);
     } on RestClientException catch (e, s) {
-      _log.error('Erro ao buscar dados do usuario', e, s);
+      _log.error('Erro ao buscar dados do usuário', e, s);
 
-      throw Failure(message: 'Erro ao buscar dados do usuario');
+      throw Failure(message: 'Erro ao buscar dados do usuário');
     }
   }
 

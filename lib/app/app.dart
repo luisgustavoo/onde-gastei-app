@@ -1,4 +1,5 @@
 import 'package:asuka/asuka.dart' as asuka;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +16,6 @@ import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_services_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
-import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:onde_gastei_app/app/modules/home/repositories/home_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/services/home_service_impl.dart';
 import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
@@ -66,6 +66,7 @@ class App extends StatelessWidget {
               localSecurityStorage:
                   context.read<FlutterSecureStorageLocalStorageImpl>(),
               log: context.read<LogImpl>(),
+              firebaseAuth: FirebaseAuth.instance,
             ),
           ),
           ChangeNotifierProvider(

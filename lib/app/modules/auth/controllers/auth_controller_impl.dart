@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
@@ -7,12 +6,11 @@ import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dar
 import 'package:onde_gastei_app/app/core/local_storages/shared_preferences_local_storage_impl.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/navigator/onde_gastei_navigator.dart';
+import 'package:onde_gastei_app/app/core/pages/app_page.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/loader.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/messages.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
-import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
 
 class AuthControllerImpl extends ChangeNotifier implements AuthController {
@@ -30,6 +28,7 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
 
   @override
   Future<bool> isLogged() async {
+
     final localUser = await _localStorage.read<String>('user');
     if (localUser != null && localUser.isNotEmpty) {
       return true;
@@ -61,7 +60,8 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
       Loader.show();
       await _service.login(email, password);
       Loader.hide();
-      await OndeGasteiNavigator.to!.pushReplacementNamed(HomePage.router);
+      //await OndeGasteiNavigator.to!.pushReplacementNamed(HomePage.router);
+      await OndeGasteiNavigator.to!.pushReplacementNamed(AppPage.router);
     } on UserNotFoundException catch (e, s) {
       Loader.hide();
       _log.error('Login e senha inválidos', e, s);

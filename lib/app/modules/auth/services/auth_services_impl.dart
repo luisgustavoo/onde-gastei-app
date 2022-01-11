@@ -14,21 +14,25 @@ class AuthServicesImpl implements AuthService {
     required LocalStorage localStorage,
     required LocalSecurityStorage localSecurityStorage,
     required Log log,
+    required FirebaseAuth firebaseAuth,
   })  : _repository = repository,
         _localStorage = localStorage,
         _localSecurityStorage = localSecurityStorage,
-        _log = log;
+        _log = log,
+        _firebaseAuth = firebaseAuth;
 
   final AuthRepository _repository;
   final LocalStorage _localStorage;
   final LocalSecurityStorage _localSecurityStorage;
   final Log _log;
 
+  final FirebaseAuth _firebaseAuth;
+
   @override
   Future<void> register(String name, String email, String password) async {
     try {
       await _repository.register(name, email, password);
-      final firebaseAuth = await FirebaseAuth.instance
+      final firebaseAuth = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
 
       if (firebaseAuth.user != null) {

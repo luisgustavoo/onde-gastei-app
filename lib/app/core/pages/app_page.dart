@@ -52,7 +52,7 @@ class _AppPageState extends State<AppPage> {
         ),
       ),*/
 
-      BottomNavigationBar(
+          BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         elevation: 0,
         currentIndex: currentIndex,
@@ -62,7 +62,9 @@ class _AppPageState extends State<AppPage> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined,),
+            icon: Icon(
+              Icons.home_outlined,
+            ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
@@ -81,7 +83,7 @@ class _AppPageState extends State<AppPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );

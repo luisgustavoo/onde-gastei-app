@@ -83,16 +83,15 @@ class AuthInterceptor extends Interceptor {
   Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
     //super.onError(err, handler);
 
-    if (err.response?.statusCode == 403 || err.response?.statusCode == 401) {
-      final isUpdate = await _refreshToken();
+    final statusCode = err.response?.statusCode;
 
-      if (isUpdate) {
-        await _restClient.auth().request<Map<String, dynamic>>(
-              err.requestOptions.path,
-              method: err.requestOptions.method,
-            );
-      } else {
-        await _localStorage.logout();
+    if (err.requestOptions.extra['auth_required'] == true) {
+      if (statusCode == 403 || statusCode == 401) {
+        await _refreshToken();
+        _log
+          ..append('########### Refresh Token Atualizado ###########')
+          ..closeAppend();
+        return _retryRequest(err, handler);
       }
     }
 
@@ -105,7 +104,7 @@ class AuthInterceptor extends Interceptor {
     handler.next(err);
   }
 
-  Future<bool> _refreshToken() async {
+  Future<void> _refreshToken() async {
     try {
       final refreshToken =
           await _localSecurityStorage.read(Constants.refreshToken);
@@ -126,12 +125,38 @@ class AuthInterceptor extends Interceptor {
           refreshTokenResult.data!['access_token'].toString(),
         );
       }
-      return true;
     } on Exception catch (e, s) {
       Loader.hide();
       _log.error('Erro ao atualizar refresh token', e, s);
       Messages.alert('Erro ao atualizar refresh token');
-      return false;
+      await _localStorage.logout();
+    }
+  }
+
+  Future<void> _retryRequest(
+      DioError err, ErrorInterceptorHandler handler) async {
+    _log.append('########### Retry Request ###########');
+    try {
+      final requestOptions = err.requestOptions;
+
+      final response = await _restClient.auth().request<Map<String, dynamic>?>(
+            requestOptions.path,
+            method: requestOptions.method,
+            data: requestOptions.data as Map<String, dynamic>?,
+            headers: requestOptions.headers,
+            queryParameters: requestOptions.queryParameters,
+          );
+
+      handler.resolve(
+        Response<Map<String, dynamic>>(
+            requestOptions: requestOptions,
+            data: response.data,
+            statusCode: response.statusCode,
+            statusMessage: response.statusMessage),
+      );
+    } on DioError catch (e, s) {
+      _log.error('Erro ao refazer request', e, s);
+      handler.reject(e);
     }
   }
 }

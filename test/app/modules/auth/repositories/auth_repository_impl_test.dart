@@ -7,15 +7,16 @@ import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/models/confirm_login_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository_impl.dart';
 
-import '../../../core/log/mock_log.dart';
-import '../../../core/rest_client/mock_rest_client.dart';
-import '../../../core/rest_client/mock_rest_client_exception.dart';
-import '../../../core/rest_client/mock_rest_client_response.dart';
+import '../../../../core/log/mock_log.dart';
+import '../../../../core/rest_client/mock_rest_client.dart';
+import '../../../../core/rest_client/mock_rest_client_exception.dart';
+import '../../../../core/rest_client/mock_rest_client_response.dart';
 
 void main() {
   late AuthRepositoryImpl authRepository;
   late Log log;
   late MockRestClient restClient;
+
 
   setUp(() {
     log = MockLog();
@@ -162,11 +163,10 @@ void main() {
       final accessToken = await authRepository.login(email, password);
 
       //Assert
+      expect(accessToken, accessTokenExpected);
       verify(() =>
               restClient.post<Map<String, dynamic>>(any(), data: requestData))
           .called(1);
-
-      expect(accessToken, accessTokenExpected);
     });
 
     test('Should throws UserNotFoundException', () async {
@@ -271,4 +271,5 @@ void main() {
       expect(call, throwsA(isA<Failure>()));
     });
   });
+
 }
