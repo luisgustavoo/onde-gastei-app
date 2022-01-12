@@ -6,18 +6,13 @@ class MockUser extends Mock implements User {
     String uid = '',
     String? displayName,
     String? email,
-    //bool emailVerified = false,
   })  : _uid = uid,
         _displayName = displayName,
-        _email = email
-  //      _emailVerified = emailVerified
-  ;
+        _email = email;
 
   final String _uid;
   final String? _displayName;
   final String? _email;
-
-  //final bool _emailVerified;
 
   @override
   String get uid => _uid;
@@ -27,7 +22,4 @@ class MockUser extends Mock implements User {
 
   @override
   String? get email => _email;
-
-// @override
-// bool get emailVerified => _emailVerified;
 }
