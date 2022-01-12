@@ -49,22 +49,13 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
   @override
   Future<void> login(String email, String password) async {
     try {
-      Loader.show();
       await _service.login(email, password);
-      Loader.hide();
-      //await OndeGasteiNavigator.to!.pushReplacementNamed(HomePage.router);
-      await OndeGasteiNavigator.to!.pushReplacementNamed(AppPage.router);
+      //await OndeGasteiNavigator.to!.pushReplacementNamed(AppPage.router);
     } on UserNotFoundException catch (e, s) {
-      Loader.hide();
       _log.error('Login e senha inválidos', e, s);
-      Messages.alert('Login e senha inválidos');
     } on UnverifiedEmailException catch (e, s) {
-      Loader.hide();
-      Messages.alert('E-mail não verificado!');
       _log.error('E-mail não verificado!', e, s);
     } on Exception catch (e, s) {
-      Loader.hide();
-      Messages.alert('Erro ao realizar login');
       _log.error('Erro ao realizar login tente novamente mais tarde!!!', e, s);
     }
   }
