@@ -1,5 +1,5 @@
+
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/core/navigator/onde_gastei_navigator.dart';
 import 'package:onde_gastei_app/app/core/pages/app_page.dart';
 import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
@@ -42,9 +42,9 @@ class _SplashPageState extends State<SplashPage> {
           initialDate: initialDate,
           finalDate: finalDate,
         );
-        await OndeGasteiNavigator.to!.pushReplacementNamed(AppPage.router);
+        await Navigator.of(context).pushReplacementNamed(AppPage.router);
       } else {
-        await OndeGasteiNavigator.to!.pushReplacementNamed(LoginPage.router);
+        await Navigator.of(context).pushReplacementNamed(LoginPage.router);
       }
     });
   }

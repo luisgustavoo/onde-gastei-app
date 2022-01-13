@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
@@ -88,9 +89,11 @@ void main() {
           .thenThrow(UserExistsException());
 
       //Act
-      await controller.register(name, email, password);
+      final call = controller.register;
 
       //Assert
+      expect(() => call(name, email, password),
+          throwsA(isA<UserExistsException>()));
       verify(() => service.register(any(), any(), any())).called(1);
       verify(() => log.error(
           'Email já cadastrado, por favor escolha outro e-mail',
@@ -98,7 +101,7 @@ void main() {
           any())).called(1);
     });
 
-    test('Should throws generic exception', () async {
+    test('Should throw generic exception when registering user', () async {
       // Arrange
       const name = 'Test';
       const email = 'test@test.com';
@@ -107,9 +110,10 @@ void main() {
       when(() => service.register(any(), any(), any())).thenThrow(Exception());
 
       //Act
-      await controller.register(name, email, password);
+      final call = controller.register;
 
       //Assert
+      expect(() => call(name, email, password), throwsA(isA<Failure>()));
       verify(() => service.register(any(), any(), any())).called(1);
       verify(() => log.error('Erro ao registrar usuário', any(), any()))
           .called(1);
@@ -136,9 +140,11 @@ void main() {
       when(() => service.login(any(), any()))
           .thenThrow(UserNotFoundException());
       //Act
-      await controller.login(email, password);
+      final call = controller.login;
 
       //Assert
+      expect(
+          () => call(email, password), throwsA(isA<UserNotFoundException>()));
       verify(() => log.error('Login e senha inválidos', any(), any()))
           .called(1);
     });
@@ -150,21 +156,26 @@ void main() {
       when(() => service.login(any(), any()))
           .thenThrow(UnverifiedEmailException());
       //Act
-      await controller.login(email, password);
+      final call = controller.login;
 
       //Assert
+      expect(() => call(email, password),
+          throwsA(isA<UnverifiedEmailException>()));
       verify(() => log.error('E-mail não verificado!', any(), any())).called(1);
     });
 
-    test('Should throws generic exception', () async {
+    test(
+        'Should throw generic exception when logging in with email and password ',
+        () async {
       // Arrange
       const email = 'Test';
       const password = 'password';
       when(() => service.login(any(), any())).thenThrow(Exception());
       //Act
-      await controller.login(email, password);
+      final call = controller.login;
 
       //Assert
+      expect(() => call(email, password), throwsA(isA<Failure>()));
       verify(() => log.error(
           'Erro ao realizar login tente novamente mais tarde!!!',
           any(),
