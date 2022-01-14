@@ -87,7 +87,7 @@ void main() {
       final confirmPassword =
       find.byKey(const ValueKey('confirm_password_key_register_page'));
 
-      final buttonRegister =
+      final registerButton =
       find.byKey(const ValueKey('register_button_key_register_page'));
 
       await tester.enterText(name, '');
@@ -99,7 +99,7 @@ void main() {
       await tester.pump();
 
       //Act
-      await tester.tap(buttonRegister);
+      await tester.tap(registerButton);
       await tester.pumpAndSettle();
 
       //Assert

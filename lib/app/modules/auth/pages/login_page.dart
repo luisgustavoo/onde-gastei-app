@@ -10,7 +10,6 @@ import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
-import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
@@ -51,7 +50,9 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         height: 100.h,
                       ),
-                      const Logo(),
+                      const Logo(
+                        key: Key('logo_key_login_page'),
+                      ),
                       SizedBox(
                         height: 32.h,
                       ),
@@ -75,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: [
           OndeGasteiTextForm(
+            key: const Key('email_key_login_page'),
             controller: _emailController,
             label: 'E-mail',
             prefixIcon: const Icon(Icons.email_outlined),
@@ -88,6 +90,7 @@ class _LoginPageState extends State<LoginPage> {
             height: 32.h,
           ),
           OndeGasteiTextForm(
+            key: const Key('password_key_login_page'),
             controller: _passwordController,
             label: 'Senha',
             obscureText: true,
@@ -152,6 +155,7 @@ class _LoginPageState extends State<LoginPage> {
           fontWeight: FontWeight.w500,
         ),
       ),
+      key: const Key('button_login_key_login_page'),
       onPressed: () async {
         final formValid = _formKey.currentState?.validate() ?? false;
         if (formValid) {
@@ -164,6 +168,7 @@ class _LoginPageState extends State<LoginPage> {
             );
 
             await Navigator.of(context).pushReplacementNamed(AppPage.router);
+
           } on UserNotFoundException {
             snackBar = OndeGasteiSnackBar.buildSnackBar(
               content: const Text.rich(
