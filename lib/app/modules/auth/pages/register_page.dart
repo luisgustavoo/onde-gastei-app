@@ -66,6 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
               top: 32.h,
             ),
             child: OndeGasteiTextForm(
+              key: const Key('name_key_register_page'),
               controller: nameController,
               label: 'Como quer ser chamado?',
               prefixIcon: const Icon(Icons.person_outline),
@@ -76,6 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
               top: 32.h,
             ),
             child: OndeGasteiTextForm(
+              key: const Key('email_key_register_page'),
               controller: emailController,
               label: 'E-mail',
               prefixIcon: const Icon(Icons.email_outlined),
@@ -91,6 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
               top: 32.h,
             ),
             child: OndeGasteiTextForm(
+              key: const Key('password_key_register_page'),
               controller: passwordController,
               label: 'Senha',
               obscureText: true,
@@ -107,6 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
               top: 32.h,
             ),
             child: OndeGasteiTextForm(
+              key: const Key('confirm_password_key_register_page'),
               controller: confirmPasswordController,
               label: 'Confirmar senha',
               obscureText: true,
@@ -138,6 +142,7 @@ class _RegisterPageState extends State<RegisterPage> {
           fontWeight: FontWeight.w500,
         ),
       ),
+      key: const Key('register_button_key_register_page'),
       onPressed: () async {
         final formValid = _formKey.currentState?.validate() ?? false;
 
@@ -152,8 +157,10 @@ class _RegisterPageState extends State<RegisterPage> {
             );
 
             snackBar = OndeGasteiSnackBar.buildSnackBar(
-              content: const Text.rich(
-                TextSpan(
+              key: const Key('snack_bar_success_key_register_page'),
+              content: RichText(
+                key: const Key('message_key_register_page'),
+                text: const TextSpan(
                   children: [
                     TextSpan(
                       text: 'Usuário registrado com sucesso!\n\n',

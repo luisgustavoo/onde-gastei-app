@@ -9,8 +9,10 @@ class OndeGasteiSnackBar {
     required Color backgroundColor,
     required String label,
     required VoidCallback onPressed,
+    Key? key,
   }) {
     return SnackBar(
+      key: key,
       backgroundColor: backgroundColor,
       elevation: 10,
       content: content,
