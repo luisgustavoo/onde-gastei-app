@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
       builder: (context, homeController, _) {
         return SafeArea(
           child: Scaffold(
-            body: homeController.isLoading
+            body: 1==1
                 ? const SizedBox()
                 : ListView(
                     padding: EdgeInsets.only(

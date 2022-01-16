@@ -229,7 +229,7 @@ packages:
     source: hosted
     version: "4.2.1"
   flutter_test:
-    dependency: "direct dev"
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -287,11 +287,9 @@ packages:
     version: "4.0.0"
   integration_test:
     dependency: "direct dev"
-    description:
-      name: integration_test
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.8.1"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   intl:
     dependency: transitive
     description:

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
+import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_security_storage.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
@@ -64,7 +65,7 @@ class AuthServicesImpl implements AuthService {
       _log.error('Erro ao realizar login no FirebaseAuth', e, s);
       throw Failure(message: 'Erro ao realizar login no FirebaseAuth');
     } on Exception catch (e) {
-      if (e is UnverifiedEmailException) {
+      if ((e is UnverifiedEmailException) || (e is UserNotFoundException)) {
         rethrow;
       }
       throw Failure(message: 'Erro ao realizar login');

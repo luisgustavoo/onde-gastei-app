@@ -45,14 +45,8 @@ class HomeRepositoryImpl implements HomeRepository {
     }
   }
 
-  Future<void> _saveLocalUserData(UserModel user) async {
-    final userMap = <String, dynamic>{
-      'id_usuario': user.userId,
-      'nome': user.name,
-      'email': user.email
-    };
-    await _localStorage.write<String>('user', jsonEncode(userMap));
-  }
+  Future<void> _saveLocalUserData(UserModel user) =>
+      _localStorage.write('user', jsonEncode(user.toMap()));
 
   @override
   Future<List<TotalExpensesCategoriesViewModel>> findTotalExpensesByCategories(

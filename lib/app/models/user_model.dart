@@ -19,9 +19,21 @@ class UserModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': userId,
+      'id_usuario': userId,
       'name': name,
       'email': email,
     };
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserModel &&
+          runtimeType == other.runtimeType &&
+          userId == other.userId &&
+          name == other.name &&
+          email == other.email;
+
+  @override
+  int get hashCode => userId.hashCode ^ name.hashCode ^ email.hashCode;
 }

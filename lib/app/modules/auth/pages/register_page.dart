@@ -34,23 +34,21 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     final scaffoldMessage = ScaffoldMessenger.of(context);
 
+    final state = context.select<AuthControllerImpl, authState>(
+        (autController) => autController.state);
+
     return Scaffold(
       appBar: _buildAppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Selector<AuthControllerImpl, authState>(
-            builder: (context, state, _) {
-              return IgnorePointer(
-                ignoring: state == authState.loading,
-                child: ListView(
-                  children: [
-                    _buildForm(context, scaffoldMessage, state),
-                  ],
-                ),
-              );
-            },
-            selector: (context, authControllerImpl) =>
-                authControllerImpl.state),
+        child: IgnorePointer(
+          ignoring: state == authState.loading,
+          child: ListView(
+            children: [
+              _buildForm(context, scaffoldMessage, state),
+            ],
+          ),
+        ),
       ),
     );
   }

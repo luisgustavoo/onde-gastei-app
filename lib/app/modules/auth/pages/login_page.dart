@@ -36,36 +36,34 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final scaffoldMessage = ScaffoldMessenger.of(context);
 
+    final state = context.select<AuthControllerImpl, authState>(
+            (autController) => autController.state);
+
     return Scaffold(
-      body: Selector<AuthControllerImpl, authState>(
-        builder: (context, state, _) {
-          return IgnorePointer(
-            ignoring: state == authState.loading,
-            child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 100.h,
-                      ),
-                      const Logo(
-                        key: Key('logo_key_login_page'),
-                      ),
-                      SizedBox(
-                        height: 32.h,
-                      ),
-                      _buildForm(state, context, scaffoldMessage),
-                    ],
+      body: IgnorePointer(
+        ignoring: state == authState.loading,
+        child: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 100.h,
                   ),
-                )
-              ],
-            ),
-          );
-        },
-        selector: (context, authControllerImpl) => authControllerImpl.state,
-      ),
+                  const Logo(
+                    key: Key('logo_key_login_page'),
+                  ),
+                  SizedBox(
+                    height: 32.h,
+                  ),
+                  _buildForm(state, context, scaffoldMessage),
+                ],
+              ),
+            )
+          ],
+        ),
+      )
     );
   }
 
@@ -129,6 +127,7 @@ class _LoginPageState extends State<LoginPage> {
             height: 32.h,
           ),
           TextButton(
+            key: const Key('register_buttn_key_login_page'),
             style: ElevatedButton.styleFrom(
               minimumSize: Size.zero,
               padding: const EdgeInsets.all(5),
@@ -168,7 +167,6 @@ class _LoginPageState extends State<LoginPage> {
             );
 
             await Navigator.of(context).pushReplacementNamed(AppPage.router);
-
           } on UserNotFoundException {
             snackBar = OndeGasteiSnackBar.buildSnackBar(
               content: const Text.rich(

@@ -49,10 +49,11 @@ dependencies:
   validatorless: ^1.2.1
 
 dev_dependencies:
-  flutter_test:
+  integration_test:
     sdk: flutter
+#  flutter_test:
+#    sdk: flutter
 
-  integration_test: ^0.8.1
   mocktail: ^0.2.0
 #  firebase_auth_mocks:
 #    path: ../../../Flutter/firebase_auth_mocks

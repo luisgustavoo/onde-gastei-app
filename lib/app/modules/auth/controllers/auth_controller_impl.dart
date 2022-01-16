@@ -24,6 +24,7 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
   final LocalStorage _localStorage;
   authState state = authState.idle;
 
+
   @override
   Future<bool> isLogged() async {
     final localUser = await _localStorage.read<String>('user');

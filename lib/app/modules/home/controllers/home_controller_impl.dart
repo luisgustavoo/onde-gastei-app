@@ -5,10 +5,13 @@ import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/loader.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
+import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/services/home_service.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/percentage_categories_view_model.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categories_view_model.dart';
+
+enum homeState { idle, loading, error, success }
 
 class HomeControllerImpl extends ChangeNotifier implements HomeController {
   HomeControllerImpl(
@@ -16,7 +19,6 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
       : _service = service,
         _localStorage = localStorage;
 
-  bool isLoading = true;
   final HomeService _service;
   final LocalStorage _localStorage;
   late UserModel userModel;
@@ -24,6 +26,7 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
       <TotalExpensesCategoriesViewModel>[];
   List<PercentageCategoriesViewModel> percentageCategoriesList =
       <PercentageCategoriesViewModel>[];
+  homeState state = homeState.idle;
 
   @override
   Future<void> fetchHomeData({
@@ -32,20 +35,19 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
     required DateTime finalDate,
   }) async {
     try {
-      //Loader.show();
-      isLoading = true;
+      state = homeState.loading;
       notifyListeners();
 
       totalExpensesCategoriesList = await _service
           .findTotalExpensesByCategories(userId, initialDate, finalDate);
       percentageCategoriesList = await _service.findPercentageByCategories(
           userId, initialDate, finalDate);
-      Loader.hide();
-      isLoading = false;
+
+      state = homeState.success;
       notifyListeners();
+
     } on Exception {
-      isLoading = false;
-      Loader.hide();
+      state = homeState.error;
       notifyListeners();
       throw Failure(message: 'Erro ao buscar dados da home page');
     }
@@ -54,8 +56,9 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
   @override
   Future<UserModel> fetchUserData() async {
     try {
-      isLoading = true;
+      state = homeState.loading;
       notifyListeners();
+
       final localUser = await _localStorage.read<String>('user');
 
       if (localUser != null && localUser.isNotEmpty) {
@@ -65,13 +68,12 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
         userModel = await _service.fetchUserData();
       }
 
-      isLoading = false;
+      state = homeState.success;
       notifyListeners();
+
       return userModel;
     } on Exception {
-      isLoading = false;
-      notifyListeners();
-      Loader.hide();
+      state = homeState.error;
       notifyListeners();
       throw Failure(message: 'Erro ao buscar dados do usuário');
     }
