@@ -1,31 +1,43 @@
+// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
+
+import 'package:onde_gastei_app/app/models/category_model.dart';
+
 class PercentageCategoriesViewModel {
   const PercentageCategoriesViewModel({
-    required this.categoryId,
-    required this.categoryDescription,
-    required this.totalValueCategory,
-    required this.categoryPercentage,
+    required this.value,
+    required this.percentage,
+    required this.category,
   });
 
   factory PercentageCategoriesViewModel.fromMap(Map<String, dynamic> map) {
     return PercentageCategoriesViewModel(
-      categoryId: map['id_categoria'] as int,
-      categoryDescription: map['descricao'] as String,
-      totalValueCategory: map['valor_total_categoria'] as double,
-      categoryPercentage: map['percentual_categoria'] as double,
+      value: double.parse(map['valor'].toString()),
+      percentage: double.parse(map['percentual'].toString()),
+      category: CategoryModel.fromMap(map['categoria'] as Map<String, dynamic>),
     );
   }
 
-  final int categoryId;
-  final String categoryDescription;
-  final double totalValueCategory;
-  final double categoryPercentage;
+  final double value;
+  final double percentage;
+  final CategoryModel category;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id_categoria': categoryId,
-      'descricao': categoryDescription,
-      'valor_total_categoria': totalValueCategory,
-      'percentual_categoria': categoryPercentage,
+      'valor': value,
+      'percentual': percentage,
+      'categoria': category.toMap(),
     };
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PercentageCategoriesViewModel &&
+          runtimeType == other.runtimeType &&
+          value == other.value &&
+          percentage == other.percentage &&
+          category == other.category);
+
+  @override
+  int get hashCode => value.hashCode ^ percentage.hashCode ^ category.hashCode;
 }
