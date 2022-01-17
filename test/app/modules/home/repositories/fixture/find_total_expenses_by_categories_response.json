@@ -1,0 +1,11 @@
+[
+  {
+    "valor_total": 1,
+    "categoria": {
+      "id_categoria": 1,
+      "descricao": "Test",
+      "codigo_icone": 1,
+      "codigo_cor": 1
+    }
+  }
+]
