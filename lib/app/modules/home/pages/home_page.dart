@@ -16,73 +16,74 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-/*  final initialDate = DateTime(DateTime.now().year, DateTime.now().month);
+  final initialDate = DateTime(DateTime.now().year, DateTime.now().month);
   final finalDate = DateTime(
     DateTime.now().year,
     DateTime.now().month + 1,
-  ).subtract(
-    const Duration(days: 1),
-  );*/
+  ).subtract(const Duration(days: 1));
 
   @override
   void initState() {
     super.initState();
-/*    Future.microtask(() async {
+    Future.microtask(() async {
       final user = await widget.homeController.fetchUserData();
 
       await widget.homeController.fetchHomeData(
-        userId: user.userId,
+        userId: user?.userId ?? 0,
         initialDate: initialDate,
         finalDate: finalDate,
       );
-    });*/
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeControllerImpl>(
-      builder: (context, homeController, _) {
-        return SafeArea(
-          child: Scaffold(
-            body: 1==1
-                ? const SizedBox()
-                : ListView(
-                    padding: EdgeInsets.only(
-                      left: 16.w,
-                      right: 16.w,
-                    ),
-                    children: [
-                      BuildAppBarHomePage(
-                        homeController: homeController,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 16.h,
-                          ),
-                          Text.rich(
-                            TextSpan(
-                              text: r'R$, ',
-                              style: TextStyle(fontSize: 20.sp),
-                              children: [
-                                TextSpan(
-                                  text: '100,00',
-                                  style: TextStyle(
-                                    fontSize: 50.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
+    final homeController = context.watch<HomeControllerImpl>();
+
+    return SafeArea(
+      child: Scaffold(
+        body: homeController.state == homeState.loading
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).primaryColor,
+                  strokeWidth: 1.w,
+                ),
+              )
+            : ListView(
+                padding: EdgeInsets.only(
+                  left: 16.w,
+                  right: 16.w,
+                ),
+                children: [
+                  BuildAppBarHomePage(
+                    homeController: homeController,
                   ),
-          ),
-        );
-      },
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 16.h,
+                      ),
+                      Text.rich(
+                        TextSpan(
+                          text: r'R$, ',
+                          style: TextStyle(fontSize: 20.sp),
+                          children: [
+                            TextSpan(
+                              text: '100,00',
+                              style: TextStyle(
+                                fontSize: 50.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+      ),
     );
   }
 }
@@ -108,7 +109,7 @@ class BuildAppBarHomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 17.sp),
                 children: [
                   TextSpan(
-                    text: homeController.userModel.name,
+                    text: homeController.userModel?.name,
                     style: TextStyle(
                       fontSize: 20.sp,
                       fontWeight: FontWeight.bold,

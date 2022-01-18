@@ -20,7 +20,7 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
   final HomeService _service;
   final LocalStorage _localStorage;
 
-  late UserModel userModel;
+  UserModel? userModel;
   List<TotalExpensesCategoriesViewModel> totalExpensesCategoriesList =
       <TotalExpensesCategoriesViewModel>[];
   List<PercentageCategoriesViewModel> percentageCategoriesList =
@@ -54,7 +54,7 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
   }
 
   @override
-  Future<UserModel> fetchUserData() async {
+  Future<UserModel?> fetchUserData() async {
     try {
       state = homeState.loading;
       notifyListeners();

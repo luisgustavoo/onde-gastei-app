@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
-import 'package:onde_gastei_app/app/core/pages/app_page.dart';
 import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
@@ -12,6 +11,7 @@ import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/services/home_service.dart';
+import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/local_storage/mock_local_storage.dart';
@@ -245,14 +245,16 @@ void main() {
 
     //Assert
     expect(find.byType(SnackBar), findsOneWidget);
-    expect(find.text('E-mail não verificado!\n\nAcesse o seu e-mail para fazer a verificação', findRichText: true),
+    expect(
+        find.text(
+            'E-mail não verificado!\n\nAcesse o seu e-mail para fazer a verificação',
+            findRichText: true),
         findsOneWidget);
   });
 
   testWidgets('Should trows generic Exception', (tester) async {
     //Arrange
-    when(() => authService.login(any(), any()))
-        .thenThrow(Exception());
+    when(() => authService.login(any(), any())).thenThrow(Exception());
 
     await tester.pumpWidget(createLoginPagePage());
 
@@ -261,7 +263,7 @@ void main() {
     final password = find.byKey(const ValueKey('password_key_login_page'));
 
     final loginButton =
-    find.byKey(const ValueKey('button_login_key_login_page'));
+        find.byKey(const ValueKey('button_login_key_login_page'));
 
     await tester.enterText(email, 'test@teste.com');
     await tester.enterText(password, '123456');
@@ -273,7 +275,9 @@ void main() {
 
     //Assert
     expect(find.byType(SnackBar), findsOneWidget);
-    expect(find.text('Erro ao realizar login tente novamente mais tarde!!!', findRichText: true),
+    expect(
+        find.text('Erro ao realizar login tente novamente mais tarde!!!',
+            findRichText: true),
         findsOneWidget);
   });
 }

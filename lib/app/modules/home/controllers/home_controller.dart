@@ -1,7 +1,7 @@
 import 'package:onde_gastei_app/app/models/user_model.dart';
 
 abstract class HomeController {
-  Future<UserModel> fetchUserData();
+  Future<UserModel?> fetchUserData();
 
   Future<void> fetchHomeData({
     required int userId,
