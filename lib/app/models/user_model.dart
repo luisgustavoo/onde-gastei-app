@@ -22,7 +22,7 @@ class UserModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id_usuario': userId,
-      'name': name,
+      'nome': name,
       'email': email,
     };
   }
