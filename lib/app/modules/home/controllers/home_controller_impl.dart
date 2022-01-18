@@ -19,12 +19,14 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
 
   final HomeService _service;
   final LocalStorage _localStorage;
+
   late UserModel userModel;
   List<TotalExpensesCategoriesViewModel> totalExpensesCategoriesList =
       <TotalExpensesCategoriesViewModel>[];
   List<PercentageCategoriesViewModel> percentageCategoriesList =
       <PercentageCategoriesViewModel>[];
   homeState state = homeState.idle;
+
 
   @override
   Future<void> fetchHomeData({
