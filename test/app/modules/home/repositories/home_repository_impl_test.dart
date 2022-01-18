@@ -247,4 +247,6 @@ void main() {
       expect(() => call(1, initialDate, finalDate), throwsA(isA<Failure>()));
     });
   });
+
+
 }

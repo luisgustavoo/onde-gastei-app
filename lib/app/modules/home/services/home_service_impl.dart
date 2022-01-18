@@ -4,7 +4,7 @@ import 'package:onde_gastei_app/app/modules/home/services/home_service.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/percentage_categories_view_model.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categories_view_model.dart';
 
-class HomeServiceImpl implements HomeService {
+  class HomeServiceImpl implements HomeService {
   HomeServiceImpl({required HomeRepository repository})
       : _repository = repository;
 
