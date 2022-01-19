@@ -111,4 +111,29 @@ void main() {
       verify(() => restClient.put(any(), data: mockData)).called(1);
     });
   });
+
+  group('Group test deleteCategory', () {
+    test('Should delete category with success', () async {
+      // Arrange
+      when(() => restClient.delete<Map<String, dynamic>>(any()))
+          .thenAnswer((_) async => MockRestClientResponse(statusCode: 200));
+      //Act
+      await repository.deleteCategory(1);
+
+      //Assert
+      verify(() => restClient.delete<Map<String, dynamic>>(any())).called(1);
+    });
+
+    test('Should throws RestClientException', () async {
+      // Arrange
+      when(() => restClient.delete<Map<String, dynamic>>(any()))
+          .thenThrow(RestClientException(error: 'Error'));
+      //Act
+      final call = repository.deleteCategory;
+
+      //Assert
+      expect(() => call(1), throwsA(isA<Failure>()));
+      verify(() => restClient.delete<Map<String, dynamic>>(any())).called(1);
+    });
+  });
 }
