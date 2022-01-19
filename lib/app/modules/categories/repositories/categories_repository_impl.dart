@@ -17,12 +17,13 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
   @override
   Future<void> register(CategoryModel categoryModel) async {
     try {
-      await _restClient.auth().post('/category/register', data: {
-        'descricao': categoryModel.description,
-        'codigo_icone': categoryModel.iconCode,
-        'codigo_cor': categoryModel.colorCode,
-        'id_usuario': categoryModel.userId
-      });
+      await _restClient.auth().post<Map<String, dynamic>>('/category/register',
+          data: <String, dynamic>{
+            'descricao': categoryModel.description,
+            'codigo_icone': categoryModel.iconCode,
+            'codigo_cor': categoryModel.colorCode,
+            'id_usuario': categoryModel.userId
+          });
     } on RestClientException catch (e, s) {
       _log.error('Erro ao registrar categoria', e, s);
       throw Failure();
@@ -33,11 +34,13 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
   Future<void> updateCategory(
       int categoryId, CategoryInputModel categoryInputModel) async {
     try {
-      await _restClient.auth().put('/category/$categoryId/update', data: {
-        'descricao': categoryInputModel.description,
-        'codigo_icone': categoryInputModel.iconCode,
-        'codigo_cor': categoryInputModel.colorCode
-      });
+      await _restClient.auth().put<Map<String, dynamic>>(
+          '/category/$categoryId/update',
+          data: <String, dynamic>{
+            'descricao': categoryInputModel.description,
+            'codigo_icone': categoryInputModel.iconCode,
+            'codigo_cor': categoryInputModel.colorCode
+          });
     } on RestClientException catch (e, s) {
       _log.error('Erro ao atualizar categoria', e, s);
       throw Failure();
