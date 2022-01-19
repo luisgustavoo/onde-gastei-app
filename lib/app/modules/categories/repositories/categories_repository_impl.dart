@@ -46,4 +46,16 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
       throw Failure();
     }
   }
+
+  @override
+  Future<void> deleteCategory(int categoryId) async {
+    try {
+      await _restClient
+          .auth()
+          .delete<Map<String, dynamic>>('/category/$categoryId/delete');
+    } on RestClientException catch (e, s) {
+      _log.error('Erro ao excluir categoria', e, s);
+      throw Failure();
+    }
+  }
 }
