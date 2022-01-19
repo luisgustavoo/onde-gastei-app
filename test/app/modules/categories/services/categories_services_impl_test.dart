@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
@@ -5,6 +6,7 @@ import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/repositories/categories_repository.dart';
 import 'package:onde_gastei_app/app/modules/categories/services/categories_service.dart';
 import 'package:onde_gastei_app/app/modules/categories/services/categories_service_impl.dart';
+import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 
 class MockCategoriesRepository extends Mock implements CategoriesRepository {}
 
@@ -41,6 +43,35 @@ void main() {
       //Assert
       expect(() => call(categoryModel), throwsA(isA<Failure>()));
       verify(() => repository.register(categoryModel)).called(1);
+    });
+  });
+
+  group('Group test updateCategory', () {
+    test('Should update category with success', () async {
+      // Arrange
+      const categoryInputModel =
+          CategoryInputModel(description: 'Test', iconCode: 1, colorCode: 1);
+      when(() => repository.updateCategory(1, categoryInputModel))
+          .thenAnswer((_) async => _);
+      //Act
+      await service.updateCategory(1, categoryInputModel);
+
+      //Assert
+      verify(() => repository.updateCategory(1, categoryInputModel)).called(1);
+    });
+
+    test('Should throws exception', () async {
+      // Arrange
+      const categoryInputModel =
+          CategoryInputModel(description: 'Test', iconCode: 1, colorCode: 1);
+      when(() => repository.updateCategory(1, categoryInputModel))
+          .thenThrow(Failure());
+      //Act
+      final call = service.updateCategory;
+
+      //Assert
+      expect(() => call(1, categoryInputModel), throwsA(isA<Failure>()));
+      verify(() => repository.updateCategory(1, categoryInputModel)).called(1);
     });
   });
 }
