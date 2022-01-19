@@ -74,4 +74,27 @@ void main() {
       verify(() => repository.updateCategory(1, categoryInputModel)).called(1);
     });
   });
+
+  group('group test delete category', () {
+    test('Should deleteCategory with success', () async {
+      // Arrange
+      when(() => repository.deleteCategory(1)).thenAnswer((_) async => _);
+      //Act
+      await service.deleteCategory(1);
+
+      //Assert
+      verify(() => repository.deleteCategory(1)).called(1);
+    });
+
+    test('Should throws exception', () async {
+      // Arrange
+      when(() => repository.deleteCategory(1)).thenThrow(Failure());
+      //Act
+      final call = service.deleteCategory;
+
+      //Assert
+      expect(() => call(1), throwsA(isA<Failure>()));
+      verify(() => repository.deleteCategory(1)).called(1);
+    });
+  });
 }
