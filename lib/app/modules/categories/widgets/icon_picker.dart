@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
 
 class IconPicker {
   IconPicker._();
