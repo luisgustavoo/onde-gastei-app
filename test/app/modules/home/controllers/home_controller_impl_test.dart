@@ -149,9 +149,6 @@ void main() {
 
     test('Should throws exception', () async {
       // Arrange
-      final userExpected =
-          UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
-
       when(() => localStorage.read<String>(any())).thenThrow(Exception());
 
       //Act

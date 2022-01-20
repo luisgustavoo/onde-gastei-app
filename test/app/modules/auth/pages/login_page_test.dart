@@ -4,11 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
+import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
+import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
-import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/services/home_service.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
@@ -18,14 +19,13 @@ import '../../../../core/local_storage/mock_local_storage.dart';
 import '../../../../core/log/mock_log.dart';
 import '../controllers/auth_controller_impl_test.dart';
 
-late AuthService authService;
-late HomeController homeController;
-late HomeService homeService;
-late NavigatorObserver navigatorObserver;
+late AuthService mockAuthService;
+late NavigatorObserver mockNavigatorObserver;
+late Log mockLog;
+late LocalStorage mockLocalStorage;
+late HomeService mockHomeService;
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
-
-class MockHomeController extends Mock implements HomeController {}
 
 class MockHomeService extends Mock implements HomeService {}
 
@@ -36,25 +36,26 @@ Widget createLoginPagePage() {
     providers: [
       ChangeNotifierProvider(
         create: (context) => AuthControllerImpl(
-          localStorage: MockLocalStorage(),
-          log: MockLog(),
-          service: authService,
+          localStorage: mockLocalStorage,
+          log: mockLog,
+          service: mockAuthService,
         ),
       ),
       ChangeNotifierProvider(
-          create: (context) => HomeControllerImpl(
-              service: homeService, localStorage: MockLocalStorage()))
+        create: (context) => HomeControllerImpl(
+            localStorage: mockLocalStorage, service: mockHomeService),
+      )
     ],
     child: ScreenUtilInit(
       builder: () => MaterialApp(
         initialRoute: LoginPage.router,
-        navigatorObservers: [navigatorObserver],
+        navigatorObservers: [mockNavigatorObserver],
         routes: {
-          LoginPage.router: (context) =>
-              LoginPage(authController: context.read<AuthControllerImpl>()),
-          AppPage.router: (context) => AppPage(
-                homeController: context.read<HomeControllerImpl>(),
-              )
+          LoginPage.router: (context) => LoginPage(
+                authController: context.read<AuthControllerImpl>(),
+              ),
+          AppPage.router: (context) => Container()
+          // AppPage(homeController: context.read<HomeControllerImpl>()),
         },
       ),
     ),
@@ -63,10 +64,11 @@ Widget createLoginPagePage() {
 
 void main() {
   setUp(() {
-    authService = MockAuthService();
-    homeController = MockHomeController();
-    homeService = MockHomeService();
-    navigatorObserver = MockNavigatorObserver();
+    mockAuthService = MockAuthService();
+    mockLog = MockLog();
+    mockLocalStorage = MockLocalStorage();
+    mockHomeService = MockHomeService();
+    mockNavigatorObserver = MockNavigatorObserver();
     registerFallbackValue(MockRoute());
   });
 
@@ -169,7 +171,15 @@ void main() {
 
   testWidgets('Should login with success', (tester) async {
     //Arrange
-    when(() => authService.login(any(), any())).thenAnswer((_) async => _);
+
+    when(() => mockAuthService.login(any(), any())).thenAnswer((_) async => _);
+    when(() => mockNavigatorObserver.didReplace(
+          oldRoute: any(named: 'oldRoute'),
+          newRoute: any(named: 'newRoute'),
+        )).thenAnswer((_) async => _);
+
+    // when(() => mockNavigatorObserver.didPush(any(), any()))
+    //     .thenAnswer((_) async => _);
 
     await tester.pumpWidget(createLoginPagePage());
 
@@ -182,20 +192,22 @@ void main() {
 
     await tester.enterText(email, 'test@teste.com');
     await tester.enterText(password, '123456');
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     //Act
     await tester.tap(loginButton);
     await tester.pumpAndSettle();
 
     //Assert
-    verify(() => authService.login(any(), any())).called(1);
-    verify(() => navigatorObserver.didPush(any(), any())).called(1);
+    verify(() => mockAuthService.login(any(), any())).called(1);
+    verify(() => mockNavigatorObserver.didReplace(
+        oldRoute: any(named: 'oldRoute'),
+        newRoute: any(named: 'newRoute'))).called(1);
   });
 
   testWidgets('Should trows UserNotFoundException', (tester) async {
     //Arrange
-    when(() => authService.login(any(), any()))
+    when(() => mockAuthService.login(any(), any()))
         .thenThrow(UserNotFoundException());
 
     await tester.pumpWidget(createLoginPagePage());
@@ -223,7 +235,7 @@ void main() {
 
   testWidgets('Should trows UnverifiedEmailException', (tester) async {
     //Arrange
-    when(() => authService.login(any(), any()))
+    when(() => mockAuthService.login(any(), any()))
         .thenThrow(UnverifiedEmailException());
 
     await tester.pumpWidget(createLoginPagePage());
@@ -254,7 +266,7 @@ void main() {
 
   testWidgets('Should trows generic Exception', (tester) async {
     //Arrange
-    when(() => authService.login(any(), any())).thenThrow(Exception());
+    when(() => mockAuthService.login(any(), any())).thenThrow(Exception());
 
     await tester.pumpWidget(createLoginPagePage());
 

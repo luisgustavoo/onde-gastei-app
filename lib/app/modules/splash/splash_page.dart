@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
-import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 
 class SplashPage extends StatefulWidget {

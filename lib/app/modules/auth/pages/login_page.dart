@@ -37,34 +37,33 @@ class _LoginPageState extends State<LoginPage> {
     final scaffoldMessage = ScaffoldMessenger.of(context);
 
     final state = context.select<AuthControllerImpl, authState>(
-            (autController) => autController.state);
+        (autController) => autController.state);
 
     return Scaffold(
-      body: IgnorePointer(
-        ignoring: state == authState.loading,
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 100.h,
-                  ),
-                  const Logo(
-                    key: Key('logo_key_login_page'),
-                  ),
-                  SizedBox(
-                    height: 32.h,
-                  ),
-                  _buildForm(state, context, scaffoldMessage),
-                ],
-              ),
-            )
-          ],
-        ),
-      )
-    );
+        body: IgnorePointer(
+      ignoring: state == authState.loading,
+      child: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 100.h,
+                ),
+                const Logo(
+                  key: Key('logo_key_login_page'),
+                ),
+                SizedBox(
+                  height: 32.h,
+                ),
+                _buildForm(state, context, scaffoldMessage),
+              ],
+            ),
+          )
+        ],
+      ),
+    ));
   }
 
   Form _buildForm(authState state, BuildContext context,
