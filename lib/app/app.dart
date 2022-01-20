@@ -5,15 +5,22 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/local_storages/flutter_secure_storage_local_storage_impl.dart';
 import 'package:onde_gastei_app/app/core/local_storages/shared_preferences_local_storage_impl.dart';
+import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/logs/log_impl.dart';
 import 'package:onde_gastei_app/app/core/navigator/onde_gastei_navigator.dart';
 import 'package:onde_gastei_app/app/core/rest_client/dio_rest_client.dart';
+import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_services_impl.dart';
+import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
+import 'package:onde_gastei_app/app/modules/categories/pages/register_update_categories_page.dart';
+import 'package:onde_gastei_app/app/modules/categories/repositories/categories_repository_impl.dart';
+import 'package:onde_gastei_app/app/modules/categories/services/categories_service_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/repositories/home_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/services/home_service_impl.dart';
@@ -53,6 +60,8 @@ class App extends StatelessWidget {
               log: context.read<LogImpl>(),
             ),
           ),
+
+          // *** AUTENTICAÇÃO ***
           Provider(
             create: (context) => AuthRepositoryImpl(
               restClient: context.read<DioRestClient>(),
@@ -76,6 +85,8 @@ class App extends StatelessWidget {
               localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
             ),
           ),
+
+          // *** HOME ***
           Provider(
             create: (context) => HomeRepositoryImpl(
               restClient: context.read<DioRestClient>(),
@@ -94,6 +105,25 @@ class App extends StatelessWidget {
               localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
             ),
           ),
+
+          // *** CATEGORIAS ***
+          Provider(
+            create: (context) => CategoriesRepositoryImpl(
+              restClient: context.read<DioRestClient>(),
+              log: context.read<LogImpl>(),
+            ),
+          ),
+          Provider(
+            create: (context) => CategoriesServiceImpl(
+              repository: context.read<CategoriesRepositoryImpl>(),
+            ),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => CategoriesControllerImpl(
+              service: context.read<CategoriesServiceImpl>(),
+              log: context.read<LogImpl>(),
+            ),
+          ),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -105,16 +135,26 @@ class App extends StatelessWidget {
           routes: {
             SplashPage.router: (context) => SplashPage(
                   authController: context.read<AuthControllerImpl>(),
-                  //homeController: context.read<HomeControllerImpl>(),
                 ),
             AppPage.router: (context) => AppPage(
                   homeController: context.read<HomeControllerImpl>(),
+                  categoriesController:
+                      context.read<CategoriesControllerImpl>(),
                 ),
             LoginPage.router: (context) => LoginPage(
                   authController: context.read<AuthControllerImpl>(),
                 ),
             RegisterPage.router: (context) => RegisterPage(
                   authController: context.read<AuthControllerImpl>(),
+                ),
+            CategoriesPage.router: (context) => CategoriesPage(
+                  categoriesController:
+                      context.read<CategoriesControllerImpl>(),
+                ),
+            RegisterUpdateCategoriesPage.router: (context) =>
+                RegisterUpdateCategoriesPage(
+                  categoriesController:
+                      context.read<CategoriesControllerImpl>(),
                 ),
           },
         ),

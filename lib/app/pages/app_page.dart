@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
+import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 
 class AppPage extends StatefulWidget {
-  const AppPage({required this.homeController, Key? key}) : super(key: key);
+  const AppPage(
+      {required this.homeController,
+      required this.categoriesController,
+      Key? key})
+      : super(key: key);
   static const router = '/app';
+
   final HomeController homeController;
+  final CategoriesController categoriesController;
 
   @override
   State<AppPage> createState() => _AppPageState();
@@ -13,6 +21,16 @@ class AppPage extends StatefulWidget {
 
 class _AppPageState extends State<AppPage> {
   int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    /*
+       CARREGAR OS DADOS DAS TELAS
+       HOME, EXPENSES, CATEGORIES E PERFIL
+    */
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,28 +49,15 @@ class _AppPageState extends State<AppPage> {
           Container(
             color: Colors.red,
           ),
-          Container(
-            color: Colors.blue,
+          CategoriesPage(
+            categoriesController: widget.categoriesController,
           ),
           Container(
             color: Colors.yellow,
           )
         ],
       ),
-      bottomNavigationBar: /*BottomAppBar(
-        child: Container(
-          child: Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.home_outlined),
-              )
-            ],
-          ),
-        ),
-      ),*/
-
-          BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         elevation: 0,
         currentIndex: currentIndex,
