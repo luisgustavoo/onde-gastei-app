@@ -1,3 +1,4 @@
+import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/repositories/categories_repository.dart';
 import 'package:onde_gastei_app/app/modules/categories/services/categories_service.dart';
@@ -21,4 +22,8 @@ class CategoriesServiceImpl implements CategoriesService {
   @override
   Future<void> deleteCategory(int categoryId) =>
       _repository.deleteCategory(categoryId);
+
+  @override
+  Future<List<CategoryModel>> findCategories(int userId) =>
+      _repository.findCategories(userId);
 }

@@ -96,4 +96,20 @@ void main() {
       verify(() => repository.deleteCategory(1)).called(1);
     });
   });
+
+  group('Group test findCategories', () {
+    test('Should find categories with success', () async {
+      //Arrange
+      const categoriesExpected = [
+        CategoryModel(id: 1, description: 'Test', iconCode: 1, colorCode: 1)
+      ];
+      when(() => repository.findCategories(any()))
+          .thenAnswer((_) async => categoriesExpected);
+      //Act
+      await service.findCategories(1);
+
+      //Assert
+      verify(() => service.findCategories(any())).called(1);
+    });
+  });
 }
