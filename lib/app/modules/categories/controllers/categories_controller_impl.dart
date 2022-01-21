@@ -17,7 +17,7 @@ class CategoriesControllerImpl extends ChangeNotifier
 
   final CategoriesService _service;
   final Log _log;
-  // var categoriesList = <CategoryModel>[];
+  List<CategoryModel> categoriesList = <CategoryModel>[];
 
   categoriesState state = categoriesState.idle;
 
@@ -74,6 +74,26 @@ class CategoriesControllerImpl extends ChangeNotifier
       notifyListeners();
     } on Exception catch (e, s) {
       _log.error('Erro ao excluir categoria', e, s);
+
+      state = categoriesState.error;
+      notifyListeners();
+
+      throw Failure();
+    }
+  }
+
+  @override
+  Future<void> findCategories(int userId) async {
+    try {
+      state = categoriesState.loading;
+      notifyListeners();
+
+      categoriesList = await _service.findCategories(userId);
+
+      state = categoriesState.success;
+      notifyListeners();
+    } on Exception catch (e, s) {
+      _log.error('Erro ao buscar categorias', e, s);
 
       state = categoriesState.error;
       notifyListeners();

@@ -110,4 +110,38 @@ void main() {
       verify(() => service.deleteCategory(any())).called(1);
     });
   });
+
+  group('Group test find categories', () {
+    test('Should find categories with success', () async {
+      //Arrange
+      const categoriesExpected = [
+        CategoryModel(
+            id: 1, description: 'Test', iconCode: 1, colorCode: 1, userId: 1)
+      ];
+
+      when(() => service.findCategories(any()))
+          .thenAnswer((_) async => categoriesExpected);
+
+      //Act
+
+      await controller.findCategories(1);
+
+      //Assert
+      verify(() => service.findCategories(any())).called(1);
+    });
+
+    test('Should throws exception', () async {
+      //Arrange
+
+      when(() => service.findCategories(any())).thenThrow(Exception());
+
+      //Act
+
+      final call = controller.findCategories;
+
+      //Assert
+      expect(() => call(1), throwsA(isA<Failure>()));
+      verify(() => service.findCategories(any())).called(1);
+    });
+  });
 }

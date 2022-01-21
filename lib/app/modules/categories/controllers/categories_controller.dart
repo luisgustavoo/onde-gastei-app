@@ -6,5 +6,5 @@ abstract class CategoriesController {
   Future<void> updateCategory(
       int categoryId, CategoryInputModel categoryInputModel);
   Future<void> deleteCategory(int categoryId);
-  // Future<void> findCategories(int userId);
+  Future<void> findCategories(int userId);
 }
