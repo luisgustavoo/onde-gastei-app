@@ -58,4 +58,23 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
       throw Failure();
     }
   }
+
+  @override
+  Future<List<CategoryModel>> findCategories(int userId) async {
+    try {
+      final result = await _restClient
+          .auth()
+          .get<List<dynamic>>('/users/$userId/categories');
+
+      if (result.data != null) {
+        final categoriesList = List<Map<String, dynamic>>.from(result.data!);
+        return categoriesList.map((c) => CategoryModel.fromMap(c)).toList();
+      }
+
+      return <CategoryModel>[];
+    } on Exception catch (e, s) {
+      _log.error('Erro ao buscar categories do usuário $userId', e, s);
+      throw Failure();
+    }
+  }
 }

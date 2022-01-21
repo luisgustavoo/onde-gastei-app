@@ -17,6 +17,7 @@ class CategoriesControllerImpl extends ChangeNotifier
 
   final CategoriesService _service;
   final Log _log;
+  // var categoriesList = <CategoryModel>[];
 
   categoriesState state = categoriesState.idle;
 

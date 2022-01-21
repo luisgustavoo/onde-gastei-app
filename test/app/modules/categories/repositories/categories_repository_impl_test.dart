@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
@@ -9,6 +11,7 @@ import 'package:onde_gastei_app/app/modules/categories/repositories/categories_r
 import 'package:onde_gastei_app/app/modules/categories/repositories/categories_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 
+import '../../../../core/fixture/fixture_reader.dart';
 import '../../../../core/log/mock_log.dart';
 import '../../../../core/rest_client/mock_rest_client.dart';
 import '../../../../core/rest_client/mock_rest_client_response.dart';
@@ -134,6 +137,57 @@ void main() {
       //Assert
       expect(() => call(1), throwsA(isA<Failure>()));
       verify(() => restClient.delete<Map<String, dynamic>>(any())).called(1);
+    });
+  });
+
+  group('Group test findCategories', () {
+    test('Should find categories with success', () async {
+      //Arrange
+      final jsonData = FixtureReader.getJsonData(
+          'app/modules/categories/repositories/fixture/find_categories_response.json');
+      final responseData = jsonDecode(jsonData) as List<dynamic>;
+
+      final categoriesList = List<Map<String, dynamic>>.from(responseData);
+
+      final categoriesModelExpected =
+          categoriesList.map((c) => CategoryModel.fromMap(c)).toList();
+
+      when(() => restClient.get<List<Map<String, dynamic>>>(any())).thenAnswer(
+        (_) async =>
+            MockRestClientResponse(statusCode: 200, data: categoriesList),
+      );
+
+      //Act
+      final categoriesModel = await repository.findCategories(1);
+
+      //Assert
+      expect(categoriesModel, categoriesModelExpected);
+      verify(() => restClient.get<List<Map<String, dynamic>>>(any())).called(1);
+    });
+
+    test('Should return categories empty', () async {
+      //Arrange
+      when(() => restClient.get<List<Map<String, dynamic>>>(any())).thenAnswer(
+        (_) async => MockRestClientResponse(statusCode: 200, data: null),
+      );
+
+      //Act
+      final categoriesModel = await repository.findCategories(1);
+
+      //Assert
+      expect(categoriesModel, <CategoryModel>[]);
+    });
+
+    test('Should throws exception', () async {
+      //Arrange
+      when(() => restClient.get<List<Map<String, dynamic>>>(any()))
+          .thenThrow(Exception());
+
+      //Act
+      final call = repository.findCategories;
+
+      //Assert
+      expect(() => call(1), throwsA(isA<Failure>()));
     });
   });
 }

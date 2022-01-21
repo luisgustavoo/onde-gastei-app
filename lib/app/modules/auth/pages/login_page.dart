@@ -36,8 +36,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final scaffoldMessage = ScaffoldMessenger.of(context);
-
     final state = context.select<AuthControllerImpl, authState>(
         (autController) => autController.state);
 
@@ -146,7 +144,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  OndeGasteiButton _buildOndeGasteiButton(BuildContext context, authState state) {
+  OndeGasteiButton _buildOndeGasteiButton(
+      BuildContext context, authState state) {
     return OndeGasteiButton(
       Text(
         'Entrar',
