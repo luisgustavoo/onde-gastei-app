@@ -32,6 +32,8 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  final _scaffoldMessagedKey = GlobalKey<ScaffoldMessengerState>();
+
   @override
   Widget build(BuildContext context) {
     final scaffoldMessage = ScaffoldMessenger.of(context);
@@ -39,35 +41,37 @@ class _LoginPageState extends State<LoginPage> {
     final state = context.select<AuthControllerImpl, authState>(
         (autController) => autController.state);
 
-    return Scaffold(
-        body: IgnorePointer(
-      ignoring: state == authState.loading,
-      child: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 100.h,
-                ),
-                const Logo(
-                  key: Key('logo_key_login_page'),
-                ),
-                SizedBox(
-                  height: 32.h,
-                ),
-                _buildForm(state, context, scaffoldMessage),
-              ],
-            ),
-          )
-        ],
-      ),
-    ));
+    return ScaffoldMessenger(
+      key: _scaffoldMessagedKey,
+      child: Scaffold(
+          body: IgnorePointer(
+        ignoring: state == authState.loading,
+        child: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 100.h,
+                  ),
+                  const Logo(
+                    key: Key('logo_key_login_page'),
+                  ),
+                  SizedBox(
+                    height: 32.h,
+                  ),
+                  _buildForm(context, state),
+                ],
+              ),
+            )
+          ],
+        ),
+      )),
+    );
   }
 
-  Form _buildForm(authState state, BuildContext context,
-      ScaffoldMessengerState scaffoldMessage) {
+  Form _buildForm(BuildContext context, authState state) {
     return Form(
       key: _formKey,
       child: Column(
@@ -121,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(
             height: 32.h,
           ),
-          _buildOndeGasteiButton(context, state, scaffoldMessage),
+          _buildOndeGasteiButton(context, state),
           SizedBox(
             height: 32.h,
           ),
@@ -142,8 +146,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  OndeGasteiButton _buildOndeGasteiButton(BuildContext context, authState state,
-      ScaffoldMessengerState scaffoldMessage) {
+  OndeGasteiButton _buildOndeGasteiButton(BuildContext context, authState state) {
     return OndeGasteiButton(
       Text(
         'Entrar',
@@ -185,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {},
             );
 
-            scaffoldMessage.showSnackBar(snackBar);
+            _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
           } on UnverifiedEmailException {
             snackBar = OndeGasteiSnackBar.buildSnackBar(
               content: const Text.rich(
@@ -208,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {},
             );
 
-            scaffoldMessage.showSnackBar(snackBar);
+            _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
           } on Exception {
             snackBar = OndeGasteiSnackBar.buildSnackBar(
               content: const Text.rich(
@@ -229,7 +232,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {},
             );
 
-            scaffoldMessage.showSnackBar(snackBar);
+            _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
           }
         }
       },

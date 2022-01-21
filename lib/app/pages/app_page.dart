@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
+
+UserModel? userModel;
 
 class AppPage extends StatefulWidget {
   const AppPage(
@@ -25,11 +28,13 @@ class _AppPageState extends State<AppPage> {
   @override
   void initState() {
     super.initState();
-
-    /*
+    Future.microtask(() async {
+      userModel = await widget.homeController.fetchUserData();
+      /*
        CARREGAR OS DADOS DAS TELAS
        HOME, EXPENSES, CATEGORIES E PERFIL
-    */
+      */
+    });
   }
 
   @override

@@ -24,6 +24,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldMessagedKey = GlobalKey<ScaffoldMessengerState>();
 
   final nameController = TextEditingController();
   final emailController = TextEditingController();
@@ -32,29 +33,29 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final scaffoldMessage = ScaffoldMessenger.of(context);
-
     final state = context.select<AuthControllerImpl, authState>(
         (autController) => autController.state);
 
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: IgnorePointer(
-          ignoring: state == authState.loading,
-          child: ListView(
-            children: [
-              _buildForm(context, scaffoldMessage, state),
-            ],
+    return ScaffoldMessenger(
+      key: _scaffoldMessagedKey,
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: IgnorePointer(
+            ignoring: state == authState.loading,
+            child: ListView(
+              children: [
+                _buildForm(context, state),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Form _buildForm(BuildContext context, ScaffoldMessengerState scaffoldMessage,
-      authState state) {
+  Form _buildForm(BuildContext context, authState state) {
     return Form(
       key: _formKey,
       child: Column(
@@ -123,14 +124,14 @@ class _RegisterPageState extends State<RegisterPage> {
           SizedBox(
             height: 32.h,
           ),
-          _buildOndeGasteiButton(context, scaffoldMessage, state)
+          _buildOndeGasteiButton(context, state)
         ],
       ),
     );
   }
 
-  OndeGasteiButton _buildOndeGasteiButton(BuildContext context,
-      ScaffoldMessengerState scaffoldMessage, authState state) {
+  OndeGasteiButton _buildOndeGasteiButton(
+      BuildContext context, authState state) {
     return OndeGasteiButton(
       Text(
         'Cadastrar',
@@ -201,7 +202,7 @@ class _RegisterPageState extends State<RegisterPage> {
             );
           }
 
-          scaffoldMessage.showSnackBar(snackBar);
+          _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
         }
       },
       isLoading: state == authState.loading,

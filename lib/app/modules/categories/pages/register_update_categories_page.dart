@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
+import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
+import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/widgets/color_picker.dart';
 import 'package:onde_gastei_app/app/modules/categories/widgets/icon_picker.dart';
+import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
 class RegisterUpdateCategoriesPage extends StatefulWidget {
   const RegisterUpdateCategoriesPage(
-      {required this.categoriesController, Key? key})
+      {required this.categoriesController, this.categoryModel, Key? key})
       : super(key: key);
 
   static const router = '/register-categories';
 
   final CategoriesController categoriesController;
+  final CategoryModel? categoryModel;
 
   @override
   State<RegisterUpdateCategoriesPage> createState() =>
@@ -25,14 +29,27 @@ class RegisterUpdateCategoriesPage extends StatefulWidget {
 
 class _RegisterUpdateCategoriesPageState
     extends State<RegisterUpdateCategoriesPage> {
-  final categoriesTextController = TextEditingController();
-  final _icon = ValueNotifier<IconData>(
-    const IconData(0xe332, fontFamily: 'MaterialIcons'),
-  );
+  TextEditingController? categoriesTextController;
+  late ValueNotifier<IconData> _icon;
 
-  final _color = ValueNotifier<Color>(
-    Colors.grey,
-  );
+  late ValueNotifier<Color> _color;
+  final _scaffoldMessagedKey = GlobalKey<ScaffoldMessengerState>();
+
+  @override
+  void initState() {
+    super.initState();
+    categoriesTextController =
+        TextEditingController(text: widget.categoryModel?.description);
+
+    _icon = ValueNotifier<IconData>(
+      IconData(widget.categoryModel?.iconCode ?? 0xe332,
+          fontFamily: 'MaterialIcons'),
+    );
+
+    _color = ValueNotifier<Color>(
+      Color(widget.categoryModel?.colorCode ?? 0xFF9E9E9E),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,89 +57,150 @@ class _RegisterUpdateCategoriesPageState
         (categoriesController) => categoriesController.state);
 
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            splashRadius: 20,
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              if (Navigator.of(context).canPop()) {
-                Navigator.of(context).pop();
-              }
-            },
-          ),
-        ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Form(
-                  child: OndeGasteiTextForm(
-                    key: const Key('categories_key_register_categories'),
-                    label: 'Categoria...',
-                    textAlign: TextAlign.center,
-                    controller: categoriesTextController,
-                    validator:
-                        Validatorless.required('A categoria é obrigatório'),
-                  ),
-                ),
-                SizedBox(
-                  height: 16.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ValueListenableBuilder<IconData>(
-                      valueListenable: _icon,
-                      builder: (context, iconData, _) {
-                        return GestureDetector(
-                          onTap: () {
-                            showDialog<void>(
-                              context: context,
-                              builder: _buildDialogIcons,
-                            );
-                          },
-                          child: ValueListenableBuilder<Color>(
-                            valueListenable: _color,
-                            builder: (context, color, _) =>
-                                _buildIcon(icon: iconData, color: color),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      width: 50.w,
-                    ),
-                    ValueListenableBuilder<Color>(
-                      valueListenable: _color,
-                      builder: (context, color, _) {
-                        return GestureDetector(
-                          onTap: () {
-                            showDialog<void>(
-                                context: context, builder: _buildDialogsColor);
-                          },
-                          child: _buildColor(color: color),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 40.h,
-                ),
-                OndeGasteiButton(
-                  Text(
-                    'Salvar',
-                    style: TextStyle(color: Colors.white, fontSize: 17.sp),
-                  ),
-                  key: const Key('button_save_register_update_categories_page'),
-                  isLoading: state == categoriesState.loading,
-                )
-              ],
+      child: ScaffoldMessenger(
+        key: _scaffoldMessagedKey,
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              splashRadius: 20,
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                }
+              },
             ),
           ),
+          body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ListView(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Form(
+                        child: OndeGasteiTextForm(
+                          key: const Key('categories_key_register_categories'),
+                          label: 'Categoria...',
+                          textAlign: TextAlign.center,
+                          controller: categoriesTextController,
+                          validator:
+                              Validatorless.required('A categoria é obrigatório'),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ValueListenableBuilder<IconData>(
+                            valueListenable: _icon,
+                            builder: (context, iconData, _) {
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialog<void>(
+                                    context: context,
+                                    builder: _buildDialogIcons,
+                                  );
+                                },
+                                child: ValueListenableBuilder<Color>(
+                                  valueListenable: _color,
+                                  builder: (context, color, _) =>
+                                      _buildIcon(icon: iconData, color: color),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(
+                            width: 50.w,
+                          ),
+                          ValueListenableBuilder<Color>(
+                            valueListenable: _color,
+                            builder: (context, color, _) {
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialog<void>(
+                                      context: context,
+                                      builder: _buildDialogsColor);
+                                },
+                                child: _buildColor(color: color),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 40.h,
+                      ),
+                      OndeGasteiButton(
+                        Text(
+                          'Salvar',
+                          style: TextStyle(color: Colors.white, fontSize: 17.sp),
+                        ),
+                        key: const Key(
+                            'button_save_register_update_categories_page'),
+                        isLoading: state == categoriesState.loading,
+                        onPressed: () async {
+                          SnackBar snackBar;
+
+                          try {
+                            final categoryModel = CategoryModel(
+                              description: categoriesTextController!.text,
+                              iconCode: _icon.value.codePoint,
+                              colorCode: _color.value.value,
+                              userId: userModel?.userId,
+                            );
+
+                            await widget.categoriesController
+                                .register(categoryModel);
+
+                            snackBar = OndeGasteiSnackBar.buildSnackBar(
+                              key: const Key(
+                                  'snack_bar_success_key_register_update_categories_page'),
+                              content: RichText(
+                                key: const Key(
+                                    'message_key_register_update_categories_page'),
+                                text: const TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Categoria criada com sucesso!',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              backgroundColor: Theme.of(context).primaryColor,
+                              label: 'Fechar',
+                              onPressed: () {},
+                            );
+                          } on Exception {
+                            snackBar = OndeGasteiSnackBar.buildSnackBar(
+                              key: const Key(
+                                  'snack_bar_error_key_register_update_categories_page'),
+                              content: RichText(
+                                key: const Key(
+                                    'message_error_key_register_update_categories_page'),
+                                text: const TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Erro ao criar categoria!',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              backgroundColor: Colors.red,
+                              label: 'Fechar',
+                              onPressed: () {},
+                            );
+                          }
+
+                          _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
+                        },
+                      )
+                    ],
+                  ),
+                ],
+              )),
         ),
       ),
     );

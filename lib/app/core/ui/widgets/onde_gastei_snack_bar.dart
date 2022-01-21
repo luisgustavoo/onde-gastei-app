@@ -16,6 +16,7 @@ class OndeGasteiSnackBar {
       backgroundColor: backgroundColor,
       elevation: 10,
       content: content,
+
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.r),

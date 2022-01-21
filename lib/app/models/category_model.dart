@@ -2,10 +2,10 @@
 
 class CategoryModel {
   const CategoryModel({
-    required this.id,
     required this.description,
     required this.iconCode,
     required this.colorCode,
+    this.id,
     this.userId,
   });
 
@@ -19,7 +19,7 @@ class CategoryModel {
     );
   }
 
-  final int id;
+  final int? id;
   final String description;
   final int iconCode;
   final int colorCode;
