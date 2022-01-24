@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:onde_gastei_app/app/core/local_storages/shared_preferences_local_storage_impl.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
+import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
+import 'package:provider/provider.dart';
 
 UserModel? userModel;
 
@@ -25,11 +28,24 @@ class AppPage extends StatefulWidget {
 class _AppPageState extends State<AppPage> {
   int currentIndex = 0;
 
+  final initialDate = DateTime(DateTime.now().year, DateTime.now().month);
+  final finalDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month + 1,
+  ).subtract(const Duration(days: 1));
+
   @override
   void initState() {
     super.initState();
     Future.microtask(() async {
       userModel = await widget.homeController.fetchUserData();
+      await widget.categoriesController.findCategories(userModel!.userId);
+
+      await widget.homeController.fetchHomeData(
+        userId: userModel?.userId ?? 0,
+        initialDate: initialDate,
+        finalDate: finalDate,
+      );
       /*
        CARREGAR OS DADOS DAS TELAS
        HOME, EXPENSES, CATEGORIES E PERFIL
@@ -54,11 +70,21 @@ class _AppPageState extends State<AppPage> {
           Container(
             color: Colors.red,
           ),
-          CategoriesPage(
-            categoriesController: widget.categoriesController,
-          ),
+          const CategoriesPage(),
           Container(
             color: Colors.yellow,
+            child: Center(
+              child: TextButton(
+                onPressed: () async {
+                  final localStorage =
+                      context.read<SharedPreferencesLocalStorageImpl>();
+                  await localStorage.logout();
+                  await Navigator.of(context).pushNamedAndRemoveUntil(
+                      SplashPage.router, (route) => false);
+                },
+                child: const Text('Logout'),
+              ),
+            ),
           )
         ],
       ),
@@ -83,7 +109,7 @@ class _AppPageState extends State<AppPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.category_outlined),
-            label: 'Categoria',
+            label: 'Categorias',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),

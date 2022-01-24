@@ -7,12 +7,14 @@ import 'package:onde_gastei_app/app/modules/categories/services/categories_servi
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 
 enum categoriesState { idle, loading, error, success }
+enum categoriesDeleteState { idle, loading, error, success }
 
 class CategoriesControllerImpl extends ChangeNotifier
     implements CategoriesController {
-  CategoriesControllerImpl(
-      {required CategoriesService service, required Log log})
-      : _service = service,
+  CategoriesControllerImpl({
+    required CategoriesService service,
+    required Log log,
+  })  : _service = service,
         _log = log;
 
   final CategoriesService _service;
@@ -20,6 +22,7 @@ class CategoriesControllerImpl extends ChangeNotifier
   List<CategoryModel> categoriesList = <CategoryModel>[];
 
   categoriesState state = categoriesState.idle;
+  categoriesDeleteState stateDelete = categoriesDeleteState.idle;
 
   @override
   Future<void> register(CategoryModel categoryModel) async {
@@ -28,6 +31,8 @@ class CategoriesControllerImpl extends ChangeNotifier
       notifyListeners();
 
       await _service.register(categoryModel);
+
+      // categoriesList.add(categoryModel);
 
       state = categoriesState.success;
       notifyListeners();
@@ -50,6 +55,14 @@ class CategoriesControllerImpl extends ChangeNotifier
 
       await _service.updateCategory(categoryId, categoryInputModel);
 
+      // categoriesList[categoriesList
+      //     .indexWhere((element) => element.id == categoryId)] = CategoryModel(
+      //   id: categoryInputModel.id,
+      //   description: categoryInputModel.description,
+      //   iconCode: categoryInputModel.iconCode,
+      //   colorCode: categoryInputModel.colorCode,
+      // );
+
       state = categoriesState.success;
       notifyListeners();
     } on Exception catch (e, s) {
@@ -65,17 +78,21 @@ class CategoriesControllerImpl extends ChangeNotifier
   @override
   Future<void> deleteCategory(int categoryId) async {
     try {
-      state = categoriesState.loading;
+      stateDelete = categoriesDeleteState.loading;
       notifyListeners();
 
       await _service.deleteCategory(categoryId);
 
-      state = categoriesState.success;
+      // categoriesList.removeAt(
+      //   categoriesList.indexWhere((element) => element.id == categoryId),
+      // );
+
+      stateDelete = categoriesDeleteState.success;
       notifyListeners();
     } on Exception catch (e, s) {
       _log.error('Erro ao excluir categoria', e, s);
 
-      state = categoriesState.error;
+      stateDelete = categoriesDeleteState.error;
       notifyListeners();
 
       throw Failure();

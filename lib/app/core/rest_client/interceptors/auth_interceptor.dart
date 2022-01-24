@@ -139,16 +139,16 @@ class AuthInterceptor extends Interceptor {
     try {
       final requestOptions = err.requestOptions;
 
-      final response = await _restClient.auth().request<Map<String, dynamic>?>(
+      final response = await _restClient.auth().request<dynamic>(
             requestOptions.path,
             method: requestOptions.method,
-            data: requestOptions.data as Map<String, dynamic>?,
+            data: requestOptions.data,
             headers: requestOptions.headers,
             queryParameters: requestOptions.queryParameters,
           );
 
       handler.resolve(
-        Response<Map<String, dynamic>>(
+        Response<dynamic>(
             requestOptions: requestOptions,
             data: response.data,
             statusCode: response.statusCode,

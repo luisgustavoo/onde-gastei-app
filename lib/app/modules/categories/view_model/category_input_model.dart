@@ -5,8 +5,10 @@ class CategoryInputModel {
     required this.description,
     required this.iconCode,
     required this.colorCode,
+    this.id,
   });
 
+  final int? id;
   final String description;
   final int iconCode;
   final int colorCode;

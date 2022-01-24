@@ -1,36 +1,88 @@
 import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
-import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
-import 'package:onde_gastei_app/app/modules/categories/pages/register_update_categories_page.dart';
+import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/categories/pages/register_categories_page.dart';
+import 'package:onde_gastei_app/app/pages/app_page.dart';
+import 'package:provider/provider.dart';
 
 class CategoriesPage extends StatelessWidget {
-  const CategoriesPage({required this.categoriesController, Key? key})
-      : super(key: key);
+  const CategoriesPage({Key? key}) : super(key: key);
 
   static const router = '/category';
-
-  final CategoriesController categoriesController;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      appBar: AppBar(
-        title: const Text('Categorias'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(RegisterUpdateCategoriesPage.router);
-            },
-            icon: Icon(
-              Icons.add_circle,
-              color: Theme.of(context).primaryColor,
-              size: 30.sp,
-            ),
-          )
-        ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Categorias'),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                await Navigator.of(context)
+                    .pushNamed(RegisterCategoriesPage.router);
+
+                final categoreisController =
+                    context.read<CategoriesControllerImpl>();
+
+                await categoreisController
+                    .findCategories(userModel?.userId ?? 0);
+              },
+              icon: Icon(
+                Icons.add_circle,
+                color: Theme.of(context).primaryColor,
+                size: 30.sp,
+              ),
+            )
+          ],
+        ),
+        body: Consumer<CategoriesControllerImpl>(
+          builder: (context, categoreisController, _) {
+            if (categoreisController.state == categoriesState.loading) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).primaryColor,
+                  strokeWidth: 1.w,
+                ),
+              );
+            }
+
+            return ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: categoreisController.categoriesList.length,
+              itemBuilder: (context, index) {
+                final category = categoreisController.categoriesList[index];
+
+                return ListTile(
+                  onTap: () async {
+                    await Navigator.of(context).pushNamed(
+                      RegisterCategoriesPage.router,
+                      arguments: <String, dynamic>{
+                        'category': category,
+                        'editing': true,
+                      },
+                    );
+
+                    await categoreisController
+                        .findCategories(userModel?.userId ?? 0);
+                  },
+                  leading: CircleAvatar(
+                    backgroundColor: Color(category.colorCode),
+                    child: Icon(
+                      IconData(category.iconCode, fontFamily: 'MaterialIcons'),
+                      color: Colors.white,
+                    ),
+                  ),
+                  title: Text(
+                    category.description,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
-    ));
+    );
   }
 }

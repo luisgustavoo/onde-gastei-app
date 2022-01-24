@@ -16,23 +16,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final initialDate = DateTime(DateTime.now().year, DateTime.now().month);
-  final finalDate = DateTime(
-    DateTime.now().year,
-    DateTime.now().month + 1,
-  ).subtract(const Duration(days: 1));
+  // final initialDate = DateTime(DateTime.now().year, DateTime.now().month);
+  // final finalDate = DateTime(
+  //   DateTime.now().year,
+  //   DateTime.now().month + 1,
+  // ).subtract(const Duration(days: 1));
 
   @override
   void initState() {
     super.initState();
     Future.microtask(() async {
-      final user = await widget.homeController.fetchUserData();
-
-      await widget.homeController.fetchHomeData(
-        userId: user?.userId ?? 0,
-        initialDate: initialDate,
-        finalDate: finalDate,
-      );
+      // await widget.homeController.fetchHomeData(
+      //   userId: user?.userId ?? 0,
+      //   initialDate: initialDate,
+      //   finalDate: finalDate,
+      // );
     });
   }
 

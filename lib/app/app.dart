@@ -9,6 +9,7 @@ import 'package:onde_gastei_app/app/core/logs/log_impl.dart';
 import 'package:onde_gastei_app/app/core/navigator/onde_gastei_navigator.dart';
 import 'package:onde_gastei_app/app/core/rest_client/dio_rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
+import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
@@ -16,7 +17,7 @@ import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository_im
 import 'package:onde_gastei_app/app/modules/auth/services/auth_services_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
-import 'package:onde_gastei_app/app/modules/categories/pages/register_update_categories_page.dart';
+import 'package:onde_gastei_app/app/modules/categories/pages/register_categories_page.dart';
 import 'package:onde_gastei_app/app/modules/categories/repositories/categories_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/services/categories_service_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
@@ -145,15 +146,27 @@ class App extends StatelessWidget {
             RegisterPage.router: (context) => RegisterPage(
                   authController: context.read<AuthControllerImpl>(),
                 ),
-            CategoriesPage.router: (context) => CategoriesPage(
+            CategoriesPage.router: (context) => const CategoriesPage(),
+            RegisterCategoriesPage.router: (context) {
+              if (ModalRoute.of(context)!.settings.arguments != null) {
+                final arguments = ModalRoute.of(context)!.settings.arguments!
+                    as Map<String, dynamic>;
+
+                final categoryModel = arguments['category'] as CategoryModel;
+                final isEditing = arguments['editing'] as bool;
+
+                return RegisterCategoriesPage(
                   categoriesController:
                       context.read<CategoriesControllerImpl>(),
-                ),
-            RegisterUpdateCategoriesPage.router: (context) =>
-                RegisterUpdateCategoriesPage(
-                  categoriesController:
-                      context.read<CategoriesControllerImpl>(),
-                ),
+                  categoryModel: categoryModel,
+                  isEditing: isEditing,
+                );
+              }
+
+              return RegisterCategoriesPage(
+                categoriesController: context.read<CategoriesControllerImpl>(),
+              );
+            }
           },
         ),
       ),
