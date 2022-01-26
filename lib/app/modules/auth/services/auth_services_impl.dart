@@ -33,8 +33,10 @@ class AuthServicesImpl implements AuthService {
   Future<void> register(String name, String email, String password) async {
     try {
       await _repository.register(name, email, password);
-      final firebaseAuth = await _firebaseAuth
-          .createUserWithEmailAndPassword(email: email, password: password);
+      final firebaseAuth = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       if (firebaseAuth.user != null) {
         await firebaseAuth.user!.sendEmailVerification();
@@ -50,8 +52,10 @@ class AuthServicesImpl implements AuthService {
     try {
       final accessToken = await _repository.login(email, password);
 
-      final firebaseAuth = await _firebaseAuth
-          .signInWithEmailAndPassword(email: email, password: password);
+      final firebaseAuth = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       if (firebaseAuth.user != null) {
         if (!firebaseAuth.user!.emailVerified) {
@@ -79,6 +83,8 @@ class AuthServicesImpl implements AuthService {
     final confirmModel = await _repository.confirmLogin();
     await _saveAccessToken(confirmModel.accessToken);
     await _localSecurityStorage.write(
-        Constants.refreshToken, confirmModel.refreshToken);
+      Constants.refreshToken,
+      confirmModel.refreshToken,
+    );
   }
 }

@@ -4,7 +4,6 @@ import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
-import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/widgets/color_picker.dart';
@@ -15,7 +14,7 @@ import 'package:validatorless/validatorless.dart';
 
 class RegisterCategoriesPage extends StatefulWidget {
   const RegisterCategoriesPage({
-    required this.categoriesController,
+    // required this.categoriesController,
     this.categoryModel,
     this.isEditing = false,
     Key? key,
@@ -23,7 +22,7 @@ class RegisterCategoriesPage extends StatefulWidget {
 
   static const router = '/register-categories';
 
-  final CategoriesController categoriesController;
+  // final CategoriesControllerImpl categoriesController;
   final CategoryModel? categoryModel;
   final bool isEditing;
 
@@ -32,15 +31,16 @@ class RegisterCategoriesPage extends StatefulWidget {
 }
 
 class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
-  TextEditingController? categoriesTextController;
+  late TextEditingController categoriesTextController;
   late ValueNotifier<IconData> _icon;
 
   late ValueNotifier<Color> _color;
   final _scaffoldMessagedKey = GlobalKey<ScaffoldMessengerState>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    categoriesTextController?.dispose();
+    categoriesTextController.dispose();
     super.dispose();
   }
 
@@ -51,8 +51,10 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
         TextEditingController(text: widget.categoryModel?.description);
 
     _icon = ValueNotifier<IconData>(
-      IconData(widget.categoryModel?.iconCode ?? 0xe332,
-          fontFamily: 'MaterialIcons'),
+      IconData(
+        widget.categoryModel?.iconCode ?? 0xe332,
+        fontFamily: 'MaterialIcons',
+      ),
     );
 
     _color = ValueNotifier<Color>(
@@ -62,22 +64,25 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.select<CategoriesControllerImpl, categoriesState>(
-        (categoriesController) => categoriesController.state);
+    // final state = context.select<CategoriesControllerImpl, categoriesState>(
+    //     (categoriesController) => categoriesController.state);
+    final categoriesController = context.watch<CategoriesControllerImpl>();
 
     return SafeArea(
       child: ScaffoldMessenger(
         key: _scaffoldMessagedKey,
         child: IgnorePointer(
-          ignoring: state == categoriesState.loading,
+          ignoring: categoriesController.state == categoriesState.loading,
           child: Scaffold(
             appBar: AppBar(
+              title: const Text('Categoria'),
               leading: IconButton(
-                  splashRadius: 20,
-                  icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.of(context).pop()),
+                splashRadius: 20,
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
               actions: [
-                _buildDeleteButton(context),
+                _buildDeleteButton(context, categoriesController),
               ],
             ),
             body: Padding(
@@ -88,13 +93,15 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Form(
+                        key: _formKey,
                         child: OndeGasteiTextForm(
                           key: const Key('categories_key_register_categories'),
                           label: 'Categoria...',
                           textAlign: TextAlign.center,
                           controller: categoriesTextController,
                           validator: Validatorless.required(
-                              'A categoria é obrigatório'),
+                            'A categoria é obrigatório',
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -104,7 +111,11 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
                       SizedBox(
                         height: 40.h,
                       ),
-                      _buidlSaveButton(state, context)
+                      _buildSaveButton(
+                        categoriesController,
+                        categoriesController.state,
+                        context,
+                      )
                     ],
                   ),
                 ),
@@ -116,7 +127,10 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
     );
   }
 
-  Visibility _buildDeleteButton(BuildContext registerPageContext) {
+  Visibility _buildDeleteButton(
+    BuildContext registerPageContext,
+    CategoriesControllerImpl categoriesController,
+  ) {
     return Visibility(
       visible: widget.isEditing,
       child: IconButton(
@@ -125,173 +139,178 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
             context: registerPageContext,
             barrierDismissible: false,
             builder: (dialogContext) {
-              return Consumer<CategoriesControllerImpl>(
-                builder:
-                    (categoriesControllerContext, categoreisController, _) {
-                  return AlertDialog(
-                    title: const Text('Deletar categoria'),
-                    content: Text(
-                        'Deseja deletar a categoria ${widget.categoryModel?.description}?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
+              return AlertDialog(
+                key: const Key(
+                  'alert_delete_dialog_key_register_categories_page',
+                ),
+                title: const Text('Deletar categoria'),
+                content: Text(
+                  'Deseja deletar a categoria ${widget.categoryModel?.description}?',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(dialogContext).pop();
+                    },
+                    child: const Text('Cancelar'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      // SnackBar snackBar;
+                      try {
+                        await categoriesController
+                            .deleteCategory(widget.categoryModel?.id ?? 0);
+
+                        if (!mounted) {
+                          return;
+                        }
+
+                        if (Navigator.of(dialogContext).canPop()) {
                           Navigator.of(dialogContext).pop();
-                        },
-                        child: const Text('Cancelar'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          // SnackBar snackBar;
-                          try {
-                            await categoreisController
-                                .deleteCategory(widget.categoryModel?.id ?? 0);
+                        }
 
-                            // if (Navigator.of(context).canPop()) {
-                            //   Navigator.of(context).pop();
-                            // }
+                        if (Navigator.of(registerPageContext).canPop()) {
+                          Navigator.of(registerPageContext).pop();
+                        }
+                      } on Exception {
+                        final snackBar = OndeGasteiSnackBar.buildSnackBar(
+                          key: const Key(
+                            'snack_bar_fail_delete_key_register_update_categories_page',
+                          ),
+                          content: const Text('Erro ao deletar'),
+                          backgroundColor: Colors.red,
+                          label: 'Fechar',
+                          onPressed: () {},
+                        );
 
-                            if (Navigator.of(dialogContext).canPop()) {
-                              Navigator.of(dialogContext).pop();
-                            }
-
-                            if (Navigator.of(registerPageContext).canPop()) {
-                              Navigator.of(registerPageContext).pop();
-                            }
-
-                            // snackBar = OndeGasteiSnackBar.buildSnackBar(
-                            //   key: const Key(
-                            //       'snack_bar_success_delete_key_register_update_categories_page'),
-                            //   content:
-                            //       const Text('Categoria deletada com sucesso!'),
-                            //   backgroundColor: Theme.of(context).primaryColor,
-                            //   label: 'Fechar',
-                            //   onPressed: () {},
-                            // );
-                          } on Exception {
-                            final snackBar = OndeGasteiSnackBar.buildSnackBar(
-                              key: const Key(
-                                  'snack_bar_fail_delete_key_register_update_categories_page'),
-                              content: const Text('Erro ao deletar'),
-                              backgroundColor: Colors.red,
-                              label: 'Fechar',
-                              onPressed: () {},
-                            );
-
-                            _scaffoldMessagedKey.currentState!
-                                .showSnackBar(snackBar);
-                          }
-                        },
-                        child: categoreisController.stateDelete ==
-                                categoriesDeleteState.loading
-                            ? SizedBox(
-                                height: 15.h,
-                                width: 15.w,
-                                child: CircularProgressIndicator(
-                                  color: Theme.of(context).primaryColor,
-                                  strokeWidth: 1.w,
-                                ),
-                              )
-                            : const Text(
-                                'Deletar',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                      )
-                    ],
-                  );
-                },
+                        _scaffoldMessagedKey.currentState!
+                            .showSnackBar(snackBar);
+                      }
+                    },
+                    child: categoriesController.stateDelete ==
+                            categoriesDeleteState.loading
+                        ? SizedBox(
+                            height: 15.h,
+                            width: 15.w,
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).primaryColor,
+                              strokeWidth: 1.w,
+                            ),
+                          )
+                        : const Text(
+                            'Deletar',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                  )
+                ],
               );
             },
           );
         },
         splashRadius: 25.r,
         icon: const Icon(
-          Icons.delete_sharp,
+          Icons.delete,
           color: Colors.red,
         ),
       ),
     );
   }
 
-  OndeGasteiButton _buidlSaveButton(
-      categoriesState state, BuildContext context) {
+  OndeGasteiButton _buildSaveButton(
+    CategoriesControllerImpl categoriesController,
+    categoriesState state,
+    BuildContext context,
+  ) {
     return OndeGasteiButton(
       Text(
         'Salvar',
         style: TextStyle(color: Colors.white, fontSize: 17.sp),
       ),
-      key: const Key('button_save_register_update_categories_page'),
+      key: const Key('button_save_register_categories_page'),
       isLoading: state == categoriesState.loading,
       onPressed: () async {
-        SnackBar snackBar;
-        String message;
+        final formValid = _formKey.currentState?.validate() ?? false;
 
-        try {
-          if (!widget.isEditing) {
-            final categoryModel = CategoryModel(
-              description: categoriesTextController!.text,
-              iconCode: _icon.value.codePoint,
-              colorCode: _color.value.value,
-              userId: userModel?.userId,
+        if (formValid) {
+          SnackBar snackBar;
+
+          String message;
+
+          try {
+            if (!widget.isEditing) {
+              final categoryModel = CategoryModel(
+                description: categoriesTextController.text,
+                iconCode: _icon.value.codePoint,
+                colorCode: _color.value.value,
+                userId: userModel?.userId,
+              );
+
+              await categoriesController.register(categoryModel);
+              message = 'Categoria criada com sucesso!';
+
+              _resetFields();
+            } else {
+              final categoryInputModel = CategoryInputModel(
+                id: widget.categoryModel!.id,
+                description: categoriesTextController.text,
+                iconCode: _icon.value.codePoint,
+                colorCode: _color.value.value,
+              );
+
+              await categoriesController.updateCategory(
+                widget.categoryModel?.id ?? 0,
+                categoryInputModel,
+              );
+              message = 'Categoria atualizada com sucesso!';
+            }
+
+            if (!mounted) {
+              return;
+            }
+
+            snackBar = OndeGasteiSnackBar.buildSnackBar(
+              key: const Key(
+                'snack_bar_success_key_register_update_categories_page',
+              ),
+              content: RichText(
+                key: const Key('message_key_register_update_categories_page'),
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: message,
+                    ),
+                  ],
+                ),
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
+              label: 'Fechar',
+              onPressed: () {},
             );
-
-            await widget.categoriesController.register(categoryModel);
-            message = 'Categoria criada com sucesso!';
-
-            _resetFields();
-          } else {
-            final categoryInputModel = CategoryInputModel(
-              id: widget.categoryModel!.id,
-              description: categoriesTextController!.text,
-              iconCode: _icon.value.codePoint,
-              colorCode: _color.value.value,
+          } on Exception {
+            snackBar = OndeGasteiSnackBar.buildSnackBar(
+              key: const Key(
+                'snack_bar_error_key_register_update_categories_page',
+              ),
+              content: RichText(
+                key: const Key(
+                  'message_error_key_register_update_categories_page',
+                ),
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Erro ao criar categoria!',
+                    ),
+                  ],
+                ),
+              ),
+              backgroundColor: Colors.red,
+              label: 'Fechar',
+              onPressed: () {},
             );
-
-            await widget.categoriesController.updateCategory(
-              widget.categoryModel?.id ?? 0,
-              categoryInputModel,
-            );
-            message = 'Categoria atualizada com sucesso!';
           }
 
-          snackBar = OndeGasteiSnackBar.buildSnackBar(
-            key: const Key(
-                'snack_bar_success_key_register_update_categories_page'),
-            content: RichText(
-              key: const Key('message_key_register_update_categories_page'),
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: message,
-                  ),
-                ],
-              ),
-            ),
-            backgroundColor: Theme.of(context).primaryColor,
-            label: 'Fechar',
-            onPressed: () {},
-          );
-        } on Exception {
-          snackBar = OndeGasteiSnackBar.buildSnackBar(
-            key: const Key(
-                'snack_bar_error_key_register_update_categories_page'),
-            content: RichText(
-              key: const Key(
-                  'message_error_key_register_update_categories_page'),
-              text: const TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'Erro ao criar categoria!',
-                  ),
-                ],
-              ),
-            ),
-            backgroundColor: Colors.red,
-            label: 'Fechar',
-            onPressed: () {},
-          );
+          _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
         }
-
-        _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
       },
     );
   }
@@ -304,6 +323,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
           valueListenable: _icon,
           builder: (context, iconData, _) {
             return GestureDetector(
+              key: const Key('gesture_icon_key_register_categories_page'),
               onTap: () {
                 showDialog<void>(
                   context: context,
@@ -325,8 +345,9 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
           valueListenable: _color,
           builder: (context, color, _) {
             return GestureDetector(
+              key: const Key('gesture_color_key_register_categories_page'),
               onTap: () {
-                showDialog<void>(context: context, builder: _buildDialogsColor);
+                showDialog<void>(context: context, builder: _buildDialogColor);
               },
               child: _buildColor(color: color),
             );
@@ -343,6 +364,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
     return Column(
       children: [
         Container(
+          key: const Key('build_icon_key_register_categories_page'),
           height: 55,
           width: 55,
           decoration: BoxDecoration(
@@ -366,6 +388,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
     return Column(
       children: [
         Container(
+          key: const Key('build_color_key_register_categories_page'),
           height: 55,
           width: 55,
           decoration: BoxDecoration(
@@ -398,6 +421,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
           ),
           itemBuilder: (context, index) {
             return InkWell(
+              key: Key('inkwell_icons_key_register_categories_page_$index'),
               onTap: () {
                 _icon.value = icons[index];
                 Navigator.of(context).pop();
@@ -415,43 +439,49 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
     );
   }
 
-  Widget _buildDialogsColor(BuildContext context) {
+  Widget _buildDialogColor(BuildContext context) {
     const colors = ColorPicker.colors;
 
     return Dialog(
+      key: const Key('color_dialog_key_register_categories_page'),
       child: SizedBox(
         height: 450.h,
-        child: GridView(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount:
-                  MediaQuery.of(context).orientation == Orientation.portrait
-                      ? 4
-                      : 10,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-            ),
-            children: colors.map((color) {
-              return InkWell(
-                onTap: () {
-                  _color.value = color;
-                  Navigator.of(context).pop();
-                },
-                borderRadius: BorderRadius.circular(50),
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color,
-                  ),
+        child: GridView.builder(
+          itemCount: colors.length,
+          padding: const EdgeInsets.all(16),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount:
+                MediaQuery.of(context).orientation == Orientation.portrait
+                    ? 4
+                    : 10,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+          ),
+          itemBuilder: (context, index) {
+            final color = colors[index];
+
+            return InkWell(
+              key: Key('inkwell_color_key_register_categories_page_$index'),
+              onTap: () {
+                _color.value = color;
+                Navigator.of(context).pop();
+              },
+              borderRadius: BorderRadius.circular(50),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: color,
                 ),
-              );
-            }).toList()),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
   void _resetFields() {
-    categoriesTextController?.clear();
+    categoriesTextController.clear();
 
     _icon = ValueNotifier<IconData>(
       const IconData(0xe332, fontFamily: 'MaterialIcons'),

@@ -144,13 +144,14 @@ void main() {
     test('Should find categories with success', () async {
       //Arrange
       final jsonData = FixtureReader.getJsonData(
-          'app/modules/categories/repositories/fixture/find_categories_response.json');
+        'app/modules/categories/repositories/fixture/find_categories_response.json',
+      );
       final responseData = jsonDecode(jsonData) as List<dynamic>;
 
       final categoriesList = List<Map<String, dynamic>>.from(responseData);
 
       final categoriesModelExpected =
-          categoriesList.map((c) => CategoryModel.fromMap(c)).toList();
+          categoriesList.map(CategoryModel.fromMap).toList();
 
       when(() => restClient.get<List<Map<String, dynamic>>>(any())).thenAnswer(
         (_) async =>

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ColorPicker {
-
   ColorPicker._();
 
   static const List<Color> colors = [
@@ -44,5 +43,4 @@ class ColorPicker {
     Colors.yellow,
     Colors.yellowAccent
   ];
-
 }

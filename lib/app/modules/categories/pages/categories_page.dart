@@ -12,6 +12,8 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final categoriesController = context.read<CategoriesControllerImpl>();
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -22,10 +24,7 @@ class CategoriesPage extends StatelessWidget {
                 await Navigator.of(context)
                     .pushNamed(RegisterCategoriesPage.router);
 
-                final categoreisController =
-                    context.read<CategoriesControllerImpl>();
-
-                await categoreisController
+                await categoriesController
                     .findCategories(userModel?.userId ?? 0);
               },
               icon: Icon(
@@ -37,8 +36,8 @@ class CategoriesPage extends StatelessWidget {
           ],
         ),
         body: Consumer<CategoriesControllerImpl>(
-          builder: (context, categoreisController, _) {
-            if (categoreisController.state == categoriesState.loading) {
+          builder: (context, categoriesController, _) {
+            if (categoriesController.state == categoriesState.loading) {
               return Center(
                 child: CircularProgressIndicator(
                   color: Theme.of(context).primaryColor,
@@ -49,9 +48,9 @@ class CategoriesPage extends StatelessWidget {
 
             return ListView.builder(
               physics: const BouncingScrollPhysics(),
-              itemCount: categoreisController.categoriesList.length,
+              itemCount: categoriesController.categoriesList.length,
               itemBuilder: (context, index) {
-                final category = categoreisController.categoriesList[index];
+                final category = categoriesController.categoriesList[index];
 
                 return ListTile(
                   onTap: () async {
@@ -63,7 +62,7 @@ class CategoriesPage extends StatelessWidget {
                       },
                     );
 
-                    await categoreisController
+                    await categoriesController
                         .findCategories(userModel?.userId ?? 0);
                   },
                   leading: CircleAvatar(

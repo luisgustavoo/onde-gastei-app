@@ -3,8 +3,10 @@
 import 'package:onde_gastei_app/app/models/category_model.dart';
 
 class TotalExpensesCategoriesViewModel {
-  TotalExpensesCategoriesViewModel(
-      {required this.totalValue, required this.category});
+  TotalExpensesCategoriesViewModel({
+    required this.totalValue,
+    required this.category,
+  });
 
   factory TotalExpensesCategoriesViewModel.fromMap(Map<String, dynamic> map) {
     return TotalExpensesCategoriesViewModel(

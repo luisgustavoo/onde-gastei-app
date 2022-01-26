@@ -53,20 +53,21 @@ class UiConfig {
           selectionHandleColor: const Color(0xFF32B768),
         ),
         inputDecorationTheme: InputDecorationTheme(
-            hintStyle: const TextStyle(
-              color: Color(0xFFC0C2D1),
-            ),
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            fillColor: const Color(0xFFEFEFEF),
-            filled: true,
-            labelStyle: TextStyle(
-              color: const Color(0xFFC0C2D1),
-              fontSize: 12.sp,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.r),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: EdgeInsets.symmetric(vertical: 16.h)),
+          hintStyle: const TextStyle(
+            color: Color(0xFFC0C2D1),
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          fillColor: const Color(0xFFEFEFEF),
+          filled: true,
+          labelStyle: TextStyle(
+            color: const Color(0xFFC0C2D1),
+            fontSize: 12.sp,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.r),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: EdgeInsets.symmetric(vertical: 16.h),
+        ),
       );
 }

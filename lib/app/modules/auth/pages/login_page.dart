@@ -23,10 +23,10 @@ class LoginPage extends StatefulWidget {
   final AuthController _authController;
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   final _emailController = TextEditingController();
@@ -37,35 +37,37 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final state = context.select<AuthControllerImpl, authState>(
-        (autController) => autController.state);
+      (autController) => autController.state,
+    );
 
     return ScaffoldMessenger(
       key: _scaffoldMessagedKey,
       child: Scaffold(
-          body: IgnorePointer(
-        ignoring: state == authState.loading,
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 100.h,
-                  ),
-                  const Logo(
-                    key: Key('logo_key_login_page'),
-                  ),
-                  SizedBox(
-                    height: 32.h,
-                  ),
-                  _buildForm(context, state),
-                ],
-              ),
-            )
-          ],
+        body: IgnorePointer(
+          ignoring: state == authState.loading,
+          child: ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 100.h,
+                    ),
+                    const Logo(
+                      key: Key('logo_key_login_page'),
+                    ),
+                    SizedBox(
+                      height: 32.h,
+                    ),
+                    _buildForm(context, state),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 
@@ -97,7 +99,9 @@ class _LoginPageState extends State<LoginPage> {
             validator: Validatorless.multiple([
               Validatorless.required('Senha obrigatória'),
               Validatorless.min(
-                  6, 'A senha tem que ter no mínimo 6 caracteres'),
+                6,
+                'A senha tem que ter no mínimo 6 caracteres',
+              ),
             ]),
           ),
           SizedBox(
@@ -145,7 +149,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   OndeGasteiButton _buildOndeGasteiButton(
-      BuildContext context, authState state) {
+    BuildContext context,
+    authState state,
+  ) {
     return OndeGasteiButton(
       Text(
         'Entrar',
@@ -166,6 +172,10 @@ class _LoginPageState extends State<LoginPage> {
               _emailController.text,
               _passwordController.text,
             );
+
+            if (!mounted) {
+              return;
+            }
 
             await Navigator.of(context).pushReplacementNamed(AppPage.router);
           } on UserNotFoundException {

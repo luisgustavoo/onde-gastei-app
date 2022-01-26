@@ -47,28 +47,36 @@ void main() {
 
       //Assert
       expect(find.text('Cadastro'), findsOneWidget);
-      expect(find.widgetWithText(TextFormField, 'Como quer ser chamado?'),
-          findsOneWidget);
+      expect(
+        find.widgetWithText(TextFormField, 'Como quer ser chamado?'),
+        findsOneWidget,
+      );
       expect(find.widgetWithText(TextFormField, 'E-mail'), findsOneWidget);
       expect(find.widgetWithText(TextFormField, 'Senha'), findsOneWidget);
-      expect(find.widgetWithText(TextFormField, 'Confirmar senha'),
-          findsOneWidget);
-      expect(find.widgetWithText(TextFormField, 'Confirmar senha'),
-          findsOneWidget);
+      expect(
+        find.widgetWithText(TextFormField, 'Confirmar senha'),
+        findsOneWidget,
+      );
+      expect(
+        find.widgetWithText(TextFormField, 'Confirmar senha'),
+        findsOneWidget,
+      );
 
       expect(
-          find.byType(
-            ElevatedButton,
-          ),
-          findsOneWidget);
+        find.byType(
+          ElevatedButton,
+        ),
+        findsOneWidget,
+      );
 
       expect(find.widgetWithText(ElevatedButton, 'Cadastrar'), findsOneWidget);
 
       expect(
-          find.byType(
-            TextFormField,
-          ),
-          findsNWidgets(4));
+        find.byType(
+          TextFormField,
+        ),
+        findsNWidgets(4),
+      );
     });
 
     testWidgets('Should TextFormFields is empty', (tester) async {
@@ -85,10 +93,10 @@ void main() {
       final password = find.byKey(const ValueKey('password_key_register_page'));
 
       final confirmPassword =
-      find.byKey(const ValueKey('confirm_password_key_register_page'));
+          find.byKey(const ValueKey('confirm_password_key_register_page'));
 
       final registerButton =
-      find.byKey(const ValueKey('register_button_key_register_page'));
+          find.byKey(const ValueKey('register_button_key_register_page'));
 
       await tester.enterText(name, '');
       await tester.enterText(email, '');
@@ -122,10 +130,10 @@ void main() {
       final password = find.byKey(const ValueKey('password_key_register_page'));
 
       final confirmPassword =
-      find.byKey(const ValueKey('confirm_password_key_register_page'));
+          find.byKey(const ValueKey('confirm_password_key_register_page'));
 
       final buttonRegister =
-      find.byKey(const ValueKey('register_button_key_register_page'));
+          find.byKey(const ValueKey('register_button_key_register_page'));
 
       await tester.enterText(name, 'Test');
       await tester.enterText(email, 'test');
@@ -141,10 +149,10 @@ void main() {
 
       //Assert
       expect(find.text('E-mail inválido'), findsOneWidget);
-
     });
 
-    testWidgets('Should password must be at least 6 characters long', (tester) async {
+    testWidgets('Should password must be at least 6 characters long',
+        (tester) async {
       //Arrange
       when(() => service.register(any(), any(), any()))
           .thenAnswer((_) async => _);
@@ -158,10 +166,10 @@ void main() {
       final password = find.byKey(const ValueKey('password_key_register_page'));
 
       final confirmPassword =
-      find.byKey(const ValueKey('confirm_password_key_register_page'));
+          find.byKey(const ValueKey('confirm_password_key_register_page'));
 
       final buttonRegister =
-      find.byKey(const ValueKey('register_button_key_register_page'));
+          find.byKey(const ValueKey('register_button_key_register_page'));
 
       await tester.enterText(name, 'Test');
       await tester.enterText(email, 'test@test.com');
@@ -176,11 +184,14 @@ void main() {
       await tester.pumpAndSettle();
 
       //Assert
-      expect(find.text('A senha tem que ter no mínimo 6 caracteres'), findsOneWidget);
-
+      expect(
+        find.text('A senha tem que ter no mínimo 6 caracteres'),
+        findsOneWidget,
+      );
     });
 
-    testWidgets('Should password and confirm password are not the same', (tester) async {
+    testWidgets('Should password and confirm password are not the same',
+        (tester) async {
       //Arrange
       when(() => service.register(any(), any(), any()))
           .thenAnswer((_) async => _);
@@ -194,10 +205,10 @@ void main() {
       final password = find.byKey(const ValueKey('password_key_register_page'));
 
       final confirmPassword =
-      find.byKey(const ValueKey('confirm_password_key_register_page'));
+          find.byKey(const ValueKey('confirm_password_key_register_page'));
 
       final buttonRegister =
-      find.byKey(const ValueKey('register_button_key_register_page'));
+          find.byKey(const ValueKey('register_button_key_register_page'));
 
       await tester.enterText(name, 'Test');
       await tester.enterText(email, 'test@test.com');
@@ -212,8 +223,10 @@ void main() {
       await tester.pumpAndSettle();
 
       //Assert
-      expect(find.text('Senha e confirmar senha não são iguais'), findsOneWidget);
-
+      expect(
+        find.text('Senha e confirmar senha não são iguais'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Should register user with success', (tester) async {
@@ -255,22 +268,30 @@ void main() {
       //Assert
       expect(find.byType(SnackBar), findsOneWidget);
       expect(
-          find.text(
-              'Usuário registrado com sucesso!\n\nVerifique o e-mail cadastrado para concluir o processo',
-              findRichText: true),
-          findsOneWidget);
+        find.text(
+          'Usuário registrado com sucesso!\n\nVerifique o e-mail cadastrado para concluir o processo',
+          findRichText: true,
+        ),
+        findsOneWidget,
+      );
 
       await tester.pumpAndSettle();
 
       //Assert
-      expect(find.widgetWithText(TextFormField, 'Como quer ser chamado?'),
-          findsOneWidget);
+      expect(
+        find.widgetWithText(TextFormField, 'Como quer ser chamado?'),
+        findsOneWidget,
+      );
       expect(find.widgetWithText(TextFormField, 'E-mail'), findsOneWidget);
       expect(find.widgetWithText(TextFormField, 'Senha'), findsOneWidget);
-      expect(find.widgetWithText(TextFormField, 'Confirmar senha'),
-          findsOneWidget);
-      expect(find.widgetWithText(TextFormField, 'Confirmar senha'),
-          findsOneWidget);
+      expect(
+        find.widgetWithText(TextFormField, 'Confirmar senha'),
+        findsOneWidget,
+      );
+      expect(
+        find.widgetWithText(TextFormField, 'Confirmar senha'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Should trows UserExistsException', (tester) async {
@@ -312,9 +333,12 @@ void main() {
       //Assert
       expect(find.byType(SnackBar), findsOneWidget);
       expect(
-          find.text('Email já cadastrado, por favor escolha outro e-mail',
-              findRichText: true),
-          findsOneWidget);
+        find.text(
+          'Email já cadastrado, por favor escolha outro e-mail',
+          findRichText: true,
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Should trows generic Exception', (tester) async {
@@ -354,8 +378,10 @@ void main() {
 
       //Assert
       expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.text('Erro ao registrar usuário', findRichText: true),
-          findsOneWidget);
+      expect(
+        find.text('Erro ao registrar usuário', findRichText: true),
+        findsOneWidget,
+      );
     });
   });
 }

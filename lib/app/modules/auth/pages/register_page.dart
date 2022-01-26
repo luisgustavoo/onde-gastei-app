@@ -19,10 +19,10 @@ class RegisterPage extends StatefulWidget {
   final AuthController _authController;
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  RegisterPageState createState() => RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldMessagedKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -34,7 +34,8 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final state = context.select<AuthControllerImpl, authState>(
-        (autController) => autController.state);
+      (autController) => autController.state,
+    );
 
     return ScaffoldMessenger(
       key: _scaffoldMessagedKey,
@@ -100,7 +101,9 @@ class _RegisterPageState extends State<RegisterPage> {
               validator: Validatorless.multiple([
                 Validatorless.required('Senha obrigatória'),
                 Validatorless.min(
-                    6, 'A senha tem que ter no mínimo 6 caracteres'),
+                  6,
+                  'A senha tem que ter no mínimo 6 caracteres',
+                ),
               ]),
             ),
           ),
@@ -116,8 +119,10 @@ class _RegisterPageState extends State<RegisterPage> {
               prefixIcon: const Icon(Icons.lock_outline),
               validator: Validatorless.multiple([
                 Validatorless.required('Confirmar senha obrigatório'),
-                Validatorless.compare(passwordController,
-                    'Senha e confirmar senha não são iguais')
+                Validatorless.compare(
+                  passwordController,
+                  'Senha e confirmar senha não são iguais',
+                )
               ]),
             ),
           ),
@@ -131,7 +136,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   OndeGasteiButton _buildOndeGasteiButton(
-      BuildContext context, authState state) {
+    BuildContext context,
+    authState state,
+  ) {
     return OndeGasteiButton(
       Text(
         'Cadastrar',
@@ -155,6 +162,10 @@ class _RegisterPageState extends State<RegisterPage> {
               passwordController.text,
             );
 
+            if(!mounted){
+              return;
+            }
+
             snackBar = OndeGasteiSnackBar.buildSnackBar(
               key: const Key('snack_bar_success_key_register_page'),
               content: RichText(
@@ -174,7 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ],
                 ),
               ),
-              backgroundColor: Theme.of(context).primaryColor,
+              backgroundColor: Theme.of(context).primaryColor ,
               label: 'Fechar',
               onPressed: () {},
             );

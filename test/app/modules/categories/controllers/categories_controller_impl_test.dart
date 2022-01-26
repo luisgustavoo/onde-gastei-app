@@ -80,7 +80,9 @@ void main() {
 
       //Assert
       expect(
-          () => call(categoryId, categoryInputModel), throwsA(isA<Failure>()));
+        () => call(categoryId, categoryInputModel),
+        throwsA(isA<Failure>()),
+      );
       verify(() => service.updateCategory(categoryId, categoryInputModel))
           .called(1);
     });
@@ -116,7 +118,12 @@ void main() {
       //Arrange
       const categoriesExpected = [
         CategoryModel(
-            id: 1, description: 'Test', iconCode: 1, colorCode: 1, userId: 1)
+          id: 1,
+          description: 'Test',
+          iconCode: 1,
+          colorCode: 1,
+          userId: 1,
+        )
       ];
 
       when(() => service.findCategories(any()))

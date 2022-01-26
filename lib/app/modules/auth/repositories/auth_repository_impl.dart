@@ -27,13 +27,16 @@ class AuthRepositoryImpl implements AuthRepository {
         },
       );
     } on RestClientException catch (e, s) {
-      if (e.statusCode == 400 &&
-          e.response!.data['message']
-              .toString()
-              .toLowerCase()
-              .contains('usuário já cadastrado')) {
-        _log.error('Usuário já cadastrado', e, s);
-        throw UserExistsException();
+      if (e.response != null){
+        final data = e.response!.data as Map<String, dynamic>;
+        if (e.statusCode == 400 &&
+            data['message']
+                .toString()
+                .toLowerCase()
+                .contains('usuário já cadastrado')) {
+          _log.error('Usuário já cadastrado', e, s);
+          throw UserExistsException();
+        }
       }
 
       _log.error('Erro ao registrar usuário', e, s);

@@ -12,9 +12,10 @@ import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categ
 enum homeState { idle, loading, error, success }
 
 class HomeControllerImpl extends ChangeNotifier implements HomeController {
-  HomeControllerImpl(
-      {required HomeService service, required LocalStorage localStorage})
-      : _service = service,
+  HomeControllerImpl({
+    required HomeService service,
+    required LocalStorage localStorage,
+  })  : _service = service,
         _localStorage = localStorage;
 
   final HomeService _service;
@@ -26,7 +27,6 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
   List<PercentageCategoriesViewModel> percentageCategoriesList =
       <PercentageCategoriesViewModel>[];
   homeState state = homeState.idle;
-
 
   @override
   Future<void> fetchHomeData({
@@ -41,11 +41,13 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
       totalExpensesCategoriesList = await _service
           .findTotalExpensesByCategories(userId, initialDate, finalDate);
       percentageCategoriesList = await _service.findPercentageByCategories(
-          userId, initialDate, finalDate);
+        userId,
+        initialDate,
+        finalDate,
+      );
 
       state = homeState.success;
       notifyListeners();
-
     } on Exception {
       state = homeState.error;
       notifyListeners();

@@ -17,7 +17,6 @@ void main() {
   late Log log;
   late MockRestClient restClient;
 
-
   setUp(() {
     log = MockLog();
     restClient = MockRestClient();
@@ -39,17 +38,17 @@ void main() {
       final mockResponse =
           MockRestClientResponse<Map<String, dynamic>>(statusCode: 200);
 
-      when(() =>
-              restClient.post<Map<String, dynamic>>(any(), data: requestData))
-          .thenAnswer((_) async => mockResponse);
+      when(
+        () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
+      ).thenAnswer((_) async => mockResponse);
 
       //Act
       await authRepository.register(name, email, password);
 
       //Assert
-      verify(() =>
-              restClient.post<Map<String, dynamic>>(any(), data: requestData))
-          .called(1);
+      verify(
+        () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
+      ).called(1);
     });
 
     test('Should throw UserExistsException', () async {
@@ -66,13 +65,15 @@ void main() {
         'message': 'Usuário já cadastrado'
       };
       final mockResponse = MockRestClientResponse<Map<String, dynamic>>(
-          data: responseData, statusCode: 400);
+        data: responseData,
+        statusCode: 400,
+      );
       final mockException =
           MockRestClientException(statusCode: 400, response: mockResponse);
 
-      when(() =>
-              restClient.post<Map<String, dynamic>>(any(), data: requestData))
-          .thenThrow(mockException);
+      when(
+        () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
+      ).thenThrow(mockException);
 
       //Act
       final call = authRepository.register;
@@ -97,9 +98,9 @@ void main() {
       final mockException =
           MockRestClientException(statusCode: 500, response: mockResponse);
 
-      when(() =>
-              restClient.post<Map<String, dynamic>>(any(), data: requestData))
-          .thenThrow(mockException);
+      when(
+        () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
+      ).thenThrow(mockException);
 
       //Act
       final call = authRepository.register;
@@ -126,18 +127,20 @@ void main() {
       };
 
       final mockResponse = MockRestClientResponse<Map<String, dynamic>>(
-          statusCode: 200, data: responseData);
+        statusCode: 200,
+        data: responseData,
+      );
 
-      when(() =>
-              restClient.post<Map<String, dynamic>>(any(), data: requestData))
-          .thenAnswer((_) async => mockResponse);
+      when(
+        () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
+      ).thenAnswer((_) async => mockResponse);
       //Act
       final accessToken = await authRepository.login(email, password);
 
       //Assert
-      verify(() =>
-              restClient.post<Map<String, dynamic>>(any(), data: requestData))
-          .called(1);
+      verify(
+        () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
+      ).called(1);
 
       expect(accessToken, accessTokenExpected);
     });
@@ -156,17 +159,17 @@ void main() {
       final mockResponse =
           MockRestClientResponse<Map<String, dynamic>>(statusCode: 200);
 
-      when(() =>
-              restClient.post<Map<String, dynamic>>(any(), data: requestData))
-          .thenAnswer((_) async => mockResponse);
+      when(
+        () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
+      ).thenAnswer((_) async => mockResponse);
       //Act
       final accessToken = await authRepository.login(email, password);
 
       //Assert
       expect(accessToken, accessTokenExpected);
-      verify(() =>
-              restClient.post<Map<String, dynamic>>(any(), data: requestData))
-          .called(1);
+      verify(
+        () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
+      ).called(1);
     });
 
     test('Should throws UserNotFoundException', () async {
@@ -183,14 +186,16 @@ void main() {
       };
 
       final mockResponse = MockRestClientResponse<Map<String, dynamic>>(
-          statusCode: 403, data: responseData);
+        statusCode: 403,
+        data: responseData,
+      );
 
       final mockException =
           MockRestClientException(statusCode: 403, response: mockResponse);
       //Act
-      when(() =>
-              restClient.post<Map<String, dynamic>>(any(), data: requestData))
-          .thenThrow(mockException);
+      when(
+        () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
+      ).thenThrow(mockException);
 
       //Assert
       final call = authRepository.login;
@@ -213,9 +218,9 @@ void main() {
       final mockException =
           MockRestClientException(statusCode: 500, response: mockResponse);
       //Act
-      when(() =>
-              restClient.post<Map<String, dynamic>>(any(), data: requestData))
-          .thenThrow(mockException);
+      when(
+        () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
+      ).thenThrow(mockException);
 
       //Assert
       final call = authRepository.login;
@@ -271,5 +276,4 @@ void main() {
       expect(call, throwsA(isA<Failure>()));
     });
   });
-
 }

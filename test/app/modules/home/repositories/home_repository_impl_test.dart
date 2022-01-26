@@ -31,14 +31,18 @@ void main() {
     restClient = MockRestClient();
     localStorage = MockLocalStorage();
     repository = HomeRepositoryImpl(
-        restClient: restClient, localStorage: localStorage, log: log);
+      restClient: restClient,
+      localStorage: localStorage,
+      log: log,
+    );
   });
 
   group('Group test fetchUserData', () {
     test('Should fetch user data with success', () async {
       // Arrange
       final jsonData = FixtureReader.getJsonData(
-          'app/modules/home/repositories/fixture/get_data_by_token_response.json');
+        'app/modules/home/repositories/fixture/get_data_by_token_response.json',
+      );
       final responseData = jsonDecode(jsonData) as Map<String, dynamic>;
 
       final userExpected = UserModel(
@@ -100,11 +104,16 @@ void main() {
       final totalExpensesCategoriesExpected = TotalExpensesCategoriesViewModel(
         totalValue: 1,
         category: const CategoryModel(
-            id: 1, description: 'Test', iconCode: 1, colorCode: 1),
+          id: 1,
+          description: 'Test',
+          iconCode: 1,
+          colorCode: 1,
+        ),
       );
 
       final jsonData = FixtureReader.getJsonData(
-          'app/modules/home/repositories/fixture/find_total_expenses_by_categories_response.json');
+        'app/modules/home/repositories/fixture/find_total_expenses_by_categories_response.json',
+      );
       final responseData = jsonDecode(jsonData) as List<dynamic>;
       final mockResponse =
           MockRestClientResponse(statusCode: 200, data: responseData);
@@ -180,11 +189,16 @@ void main() {
         value: 1,
         percentage: 1,
         category: CategoryModel(
-            id: 1, description: 'Test', iconCode: 1, colorCode: 1),
+          id: 1,
+          description: 'Test',
+          iconCode: 1,
+          colorCode: 1,
+        ),
       );
 
       final jsonData = FixtureReader.getJsonData(
-          'app/modules/home/repositories/fixture/find_percentage_by_categories_response.json');
+        'app/modules/home/repositories/fixture/find_percentage_by_categories_response.json',
+      );
       final responseData = jsonDecode(jsonData) as List<dynamic>;
       final mockResponse =
           MockRestClientResponse(statusCode: 200, data: responseData);
@@ -199,7 +213,10 @@ void main() {
       ).thenAnswer((_) async => mockResponse);
       //Act
       final percentageCategories = await repository.findPercentageByCategories(
-          1, initialDate, finalDate);
+        1,
+        initialDate,
+        finalDate,
+      );
       //Assert
       expect(percentageCategories[0], percentageCategoriesExpected);
     });
@@ -222,7 +239,10 @@ void main() {
       ).thenAnswer((_) async => mockResponse);
       //Act
       final percentageCategories = await repository.findPercentageByCategories(
-          1, initialDate, finalDate);
+        1,
+        initialDate,
+        finalDate,
+      );
       //Assert
       expect(percentageCategories, <PercentageCategoriesViewModel>[]);
     });
@@ -247,6 +267,4 @@ void main() {
       expect(() => call(1, initialDate, finalDate), throwsA(isA<Failure>()));
     });
   });
-
-
 }

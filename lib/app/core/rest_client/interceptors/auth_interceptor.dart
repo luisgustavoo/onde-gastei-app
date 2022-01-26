@@ -29,7 +29,9 @@ class AuthInterceptor extends Interceptor {
 
   @override
   Future<void> onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     //super.onRequest(options, handler);
 
     if (options.extra['auth_required'] == true) {
@@ -134,7 +136,9 @@ class AuthInterceptor extends Interceptor {
   }
 
   Future<void> _retryRequest(
-      DioError err, ErrorInterceptorHandler handler) async {
+    DioError err,
+    ErrorInterceptorHandler handler,
+  ) async {
     _log.append('########### Retry Request ###########');
     try {
       final requestOptions = err.requestOptions;
@@ -149,10 +153,11 @@ class AuthInterceptor extends Interceptor {
 
       handler.resolve(
         Response<dynamic>(
-            requestOptions: requestOptions,
-            data: response.data,
-            statusCode: response.statusCode,
-            statusMessage: response.statusMessage),
+          requestOptions: requestOptions,
+          data: response.data,
+          statusCode: response.statusCode,
+          statusMessage: response.statusMessage,
+        ),
       );
     } on DioError catch (e, s) {
       _log.error('Erro ao refazer request', e, s);

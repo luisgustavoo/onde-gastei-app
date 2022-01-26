@@ -156,15 +156,15 @@ class App extends StatelessWidget {
                 final isEditing = arguments['editing'] as bool;
 
                 return RegisterCategoriesPage(
-                  categoriesController:
-                      context.read<CategoriesControllerImpl>(),
+                  // categoriesController:
+                  //     context.read<CategoriesControllerImpl>(),
                   categoryModel: categoryModel,
                   isEditing: isEditing,
                 );
               }
 
-              return RegisterCategoriesPage(
-                categoriesController: context.read<CategoriesControllerImpl>(),
+              return const RegisterCategoriesPage(
+                // categoriesController: context.read<CategoriesControllerImpl>(),
               );
             }
           },

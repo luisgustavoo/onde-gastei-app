@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
 class OndeGasteiTextForm extends StatelessWidget {
-  OndeGasteiTextForm(
-      {required this.label,
-      this.controller,
-      this.validator,
-      this.obscureText = false,
-      this.suffixIcon,
-      this.prefixIcon,
-      this.textInputType = TextInputType.text,
-      this.textAlign = TextAlign.start,
-      Key? key})
-      : _obscureTextNotifier = ValueNotifier<bool>(obscureText),
-        assert(!(obscureText == true && suffixIcon != null),
-            'obscureText não pode ser adicionado junto com o suffixIcon'),
+  OndeGasteiTextForm({
+    required this.label,
+    this.controller,
+    this.validator,
+    this.obscureText = false,
+    this.suffixIcon,
+    this.prefixIcon,
+    this.textInputType = TextInputType.text,
+    this.textAlign = TextAlign.start,
+    Key? key,
+  })  : _obscureTextNotifier = ValueNotifier<bool>(obscureText),
+        assert(
+          !(obscureText == true && suffixIcon != null),
+          'obscureText não pode ser adicionado junto com o suffixIcon',
+        ),
         super(key: key);
 
   final String label;

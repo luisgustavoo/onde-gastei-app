@@ -12,11 +12,11 @@ import 'package:onde_gastei_app/app/modules/home/view_model/percentage_categorie
 import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categories_view_model.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
-  HomeRepositoryImpl(
-      {required RestClient restClient,
-      required Log log,
-      required LocalStorage localStorage})
-      : _restClient = restClient,
+  HomeRepositoryImpl({
+    required RestClient restClient,
+    required Log log,
+    required LocalStorage localStorage,
+  })  : _restClient = restClient,
         _log = log,
         _localStorage = localStorage;
 
@@ -50,7 +50,10 @@ class HomeRepositoryImpl implements HomeRepository {
 
   @override
   Future<List<TotalExpensesCategoriesViewModel>> findTotalExpensesByCategories(
-      int userId, DateTime initialDate, DateTime finalDate) async {
+    int userId,
+    DateTime initialDate,
+    DateTime finalDate,
+  ) async {
     try {
       final result = await _restClient.auth().get<List<dynamic>>(
         '/users/$userId/total-expenses/categories',
@@ -65,7 +68,7 @@ class HomeRepositoryImpl implements HomeRepository {
             List<Map<String, dynamic>>.from(result.data!);
 
         return totalExpensesCategoriesList
-            .map((e) => TotalExpensesCategoriesViewModel.fromMap(e))
+            .map(TotalExpensesCategoriesViewModel.fromMap)
             .toList();
       }
 
@@ -79,7 +82,10 @@ class HomeRepositoryImpl implements HomeRepository {
 
   @override
   Future<List<PercentageCategoriesViewModel>> findPercentageByCategories(
-      int userId, DateTime initialDate, DateTime finalDate) async {
+    int userId,
+    DateTime initialDate,
+    DateTime finalDate,
+  ) async {
     try {
       final result = await _restClient.auth().get<List<dynamic>>(
         '/users/$userId/percentage/categories',
@@ -94,7 +100,7 @@ class HomeRepositoryImpl implements HomeRepository {
             List<Map<String, dynamic>>.from(result.data!);
 
         return percentageCategoriesList
-            .map((e) => PercentageCategoriesViewModel.fromMap(e))
+            .map(PercentageCategoriesViewModel.fromMap)
             .toList();
       }
 

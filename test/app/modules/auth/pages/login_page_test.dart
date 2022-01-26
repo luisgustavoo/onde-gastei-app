@@ -43,7 +43,9 @@ Widget createLoginPagePage() {
       ),
       ChangeNotifierProvider(
         create: (context) => HomeControllerImpl(
-            localStorage: mockLocalStorage, service: mockHomeService),
+          localStorage: mockLocalStorage,
+          service: mockHomeService,
+        ),
       )
     ],
     child: ScreenUtilInit(
@@ -84,7 +86,9 @@ void main() {
       expect(find.widgetWithText(TextFormField, 'E-mail'), findsOneWidget);
       expect(find.widgetWithText(TextFormField, 'Senha'), findsOneWidget);
       expect(
-          find.widgetWithText(TextButton, 'Esqueceu a senha?'), findsOneWidget);
+        find.widgetWithText(TextButton, 'Esqueceu a senha?'),
+        findsOneWidget,
+      );
       expect(find.widgetWithText(ElevatedButton, 'Entrar'), findsOneWidget);
       expect(find.widgetWithText(TextButton, 'Cadastre-se'), findsOneWidget);
     });
@@ -165,18 +169,22 @@ void main() {
 
     //Assert
     expect(find.byType(Logo), findsOneWidget);
-    expect(find.text('A senha tem que ter no mínimo 6 caracteres'),
-        findsOneWidget);
+    expect(
+      find.text('A senha tem que ter no mínimo 6 caracteres'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('Should login with success', (tester) async {
     //Arrange
 
     when(() => mockAuthService.login(any(), any())).thenAnswer((_) async => _);
-    when(() => mockNavigatorObserver.didReplace(
-          oldRoute: any(named: 'oldRoute'),
-          newRoute: any(named: 'newRoute'),
-        )).thenAnswer((_) async => _);
+    when(
+      () => mockNavigatorObserver.didReplace(
+        oldRoute: any(named: 'oldRoute'),
+        newRoute: any(named: 'newRoute'),
+      ),
+    ).thenAnswer((_) async => _);
 
     // when(() => mockNavigatorObserver.didPush(any(), any()))
     //     .thenAnswer((_) async => _);
@@ -200,9 +208,12 @@ void main() {
 
     //Assert
     verify(() => mockAuthService.login(any(), any())).called(1);
-    verify(() => mockNavigatorObserver.didReplace(
+    verify(
+      () => mockNavigatorObserver.didReplace(
         oldRoute: any(named: 'oldRoute'),
-        newRoute: any(named: 'newRoute'))).called(1);
+        newRoute: any(named: 'newRoute'),
+      ),
+    ).called(1);
   });
 
   testWidgets('Should trows UserNotFoundException', (tester) async {
@@ -229,8 +240,10 @@ void main() {
 
     //Assert
     expect(find.byType(SnackBar), findsOneWidget);
-    expect(find.text('Login e senha inválidos!', findRichText: true),
-        findsOneWidget);
+    expect(
+      find.text('Login e senha inválidos!', findRichText: true),
+      findsOneWidget,
+    );
   });
 
   testWidgets('Should trows UnverifiedEmailException', (tester) async {
@@ -258,10 +271,12 @@ void main() {
     //Assert
     expect(find.byType(SnackBar), findsOneWidget);
     expect(
-        find.text(
-            'E-mail não verificado!\n\nAcesse o seu e-mail para fazer a verificação',
-            findRichText: true),
-        findsOneWidget);
+      find.text(
+        'E-mail não verificado!\n\nAcesse o seu e-mail para fazer a verificação',
+        findRichText: true,
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('Should trows generic Exception', (tester) async {
@@ -288,8 +303,11 @@ void main() {
     //Assert
     expect(find.byType(SnackBar), findsOneWidget);
     expect(
-        find.text('Erro ao realizar login tente novamente mais tarde!!!',
-            findRichText: true),
-        findsOneWidget);
+      find.text(
+        'Erro ao realizar login tente novamente mais tarde!!!',
+        findRichText: true,
+      ),
+      findsOneWidget,
+    );
   });
 }

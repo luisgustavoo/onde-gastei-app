@@ -26,7 +26,10 @@ void main() {
     log = MockLog();
     localStorage = MockLocalStorage();
     controller = AuthControllerImpl(
-        service: service, log: log, localStorage: localStorage);
+      service: service,
+      log: log,
+      localStorage: localStorage,
+    );
   });
 
   group('Group test isLogged', () {
@@ -92,13 +95,18 @@ void main() {
       final call = controller.register;
 
       //Assert
-      expect(() => call(name, email, password),
-          throwsA(isA<UserExistsException>()));
+      expect(
+        () => call(name, email, password),
+        throwsA(isA<UserExistsException>()),
+      );
       verify(() => service.register(any(), any(), any())).called(1);
-      verify(() => log.error(
+      verify(
+        () => log.error(
           'Email já cadastrado, por favor escolha outro e-mail',
           any(),
-          any())).called(1);
+          any(),
+        ),
+      ).called(1);
     });
 
     test('Should throw generic exception when registering user', () async {
@@ -144,7 +152,9 @@ void main() {
 
       //Assert
       expect(
-          () => call(email, password), throwsA(isA<UserNotFoundException>()));
+        () => call(email, password),
+        throwsA(isA<UserNotFoundException>()),
+      );
       verify(() => log.error('Login e senha inválidos', any(), any()))
           .called(1);
     });
@@ -159,8 +169,10 @@ void main() {
       final call = controller.login;
 
       //Assert
-      expect(() => call(email, password),
-          throwsA(isA<UnverifiedEmailException>()));
+      expect(
+        () => call(email, password),
+        throwsA(isA<UnverifiedEmailException>()),
+      );
       verify(() => log.error('E-mail não verificado!', any(), any())).called(1);
     });
 
@@ -176,10 +188,13 @@ void main() {
 
       //Assert
       expect(() => call(email, password), throwsA(isA<Failure>()));
-      verify(() => log.error(
+      verify(
+        () => log.error(
           'Erro ao realizar login tente novamente mais tarde!!!',
           any(),
-          any())).called(1);
+          any(),
+        ),
+      ).called(1);
     });
   });
 }

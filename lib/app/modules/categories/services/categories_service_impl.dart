@@ -15,7 +15,9 @@ class CategoriesServiceImpl implements CategoriesService {
 
   @override
   Future<void> updateCategory(
-          int categoryId, CategoryInputModel categoryInputModel) =>
+    int categoryId,
+    CategoryInputModel categoryInputModel,
+  ) =>
       _repository.updateCategory(categoryId, categoryInputModel);
 
   @override

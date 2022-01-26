@@ -48,7 +48,9 @@ class CategoriesControllerImpl extends ChangeNotifier
 
   @override
   Future<void> updateCategory(
-      int categoryId, CategoryInputModel categoryInputModel) async {
+    int categoryId,
+    CategoryInputModel categoryInputModel,
+  ) async {
     try {
       state = categoriesState.loading;
       notifyListeners();

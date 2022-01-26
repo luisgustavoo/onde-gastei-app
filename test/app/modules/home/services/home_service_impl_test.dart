@@ -60,9 +60,13 @@ void main() {
           ),
         )
       ];
-      when(() => repository.findTotalExpensesByCategories(
-              userId, initialDate, finalDate))
-          .thenAnswer((_) async => totalExpensesCategoriesExpected);
+      when(
+        () => repository.findTotalExpensesByCategories(
+          userId,
+          initialDate,
+          finalDate,
+        ),
+      ).thenAnswer((_) async => totalExpensesCategoriesExpected);
       //Act
       final totalExpensesCategories = await service
           .findTotalExpensesByCategories(userId, initialDate, finalDate);
@@ -81,7 +85,9 @@ void main() {
       final call = service.findTotalExpensesByCategories;
       //Assert
       expect(
-          () => call(userId, initialDate, finalDate), throwsA(isA<Failure>()));
+        () => call(userId, initialDate, finalDate),
+        throwsA(isA<Failure>()),
+      );
     });
   });
 
@@ -105,12 +111,19 @@ void main() {
         )
       ];
 
-      when(() => repository.findPercentageByCategories(
-              userId, initialDate, finalDate))
-          .thenAnswer((_) async => percentageCategoriesExpected);
+      when(
+        () => repository.findPercentageByCategories(
+          userId,
+          initialDate,
+          finalDate,
+        ),
+      ).thenAnswer((_) async => percentageCategoriesExpected);
       //Act
       final percentageCategories = await service.findPercentageByCategories(
-          userId, initialDate, finalDate);
+        userId,
+        initialDate,
+        finalDate,
+      );
 
       //Assert
       expect(percentageCategories, percentageCategoriesExpected);
@@ -122,14 +135,21 @@ void main() {
       final initialDate = DateTime.now();
       final finalDate = DateTime.now();
 
-      when(() => repository.findPercentageByCategories(
-          userId, initialDate, finalDate)).thenThrow(Failure());
+      when(
+        () => repository.findPercentageByCategories(
+          userId,
+          initialDate,
+          finalDate,
+        ),
+      ).thenThrow(Failure());
       //Act
       final call = service.findPercentageByCategories;
 
       //Assert
       expect(
-          () => call(userId, initialDate, finalDate), throwsA(isA<Failure>()));
+        () => call(userId, initialDate, finalDate),
+        throwsA(isA<Failure>()),
+      );
     });
   });
 }

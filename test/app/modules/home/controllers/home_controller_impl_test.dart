@@ -67,7 +67,10 @@ void main() {
 
       //Act
       await controller.fetchHomeData(
-          userId: userId, initialDate: initialDate, finalDate: finalDate);
+        userId: userId,
+        initialDate: initialDate,
+        finalDate: finalDate,
+      );
 
       //Assert
       verify(() => service.findTotalExpensesByCategories(any(), any(), any()))
@@ -89,12 +92,16 @@ void main() {
       //Assert
       expect(
         () => call(
-            userId: userId, initialDate: initialDate, finalDate: finalDate),
+          userId: userId,
+          initialDate: initialDate,
+          finalDate: finalDate,
+        ),
         throwsA(isA<Failure>()),
       );
 
       verifyNever(
-          () => service.findPercentageByCategories(any(), any(), any()));
+        () => service.findPercentageByCategories(any(), any(), any()),
+      );
     });
   });
 

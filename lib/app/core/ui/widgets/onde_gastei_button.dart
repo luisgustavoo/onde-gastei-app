@@ -32,39 +32,40 @@ class OndeGasteiButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-        valueListenable: _isLoading,
-        builder: (context, value, _) {
-          return ElevatedButton(
-            style: ButtonStyle(
-              fixedSize: MaterialStateProperty.all<Size>(
-                Size(_width.w, _height.h),
-              ),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(_borderRadius.r),
-                ),
-              ),
-              backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                (states) {
-                  if (states.contains(MaterialState.pressed)) {
-                    return context.primaryColor.withOpacity(0.5);
-                  }
-                  return _color ?? context.primaryColor;
-                },
+      valueListenable: _isLoading,
+      builder: (context, value, _) {
+        return ElevatedButton(
+          style: ButtonStyle(
+            fixedSize: MaterialStateProperty.all<Size>(
+              Size(_width.w, _height.h),
+            ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(_borderRadius.r),
               ),
             ),
-            onPressed: value ? null : _onPressed,
-            child: value
-                ? SizedBox(
-                    height: 25.h,
-                    width: 25.w,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 1.w,
-                    ),
-                  )
-                : _child,
-          );
-        });
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+              (states) {
+                if (states.contains(MaterialState.pressed)) {
+                  return context.primaryColor.withOpacity(0.5);
+                }
+                return _color ?? context.primaryColor;
+              },
+            ),
+          ),
+          onPressed: value ? null : _onPressed,
+          child: value
+              ? SizedBox(
+                  height: 25.h,
+                  width: 25.w,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 1.w,
+                  ),
+                )
+              : _child,
+        );
+      },
+    );
   }
 }

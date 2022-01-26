@@ -11,11 +11,11 @@ import 'package:provider/provider.dart';
 UserModel? userModel;
 
 class AppPage extends StatefulWidget {
-  const AppPage(
-      {required this.homeController,
-      required this.categoriesController,
-      Key? key})
-      : super(key: key);
+  const AppPage({
+    required this.homeController,
+    required this.categoriesController,
+    Key? key,
+  }) : super(key: key);
   static const router = '/app';
 
   final HomeController homeController;
@@ -79,8 +79,15 @@ class _AppPageState extends State<AppPage> {
                   final localStorage =
                       context.read<SharedPreferencesLocalStorageImpl>();
                   await localStorage.logout();
+
+                  if (!mounted) {
+                    return;
+                  }
+
                   await Navigator.of(context).pushNamedAndRemoveUntil(
-                      SplashPage.router, (route) => false);
+                    SplashPage.router,
+                    (route) => false,
+                  );
                 },
                 child: const Text('Logout'),
               ),
@@ -93,8 +100,11 @@ class _AppPageState extends State<AppPage> {
         elevation: 0,
         currentIndex: currentIndex,
         onTap: (currentIndex) {
-          pageController.animateToPage(currentIndex,
-              duration: const Duration(milliseconds: 500), curve: Curves.ease);
+          pageController.animateToPage(
+            currentIndex,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.ease,
+          );
         },
         items: const [
           BottomNavigationBarItem(

@@ -6,8 +6,14 @@ abstract class HomeRepository {
   Future<UserModel> fetchUserData();
 
   Future<List<TotalExpensesCategoriesViewModel>> findTotalExpensesByCategories(
-      int userId, DateTime initialDate, DateTime finalDate);
+    int userId,
+    DateTime initialDate,
+    DateTime finalDate,
+  );
 
   Future<List<PercentageCategoriesViewModel>> findPercentageByCategories(
-      int userId, DateTime initialDate, DateTime finalDate);
+    int userId,
+    DateTime initialDate,
+    DateTime finalDate,
+  );
 }

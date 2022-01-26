@@ -12,10 +12,10 @@ class HomePage extends StatefulWidget {
   final HomeController homeController;
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   // final initialDate = DateTime(DateTime.now().year, DateTime.now().month);
   // final finalDate = DateTime(
   //   DateTime.now().year,
