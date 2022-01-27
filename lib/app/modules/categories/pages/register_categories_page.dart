@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
@@ -14,7 +14,6 @@ import 'package:validatorless/validatorless.dart';
 
 class RegisterCategoriesPage extends StatefulWidget {
   const RegisterCategoriesPage({
-    // required this.categoriesController,
     this.categoryModel,
     this.isEditing = false,
     Key? key,
@@ -22,7 +21,6 @@ class RegisterCategoriesPage extends StatefulWidget {
 
   static const router = '/register-categories';
 
-  // final CategoriesControllerImpl categoriesController;
   final CategoryModel? categoryModel;
   final bool isEditing;
 
@@ -64,8 +62,6 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final state = context.select<CategoriesControllerImpl, categoriesState>(
-    //     (categoriesController) => categoriesController.state);
     final categoriesController = context.watch<CategoriesControllerImpl>();
 
     return SafeArea(
@@ -155,6 +151,9 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
                     child: const Text('Cancelar'),
                   ),
                   TextButton(
+                    key: const Key(
+                      'delete_button_dialog_register_categories_page',
+                    ),
                     onPressed: () async {
                       // SnackBar snackBar;
                       try {
@@ -211,6 +210,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
         icon: const Icon(
           Icons.delete,
           color: Colors.red,
+          key: Key('icon_delete_key_register_categories_page'),
         ),
       ),
     );
@@ -272,16 +272,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
               key: const Key(
                 'snack_bar_success_key_register_update_categories_page',
               ),
-              content: RichText(
-                key: const Key('message_key_register_update_categories_page'),
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: message,
-                    ),
-                  ],
-                ),
-              ),
+              content: Text(message),
               backgroundColor: Theme.of(context).primaryColor,
               label: 'Fechar',
               onPressed: () {},
@@ -291,18 +282,9 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
               key: const Key(
                 'snack_bar_error_key_register_update_categories_page',
               ),
-              content: RichText(
-                key: const Key(
-                  'message_error_key_register_update_categories_page',
-                ),
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Erro ao criar categoria!',
-                    ),
-                  ],
-                ),
-              ),
+              content: widget.isEditing
+                  ? const Text('Erro ao atualizar categoria!')
+                  : const Text('Erro ao criar categoria!'),
               backgroundColor: Colors.red,
               label: 'Fechar',
               onPressed: () {},

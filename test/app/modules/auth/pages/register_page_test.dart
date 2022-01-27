@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
+import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
+import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
@@ -12,21 +14,24 @@ import '../../../../core/local_storage/mock_local_storage.dart';
 import '../../../../core/log/mock_log.dart';
 import '../controllers/auth_controller_impl_test.dart';
 
-late AuthService service;
+late AuthService mockService;
+late Log mockLog;
+late LocalStorage mockLocalStorage;
 
 Widget createRegisterPage() {
   return ChangeNotifierProvider<AuthControllerImpl>(
     create: (context) => AuthControllerImpl(
-      localStorage: MockLocalStorage(),
-      log: MockLog(),
-      service: service,
+      localStorage: mockLocalStorage,
+      log: mockLog,
+      service: mockService,
     ),
     child: ScreenUtilInit(
       builder: () => MaterialApp(
         initialRoute: RegisterPage.router,
         routes: {
-          RegisterPage.router: (context) =>
-              RegisterPage(authController: context.read<AuthControllerImpl>())
+          RegisterPage.router: (context) {
+            return const RegisterPage();
+          }
         },
       ),
     ),
@@ -35,7 +40,9 @@ Widget createRegisterPage() {
 
 void main() {
   setUp(() {
-    service = MockAuthService();
+    mockService = MockAuthService();
+    mockLog = MockLog();
+    mockLocalStorage = MockLocalStorage();
   });
 
   group('Group test register page', () {
@@ -81,7 +88,7 @@ void main() {
 
     testWidgets('Should TextFormFields is empty', (tester) async {
       //Arrange
-      when(() => service.register(any(), any(), any()))
+      when(() => mockService.register(any(), any(), any()))
           .thenAnswer((_) async => _);
 
       await tester.pumpWidget(createRegisterPage());
@@ -118,7 +125,7 @@ void main() {
 
     testWidgets('Should E-mail invalid ', (tester) async {
       //Arrange
-      when(() => service.register(any(), any(), any()))
+      when(() => mockService.register(any(), any(), any()))
           .thenAnswer((_) async => _);
 
       await tester.pumpWidget(createRegisterPage());
@@ -154,7 +161,7 @@ void main() {
     testWidgets('Should password must be at least 6 characters long',
         (tester) async {
       //Arrange
-      when(() => service.register(any(), any(), any()))
+      when(() => mockService.register(any(), any(), any()))
           .thenAnswer((_) async => _);
 
       await tester.pumpWidget(createRegisterPage());
@@ -193,7 +200,7 @@ void main() {
     testWidgets('Should password and confirm password are not the same',
         (tester) async {
       //Arrange
-      when(() => service.register(any(), any(), any()))
+      when(() => mockService.register(any(), any(), any()))
           .thenAnswer((_) async => _);
 
       await tester.pumpWidget(createRegisterPage());
@@ -231,7 +238,7 @@ void main() {
 
     testWidgets('Should register user with success', (tester) async {
       //Arrange
-      when(() => service.register(any(), any(), any()))
+      when(() => mockService.register(any(), any(), any()))
           .thenAnswer((_) async => _);
 
       await tester.pumpWidget(createRegisterPage());
@@ -296,7 +303,7 @@ void main() {
 
     testWidgets('Should trows UserExistsException', (tester) async {
       //Arrange
-      when(() => service.register(any(), any(), any()))
+      when(() => mockService.register(any(), any(), any()))
           .thenThrow(UserExistsException());
 
       await tester.pumpWidget(createRegisterPage());
@@ -343,7 +350,8 @@ void main() {
 
     testWidgets('Should trows generic Exception', (tester) async {
       //Arrange
-      when(() => service.register(any(), any(), any())).thenThrow(Exception());
+      when(() => mockService.register(any(), any(), any()))
+          .thenThrow(Exception());
 
       await tester.pumpWidget(createRegisterPage());
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/ui/extensions/theme_extension.dart';
 
 class Logo extends StatelessWidget {
@@ -28,6 +28,7 @@ class Logo extends StatelessWidget {
           '?',
           style: TextStyle(
             fontSize: 85.sp,
+
             color: context.primaryColor,
             fontWeight: FontWeight.bold,
             // height: 0.8.h,
@@ -40,6 +41,7 @@ class Logo extends StatelessWidget {
           'Gastei',
           style: TextStyle(
             fontSize: 45.sp,
+
             color: context.primaryColor,
             fontWeight: FontWeight.bold,
             // height: 0.8.h,

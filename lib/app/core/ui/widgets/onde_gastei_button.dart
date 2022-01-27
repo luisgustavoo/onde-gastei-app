@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/ui/extensions/theme_extension.dart';
 
 class OndeGasteiButton extends StatelessWidget {

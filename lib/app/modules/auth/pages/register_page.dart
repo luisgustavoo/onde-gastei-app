@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
-import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
-import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({required AuthController authController, Key? key})
-      : _authController = authController,
-        super(key: key);
+  const RegisterPage({Key? key}) : super(key: key);
 
   static const String router = '/register';
-
-  final AuthController _authController;
 
   @override
   RegisterPageState createState() => RegisterPageState();
@@ -33,9 +28,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.select<AuthControllerImpl, authState>(
-      (autController) => autController.state,
-    );
+    final authController = context.watch<AuthControllerImpl>();
 
     return ScaffoldMessenger(
       key: _scaffoldMessagedKey,
@@ -44,10 +37,10 @@ class RegisterPageState extends State<RegisterPage> {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: IgnorePointer(
-            ignoring: state == authState.loading,
+            ignoring: authController.state == authState.loading,
             child: ListView(
               children: [
-                _buildForm(context, state),
+                _buildForm(context, authController),
               ],
             ),
           ),
@@ -56,7 +49,7 @@ class RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Form _buildForm(BuildContext context, authState state) {
+  Form _buildForm(BuildContext context, AuthControllerImpl authController) {
     return Form(
       key: _formKey,
       child: Column(
@@ -129,7 +122,7 @@ class RegisterPageState extends State<RegisterPage> {
           SizedBox(
             height: 32.h,
           ),
-          _buildOndeGasteiButton(context, state)
+          _buildOndeGasteiButton(context, authController)
         ],
       ),
     );
@@ -137,7 +130,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   OndeGasteiButton _buildOndeGasteiButton(
     BuildContext context,
-    authState state,
+    AuthControllerImpl authController,
   ) {
     return OndeGasteiButton(
       Text(
@@ -156,13 +149,13 @@ class RegisterPageState extends State<RegisterPage> {
           SnackBar snackBar;
 
           try {
-            await widget._authController.register(
+            await authController.register(
               nameController.text,
               emailController.text,
               passwordController.text,
             );
 
-            if(!mounted){
+            if (!mounted) {
               return;
             }
 
@@ -185,7 +178,7 @@ class RegisterPageState extends State<RegisterPage> {
                   ],
                 ),
               ),
-              backgroundColor: Theme.of(context).primaryColor ,
+              backgroundColor: Theme.of(context).primaryColor,
               label: 'Fechar',
               onPressed: () {},
             );
@@ -216,7 +209,7 @@ class RegisterPageState extends State<RegisterPage> {
           _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
         }
       },
-      isLoading: state == authState.loading,
+      isLoading: authController.state == authState.loading,
     );
   }
 

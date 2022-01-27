@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
 import 'package:onde_gastei_app/app/core/ui/onde_gastei_material_color.dart';
 
 class UiConfig {

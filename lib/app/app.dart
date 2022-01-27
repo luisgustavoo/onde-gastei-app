@@ -40,17 +40,27 @@ class App extends StatelessWidget {
     );
 
     return ScreenUtilInit(
+      minTextAdapt: true,
+      splitScreenMode: true,
       builder: () => MultiProvider(
         providers: [
-          Provider(
-            create: (context) => SharedPreferencesLocalStorageImpl(),
-          ),
-          Provider(
-            create: (context) => FlutterSecureStorageLocalStorageImpl(),
-          ),
+          // ========== LOG ==========
           Provider(
             create: (context) => LogImpl(),
           ),
+          // ========== LOG ==========
+
+          // ========== DATA PERSISTENCE ==========
+          Provider(
+            create: (context) => FlutterSecureStorageLocalStorageImpl(),
+          ),
+
+          Provider(
+            create: (context) => SharedPreferencesLocalStorageImpl(),
+          ),
+          // ========== DATA PERSISTENCE ==========
+
+          // ========== REST SERVICES ==========
           Provider(
             create: (context) => DioRestClient(
               localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
@@ -59,14 +69,18 @@ class App extends StatelessWidget {
               log: context.read<LogImpl>(),
             ),
           ),
+          // ========== REST SERVICES ==========
 
-          // *** AUTENTICAÇÃO ***
+          // ========== REST SERVICES ==========
           Provider(
             create: (context) => AuthRepositoryImpl(
               restClient: context.read<DioRestClient>(),
               log: context.read<LogImpl>(),
             ),
           ),
+          // ========== REST SERVICES ==========
+
+          // ========== AUTHENTICATION ==========
           Provider(
             create: (context) => AuthServicesImpl(
               repository: context.read<AuthRepositoryImpl>(),
@@ -84,8 +98,9 @@ class App extends StatelessWidget {
               localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
             ),
           ),
+          // ========== AUTHENTICATION ==========
 
-          // *** HOME ***
+          // ========== HOME ==========
           Provider(
             create: (context) => HomeRepositoryImpl(
               restClient: context.read<DioRestClient>(),
@@ -104,8 +119,9 @@ class App extends StatelessWidget {
               localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
             ),
           ),
+          // ========== AUTHENTICATION ==========
 
-          // *** CATEGORIAS ***
+          // ========== CATEGORIES ==========
           Provider(
             create: (context) => CategoriesRepositoryImpl(
               restClient: context.read<DioRestClient>(),
@@ -123,6 +139,7 @@ class App extends StatelessWidget {
               log: context.read<LogImpl>(),
             ),
           ),
+          // ========== CATEGORIES ==========
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -132,21 +149,25 @@ class App extends StatelessWidget {
           builder: asuka.builder,
           navigatorKey: OndeGasteiNavigator.navigatorKey,
           routes: {
-            SplashPage.router: (context) => SplashPage(
-                  authController: context.read<AuthControllerImpl>(),
-                ),
+            SplashPage.router: (context) {
+              return SplashPage(
+                authController: context.read<AuthControllerImpl>(),
+              );
+            },
             AppPage.router: (context) => AppPage(
                   homeController: context.read<HomeControllerImpl>(),
                   categoriesController:
                       context.read<CategoriesControllerImpl>(),
                 ),
-            LoginPage.router: (context) => LoginPage(
-                  authController: context.read<AuthControllerImpl>(),
-                ),
-            RegisterPage.router: (context) => RegisterPage(
-                  authController: context.read<AuthControllerImpl>(),
-                ),
-            CategoriesPage.router: (context) => const CategoriesPage(),
+            LoginPage.router: (context) {
+              return const LoginPage();
+            },
+            RegisterPage.router: (context) {
+              return const RegisterPage();
+            },
+            CategoriesPage.router: (context) {
+              return const CategoriesPage();
+            },
             RegisterCategoriesPage.router: (context) {
               if (ModalRoute.of(context)!.settings.arguments != null) {
                 final arguments = ModalRoute.of(context)!.settings.arguments!
@@ -156,16 +177,12 @@ class App extends StatelessWidget {
                 final isEditing = arguments['editing'] as bool;
 
                 return RegisterCategoriesPage(
-                  // categoriesController:
-                  //     context.read<CategoriesControllerImpl>(),
                   categoryModel: categoryModel,
                   isEditing: isEditing,
                 );
               }
 
-              return const RegisterCategoriesPage(
-                // categoriesController: context.read<CategoriesControllerImpl>(),
-              );
+              return const RegisterCategoriesPage();
             }
           },
         ),

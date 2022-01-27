@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OndeGasteiSnackBar {
   OndeGasteiSnackBar._();
@@ -16,7 +16,6 @@ class OndeGasteiSnackBar {
       backgroundColor: backgroundColor,
       elevation: 10,
       content: content,
-
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.r),

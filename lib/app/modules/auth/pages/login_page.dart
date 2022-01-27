@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
-import 'package:onde_gastei_app/app/core/ui/extensions/size_screen_extension.dart';
 import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
-import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
@@ -14,13 +13,9 @@ import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({required AuthController authController, Key? key})
-      : _authController = authController,
-        super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   static const router = '/login';
-
-  final AuthController _authController;
 
   @override
   LoginPageState createState() => LoginPageState();
@@ -36,15 +31,13 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.select<AuthControllerImpl, authState>(
-      (autController) => autController.state,
-    );
+    final authController = context.watch<AuthControllerImpl>();
 
     return ScaffoldMessenger(
       key: _scaffoldMessagedKey,
       child: Scaffold(
         body: IgnorePointer(
-          ignoring: state == authState.loading,
+          ignoring: authController.state == authState.loading,
           child: ListView(
             children: [
               Padding(
@@ -60,7 +53,7 @@ class LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 32.h,
                     ),
-                    _buildForm(context, state),
+                    _buildForm(context, authController),
                   ],
                 ),
               )
@@ -71,7 +64,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  Form _buildForm(BuildContext context, authState state) {
+  Form _buildForm(BuildContext context, AuthControllerImpl authController) {
     return Form(
       key: _formKey,
       child: Column(
@@ -127,12 +120,12 @@ class LoginPageState extends State<LoginPage> {
           SizedBox(
             height: 32.h,
           ),
-          _buildOndeGasteiButton(context, state),
+          _buildOndeGasteiButton(context, authController),
           SizedBox(
             height: 32.h,
           ),
           TextButton(
-            key: const Key('register_buttn_key_login_page'),
+            key: const Key('register_button_key_login_page'),
             style: ElevatedButton.styleFrom(
               minimumSize: Size.zero,
               padding: const EdgeInsets.all(5),
@@ -150,7 +143,7 @@ class LoginPageState extends State<LoginPage> {
 
   OndeGasteiButton _buildOndeGasteiButton(
     BuildContext context,
-    authState state,
+    AuthControllerImpl authController,
   ) {
     return OndeGasteiButton(
       Text(
@@ -168,7 +161,7 @@ class LoginPageState extends State<LoginPage> {
           SnackBar snackBar;
 
           try {
-            await widget._authController.login(
+            await authController.login(
               _emailController.text,
               _passwordController.text,
             );
@@ -180,18 +173,7 @@ class LoginPageState extends State<LoginPage> {
             await Navigator.of(context).pushReplacementNamed(AppPage.router);
           } on UserNotFoundException {
             snackBar = OndeGasteiSnackBar.buildSnackBar(
-              content: const Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Login e senha inválidos!',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              content: const Text('Login e senha inválidos!'),
               backgroundColor: Colors.red,
               label: 'Fechar',
               onPressed: () {},
@@ -223,18 +205,8 @@ class LoginPageState extends State<LoginPage> {
             _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
           } on Exception {
             snackBar = OndeGasteiSnackBar.buildSnackBar(
-              content: const Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text:
-                          'Erro ao realizar login tente novamente mais tarde!!!',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+              content: const Text(
+                'Erro ao realizar login tente novamente mais tarde!!!',
               ),
               backgroundColor: Colors.red,
               label: 'Fechar',
@@ -245,7 +217,7 @@ class LoginPageState extends State<LoginPage> {
           }
         }
       },
-      isLoading: state == authState.loading,
+      isLoading: authController.state == authState.loading,
     );
   }
 
