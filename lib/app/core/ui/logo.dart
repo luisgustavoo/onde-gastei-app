@@ -10,45 +10,32 @@ class Logo extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-          child: Text(
-            'Onde',
-            style: TextStyle(
-              fontSize: 45.sp,
-              color: context.primaryColor,
-              fontWeight: FontWeight.bold,
-              // height: 0.999.h,
-            ),
-            // textHeightBehavior: const TextHeightBehavior(
-            //   leadingDistribution: TextLeadingDistribution.even,
-            // ),
+        Text(
+          'Onde',
+          style: TextStyle(
+            fontSize: 45.sp,
+            color: context.primaryColor,
+            fontWeight: FontWeight.bold,
+            // height: 0.999.h,
           ),
         ),
         Text(
           '?',
           style: TextStyle(
-            fontSize: 85.sp,
-
+            fontSize: 85,
             color: context.primaryColor,
             fontWeight: FontWeight.bold,
             // height: 0.8.h,
           ),
-          // textHeightBehavior: const TextHeightBehavior(
-          //   leadingDistribution: TextLeadingDistribution.even,
-          // ),
         ),
         Text(
           'Gastei',
           style: TextStyle(
-            fontSize: 45.sp,
-
+            fontSize: 45,
             color: context.primaryColor,
             fontWeight: FontWeight.bold,
             // height: 0.8.h,
           ),
-          // textHeightBehavior: const TextHeightBehavior(
-          //   leadingDistribution: TextLeadingDistribution.even,
-          // ),
         ),
       ],
     );

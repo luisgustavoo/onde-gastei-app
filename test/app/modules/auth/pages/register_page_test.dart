@@ -26,6 +26,8 @@ Widget createRegisterPage() {
       service: mockService,
     ),
     child: ScreenUtilInit(
+      minTextAdapt: true,
+      splitScreenMode: true,
       builder: () => MaterialApp(
         initialRoute: RegisterPage.router,
         routes: {

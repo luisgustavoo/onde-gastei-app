@@ -37,6 +37,12 @@ class CategoriesPage extends StatelessWidget {
         ),
         body: Consumer<CategoriesControllerImpl>(
           builder: (context, categoriesController, _) {
+            if (categoriesController.state == categoriesState.error) {
+              return const Center(
+                child: Text('Erro ao buscar categorias'),
+              );
+            }
+
             if (categoriesController.state == categoriesState.loading) {
               return Center(
                 child: CircularProgressIndicator(
@@ -53,6 +59,7 @@ class CategoriesPage extends StatelessWidget {
                 final category = categoriesController.categoriesList[index];
 
                 return ListTile(
+                  key: Key('list_tile_key_${index}_categories_page'),
                   onTap: () async {
                     await Navigator.of(context).pushNamed(
                       RegisterCategoriesPage.router,

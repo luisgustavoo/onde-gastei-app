@@ -69,6 +69,8 @@ Widget createLoginPagePage() {
       ),
     ],
     child: ScreenUtilInit(
+      minTextAdapt: true,
+      splitScreenMode: true,
       builder: () => MaterialApp(
         initialRoute: LoginPage.router,
         navigatorObservers: [mockNavigatorObserver],
@@ -115,216 +117,217 @@ void main() {
       expect(find.widgetWithText(ElevatedButton, 'Entrar'), findsOneWidget);
       expect(find.widgetWithText(TextButton, 'Cadastre-se'), findsOneWidget);
     });
-  });
 
-  testWidgets('Should TextFormFields is empty', (tester) async {
-    await tester.pumpWidget(createLoginPagePage());
+    testWidgets('Should TextFormFields is empty', (tester) async {
+      await tester.pumpWidget(createLoginPagePage());
 
-    final email = find.byKey(const ValueKey('email_key_login_page'));
+      final email = find.byKey(const ValueKey('email_key_login_page'));
 
-    final password = find.byKey(const ValueKey('password_key_login_page'));
+      final password = find.byKey(const ValueKey('password_key_login_page'));
 
-    final loginButton =
-        find.byKey(const ValueKey('button_login_key_login_page'));
+      final loginButton =
+          find.byKey(const ValueKey('button_login_key_login_page'));
 
-    await tester.enterText(email, '');
-    await tester.enterText(password, '');
-    await tester.pump();
+      await tester.enterText(email, '');
+      await tester.enterText(password, '');
+      await tester.pump();
 
-    await tester.tap(loginButton);
-    await tester.pumpAndSettle();
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle();
 
-    expect(find.byType(Logo), findsOneWidget);
-    expect(find.text('Email obrigatório'), findsOneWidget);
-    expect(find.text('Senha obrigatória'), findsOneWidget);
-  });
+      expect(find.byType(Logo), findsOneWidget);
+      expect(find.text('Email obrigatório'), findsOneWidget);
+      expect(find.text('Senha obrigatória'), findsOneWidget);
+    });
+    testWidgets('Should E-mail invalid', (tester) async {
+      await tester.pumpWidget(createLoginPagePage());
 
-  testWidgets('Should E-mail invalid', (tester) async {
-    await tester.pumpWidget(createLoginPagePage());
+      final email = find.byKey(const ValueKey('email_key_login_page'));
 
-    final email = find.byKey(const ValueKey('email_key_login_page'));
+      final password = find.byKey(const ValueKey('password_key_login_page'));
 
-    final password = find.byKey(const ValueKey('password_key_login_page'));
+      final loginButton =
+          find.byKey(const ValueKey('button_login_key_login_page'));
 
-    final loginButton =
-        find.byKey(const ValueKey('button_login_key_login_page'));
+      await tester.enterText(email, 'test');
+      await tester.enterText(password, '');
+      await tester.pump();
 
-    await tester.enterText(email, 'test');
-    await tester.enterText(password, '');
-    await tester.pump();
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle();
 
-    await tester.tap(loginButton);
-    await tester.pumpAndSettle();
+      expect(find.byType(Logo), findsOneWidget);
+      expect(find.text('E-mail inválido'), findsOneWidget);
+      expect(find.text('Senha obrigatória'), findsOneWidget);
+    });
 
-    expect(find.byType(Logo), findsOneWidget);
-    expect(find.text('E-mail inválido'), findsOneWidget);
-    expect(find.text('Senha obrigatória'), findsOneWidget);
-  });
+    testWidgets('Should password must be at least 6 characters long',
+        (tester) async {
+      await tester.pumpWidget(createLoginPagePage());
 
-  testWidgets('Should password must be at least 6 characters long',
-      (tester) async {
-    await tester.pumpWidget(createLoginPagePage());
+      final email = find.byKey(const ValueKey('email_key_login_page'));
 
-    final email = find.byKey(const ValueKey('email_key_login_page'));
+      final password = find.byKey(const ValueKey('password_key_login_page'));
 
-    final password = find.byKey(const ValueKey('password_key_login_page'));
+      final loginButton =
+          find.byKey(const ValueKey('button_login_key_login_page'));
 
-    final loginButton =
-        find.byKey(const ValueKey('button_login_key_login_page'));
+      await tester.enterText(email, 'test@teste.com');
+      await tester.enterText(password, '123');
+      await tester.pump();
 
-    await tester.enterText(email, 'test@teste.com');
-    await tester.enterText(password, '123');
-    await tester.pump();
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle();
 
-    await tester.tap(loginButton);
-    await tester.pumpAndSettle();
+      expect(find.byType(Logo), findsOneWidget);
+      expect(
+        find.text('A senha tem que ter no mínimo 6 caracteres'),
+        findsOneWidget,
+      );
+    });
 
-    expect(find.byType(Logo), findsOneWidget);
-    expect(
-      find.text('A senha tem que ter no mínimo 6 caracteres'),
-      findsOneWidget,
-    );
-  });
+    testWidgets('Should login with success', (tester) async {
+      when(() => mockAuthService.login(any(), any()))
+          .thenAnswer((_) async => _);
+      when(
+        () => mockHomeController.fetchUserData(),
+      ).thenAnswer(
+        (_) async =>
+            UserModel(userId: 1, name: 'Test', email: 'test@domain.com'),
+      );
+      when(
+        () => mockCategoriesController.findCategories(1),
+      ).thenAnswer(
+        (_) async => _,
+      );
 
-  testWidgets('Should login with success', (tester) async {
-    when(() => mockAuthService.login(any(), any())).thenAnswer((_) async => _);
-    when(
-      () => mockHomeController.fetchUserData(),
-    ).thenAnswer(
-      (_) async => UserModel(userId: 1, name: 'Test', email: 'test@domain.com'),
-    );
-    when(
-      () => mockCategoriesController.findCategories(1),
-    ).thenAnswer(
-      (_) async => _,
-    );
+      when(
+        () => mockHomeController.fetchHomeData(
+          userId: any(named: 'userId'),
+          initialDate: any(named: 'initialDate'),
+          finalDate: any(named: 'finalDate'),
+        ),
+      ).thenAnswer(
+        (_) async => _,
+      );
 
-    when(
-      () => mockHomeController.fetchHomeData(
-        userId: any(named: 'userId'),
-        initialDate: any(named: 'initialDate'),
-        finalDate: any(named: 'finalDate'),
-      ),
-    ).thenAnswer(
-      (_) async => _,
-    );
+      when(
+        () => mockNavigatorObserver.didReplace(
+          oldRoute: any(named: 'oldRoute'),
+          newRoute: any(named: 'newRoute'),
+        ),
+      ).thenAnswer((_) async => _);
 
-    when(
-      () => mockNavigatorObserver.didReplace(
-        oldRoute: any(named: 'oldRoute'),
-        newRoute: any(named: 'newRoute'),
-      ),
-    ).thenAnswer((_) async => _);
+      await tester.pumpWidget(createLoginPagePage());
 
-    await tester.pumpWidget(createLoginPagePage());
+      final email = find.byKey(const ValueKey('email_key_login_page'));
 
-    final email = find.byKey(const ValueKey('email_key_login_page'));
+      final password = find.byKey(const ValueKey('password_key_login_page'));
 
-    final password = find.byKey(const ValueKey('password_key_login_page'));
+      final loginButton =
+          find.byKey(const ValueKey('button_login_key_login_page'));
 
-    final loginButton =
-        find.byKey(const ValueKey('button_login_key_login_page'));
+      await tester.enterText(email, 'test@test.com');
+      await tester.enterText(password, '123456');
+      await tester.pumpAndSettle();
 
-    await tester.enterText(email, 'test@test.com');
-    await tester.enterText(password, '123456');
-    await tester.pumpAndSettle();
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle();
 
-    await tester.tap(loginButton);
-    await tester.pumpAndSettle();
+      verify(() => mockAuthService.login(any(), any())).called(1);
+      verify(
+        () => mockNavigatorObserver.didReplace(
+          oldRoute: any(named: 'oldRoute'),
+          newRoute: any(named: 'newRoute'),
+        ),
+      ).called(1);
+    });
 
-    verify(() => mockAuthService.login(any(), any())).called(1);
-    verify(
-      () => mockNavigatorObserver.didReplace(
-        oldRoute: any(named: 'oldRoute'),
-        newRoute: any(named: 'newRoute'),
-      ),
-    ).called(1);
-  });
+    testWidgets('Should trows UserNotFoundException', (tester) async {
+      when(() => mockAuthService.login(any(), any()))
+          .thenThrow(UserNotFoundException());
 
-  testWidgets('Should trows UserNotFoundException', (tester) async {
-    when(() => mockAuthService.login(any(), any()))
-        .thenThrow(UserNotFoundException());
+      await tester.pumpWidget(createLoginPagePage());
 
-    await tester.pumpWidget(createLoginPagePage());
+      final email = find.byKey(const ValueKey('email_key_login_page'));
 
-    final email = find.byKey(const ValueKey('email_key_login_page'));
+      final password = find.byKey(const ValueKey('password_key_login_page'));
 
-    final password = find.byKey(const ValueKey('password_key_login_page'));
+      final loginButton =
+          find.byKey(const ValueKey('button_login_key_login_page'));
 
-    final loginButton =
-        find.byKey(const ValueKey('button_login_key_login_page'));
+      await tester.enterText(email, 'test@teste.com');
+      await tester.enterText(password, '123456');
+      await tester.pump();
 
-    await tester.enterText(email, 'test@teste.com');
-    await tester.enterText(password, '123456');
-    await tester.pump();
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle();
 
-    await tester.tap(loginButton);
-    await tester.pumpAndSettle();
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(
+        find.text('Login e senha inválidos!', findRichText: true),
+        findsOneWidget,
+      );
+    });
 
-    expect(find.byType(SnackBar), findsOneWidget);
-    expect(
-      find.text('Login e senha inválidos!', findRichText: true),
-      findsOneWidget,
-    );
-  });
+    testWidgets('Should trows UnverifiedEmailException', (tester) async {
+      when(() => mockAuthService.login(any(), any()))
+          .thenThrow(UnverifiedEmailException());
 
-  testWidgets('Should trows UnverifiedEmailException', (tester) async {
-    when(() => mockAuthService.login(any(), any()))
-        .thenThrow(UnverifiedEmailException());
+      await tester.pumpWidget(createLoginPagePage());
 
-    await tester.pumpWidget(createLoginPagePage());
+      final email = find.byKey(const ValueKey('email_key_login_page'));
 
-    final email = find.byKey(const ValueKey('email_key_login_page'));
+      final password = find.byKey(const ValueKey('password_key_login_page'));
 
-    final password = find.byKey(const ValueKey('password_key_login_page'));
+      final loginButton =
+          find.byKey(const ValueKey('button_login_key_login_page'));
 
-    final loginButton =
-        find.byKey(const ValueKey('button_login_key_login_page'));
+      await tester.enterText(email, 'test@teste.com');
+      await tester.enterText(password, '123456');
+      await tester.pump();
 
-    await tester.enterText(email, 'test@teste.com');
-    await tester.enterText(password, '123456');
-    await tester.pump();
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle();
 
-    await tester.tap(loginButton);
-    await tester.pumpAndSettle();
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(
+        find.text(
+          'E-mail não verificado!\n\nAcesse o seu e-mail para fazer a verificação',
+          findRichText: true,
+        ),
+        findsOneWidget,
+      );
+    });
 
-    expect(find.byType(SnackBar), findsOneWidget);
-    expect(
-      find.text(
-        'E-mail não verificado!\n\nAcesse o seu e-mail para fazer a verificação',
-        findRichText: true,
-      ),
-      findsOneWidget,
-    );
-  });
+    testWidgets('Should trows generic Exception', (tester) async {
+      //Arrange
+      when(() => mockAuthService.login(any(), any())).thenThrow(Exception());
 
-  testWidgets('Should trows generic Exception', (tester) async {
-    //Arrange
-    when(() => mockAuthService.login(any(), any())).thenThrow(Exception());
+      await tester.pumpWidget(createLoginPagePage());
 
-    await tester.pumpWidget(createLoginPagePage());
+      final email = find.byKey(const ValueKey('email_key_login_page'));
 
-    final email = find.byKey(const ValueKey('email_key_login_page'));
+      final password = find.byKey(const ValueKey('password_key_login_page'));
 
-    final password = find.byKey(const ValueKey('password_key_login_page'));
+      final loginButton =
+          find.byKey(const ValueKey('button_login_key_login_page'));
 
-    final loginButton =
-        find.byKey(const ValueKey('button_login_key_login_page'));
+      await tester.enterText(email, 'test@teste.com');
+      await tester.enterText(password, '123456');
+      await tester.pump();
 
-    await tester.enterText(email, 'test@teste.com');
-    await tester.enterText(password, '123456');
-    await tester.pump();
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle();
 
-    await tester.tap(loginButton);
-    await tester.pumpAndSettle();
-
-    expect(find.byType(SnackBar), findsOneWidget);
-    expect(
-      find.text(
-        'Erro ao realizar login tente novamente mais tarde!!!',
-        findRichText: true,
-      ),
-      findsOneWidget,
-    );
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(
+        find.text(
+          'Erro ao realizar login tente novamente mais tarde!!!',
+          findRichText: true,
+        ),
+        findsOneWidget,
+      );
+    });
   });
 }

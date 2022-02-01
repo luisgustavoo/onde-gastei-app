@@ -39,13 +39,16 @@ class _AppPageState extends State<AppPage> {
     super.initState();
     Future.microtask(() async {
       userModel = await widget.homeController.fetchUserData();
-      await widget.categoriesController.findCategories(userModel!.userId);
 
-      await widget.homeController.fetchHomeData(
-        userId: userModel?.userId ?? 0,
-        initialDate: initialDate,
-        finalDate: finalDate,
-      );
+      if (userModel != null) {
+        await widget.categoriesController.findCategories(userModel!.userId);
+
+        await widget.homeController.fetchHomeData(
+          userId: userModel!.userId,
+          initialDate: initialDate,
+          finalDate: finalDate,
+        );
+      }
       /*
        CARREGAR OS DADOS DAS TELAS
        HOME, EXPENSES, CATEGORIES E PERFIL
