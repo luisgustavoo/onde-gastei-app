@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
-import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
@@ -14,7 +13,6 @@ import 'package:onde_gastei_app/app/modules/home/view_model/percentage_categorie
 import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categories_view_model.dart';
 
 import '../../../../core/local_storage/mock_local_storage.dart';
-import '../../../../core/log/mock_log.dart';
 
 class MockHomeService extends Mock implements HomeService {}
 
@@ -22,16 +20,13 @@ void main() {
   late HomeService service;
   late LocalStorage localStorage;
   late HomeController controller;
-  late Log log;
 
   setUp(() {
     service = MockHomeService();
     localStorage = MockLocalStorage();
-    log = MockLog();
     controller = HomeControllerImpl(
       service: service,
       localStorage: localStorage,
-      log: log,
     );
   });
 

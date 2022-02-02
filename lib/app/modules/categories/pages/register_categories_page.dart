@@ -9,7 +9,6 @@ import 'package:onde_gastei_app/app/modules/categories/controllers/categories_co
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/widgets/color_picker.dart';
 import 'package:onde_gastei_app/app/modules/categories/widgets/icon_picker.dart';
-import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
@@ -234,7 +233,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
         final formValid = _formKey.currentState?.validate() ?? false;
 
         if (formValid) {
-          SnackBar? snackBar;
+          SnackBar snackBar;
 
           String message;
 
@@ -293,9 +292,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
             );
           }
 
-          if (snackBar != null) {
-            _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
-          }
+          _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
         }
       },
     );

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
-import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/services/home_service.dart';
@@ -16,14 +15,11 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
   HomeControllerImpl({
     required HomeService service,
     required LocalStorage localStorage,
-    required Log log,
   })  : _service = service,
-        _localStorage = localStorage,
-        _log = log;
+        _localStorage = localStorage;
 
   final HomeService _service;
   final LocalStorage _localStorage;
-  final Log _log;
 
   UserModel? userModel;
   List<TotalExpensesCategoriesViewModel> totalExpensesCategoriesList =

@@ -117,7 +117,6 @@ class App extends StatelessWidget {
             create: (context) => HomeControllerImpl(
               service: context.read<HomeServiceImpl>(),
               localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
-              log: context.read<LogImpl>(),
             ),
           ),
           // ========== AUTHENTICATION ==========
