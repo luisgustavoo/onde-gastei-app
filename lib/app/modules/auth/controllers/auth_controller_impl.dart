@@ -27,10 +27,8 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
   @override
   Future<bool> isLogged() async {
     final localUser = await _localStorage.read<String>('user');
-    if (localUser != null && localUser.isNotEmpty) {
-      return true;
-    }
-    return false;
+
+    return localUser != null && localUser.isNotEmpty;
   }
 
   @override

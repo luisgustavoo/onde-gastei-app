@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
+import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({required this.homeController, Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   static const router = '/home';
-
-  final HomeController homeController;
 
   @override
   HomePageState createState() => HomePageState();
@@ -53,9 +51,7 @@ class HomePageState extends State<HomePage> {
                   right: 16.w,
                 ),
                 children: [
-                  BuildAppBarHomePage(
-                    homeController: homeController,
-                  ),
+                  const BuildAppBarHomePage(),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -88,11 +84,8 @@ class HomePageState extends State<HomePage> {
 
 class BuildAppBarHomePage extends StatelessWidget {
   const BuildAppBarHomePage({
-    required this.homeController,
     Key? key,
   }) : super(key: key);
-
-  final HomeControllerImpl homeController;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +100,7 @@ class BuildAppBarHomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 17.sp),
                 children: [
                   TextSpan(
-                    text: homeController.userModel?.name,
+                    text: userModel?.name,
                     style: TextStyle(
                       fontSize: 20.sp,
                       fontWeight: FontWeight.bold,

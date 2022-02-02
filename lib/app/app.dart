@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:onde_gastei_app/app/controllers/app_controller.dart';
 import 'package:onde_gastei_app/app/core/local_storages/flutter_secure_storage_local_storage_impl.dart';
 import 'package:onde_gastei_app/app/core/local_storages/shared_preferences_local_storage_impl.dart';
 import 'package:onde_gastei_app/app/core/logs/log_impl.dart';
@@ -140,6 +141,15 @@ class App extends StatelessWidget {
             ),
           ),
           // ========== CATEGORIES ==========
+
+          // ========== APP ==========
+          ChangeNotifierProvider(
+            create: (context) => AppController(
+              homeController: context.read<HomeControllerImpl>(),
+              categoriesController: context.read<CategoriesControllerImpl>(),
+            ),
+          ),
+          // ========== APP ==========
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -155,10 +165,7 @@ class App extends StatelessWidget {
               );
             },
             AppPage.router: (context) => AppPage(
-                  homeController: context.read<HomeControllerImpl>(),
-                  categoriesController:
-                      context.read<CategoriesControllerImpl>(),
-                  authController: context.read<AuthControllerImpl>(),
+                  appController: context.read<AppController>(),
                 ),
             LoginPage.router: (context) {
               return const LoginPage();

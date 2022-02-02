@@ -161,4 +161,37 @@ void main() {
       ).called(1);
     });
   });
+
+  group('Group test expense delete', () {
+    test('Should delete expense with success', () async {
+      //Arrange
+      when(() => mockRestClient.delete<Map<String, dynamic>>(any())).thenAnswer(
+        (_) async => MockRestClientResponse(statusCode: 200),
+      );
+
+      //Act
+      await expensesRepositoryImpl.delete(1);
+
+      //Asssert
+      verify(
+        () => mockRestClient.delete<Map<String, dynamic>>(any()),
+      ).called(1);
+    });
+
+    test('Should throws exception', () async {
+      //Arrange
+      when(() => mockRestClient.delete<Map<String, dynamic>>(any())).thenThrow(
+        RestClientException(error: 'Erro'),
+      );
+
+      //Act
+      final call = expensesRepositoryImpl.delete;
+
+      //Asssert
+      expect(() => call(1), throwsA(isA<Failure>()));
+      verify(
+        () => mockRestClient.delete<Map<String, dynamic>>(any()),
+      ).called(1);
+    });
+  });
 }

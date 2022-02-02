@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
@@ -8,6 +7,7 @@ import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dar
 import 'package:onde_gastei_app/app/modules/home/services/home_service.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/percentage_categories_view_model.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categories_view_model.dart';
+import 'package:onde_gastei_app/app/pages/app_page.dart';
 
 enum homeState { idle, loading, error, success }
 
@@ -21,7 +21,6 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
   final HomeService _service;
   final LocalStorage _localStorage;
 
-  UserModel? userModel;
   List<TotalExpensesCategoriesViewModel> totalExpensesCategoriesList =
       <TotalExpensesCategoriesViewModel>[];
   List<PercentageCategoriesViewModel> percentageCategoriesList =

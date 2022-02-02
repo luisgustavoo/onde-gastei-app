@@ -52,4 +52,16 @@ class ExpensesRepositoryImpl implements ExpensesRepository {
       throw Failure();
     }
   }
+
+  @override
+  Future<void> delete(int expenseId) async {
+    try {
+      await _restClient.auth().delete<Map<String, dynamic>>(
+            '/expenses/$expenseId/delete',
+          );
+    } on RestClientException catch (e, s) {
+      _log.error('Erro ao deletar despesa', e, s);
+      throw Failure();
+    }
+  }
 }
