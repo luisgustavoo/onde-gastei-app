@@ -5,8 +5,6 @@ import 'package:onde_gastei_app/app/core/local_storages/local_security_storage.d
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
-import 'package:onde_gastei_app/app/core/ui/widgets/loader.dart';
-import 'package:onde_gastei_app/app/core/ui/widgets/messages.dart';
 
 class AuthInterceptor extends Interceptor {
   AuthInterceptor({
@@ -128,10 +126,8 @@ class AuthInterceptor extends Interceptor {
         );
       }
     } on Exception catch (e, s) {
-      Loader.hide();
       _log.error('Erro ao atualizar refresh token', e, s);
-      Messages.alert('Erro ao atualizar refresh token');
-      await _localStorage.logout();
+      // throw UpdateRefreshTokenException();
     }
   }
 
@@ -139,7 +135,9 @@ class AuthInterceptor extends Interceptor {
     DioError err,
     ErrorInterceptorHandler handler,
   ) async {
-    _log.append('########### Retry Request ###########');
+    _log
+      ..append('########### Retry Request ###########')
+      ..closeAppend();
     try {
       final requestOptions = err.requestOptions;
 

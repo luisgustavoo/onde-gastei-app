@@ -117,6 +117,7 @@ class App extends StatelessWidget {
             create: (context) => HomeControllerImpl(
               service: context.read<HomeServiceImpl>(),
               localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+              log: context.read<LogImpl>(),
             ),
           ),
           // ========== AUTHENTICATION ==========
@@ -158,6 +159,7 @@ class App extends StatelessWidget {
                   homeController: context.read<HomeControllerImpl>(),
                   categoriesController:
                       context.read<CategoriesControllerImpl>(),
+                  authController: context.read<AuthControllerImpl>(),
                 ),
             LoginPage.router: (context) {
               return const LoginPage();

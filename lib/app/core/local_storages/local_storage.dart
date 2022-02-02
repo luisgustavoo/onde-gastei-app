@@ -9,5 +9,4 @@ abstract class LocalStorage {
 
   Future<void> remove(String key);
 
-  Future<void> logout();
 }

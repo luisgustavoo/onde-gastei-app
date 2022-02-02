@@ -3,28 +3,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
-import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
-import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
-import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/local_storage/mock_local_storage.dart';
-import '../../../../core/log/mock_log.dart';
-import '../controllers/auth_controller_impl_test.dart';
+late AuthControllerImpl mockAuthControllerImpl;
 
-late AuthService mockService;
-late Log mockLog;
-late LocalStorage mockLocalStorage;
+class MockAuthControllerImpl extends Mock implements AuthControllerImpl {}
 
 Widget createRegisterPage() {
   return ChangeNotifierProvider<AuthControllerImpl>(
-    create: (context) => AuthControllerImpl(
-      localStorage: mockLocalStorage,
-      log: mockLog,
-      service: mockService,
-    ),
+    create: (context) => mockAuthControllerImpl,
     child: ScreenUtilInit(
       minTextAdapt: true,
       splitScreenMode: true,
@@ -42,16 +31,13 @@ Widget createRegisterPage() {
 
 void main() {
   setUp(() {
-    mockService = MockAuthService();
-    mockLog = MockLog();
-    mockLocalStorage = MockLocalStorage();
+    mockAuthControllerImpl = MockAuthControllerImpl();
   });
 
   group('Group test register page', () {
     testWidgets('Test if register page shows up', (tester) async {
-      //Arrange
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
 
-      //Act
       await tester.pumpWidget(createRegisterPage());
 
       //Assert
@@ -89,8 +75,9 @@ void main() {
     });
 
     testWidgets('Should TextFormFields is empty', (tester) async {
-      //Arrange
-      when(() => mockService.register(any(), any(), any()))
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+
+      when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenAnswer((_) async => _);
 
       await tester.pumpWidget(createRegisterPage());
@@ -112,22 +99,20 @@ void main() {
       await tester.enterText(password, '');
       await tester.enterText(confirmPassword, '');
 
-      //Act
       await tester.pump();
 
-      //Act
       await tester.tap(registerButton);
       await tester.pumpAndSettle();
 
-      //Assert
       expect(find.text('Email obrigatório'), findsOneWidget);
       expect(find.text('Senha obrigatória'), findsOneWidget);
       expect(find.text('Confirmar senha obrigatório'), findsOneWidget);
     });
 
     testWidgets('Should E-mail invalid ', (tester) async {
-      //Arrange
-      when(() => mockService.register(any(), any(), any()))
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+
+      when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenAnswer((_) async => _);
 
       await tester.pumpWidget(createRegisterPage());
@@ -149,21 +134,19 @@ void main() {
       await tester.enterText(password, 'password');
       await tester.enterText(confirmPassword, 'password');
 
-      //Act
       await tester.pump();
 
-      //Act
       await tester.tap(buttonRegister);
       await tester.pumpAndSettle();
 
-      //Assert
       expect(find.text('E-mail inválido'), findsOneWidget);
     });
 
     testWidgets('Should password must be at least 6 characters long',
         (tester) async {
-      //Arrange
-      when(() => mockService.register(any(), any(), any()))
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+
+      when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenAnswer((_) async => _);
 
       await tester.pumpWidget(createRegisterPage());
@@ -185,14 +168,11 @@ void main() {
       await tester.enterText(password, '123');
       await tester.enterText(confirmPassword, '123');
 
-      //Act
       await tester.pump();
 
-      //Act
       await tester.tap(buttonRegister);
       await tester.pumpAndSettle();
 
-      //Assert
       expect(
         find.text('A senha tem que ter no mínimo 6 caracteres'),
         findsOneWidget,
@@ -201,8 +181,9 @@ void main() {
 
     testWidgets('Should password and confirm password are not the same',
         (tester) async {
-      //Arrange
-      when(() => mockService.register(any(), any(), any()))
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+
+      when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenAnswer((_) async => _);
 
       await tester.pumpWidget(createRegisterPage());
@@ -224,14 +205,11 @@ void main() {
       await tester.enterText(password, '123');
       await tester.enterText(confirmPassword, '1234');
 
-      //Act
       await tester.pump();
 
-      //Act
       await tester.tap(buttonRegister);
       await tester.pumpAndSettle();
 
-      //Assert
       expect(
         find.text('Senha e confirmar senha não são iguais'),
         findsOneWidget,
@@ -239,8 +217,9 @@ void main() {
     });
 
     testWidgets('Should register user with success', (tester) async {
-      //Arrange
-      when(() => mockService.register(any(), any(), any()))
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+
+      when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenAnswer((_) async => _);
 
       await tester.pumpWidget(createRegisterPage());
@@ -262,19 +241,15 @@ void main() {
       await tester.enterText(password, 'password');
       await tester.enterText(confirmPassword, 'password');
 
-      //Act
       await tester.pump();
 
-      //Assert
       expect(find.text('Test'), findsOneWidget);
       expect(find.text('test@test.com'), findsOneWidget);
       expect(find.text('password'), findsNWidgets(2));
 
-      //Act
       await tester.tap(buttonRegister);
       await tester.pumpAndSettle();
 
-      //Assert
       expect(find.byType(SnackBar), findsOneWidget);
       expect(
         find.text(
@@ -286,7 +261,6 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      //Assert
       expect(
         find.widgetWithText(TextFormField, 'Como quer ser chamado?'),
         findsOneWidget,
@@ -304,8 +278,9 @@ void main() {
     });
 
     testWidgets('Should trows UserExistsException', (tester) async {
-      //Arrange
-      when(() => mockService.register(any(), any(), any()))
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+
+      when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenThrow(UserExistsException());
 
       await tester.pumpWidget(createRegisterPage());
@@ -327,19 +302,15 @@ void main() {
       await tester.enterText(password, 'password');
       await tester.enterText(confirmPassword, 'password');
 
-      //Act
       await tester.pump();
 
-      //Assert
       expect(find.text('Test'), findsOneWidget);
       expect(find.text('test@test.com'), findsOneWidget);
       expect(find.text('password'), findsNWidgets(2));
 
-      //Act
       await tester.tap(buttonRegister);
       await tester.pumpAndSettle();
 
-      //Assert
       expect(find.byType(SnackBar), findsOneWidget);
       expect(
         find.text(
@@ -351,8 +322,9 @@ void main() {
     });
 
     testWidgets('Should trows generic Exception', (tester) async {
-      //Arrange
-      when(() => mockService.register(any(), any(), any()))
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+
+      when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenThrow(Exception());
 
       await tester.pumpWidget(createRegisterPage());
@@ -374,19 +346,15 @@ void main() {
       await tester.enterText(password, 'password');
       await tester.enterText(confirmPassword, 'password');
 
-      //Act
       await tester.pump();
 
-      //Assert
       expect(find.text('Test'), findsOneWidget);
       expect(find.text('test@test.com'), findsOneWidget);
       expect(find.text('password'), findsNWidgets(2));
 
-      //Act
       await tester.tap(buttonRegister);
       await tester.pumpAndSettle();
 
-      //Assert
       expect(find.byType(SnackBar), findsOneWidget);
       expect(
         find.text('Erro ao registrar usuário', findRichText: true),

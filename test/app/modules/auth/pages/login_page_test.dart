@@ -4,68 +4,26 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
-import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
-import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/ui/logo.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
-import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
-import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
-import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
-import 'package:onde_gastei_app/app/modules/categories/services/categories_service.dart';
-import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
-import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
-import 'package:onde_gastei_app/app/modules/home/services/home_service.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/local_storage/mock_local_storage.dart';
-import '../../../../core/log/mock_log.dart';
-import '../controllers/auth_controller_impl_test.dart';
-
-late AuthService mockAuthService;
-late NavigatorObserver mockNavigatorObserver;
-late Log mockLog;
-late LocalStorage mockLocalStorage;
-late HomeService mockHomeService;
-late CategoriesService mockCategoriesService;
-late HomeController mockHomeController;
-late CategoriesController mockCategoriesController;
-
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
-class MockHomeService extends Mock implements HomeService {}
-
-class MockCategoriesService extends Mock implements CategoriesService {}
-
-class MockHomeController extends Mock implements HomeController {}
-
-class MockCategoriesController extends Mock implements CategoriesController {}
-
 class MockRoute extends Mock implements Route<dynamic> {}
+
+class MockAuthControllerImpl extends Mock implements AuthControllerImpl {}
+
+late NavigatorObserver mockNavigatorObserver;
+late AuthControllerImpl mockAuthControllerImpl;
 
 Widget createLoginPagePage() {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider(
-        create: (context) => AuthControllerImpl(
-          localStorage: mockLocalStorage,
-          log: mockLog,
-          service: mockAuthService,
-        ),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => HomeControllerImpl(
-          localStorage: mockLocalStorage,
-          service: mockHomeService,
-        ),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => CategoriesControllerImpl(
-          service: mockCategoriesService,
-          log: mockLog,
-        ),
+      ChangeNotifierProvider<AuthControllerImpl>(
+        create: (context) => mockAuthControllerImpl,
       ),
     ],
     child: ScreenUtilInit(
@@ -78,12 +36,7 @@ Widget createLoginPagePage() {
           LoginPage.router: (context) {
             return const LoginPage();
           },
-          AppPage.router: (context) {
-            return AppPage(
-              homeController: mockHomeController,
-              categoriesController: mockCategoriesController,
-            );
-          },
+          AppPage.router: (context) => Container(),
         },
       ),
     ),
@@ -92,19 +45,15 @@ Widget createLoginPagePage() {
 
 void main() {
   setUp(() {
-    mockAuthService = MockAuthService();
-    mockLog = MockLog();
-    mockLocalStorage = MockLocalStorage();
-    mockHomeService = MockHomeService();
-    mockHomeController = MockHomeController();
-    mockCategoriesService = MockCategoriesService();
-    mockCategoriesController = MockCategoriesController();
+    mockAuthControllerImpl = MockAuthControllerImpl();
     mockNavigatorObserver = MockNavigatorObserver();
     registerFallbackValue(MockRoute());
   });
 
   group('Group test login pate', () {
     testWidgets('Test if login page shows up', (tester) async {
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+
       await tester.pumpWidget(createLoginPagePage());
 
       expect(find.byType(Logo), findsOneWidget);
@@ -119,6 +68,7 @@ void main() {
     });
 
     testWidgets('Should TextFormFields is empty', (tester) async {
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
       await tester.pumpWidget(createLoginPagePage());
 
       final email = find.byKey(const ValueKey('email_key_login_page'));
@@ -140,6 +90,7 @@ void main() {
       expect(find.text('Senha obrigatória'), findsOneWidget);
     });
     testWidgets('Should E-mail invalid', (tester) async {
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
       await tester.pumpWidget(createLoginPagePage());
 
       final email = find.byKey(const ValueKey('email_key_login_page'));
@@ -163,6 +114,8 @@ void main() {
 
     testWidgets('Should password must be at least 6 characters long',
         (tester) async {
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+
       await tester.pumpWidget(createLoginPagePage());
 
       final email = find.byKey(const ValueKey('email_key_login_page'));
@@ -187,29 +140,10 @@ void main() {
     });
 
     testWidgets('Should login with success', (tester) async {
-      when(() => mockAuthService.login(any(), any()))
-          .thenAnswer((_) async => _);
-      when(
-        () => mockHomeController.fetchUserData(),
-      ).thenAnswer(
-        (_) async =>
-            UserModel(userId: 1, name: 'Test', email: 'test@domain.com'),
-      );
-      when(
-        () => mockCategoriesController.findCategories(1),
-      ).thenAnswer(
-        (_) async => _,
-      );
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
 
-      when(
-        () => mockHomeController.fetchHomeData(
-          userId: any(named: 'userId'),
-          initialDate: any(named: 'initialDate'),
-          finalDate: any(named: 'finalDate'),
-        ),
-      ).thenAnswer(
-        (_) async => _,
-      );
+      when(() => mockAuthControllerImpl.login(any(), any()))
+          .thenAnswer((_) async => _);
 
       when(
         () => mockNavigatorObserver.didReplace(
@@ -234,7 +168,7 @@ void main() {
       await tester.tap(loginButton);
       await tester.pumpAndSettle();
 
-      verify(() => mockAuthService.login(any(), any())).called(1);
+      verify(() => mockAuthControllerImpl.login(any(), any())).called(1);
       verify(
         () => mockNavigatorObserver.didReplace(
           oldRoute: any(named: 'oldRoute'),
@@ -244,7 +178,9 @@ void main() {
     });
 
     testWidgets('Should trows UserNotFoundException', (tester) async {
-      when(() => mockAuthService.login(any(), any()))
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+
+      when(() => mockAuthControllerImpl.login(any(), any()))
           .thenThrow(UserNotFoundException());
 
       await tester.pumpWidget(createLoginPagePage());
@@ -271,7 +207,9 @@ void main() {
     });
 
     testWidgets('Should trows UnverifiedEmailException', (tester) async {
-      when(() => mockAuthService.login(any(), any()))
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+
+      when(() => mockAuthControllerImpl.login(any(), any()))
           .thenThrow(UnverifiedEmailException());
 
       await tester.pumpWidget(createLoginPagePage());
@@ -301,8 +239,10 @@ void main() {
     });
 
     testWidgets('Should trows generic Exception', (tester) async {
-      //Arrange
-      when(() => mockAuthService.login(any(), any())).thenThrow(Exception());
+      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+
+      when(() => mockAuthControllerImpl.login(any(), any()))
+          .thenThrow(Exception());
 
       await tester.pumpWidget(createLoginPagePage());
 

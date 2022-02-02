@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
@@ -8,6 +9,7 @@ import 'package:onde_gastei_app/app/modules/categories/controllers/categories_co
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/widgets/color_picker.dart';
 import 'package:onde_gastei_app/app/modules/categories/widgets/icon_picker.dart';
+import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
@@ -50,13 +52,13 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
 
     _icon = ValueNotifier<IconData>(
       IconData(
-        widget.categoryModel?.iconCode ?? 0xe332,
+        widget.categoryModel?.iconCode ?? Constants.defaultIconCode,
         fontFamily: 'MaterialIcons',
       ),
     );
 
     _color = ValueNotifier<Color>(
-      Color(widget.categoryModel?.colorCode ?? 0xFF9E9E9E),
+      Color(widget.categoryModel?.colorCode ?? Constants.defaultColorCode),
     );
   }
 
@@ -232,7 +234,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
         final formValid = _formKey.currentState?.validate() ?? false;
 
         if (formValid) {
-          SnackBar snackBar;
+          SnackBar? snackBar;
 
           String message;
 
@@ -291,7 +293,9 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
             );
           }
 
-          _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
+          if (snackBar != null) {
+            _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
+          }
         }
       },
     );
@@ -340,7 +344,8 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
   }
 
   Widget _buildIcon({
-    IconData icon = const IconData(0xe332, fontFamily: 'MaterialIcons'),
+    IconData icon =
+        const IconData(Constants.defaultIconCode, fontFamily: 'MaterialIcons'),
     Color color = Colors.grey,
   }) {
     return Column(
@@ -466,11 +471,11 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
     categoriesTextController.clear();
 
     _icon = ValueNotifier<IconData>(
-      const IconData(0xe332, fontFamily: 'MaterialIcons'),
+      const IconData(Constants.defaultIconCode, fontFamily: 'MaterialIcons'),
     );
 
     _color = ValueNotifier<Color>(
-      const Color(0xFF9E9E9E),
+      const Color(Constants.defaultColorCode),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/core/local_storages/shared_preferences_local_storage_impl.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
+import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
+import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
@@ -14,12 +15,14 @@ class AppPage extends StatefulWidget {
   const AppPage({
     required this.homeController,
     required this.categoriesController,
+    required this.authController,
     Key? key,
   }) : super(key: key);
   static const router = '/app';
 
   final HomeController homeController;
   final CategoriesController categoriesController;
+  final AuthController authController;
 
   @override
   State<AppPage> createState() => _AppPageState();
@@ -79,9 +82,8 @@ class _AppPageState extends State<AppPage> {
             child: Center(
               child: TextButton(
                 onPressed: () async {
-                  final localStorage =
-                      context.read<SharedPreferencesLocalStorageImpl>();
-                  await localStorage.logout();
+                  final authController = context.read<AuthControllerImpl>();
+                  await authController.logout();
 
                   if (!mounted) {
                     return;

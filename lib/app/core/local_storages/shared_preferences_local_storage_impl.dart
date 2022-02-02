@@ -1,6 +1,4 @@
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
-import 'package:onde_gastei_app/app/core/navigator/onde_gastei_navigator.dart';
-import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesLocalStorageImpl implements LocalStorage {
@@ -72,11 +70,5 @@ class SharedPreferencesLocalStorageImpl implements LocalStorage {
         await sp.setStringList(key, value as List<String>);
         break;
     }
-  }
-
-  @override
-  Future<void> logout() async {
-    await clear();
-    await OndeGasteiNavigator.to!.pushReplacementNamed(SplashPage.router);
   }
 }
