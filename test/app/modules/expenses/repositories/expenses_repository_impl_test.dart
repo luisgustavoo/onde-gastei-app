@@ -94,4 +94,71 @@ void main() {
       ).called(1);
     });
   });
+
+  group('Group test exepense update', () {
+    test('Should update expense with success', () async {
+      //Arrange
+      final expensesInputModel = ExpensesInputModel(
+        description: 'Test',
+        date: DateTime.now(),
+        value: 1,
+        categoryId: 1,
+      );
+
+      final data = <String, dynamic>{
+        'descricao': expensesInputModel.description,
+        'valor': expensesInputModel.value,
+        'data': expensesInputModel.date,
+        'id_categoria': expensesInputModel.categoryId
+      };
+
+      when(
+        () => mockRestClient.put<Map<String, dynamic>>(
+          any(),
+          data: data,
+        ),
+      ).thenAnswer((_) async => MockRestClientResponse(statusCode: 200));
+
+      //Act
+      await expensesRepositoryImpl.update(expensesInputModel, 1);
+
+      //Assert
+      verify(
+        () => mockRestClient.put<Map<String, dynamic>>(any(), data: data),
+      ).called(1);
+    });
+
+    test('Should throws exception', () async {
+      //Arrange
+      final expensesInputModel = ExpensesInputModel(
+        description: 'Test',
+        date: DateTime.now(),
+        value: 1,
+        categoryId: 1,
+      );
+
+      final data = <String, dynamic>{
+        'descricao': expensesInputModel.description,
+        'valor': expensesInputModel.value,
+        'data': expensesInputModel.date,
+        'id_categoria': expensesInputModel.categoryId
+      };
+
+      when(
+        () => mockRestClient.put<Map<String, dynamic>>(
+          any(),
+          data: data,
+        ),
+      ).thenThrow(RestClientException(error: 'Error'));
+
+      //Act
+      final call = expensesRepositoryImpl.update;
+
+      //Assert
+      expect(() => call(expensesInputModel, 1), throwsA(isA<Failure>()));
+      verify(
+        () => mockRestClient.put<Map<String, dynamic>>(any(), data: data),
+      ).called(1);
+    });
+  });
 }

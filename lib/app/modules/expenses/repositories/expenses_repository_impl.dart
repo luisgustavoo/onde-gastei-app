@@ -38,7 +38,7 @@ class ExpensesRepositoryImpl implements ExpensesRepository {
     int expenseId,
   ) async {
     try {
-      await _restClient.auth().post(
+      await _restClient.auth().put(
         '/expenses/$expenseId/update',
         data: <String, dynamic>{
           'descricao': expensesInputModel.description,
