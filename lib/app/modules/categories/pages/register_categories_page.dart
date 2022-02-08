@@ -36,6 +36,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
   late ValueNotifier<Color> _color;
   final _scaffoldMessagedKey = GlobalKey<ScaffoldMessengerState>();
   final _formKey = GlobalKey<FormState>();
+  bool _edited = false;
 
   @override
   void dispose() {
@@ -76,7 +77,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
               leading: IconButton(
                 splashRadius: 20,
                 icon: const Icon(Icons.close),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () => Navigator.of(context).pop(_edited),
               ),
               actions: [
                 _buildDeleteButton(context, categoriesController),
@@ -158,6 +159,8 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
                     onPressed: () async {
                       // SnackBar snackBar;
                       try {
+                        _edited = true;
+
                         await categoriesController
                             .deleteCategory(widget.categoryModel?.id ?? 0);
 
@@ -166,11 +169,11 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
                         }
 
                         if (Navigator.of(dialogContext).canPop()) {
-                          Navigator.of(dialogContext).pop();
+                          Navigator.of(dialogContext).pop(_edited);
                         }
 
                         if (Navigator.of(registerPageContext).canPop()) {
-                          Navigator.of(registerPageContext).pop();
+                          Navigator.of(registerPageContext).pop(_edited);
                         }
                       } on Exception {
                         final snackBar = OndeGasteiSnackBar.buildSnackBar(
@@ -233,6 +236,8 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
         final formValid = _formKey.currentState?.validate() ?? false;
 
         if (formValid) {
+          _edited = true;
+
           SnackBar snackBar;
 
           String message;
@@ -340,7 +345,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
     );
   }
 
-  Widget _buildIcon({
+  Column _buildIcon({
     IconData icon =
         const IconData(Constants.defaultIconCode, fontFamily: 'MaterialIcons'),
     Color color = Colors.grey,
@@ -366,7 +371,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
     );
   }
 
-  Widget _buildColor({
+  Column _buildColor({
     Color color = Colors.grey,
   }) {
     return Column(
@@ -386,7 +391,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
     );
   }
 
-  Widget _buildDialogIcons(BuildContext context) {
+  Dialog _buildDialogIcons(BuildContext context) {
     const icons = IconPicker.icons;
 
     return Dialog(
@@ -423,7 +428,7 @@ class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
     );
   }
 
-  Widget _buildDialogColor(BuildContext context) {
+  Dialog _buildDialogColor(BuildContext context) {
     const colors = ColorPicker.colors;
 
     return Dialog(

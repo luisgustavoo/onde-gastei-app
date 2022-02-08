@@ -21,11 +21,15 @@ class CategoriesPage extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () async {
-                await Navigator.of(context)
+                final edited = await Navigator.of(context)
                     .pushNamed(RegisterCategoriesPage.router);
 
-                await categoriesController
-                    .findCategories(userModel?.userId ?? 0);
+                if (edited != null) {
+                  if (edited is bool && edited == true) {
+                    await categoriesController
+                        .findCategories(userModel?.userId ?? 0);
+                  }
+                }
               },
               icon: Icon(
                 Icons.add_circle,
@@ -61,7 +65,7 @@ class CategoriesPage extends StatelessWidget {
                 return ListTile(
                   key: Key('list_tile_key_${index}_categories_page'),
                   onTap: () async {
-                    await Navigator.of(context).pushNamed(
+                    final edited = await Navigator.of(context).pushNamed(
                       RegisterCategoriesPage.router,
                       arguments: <String, dynamic>{
                         'category': category,
@@ -69,8 +73,12 @@ class CategoriesPage extends StatelessWidget {
                       },
                     );
 
-                    await categoriesController
-                        .findCategories(userModel?.userId ?? 0);
+                    if (edited != null) {
+                      if (edited is bool && edited == true) {
+                        await categoriesController
+                            .findCategories(userModel?.userId ?? 0);
+                      }
+                    }
                   },
                   leading: CircleAvatar(
                     backgroundColor: Color(category.colorCode),

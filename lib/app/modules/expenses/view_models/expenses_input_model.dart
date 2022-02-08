@@ -12,4 +12,5 @@ class ExpensesInputModel {
   final DateTime date;
   final int? userId;
   final int categoryId;
+
 }
