@@ -6,7 +6,7 @@ import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
-import 'package:onde_gastei_app/app/modules/categories/pages/register_categories_page.dart';
+import 'package:onde_gastei_app/app/modules/categories/pages/categories_register_page.dart';
 import 'package:onde_gastei_app/app/modules/categories/services/categories_service.dart';
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 import 'package:provider/provider.dart';
@@ -28,11 +28,11 @@ Widget createRegisterCategoriesPage() {
     },
     child: ScreenUtilInit(
       builder: () => MaterialApp(
-        initialRoute: RegisterCategoriesPage.router,
+        initialRoute: CategoriesRegisterPage.router,
         routes: {
-          RegisterCategoriesPage.router: (context) {
+          CategoriesRegisterPage.router: (context) {
             if (isEditing) {
-              return RegisterCategoriesPage(
+              return CategoriesRegisterPage(
                 categoryModel: const CategoryModel(
                   description: 'Test',
                   iconCode: 1,
@@ -41,7 +41,7 @@ Widget createRegisterCategoriesPage() {
                 isEditing: isEditing,
               );
             }
-            return const RegisterCategoriesPage();
+            return const CategoriesRegisterPage();
           }
         },
       ),

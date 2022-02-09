@@ -3,6 +3,7 @@ import 'package:onde_gastei_app/app/controllers/app_controller.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
+import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
 import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
 import 'package:provider/provider.dart';
@@ -129,7 +130,9 @@ class _AppPageState extends State<AppPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed(ExpensesRegisterPage.router);
+        },
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

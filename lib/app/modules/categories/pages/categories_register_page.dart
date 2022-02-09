@@ -13,23 +13,23 @@ import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
-class RegisterCategoriesPage extends StatefulWidget {
-  const RegisterCategoriesPage({
+class CategoriesRegisterPage extends StatefulWidget {
+  const CategoriesRegisterPage({
     this.categoryModel,
     this.isEditing = false,
     Key? key,
   }) : super(key: key);
 
-  static const router = '/register-categories';
+  static const router = '/categories/register';
 
   final CategoryModel? categoryModel;
   final bool isEditing;
 
   @override
-  State<RegisterCategoriesPage> createState() => _RegisterCategoriesPageState();
+  State<CategoriesRegisterPage> createState() => _CategoriesRegisterPageState();
 }
 
-class _RegisterCategoriesPageState extends State<RegisterCategoriesPage> {
+class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
   late TextEditingController categoriesTextController;
   late ValueNotifier<IconData> _icon;
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class OndeGasteiTextForm extends StatelessWidget {
   OndeGasteiTextForm({
@@ -10,6 +11,7 @@ class OndeGasteiTextForm extends StatelessWidget {
     this.prefixIcon,
     this.textInputType = TextInputType.text,
     this.textAlign = TextAlign.start,
+    this.inputFormatters,
     Key? key,
   })  : _obscureTextNotifier = ValueNotifier<bool>(obscureText),
         assert(
@@ -27,6 +29,7 @@ class OndeGasteiTextForm extends StatelessWidget {
   final ValueNotifier<bool> _obscureTextNotifier;
   final TextInputType textInputType;
   final TextAlign textAlign;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +43,7 @@ class OndeGasteiTextForm extends StatelessWidget {
           validator: validator,
           keyboardType: textInputType,
           textAlign: textAlign,
+          inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: label,
             prefixIcon: prefixIcon,

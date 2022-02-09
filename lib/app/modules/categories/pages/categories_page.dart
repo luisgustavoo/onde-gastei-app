@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
-import 'package:onde_gastei_app/app/modules/categories/pages/register_categories_page.dart';
+import 'package:onde_gastei_app/app/modules/categories/pages/categories_register_page.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesPage extends StatelessWidget {
   const CategoriesPage({Key? key}) : super(key: key);
 
-  static const router = '/category';
+  static const router = '/categories';
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class CategoriesPage extends StatelessWidget {
             IconButton(
               onPressed: () async {
                 final edited = await Navigator.of(context)
-                    .pushNamed(RegisterCategoriesPage.router);
+                    .pushNamed(CategoriesRegisterPage.router);
 
                 if (edited != null) {
                   if (edited is bool && edited == true) {
@@ -66,7 +66,7 @@ class CategoriesPage extends StatelessWidget {
                   key: Key('list_tile_key_${index}_categories_page'),
                   onTap: () async {
                     final edited = await Navigator.of(context).pushNamed(
-                      RegisterCategoriesPage.router,
+                      CategoriesRegisterPage.router,
                       arguments: <String, dynamic>{
                         'category': category,
                         'editing': true,

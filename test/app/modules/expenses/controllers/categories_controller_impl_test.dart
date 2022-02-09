@@ -21,7 +21,10 @@ void main() {
   setUp(() {
     mockServices = MockExpensesServices();
     mockLog = MockLog();
-    controller = ExpensesControllerImpl(services: mockServices, log: mockLog);
+    controller = ExpensesControllerImpl(
+      services: mockServices,
+      log: mockLog,
+    );
 
     registerFallbackValue(MockExpensesInputModel());
   });

@@ -1,24 +1,29 @@
+import 'package:flutter/foundation.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/services/expenses_services.dart';
 import 'package:onde_gastei_app/app/modules/expenses/view_models/expenses_input_model.dart';
 
-class ExpensesControllerImpl implements ExpensesController {
-  ExpensesControllerImpl({required ExpensesServices services, required Log log})
-      : _services = services,
+class ExpensesControllerImpl extends ChangeNotifier
+    implements ExpensesController {
+  ExpensesControllerImpl({
+    required ExpensesServices services,
+    required Log log,
+  })  : _services = services,
         _log = log;
 
   final ExpensesServices _services;
   final Log _log;
 
   @override
-  Future<void> register(
-      {required String description,
-      required double value,
-      required DateTime date,
-      required int categoryId,
-      int? userId}) async {
+  Future<void> register({
+    required String description,
+    required double value,
+    required DateTime date,
+    required int categoryId,
+    int? userId,
+  }) async {
     try {
       final expensesInputModel = ExpensesInputModel(
         description: description,
