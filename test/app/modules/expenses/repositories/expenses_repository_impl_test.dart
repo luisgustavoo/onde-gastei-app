@@ -4,8 +4,8 @@ import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
+import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/repositories/expenses_repository_impl.dart';
-import 'package:onde_gastei_app/app/modules/expenses/view_models/expenses_input_model.dart';
 
 import '../../../../core/log/mock_log.dart';
 import '../../../../core/rest_client/mock_rest_client.dart';
@@ -16,31 +16,32 @@ void main() {
   late Log mockLog;
   late ExpensesRepositoryImpl expensesRepositoryImpl;
 
+  final expenseModel = ExpenseModel(
+    description: 'Test',
+    date: DateTime.now(),
+    value: 1,
+    userId: 1,
+    categoryId: 1,
+  );
+
   setUp(() {
     mockRestClient = MockRestClient();
     mockLog = MockLog();
     expensesRepositoryImpl =
         ExpensesRepositoryImpl(restClient: mockRestClient, log: mockLog);
-    registerFallbackValue(ExpensesInputModel);
+    registerFallbackValue(expenseModel);
   });
 
-  group('Group test exepenses register', () {
-    test('Should resgister expenses with success', () async {
+  group('Group test expenses register', () {
+    test('Should register expenses with success', () async {
       //Arrange
-      final expensesInputModel = ExpensesInputModel(
-        description: 'Test',
-        date: DateTime.now(),
-        value: 1,
-        userId: 1,
-        categoryId: 1,
-      );
 
       final data = <String, dynamic>{
-        'descricao': expensesInputModel.description,
-        'valor': expensesInputModel.value,
-        'data': expensesInputModel.date,
-        'id_usuario': expensesInputModel.userId,
-        'id_categoria': expensesInputModel.categoryId
+        'descricao': expenseModel.description,
+        'valor': expenseModel.value,
+        'data': expenseModel.date,
+        'id_usuario': expenseModel.userId,
+        'id_categoria': expenseModel.categoryId
       };
 
       when(
@@ -51,7 +52,7 @@ void main() {
       ).thenAnswer((_) async => MockRestClientResponse(statusCode: 200));
 
       //Act
-      await expensesRepositoryImpl.register(expensesInputModel);
+      await expensesRepositoryImpl.register(expenseModel);
 
       //Assert
       verify(
@@ -61,20 +62,12 @@ void main() {
 
     test('Should throws exception', () async {
       //Arrange
-      final expensesInputModel = ExpensesInputModel(
-        description: 'Test',
-        date: DateTime.now(),
-        value: 1,
-        userId: 1,
-        categoryId: 1,
-      );
-
       final data = <String, dynamic>{
-        'descricao': expensesInputModel.description,
-        'valor': expensesInputModel.value,
-        'data': expensesInputModel.date,
-        'id_usuario': expensesInputModel.userId,
-        'id_categoria': expensesInputModel.categoryId
+        'descricao': expenseModel.description,
+        'valor': expenseModel.value,
+        'data': expenseModel.date,
+        'id_usuario': expenseModel.userId,
+        'id_categoria': expenseModel.categoryId
       };
 
       when(
@@ -88,28 +81,21 @@ void main() {
       final call = expensesRepositoryImpl.register;
 
       //Assert
-      expect(() => call(expensesInputModel), throwsA(isA<Failure>()));
+      expect(() => call(expenseModel), throwsA(isA<Failure>()));
       verify(
         () => mockRestClient.post<Map<String, dynamic>>(any(), data: data),
       ).called(1);
     });
   });
 
-  group('Group test exepense update', () {
+  group('Group test expense update', () {
     test('Should update expense with success', () async {
       //Arrange
-      final expensesInputModel = ExpensesInputModel(
-        description: 'Test',
-        date: DateTime.now(),
-        value: 1,
-        categoryId: 1,
-      );
-
       final data = <String, dynamic>{
-        'descricao': expensesInputModel.description,
-        'valor': expensesInputModel.value,
-        'data': expensesInputModel.date,
-        'id_categoria': expensesInputModel.categoryId
+        'descricao': expenseModel.description,
+        'valor': expenseModel.value,
+        'data': expenseModel.date,
+        'id_categoria': expenseModel.categoryId
       };
 
       when(
@@ -120,7 +106,7 @@ void main() {
       ).thenAnswer((_) async => MockRestClientResponse(statusCode: 200));
 
       //Act
-      await expensesRepositoryImpl.update(expensesInputModel, 1);
+      await expensesRepositoryImpl.update(expenseModel, 1);
 
       //Assert
       verify(
@@ -130,18 +116,11 @@ void main() {
 
     test('Should throws exception', () async {
       //Arrange
-      final expensesInputModel = ExpensesInputModel(
-        description: 'Test',
-        date: DateTime.now(),
-        value: 1,
-        categoryId: 1,
-      );
-
       final data = <String, dynamic>{
-        'descricao': expensesInputModel.description,
-        'valor': expensesInputModel.value,
-        'data': expensesInputModel.date,
-        'id_categoria': expensesInputModel.categoryId
+        'descricao': expenseModel.description,
+        'valor': expenseModel.value,
+        'data': expenseModel.date,
+        'id_categoria': expenseModel.categoryId
       };
 
       when(
@@ -155,7 +134,7 @@ void main() {
       final call = expensesRepositoryImpl.update;
 
       //Assert
-      expect(() => call(expensesInputModel, 1), throwsA(isA<Failure>()));
+      expect(() => call(expenseModel, 1), throwsA(isA<Failure>()));
       verify(
         () => mockRestClient.put<Map<String, dynamic>>(any(), data: data),
       ).called(1);

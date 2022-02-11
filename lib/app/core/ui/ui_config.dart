@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:onde_gastei_app/app/core/ui/onde_gastei_material_color.dart';
+import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 
 class UiConfig {
   UiConfig._();
@@ -19,45 +19,45 @@ class UiConfig {
           color: Colors.transparent,
           elevation: 0,
           iconTheme: const IconThemeData(
-            color: Color(0xFF585666),
+            color: Constants.iconThemeColor,
           ),
           titleTextStyle: GoogleFonts.jost(
-            color: const Color(0xFF585666),
+            color: Constants.titleTextStyleColor,
             fontSize: 23.sp,
             fontWeight: FontWeight.w500,
           ),
           centerTitle: true,
         ),
-        primaryColor: const Color(0xFF32B768),
-        primaryColorDark: const Color(0xff278F51),
-        primaryColorLight: const Color(0xffDAF2E4),
-        primarySwatch: OndeGasteiMaterialColor.primarySwatch,
+        primaryColor: Constants.primaryColor,
+        primaryColorDark: Constants.primaryColorDark,
+        primaryColorLight: Constants.primaryColorLight,
+        primarySwatch: Constants.primarySwatch,
         textTheme: TextTheme(
           bodyText2: GoogleFonts.jost(
-            color: const Color(0xFF585666),
+            color: Constants.bodyText2Color,
           ),
           subtitle1: GoogleFonts.jost(
-            color: const Color(0xFF585666),
+            color: Constants.subtitle1Color,
           ),
         ),
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: const Color(0xFF32B768),
-          primary: const Color(0xFF32B768),
+          secondary: Constants.primaryColor,
+          primary: Constants.primaryColor,
         ),
         textSelectionTheme: TextSelectionThemeData(
-          cursorColor: const Color(0xFF32B768),
-          selectionColor: const Color(0xFF32B768).withAlpha(50),
-          selectionHandleColor: const Color(0xFF32B768),
+          cursorColor: Constants.primaryColor,
+          selectionColor: Constants.primaryColor.withAlpha(50),
+          selectionHandleColor: Constants.primaryColor,
         ),
         inputDecorationTheme: InputDecorationTheme(
           hintStyle: const TextStyle(
-            color: Color(0xFFC0C2D1),
+            color: Constants.hintStyleColor,
           ),
           floatingLabelBehavior: FloatingLabelBehavior.never,
-          fillColor: const Color(0xFFEFEFEF),
+          fillColor: Constants.fillColor,
           filled: true,
           labelStyle: TextStyle(
-            color: const Color(0xFFC0C2D1),
+            color: Constants.labelStyleColor,
             fontSize: 12.sp,
           ),
           border: OutlineInputBorder(
@@ -66,6 +66,5 @@ class UiConfig {
           ),
           contentPadding: EdgeInsets.symmetric(vertical: 16.h),
         ),
-
       );
 }

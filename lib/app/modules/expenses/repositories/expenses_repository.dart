@@ -1,9 +1,9 @@
-import 'package:onde_gastei_app/app/modules/expenses/view_models/expenses_input_model.dart';
+import 'package:onde_gastei_app/app/models/expense_model.dart';
 
 abstract class ExpensesRepository {
-  Future<void> register(ExpensesInputModel expensesInputModel);
+  Future<void> register(ExpenseModel expenseModel);
 
-  Future<void> update(ExpensesInputModel expensesInputModel, int expenseId);
+  Future<void> update(ExpenseModel expenseModel, int expenseId);
 
   Future<void> delete(int expenseId);
 }

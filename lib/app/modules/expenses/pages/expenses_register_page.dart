@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/helpers/input_formatter/currency_input_formatter_ptbr.dart';
 import 'package:onde_gastei_app/app/core/helpers/input_formatter/date_input_formatter_ptbr.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
@@ -20,7 +21,9 @@ class ExpensesRegisterPage extends StatefulWidget {
 
 class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
   final _formKey = GlobalKey<FormState>();
+
   CategoryModel? _selectedCategory;
+
   TextEditingController dateController = TextEditingController(
     text: DateFormat.yMd('pt_BR').format(
       DateTime.now(),
@@ -108,6 +111,8 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                   ),
                   Selector<CategoriesControllerImpl, List<CategoryModel>>(
                     builder: (context, categoriesList, _) {
+                      _selectedCategory = categoriesList.first;
+
                       return DropdownButtonFormField<CategoryModel>(
                         onChanged: (value) {
                           _selectedCategory = value;
@@ -116,7 +121,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                         hint: const Text(
                           'Selecione a categoria',
                           style: TextStyle(
-                            color: Color(0xFFC0C2D1),
+                            color: Constants.hintStyleColor,
                           ),
                         ),
                         decoration: InputDecoration(

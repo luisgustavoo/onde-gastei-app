@@ -8,5 +8,4 @@ abstract class HomeController {
     required DateTime initialDate,
     required DateTime finalDate,
   });
-
 }

@@ -10,6 +10,16 @@ class DateInputFormatterPtbr extends TextInputFormatter {
       return newValue;
     }
 
+    final digit = newValue.text.substring(newValue.text.length - 1);
+
+    if (oldValue.text.length < newValue.text.length) {
+      try {
+        int.parse(digit);
+      } on FormatException {
+        return oldValue;
+      }
+    }
+
     var result = newValue.text;
 
     if ((newValue.text.length == 2 || newValue.text.length == 5) &&

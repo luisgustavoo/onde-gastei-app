@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/services/expenses_services.dart';
 import 'package:onde_gastei_app/app/modules/expenses/view_models/expenses_input_model.dart';
@@ -25,7 +26,7 @@ class ExpensesControllerImpl extends ChangeNotifier
     int? userId,
   }) async {
     try {
-      final expensesInputModel = ExpensesInputModel(
+      final expenseModel = ExpenseModel(
         description: description,
         value: value,
         date: date,
@@ -33,7 +34,7 @@ class ExpensesControllerImpl extends ChangeNotifier
         userId: userId,
       );
 
-      await _services.register(expensesInputModel);
+      await _services.register(expenseModel);
     } on Exception catch (e, s) {
       _log.error('Erro ao registrar despesa', e, s);
       throw Failure();
@@ -50,7 +51,7 @@ class ExpensesControllerImpl extends ChangeNotifier
     int? userId,
   }) async {
     try {
-      final expensesInputModel = ExpensesInputModel(
+      final expenseModel = ExpenseModel(
         description: description,
         value: value,
         date: date,
@@ -58,7 +59,7 @@ class ExpensesControllerImpl extends ChangeNotifier
         userId: userId,
       );
 
-      await _services.update(expensesInputModel, expenseId);
+      await _services.update(expenseModel, expenseId);
     } on Exception catch (e, s) {
       _log.error('Erro ao atualizar despesa', e, s);
       throw Failure();

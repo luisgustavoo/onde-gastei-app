@@ -2,6 +2,7 @@ import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
+import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/repositories/expenses_repository.dart';
 import 'package:onde_gastei_app/app/modules/expenses/view_models/expenses_input_model.dart';
 
@@ -14,16 +15,16 @@ class ExpensesRepositoryImpl implements ExpensesRepository {
   final Log _log;
 
   @override
-  Future<void> register(ExpensesInputModel expensesInputModel) async {
+  Future<void> register(ExpenseModel expenseModel) async {
     try {
       await _restClient.auth().post(
         '/expenses/register',
         data: <String, dynamic>{
-          'descricao': expensesInputModel.description,
-          'valor': expensesInputModel.value,
-          'data': expensesInputModel.date,
-          'id_usuario': expensesInputModel.userId,
-          'id_categoria': expensesInputModel.categoryId
+          'descricao': expenseModel.description,
+          'valor': expenseModel.value,
+          'data': expenseModel.date,
+          'id_usuario': expenseModel.userId,
+          'id_categoria': expenseModel.categoryId
         },
       );
     } on RestClientException catch (e, s) {
@@ -34,17 +35,17 @@ class ExpensesRepositoryImpl implements ExpensesRepository {
 
   @override
   Future<void> update(
-    ExpensesInputModel expensesInputModel,
+    ExpenseModel expenseModel,
     int expenseId,
   ) async {
     try {
       await _restClient.auth().put(
         '/expenses/$expenseId/update',
         data: <String, dynamic>{
-          'descricao': expensesInputModel.description,
-          'valor': expensesInputModel.value,
-          'data': expensesInputModel.date,
-          'id_categoria': expensesInputModel.categoryId
+          'descricao': expenseModel.description,
+          'valor': expenseModel.value,
+          'data': expenseModel.date,
+          'id_categoria': expenseModel.categoryId
         },
       );
     } on RestClientException catch (e, s) {

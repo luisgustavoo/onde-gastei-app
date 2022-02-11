@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
+import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/repositories/expenses_repository.dart';
 import 'package:onde_gastei_app/app/modules/expenses/services/expenses_services.dart';
 import 'package:onde_gastei_app/app/modules/expenses/services/expenses_services_impl.dart';
@@ -12,6 +13,14 @@ void main() {
   late ExpensesRepository repository;
   late ExpensesServices services;
 
+  final expenseModel = ExpenseModel(
+    description: 'Test',
+    date: DateTime.now(),
+    value: 1,
+    userId: 1,
+    categoryId: 1,
+  );
+
   setUp(() {
     repository = MockExpensesRepository();
     services = ExpensesServicesImpl(repository: repository);
@@ -20,76 +29,48 @@ void main() {
   group('Group test register', () {
     test('Should register expense with success', () async {
       // Arrange
-      final expensesInputModel = ExpensesInputModel(
-        description: 'Test',
-        date: DateTime.now(),
-        value: 1,
-        categoryId: 1,
-        userId: 1,
-      );
-      when(() => repository.register(expensesInputModel))
+      when(() => repository.register(expenseModel))
           .thenAnswer((_) async => _);
       //Act
-      await services.register(expensesInputModel);
+      await services.register(expenseModel);
 
       //Assert
-      verify(() => repository.register(expensesInputModel)).called(1);
+      verify(() => repository.register(expenseModel)).called(1);
     });
 
     test('Should throws exception', () async {
       // Arrange
-      final expensesInputModel = ExpensesInputModel(
-        description: 'Test',
-        date: DateTime.now(),
-        value: 1,
-        categoryId: 1,
-        userId: 1,
-      );
-      when(() => repository.register(expensesInputModel)).thenThrow(Failure());
+      when(() => repository.register(expenseModel)).thenThrow(Failure());
       //Act
       final call = services.register;
 
       //Assert
-      expect(() => call(expensesInputModel), throwsA(isA<Failure>()));
-      verify(() => repository.register(expensesInputModel)).called(1);
+      expect(() => call(expenseModel), throwsA(isA<Failure>()));
+      verify(() => repository.register(expenseModel)).called(1);
     });
   });
 
   group('Group test update', () {
     test('Should update expense with success', () async {
       // Arrange
-      final expensesInputModel = ExpensesInputModel(
-        description: 'Test',
-        date: DateTime.now(),
-        value: 1,
-        categoryId: 1,
-        userId: 1,
-      );
-      when(() => repository.update(expensesInputModel, 1))
+      when(() => repository.update(expenseModel, 1))
           .thenAnswer((_) async => _);
       //Act
-      await services.update(expensesInputModel, 1);
+      await services.update(expenseModel, 1);
 
       //Assert
-      verify(() => repository.update(expensesInputModel, 1)).called(1);
+      verify(() => repository.update(expenseModel, 1)).called(1);
     });
 
     test('Should throws exception', () async {
       // Arrange
-      final expensesInputModel = ExpensesInputModel(
-        description: 'Test',
-        date: DateTime.now(),
-        value: 1,
-        categoryId: 1,
-        userId: 1,
-      );
-      when(() => repository.update(expensesInputModel, 1)).thenThrow(Failure());
+      when(() => repository.update(expenseModel, 1)).thenThrow(Failure());
       //Act
       final call = services.update;
 
       //Assert
-      expect(() => call(expensesInputModel, 1), throwsA(isA<Failure>()));
-      verify(() => repository.update(expensesInputModel, 1)).called(1);
+      expect(() => call(expenseModel, 1), throwsA(isA<Failure>()));
+      verify(() => repository.update(expenseModel, 1)).called(1);
     });
   });
 
