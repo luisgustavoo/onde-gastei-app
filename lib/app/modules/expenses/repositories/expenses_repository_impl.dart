@@ -4,7 +4,6 @@ import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/repositories/expenses_repository.dart';
-import 'package:onde_gastei_app/app/modules/expenses/view_models/expenses_input_model.dart';
 
 class ExpensesRepositoryImpl implements ExpensesRepository {
   ExpensesRepositoryImpl({required RestClient restClient, required Log log})

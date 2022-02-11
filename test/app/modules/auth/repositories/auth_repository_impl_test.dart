@@ -4,8 +4,8 @@ import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
-import 'package:onde_gastei_app/app/modules/auth/view_models/confirm_login_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository_impl.dart';
+import 'package:onde_gastei_app/app/modules/auth/view_models/confirm_login_model.dart';
 
 import '../../../../core/log/mock_log.dart';
 import '../../../../core/rest_client/mock_rest_client.dart';

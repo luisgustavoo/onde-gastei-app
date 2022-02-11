@@ -1,7 +1,6 @@
 import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/repositories/expenses_repository.dart';
 import 'package:onde_gastei_app/app/modules/expenses/services/expenses_services.dart';
-import 'package:onde_gastei_app/app/modules/expenses/view_models/expenses_input_model.dart';
 
 class ExpensesServicesImpl implements ExpensesServices {
   ExpensesServicesImpl({required ExpensesRepository repository})

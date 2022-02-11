@@ -12,7 +12,7 @@ class SplashPage extends StatefulWidget {
   final AuthController authController;
 
   @override
-  SplashPageState createState() => SplashPageState();
+  State<SplashPage> createState() => SplashPageState();
 }
 
 class SplashPageState extends State<SplashPage> {

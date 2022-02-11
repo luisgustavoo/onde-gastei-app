@@ -4,8 +4,8 @@ import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dar
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
-import 'package:onde_gastei_app/app/modules/auth/view_models/confirm_login_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository.dart';
+import 'package:onde_gastei_app/app/modules/auth/view_models/confirm_login_model.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({required RestClient restClient, required Log log})

@@ -10,10 +10,10 @@ class HomePage extends StatefulWidget {
   static const router = '/home';
 
   @override
-  HomePageState createState() => HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> {
   // final initialDate = DateTime(DateTime.now().year, DateTime.now().month);
   // final finalDate = DateTime(
   //   DateTime.now().year,

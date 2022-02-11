@@ -18,10 +18,10 @@ class LoginPage extends StatefulWidget {
   static const router = '/login';
 
   @override
-  LoginPageState createState() => LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   final _emailController = TextEditingController();

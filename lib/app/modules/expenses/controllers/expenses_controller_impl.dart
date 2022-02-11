@@ -4,7 +4,6 @@ import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/services/expenses_services.dart';
-import 'package:onde_gastei_app/app/modules/expenses/view_models/expenses_input_model.dart';
 
 class ExpensesControllerImpl extends ChangeNotifier
     implements ExpensesController {

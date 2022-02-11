@@ -16,7 +16,7 @@ class ExpensesRegisterPage extends StatefulWidget {
   static const router = 'expenses/register';
 
   @override
-  _ExpensesRegisterPageState createState() => _ExpensesRegisterPageState();
+  State<ExpensesRegisterPage> createState() => _ExpensesRegisterPageState();
 }
 
 class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {

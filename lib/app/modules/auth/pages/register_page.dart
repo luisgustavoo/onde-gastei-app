@@ -14,10 +14,10 @@ class RegisterPage extends StatefulWidget {
   static const String router = '/register';
 
   @override
-  RegisterPageState createState() => RegisterPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldMessagedKey = GlobalKey<ScaffoldMessengerState>();
 

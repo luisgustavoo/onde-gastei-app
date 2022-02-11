@@ -5,7 +5,6 @@ import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/repositories/expenses_repository.dart';
 import 'package:onde_gastei_app/app/modules/expenses/services/expenses_services.dart';
 import 'package:onde_gastei_app/app/modules/expenses/services/expenses_services_impl.dart';
-import 'package:onde_gastei_app/app/modules/expenses/view_models/expenses_input_model.dart';
 
 class MockExpensesRepository extends Mock implements ExpensesRepository {}
 
@@ -29,8 +28,7 @@ void main() {
   group('Group test register', () {
     test('Should register expense with success', () async {
       // Arrange
-      when(() => repository.register(expenseModel))
-          .thenAnswer((_) async => _);
+      when(() => repository.register(expenseModel)).thenAnswer((_) async => _);
       //Act
       await services.register(expenseModel);
 
@@ -53,8 +51,7 @@ void main() {
   group('Group test update', () {
     test('Should update expense with success', () async {
       // Arrange
-      when(() => repository.update(expenseModel, 1))
-          .thenAnswer((_) async => _);
+      when(() => repository.update(expenseModel, 1)).thenAnswer((_) async => _);
       //Act
       await services.update(expenseModel, 1);
 
