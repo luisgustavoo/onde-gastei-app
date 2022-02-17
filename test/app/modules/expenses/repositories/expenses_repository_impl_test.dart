@@ -4,6 +4,7 @@ import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
+import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/repositories/expenses_repository_impl.dart';
 
@@ -21,7 +22,13 @@ void main() {
     date: DateTime.now(),
     value: 1,
     userId: 1,
-    categoryId: 1,
+    category: const CategoryModel(
+      id: 1,
+      description: 'Test',
+      colorCode: 1,
+      iconCode: 1,
+      userId: 1,
+    ),
   );
 
   setUp(() {
@@ -39,9 +46,9 @@ void main() {
       final data = <String, dynamic>{
         'descricao': expenseModel.description,
         'valor': expenseModel.value,
-        'data': expenseModel.date,
+        'data': expenseModel.date.toIso8601String(),
         'id_usuario': expenseModel.userId,
-        'id_categoria': expenseModel.categoryId
+        'id_categoria': expenseModel.category.id
       };
 
       when(
@@ -65,9 +72,9 @@ void main() {
       final data = <String, dynamic>{
         'descricao': expenseModel.description,
         'valor': expenseModel.value,
-        'data': expenseModel.date,
+        'data': expenseModel.date.toIso8601String(),
         'id_usuario': expenseModel.userId,
-        'id_categoria': expenseModel.categoryId
+        'id_categoria': expenseModel.category.id
       };
 
       when(
@@ -95,7 +102,7 @@ void main() {
         'descricao': expenseModel.description,
         'valor': expenseModel.value,
         'data': expenseModel.date,
-        'id_categoria': expenseModel.categoryId
+        'id_categoria': expenseModel.category.id
       };
 
       when(
@@ -120,7 +127,7 @@ void main() {
         'descricao': expenseModel.description,
         'valor': expenseModel.value,
         'data': expenseModel.date,
-        'id_categoria': expenseModel.categoryId
+        'id_categoria': expenseModel.category.id
       };
 
       when(
@@ -166,7 +173,7 @@ void main() {
       //Act
       final call = expensesRepositoryImpl.delete;
 
-      //Asssert
+      //Assert
       expect(() => call(1), throwsA(isA<Failure>()));
       verify(
         () => mockRestClient.delete<Map<String, dynamic>>(any()),

@@ -74,7 +74,7 @@ void main() {
       expect(totalExpensesCategories, totalExpensesCategoriesExpected);
     });
 
-    test('Should findTotalExpensesByCategories with success', () async {
+    test('Should throws exceptions', () async {
       // Arrange
       const userId = 1;
       final initialDate = DateTime.now();

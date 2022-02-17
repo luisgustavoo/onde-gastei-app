@@ -21,9 +21,9 @@ class ExpensesRepositoryImpl implements ExpensesRepository {
         data: <String, dynamic>{
           'descricao': expenseModel.description,
           'valor': expenseModel.value,
-          'data': expenseModel.date,
+          'data': expenseModel.date.toIso8601String(),
           'id_usuario': expenseModel.userId,
-          'id_categoria': expenseModel.categoryId
+          'id_categoria': expenseModel.category.id
         },
       );
     } on RestClientException catch (e, s) {
@@ -44,7 +44,7 @@ class ExpensesRepositoryImpl implements ExpensesRepository {
           'descricao': expenseModel.description,
           'valor': expenseModel.value,
           'data': expenseModel.date,
-          'id_categoria': expenseModel.categoryId
+          'id_categoria': expenseModel.category.id
         },
       );
     } on RestClientException catch (e, s) {

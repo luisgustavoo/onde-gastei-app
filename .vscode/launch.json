@@ -10,6 +10,21 @@
             "type": "dart"
         },
         {
+            "name": "onde_gastei_app (test mode)",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/"
+        },
+        {
+            "name": "onde_gastei_app (test mode (coverage) )",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/",
+            "args": [
+                "--coverage"
+            ]
+        },
+        {
             "name": "onde_gastei_app (profile mode)",
             "request": "launch",
             "type": "dart",

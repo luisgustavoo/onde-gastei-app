@@ -21,6 +21,15 @@ class CategoriesControllerImpl extends ChangeNotifier
   final Log _log;
   List<CategoryModel> categoriesList = <CategoryModel>[];
 
+  // CategoryModel? _category;
+  //
+  // CategoryModel? get category => _category;
+  //
+  // set category(CategoryModel? categoryModel) {
+  //   _category = categoryModel;
+  //   notifyListeners();
+  // }
+
   categoriesState state = categoriesState.idle;
   categoriesDeleteState stateDelete = categoriesDeleteState.idle;
 

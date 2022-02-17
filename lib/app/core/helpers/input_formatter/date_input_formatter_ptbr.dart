@@ -10,11 +10,20 @@ class DateInputFormatterPtbr extends TextInputFormatter {
       return newValue;
     }
 
-    final digit = newValue.text.substring(newValue.text.length - 1);
+    final oldValueLength = oldValue.text.length;
+    final newValueLength = newValue.text.length;
+    final lastDigitNewValue = newValue.text.substring(newValueLength - 1);
 
-    if (oldValue.text.length < newValue.text.length) {
+    // Estou apagando, retorna o novo texto
+    if (oldValueLength > newValueLength) {
+      return newValue;
+    }
+
+    // Verifico o último caracter digitado para ver se é um número
+    // se não for retorno o último texto digitado
+    if (oldValueLength < newValueLength) {
       try {
-        int.parse(digit);
+        int.parse(lastDigitNewValue);
       } on FormatException {
         return oldValue;
       }
@@ -22,9 +31,20 @@ class DateInputFormatterPtbr extends TextInputFormatter {
 
     var result = newValue.text;
 
-    if ((newValue.text.length == 2 || newValue.text.length == 5) &&
-        (oldValue.text.length < newValue.text.length)) {
+    // Adiciona a "/" na última posição da string se a quantidade de caracteres for 2 ou 5
+    if (newValueLength == 2 || newValueLength == 5) {
       result += '/';
+    }
+
+    // Verifica se contém a "/" iniciando a verificação à partir da penultima posição da string
+    final containsSlash = result.contains('/', newValueLength - 1);
+
+    // Adiciona a "/" (se não existir) na penultima posição da string se a quantidade de caracteres for 3 ou 6
+    if ((result.length == 3 || result.length == 6) && (!containsSlash)) {
+      result = result.replaceAllMapped(
+        RegExp('.{${newValueLength - 1}}'),
+        (match) => '${match.group(0)}/',
+      );
     }
 
     return newValue.copyWith(

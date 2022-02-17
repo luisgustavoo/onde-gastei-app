@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
@@ -39,7 +40,13 @@ void main() {
         description: 'Test',
         value: 1,
         date: DateTime.now(),
-        categoryId: 1,
+        category: const CategoryModel(
+          id: 1,
+          description: 'Test',
+          colorCode: 1,
+          iconCode: 1,
+          userId: 1,
+        ),
         userId: 1,
       );
 
@@ -60,7 +67,13 @@ void main() {
           description: 'Test',
           value: 1,
           date: DateTime.now(),
-          categoryId: 1,
+          category: const CategoryModel(
+            id: 1,
+            description: 'Test',
+            colorCode: 1,
+            iconCode: 1,
+            userId: 1,
+          ),
           userId: 1,
         ),
         throwsA(isA<Failure>()),
@@ -79,7 +92,13 @@ void main() {
         description: 'Test',
         value: 1,
         date: DateTime.now(),
-        categoryId: 1,
+        category: const CategoryModel(
+          id: 1,
+          description: 'Test',
+          colorCode: 1,
+          iconCode: 1,
+          userId: 1,
+        ),
         expenseId: 1,
       );
 
@@ -100,7 +119,13 @@ void main() {
           description: 'Test',
           value: 1,
           date: DateTime.now(),
-          categoryId: 1,
+          category: const CategoryModel(
+            id: 1,
+            description: 'Test',
+            colorCode: 1,
+            iconCode: 1,
+            userId: 1,
+          ),
           userId: 1,
           expenseId: 1,
         ),

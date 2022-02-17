@@ -1,9 +1,11 @@
+import 'package:onde_gastei_app/app/models/category_model.dart';
+
 class ExpenseModel {
   ExpenseModel({
     required this.description,
     required this.value,
     required this.date,
-    required this.categoryId,
+    required this.category,
     this.userId,
     this.expenseId,
   });
@@ -12,6 +14,6 @@ class ExpenseModel {
   final String description;
   final double value;
   final DateTime date;
-  final int categoryId;
+  final CategoryModel category;
   final int? userId;
 }
