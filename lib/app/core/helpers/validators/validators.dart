@@ -34,6 +34,10 @@ class Validators {
         return 'Informe a data';
       }
 
+      if (date.isEmpty) {
+        return 'Informe a data';
+      }
+
       try {
         parseLocalFormatDateToIso8601(date);
       } on FormatException {

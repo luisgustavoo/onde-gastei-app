@@ -2,30 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_register_page.dart';
-import 'package:onde_gastei_app/app/modules/categories/services/categories_service.dart';
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/log/mock_log.dart';
-import '../controllers/categories_controller_impl_test.dart';
+late CategoriesControllerImpl mockCategoriesControllerImpl;
 
-late CategoriesService mockCategoriesService;
-late Log mockLog;
 bool isEditing = false;
 
-Widget createRegisterCategoriesPage() {
+class MockCategoriesControllerImpl extends Mock
+    implements CategoriesControllerImpl {}
+
+Widget createCategoriesRegisterPage() {
   return ChangeNotifierProvider<CategoriesControllerImpl>(
-    create: (context) {
-      return CategoriesControllerImpl(
-        log: mockLog,
-        service: mockCategoriesService,
-      );
-    },
+    create: (context) => mockCategoriesControllerImpl,
     child: ScreenUtilInit(
       builder: () => MaterialApp(
         initialRoute: CategoriesRegisterPage.router,
@@ -51,8 +45,7 @@ Widget createRegisterCategoriesPage() {
 
 void main() {
   setUp(() {
-    mockCategoriesService = MockCategoriesServices();
-    mockLog = MockLog();
+    mockCategoriesControllerImpl = MockCategoriesControllerImpl();
 
     const categoryModel = CategoryModel(
       description: 'Test',
@@ -73,7 +66,10 @@ void main() {
 
   group('Group test RegisterCategoriesPage ', () {
     testWidgets('Test if register categories page shows up', (tester) async {
-      await tester.pumpWidget(createRegisterCategoriesPage());
+      when(() => mockCategoriesControllerImpl.state)
+          .thenReturn(categoriesState.idle);
+
+      await tester.pumpWidget(createCategoriesRegisterPage());
 
       expect(find.text('Categoria'), findsOneWidget);
       expect(find.text('Ícone'), findsOneWidget);
@@ -103,7 +99,10 @@ void main() {
     });
 
     testWidgets('Should TextFormField is empty', (tester) async {
-      await tester.pumpWidget(createRegisterCategoriesPage());
+      when(() => mockCategoriesControllerImpl.state)
+          .thenReturn(categoriesState.idle);
+
+      await tester.pumpWidget(createCategoriesRegisterPage());
 
       final categoryTextField = find.byKey(
         const Key('categories_key_register_categories'),
@@ -125,10 +124,16 @@ void main() {
     });
 
     testWidgets('Should create category with success', (tester) async {
-      await tester.pumpWidget(createRegisterCategoriesPage());
+      when(() => mockCategoriesControllerImpl.state)
+          .thenReturn(categoriesState.idle);
 
-      when(() => mockCategoriesService.register(any()))
+      await tester.pumpWidget(createCategoriesRegisterPage());
+
+      when(() => mockCategoriesControllerImpl.register(any()))
           .thenAnswer((_) async => _);
+
+      when(() => mockCategoriesControllerImpl.state)
+          .thenReturn(categoriesState.idle);
 
       final categoryTextField = find.byKey(
         const Key('categories_key_register_categories'),
@@ -145,10 +150,10 @@ void main() {
       );
 
       final iconsDialog =
-          find.byKey(const Key('inkwell_icons_key_register_categories_page_0'));
+          find.byKey(const Key('inkwell_icons_key_0_register_categories_page'));
 
       final colorsDialog =
-          find.byKey(const Key('inkwell_color_key_register_categories_page_0'));
+          find.byKey(const Key('inkwell_color_key_0_register_categories_page'));
 
       expect(find.widgetWithText(ElevatedButton, 'Salvar'), findsOneWidget);
 
@@ -182,13 +187,18 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Categoria criada com sucesso!'), findsOneWidget);
+      verify(() => mockCategoriesControllerImpl.register(any())).called(1);
     });
 
     testWidgets('Should throw exception when creating category',
         (tester) async {
-      await tester.pumpWidget(createRegisterCategoriesPage());
+      when(() => mockCategoriesControllerImpl.state)
+          .thenReturn(categoriesState.idle);
 
-      when(() => mockCategoriesService.register(any())).thenThrow(Exception());
+      await tester.pumpWidget(createCategoriesRegisterPage());
+
+      when(() => mockCategoriesControllerImpl.register(any()))
+          .thenThrow(Failure());
 
       final categoryTextField = find.byKey(
         const Key('categories_key_register_categories'),
@@ -205,10 +215,10 @@ void main() {
       );
 
       final iconsDialog =
-          find.byKey(const Key('inkwell_icons_key_register_categories_page_0'));
+          find.byKey(const Key('inkwell_icons_key_0_register_categories_page'));
 
       final colorsDialog =
-          find.byKey(const Key('inkwell_color_key_register_categories_page_0'));
+          find.byKey(const Key('inkwell_color_key_0_register_categories_page'));
 
       expect(find.widgetWithText(ElevatedButton, 'Salvar'), findsOneWidget);
 
@@ -247,10 +257,13 @@ void main() {
     testWidgets('Should update category with success', (tester) async {
       isEditing = true;
 
-      await tester.pumpWidget(createRegisterCategoriesPage());
+      when(() => mockCategoriesControllerImpl.state)
+          .thenReturn(categoriesState.idle);
+
+      await tester.pumpWidget(createCategoriesRegisterPage());
 
       when(
-        () => mockCategoriesService.updateCategory(any(), any()),
+        () => mockCategoriesControllerImpl.updateCategory(any(), any()),
       ).thenAnswer((_) async => _);
 
       final categoryTextField = find.byKey(
@@ -268,10 +281,10 @@ void main() {
       );
 
       final iconsDialog =
-          find.byKey(const Key('inkwell_icons_key_register_categories_page_0'));
+          find.byKey(const Key('inkwell_icons_key_0_register_categories_page'));
 
       final colorsDialog =
-          find.byKey(const Key('inkwell_color_key_register_categories_page_0'));
+          find.byKey(const Key('inkwell_color_key_0_register_categories_page'));
 
       expect(find.widgetWithText(ElevatedButton, 'Salvar'), findsOneWidget);
 
@@ -311,10 +324,13 @@ void main() {
         (tester) async {
       isEditing = true;
 
-      await tester.pumpWidget(createRegisterCategoriesPage());
+      when(() => mockCategoriesControllerImpl.state)
+          .thenReturn(categoriesState.idle);
 
-      when(() => mockCategoriesService.updateCategory(any(), any()))
-          .thenThrow(Exception());
+      await tester.pumpWidget(createCategoriesRegisterPage());
+
+      when(() => mockCategoriesControllerImpl.updateCategory(any(), any()))
+          .thenThrow(Failure());
 
       final categoryTextField = find.byKey(
         const Key('categories_key_register_categories'),
@@ -331,10 +347,10 @@ void main() {
       );
 
       final iconsDialog =
-          find.byKey(const Key('inkwell_icons_key_register_categories_page_0'));
+          find.byKey(const Key('inkwell_icons_key_0_register_categories_page'));
 
       final colorsDialog =
-          find.byKey(const Key('inkwell_color_key_register_categories_page_0'));
+          find.byKey(const Key('inkwell_color_key_0_register_categories_page'));
 
       expect(find.widgetWithText(ElevatedButton, 'Salvar'), findsOneWidget);
 
@@ -373,10 +389,16 @@ void main() {
     testWidgets('Should delete category with success', (tester) async {
       isEditing = true;
 
-      await tester.pumpWidget(createRegisterCategoriesPage());
+      when(() => mockCategoriesControllerImpl.stateDelete)
+          .thenReturn(categoriesDeleteState.idle);
+
+      when(() => mockCategoriesControllerImpl.state)
+          .thenReturn(categoriesState.idle);
+
+      await tester.pumpWidget(createCategoriesRegisterPage());
 
       when(
-        () => mockCategoriesService.deleteCategory(
+        () => mockCategoriesControllerImpl.deleteCategory(
           any(),
         ),
       ).thenAnswer((_) async => _);
@@ -403,7 +425,46 @@ void main() {
 
       expect(deleteButtonDialog, findsNothing);
       expect(find.byType(AlertDialog), findsNothing);
-      expect(find.byWidget(createRegisterCategoriesPage()), findsNothing);
+      expect(find.byWidget(createCategoriesRegisterPage()), findsNothing);
+    });
+
+    testWidgets('Should throws when delete category', (tester) async {
+      isEditing = true;
+
+      when(() => mockCategoriesControllerImpl.stateDelete)
+          .thenReturn(categoriesDeleteState.idle);
+
+      when(() => mockCategoriesControllerImpl.state)
+          .thenReturn(categoriesState.idle);
+
+      await tester.pumpWidget(createCategoriesRegisterPage());
+
+      when(
+        () => mockCategoriesControllerImpl.deleteCategory(
+          any(),
+        ),
+      ).thenThrow(Failure());
+
+      expect(find.byIcon(Icons.delete), findsOneWidget);
+
+      final deleteIcon =
+          find.byKey(const Key('icon_delete_key_register_categories_page'));
+
+      final deleteButtonDialog = find.byKey(
+        const Key('delete_button_dialog_register_categories_page'),
+      );
+
+      // Deletando registro
+      await tester.tap(deleteIcon);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(AlertDialog), findsOneWidget);
+
+      await tester.tap(deleteButtonDialog);
+      await tester.pumpAndSettle();
+
+
+      expect(find.text('Erro ao deletar categoria'), findsOneWidget);
     });
   });
 }

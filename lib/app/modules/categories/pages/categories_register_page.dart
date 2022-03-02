@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
@@ -175,12 +176,12 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                         if (Navigator.of(registerPageContext).canPop()) {
                           Navigator.of(registerPageContext).pop(_edited);
                         }
-                      } on Exception {
+                      } on Failure {
                         final snackBar = OndeGasteiSnackBar.buildSnackBar(
                           key: const Key(
                             'snack_bar_fail_delete_key_register_update_categories_page',
                           ),
-                          content: const Text('Erro ao deletar'),
+                          content: const Text('Erro ao deletar categoria'),
                           backgroundColor: Colors.red,
                           label: 'Fechar',
                           onPressed: () {},
@@ -410,7 +411,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
           ),
           itemBuilder: (context, index) {
             return InkWell(
-              key: Key('inkwell_icons_key_register_categories_page_$index'),
+              key: Key('inkwell_icons_key_${index}_register_categories_page'),
               onTap: () {
                 _icon.value = icons[index];
                 Navigator.of(context).pop();
@@ -450,7 +451,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
             final color = colors[index];
 
             return InkWell(
-              key: Key('inkwell_color_key_register_categories_page_$index'),
+              key: Key('inkwell_color_key_${index}_register_categories_page'),
               onTap: () {
                 _color.value = color;
                 Navigator.of(context).pop();

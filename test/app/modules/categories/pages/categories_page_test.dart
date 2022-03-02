@@ -26,7 +26,7 @@ Widget createCategoriesPage() {
   );
 }
 
-final categoriesList = List<CategoryModel>.generate(
+final mockCategoriesList = List<CategoryModel>.generate(
   100,
   (index) => CategoryModel(
     id: index,
@@ -48,7 +48,7 @@ void main() {
           .thenAnswer((_) async => _);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(categoriesList);
+          .thenReturn(mockCategoriesList);
 
       when(() => mockCategoriesControllerImpl.state)
           .thenReturn(categoriesState.success);
@@ -69,7 +69,7 @@ void main() {
           .thenAnswer((_) async => _);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(categoriesList);
+          .thenReturn(mockCategoriesList);
 
       when(() => mockCategoriesControllerImpl.state)
           .thenReturn(categoriesState.loading);
@@ -89,7 +89,7 @@ void main() {
           .thenAnswer((_) async => _);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(categoriesList);
+          .thenReturn(mockCategoriesList);
 
       when(() => mockCategoriesControllerImpl.state)
           .thenReturn(categoriesState.error);
@@ -108,7 +108,7 @@ void main() {
           .thenAnswer((_) async => _);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(categoriesList);
+          .thenReturn(mockCategoriesList);
 
       when(() => mockCategoriesControllerImpl.state)
           .thenReturn(categoriesState.success);

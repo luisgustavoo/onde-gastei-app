@@ -33,7 +33,7 @@ class UiConfig {
         primaryColorLight: Constants.primaryColorLight,
         primarySwatch: Constants.primarySwatch,
         textTheme: TextTheme(
-          bodyText2: GoogleFonts.jost(
+          bodyText1: GoogleFonts.jost(
             color: Constants.bodyText2Color,
           ),
           subtitle1: GoogleFonts.jost(

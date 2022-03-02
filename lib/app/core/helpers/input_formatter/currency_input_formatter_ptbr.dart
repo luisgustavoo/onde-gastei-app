@@ -1,27 +1,40 @@
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-class CurrencyInputFormatterPtbr extends TextInputFormatter {
+class CurrencyInputFormatterPtBr extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
+
+    try {
+      double.parse(
+        newValue.text
+            .replaceAll('.', '')
+            .replaceAll(',', '')
+            .replaceAll(r'R$', ''),
+      );
+    } on FormatException {
+      return newValue;
+    }
+
     if (newValue.selection.baseOffset == 0) {
       return newValue;
     }
-    final format = NumberFormat.currency(
-      locale: 'pt-BR',
-      symbol: r'R$',
-      decimalDigits: 2,
-    );
+
     final value = double.parse(
       newValue.text
           .replaceAll('.', '')
           .replaceAll(',', '')
           .replaceAll(r'R$', ''),
     );
-    final result = format.format(value / 100);
+
+    final result = NumberFormat.currency(
+      locale: 'pt-BR',
+      symbol: r'R$',
+      decimalDigits: 2,
+    ).format(value / 100);
 
     return newValue.copyWith(
       text: result,

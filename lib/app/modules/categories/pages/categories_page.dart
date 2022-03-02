@@ -22,10 +22,10 @@ class CategoriesPage extends StatelessWidget {
             IconButton(
               onPressed: () async {
                 final edited = await Navigator.of(context)
-                    .pushNamed(CategoriesRegisterPage.router);
+                    .pushNamed(CategoriesRegisterPage.router) as bool?;
 
                 if (edited != null) {
-                  if (edited is bool && edited == true) {
+                  if (edited == true) {
                     await categoriesController
                         .findCategories(userModel?.userId ?? 0);
                   }
@@ -71,10 +71,10 @@ class CategoriesPage extends StatelessWidget {
                         'category': category,
                         'editing': true,
                       },
-                    );
+                    ) as bool?;
 
                     if (edited != null) {
-                      if (edited is bool && edited == true) {
+                      if (edited == true) {
                         await categoriesController
                             .findCategories(userModel?.userId ?? 0);
                       }

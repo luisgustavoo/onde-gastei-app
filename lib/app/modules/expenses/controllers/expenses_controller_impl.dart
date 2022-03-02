@@ -8,6 +8,8 @@ import 'package:onde_gastei_app/app/modules/expenses/services/expenses_services.
 
 enum expensesState { idle, loading, error, success }
 
+enum expensesDeleteState { idle, loading, error, success }
+
 class ExpensesControllerImpl extends ChangeNotifier
     implements ExpensesController {
   ExpensesControllerImpl({
@@ -19,6 +21,21 @@ class ExpensesControllerImpl extends ChangeNotifier
   final ExpensesServices _services;
   final Log _log;
   expensesState state = expensesState.idle;
+  expensesDeleteState deleteState = expensesDeleteState.idle;
+
+  final expensesList = <ExpenseModel>[
+    ExpenseModel(
+      description: 'Supermercado BH',
+      value: 1000,
+      date: DateTime.now(),
+      category: const CategoryModel(
+        id: 110044,
+        description: 'Supermercado',
+        iconCode: 58261,
+        colorCode: 4294945600,
+      ),
+    )
+  ];
 
   @override
   Future<void> register({
@@ -92,17 +109,17 @@ class ExpensesControllerImpl extends ChangeNotifier
   @override
   Future<void> delete({required int expenseId}) async {
     try {
-      state = expensesState.loading;
+      deleteState = expensesDeleteState.loading;
       notifyListeners();
 
       await _services.delete(expenseId);
 
-      state = expensesState.success;
+      deleteState = expensesDeleteState.success;
       notifyListeners();
     } on Exception catch (e, s) {
       _log.error('Erro ao deletar despesa', e, s);
 
-      state = expensesState.error;
+      deleteState = expensesDeleteState.error;
       notifyListeners();
 
       throw Failure();

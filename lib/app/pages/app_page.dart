@@ -3,6 +3,7 @@ import 'package:onde_gastei_app/app/controllers/app_controller.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
+import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
 import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
@@ -64,9 +65,7 @@ class _AppPageState extends State<AppPage> {
         controller: pageController,
         children: [
           const HomePage(),
-          Container(
-            color: Colors.red,
-          ),
+          const ExpensesPage(),
           const CategoriesPage(),
           Container(
             color: Colors.yellow,

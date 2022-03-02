@@ -12,6 +12,7 @@ import 'package:onde_gastei_app/app/core/navigator/onde_gastei_navigator.dart';
 import 'package:onde_gastei_app/app/core/rest_client/dio_rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
+import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
@@ -207,6 +208,15 @@ class App extends StatelessWidget {
               return const RegisterPage();
             },
             ExpensesRegisterPage.router: (context) {
+              if (ModalRoute.of(context)!.settings.arguments != null) {
+                final expenseModel =
+                    ModalRoute.of(context)!.settings.arguments! as ExpenseModel;
+
+                return ExpensesRegisterPage(
+                  expenseModel: expenseModel,
+                  isEditing: true,
+                );
+              }
               return const ExpensesRegisterPage();
             },
             CategoriesPage.router: (context) {
