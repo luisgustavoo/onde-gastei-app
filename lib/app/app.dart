@@ -173,6 +173,7 @@ class App extends StatelessWidget {
             create: (context) => AppController(
               homeController: context.read<HomeControllerImpl>(),
               categoriesController: context.read<CategoriesControllerImpl>(),
+              expensesController: context.read<ExpensesControllerImpl>(),
             ),
           ),
           // ========== APP ==========

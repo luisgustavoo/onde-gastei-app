@@ -20,22 +20,23 @@ class ExpensesControllerImpl extends ChangeNotifier
 
   final ExpensesServices _services;
   final Log _log;
+  List<ExpenseModel> expensesList = <ExpenseModel>[];
   expensesState state = expensesState.idle;
   expensesDeleteState deleteState = expensesDeleteState.idle;
 
-  final expensesList = <ExpenseModel>[
-    ExpenseModel(
-      description: 'Supermercado BH',
-      value: 1000,
-      date: DateTime.now(),
-      category: const CategoryModel(
-        id: 110044,
-        description: 'Supermercado',
-        iconCode: 58261,
-        colorCode: 4294945600,
-      ),
-    )
-  ];
+  // final expensesList = <ExpenseModel>[
+  //   ExpenseModel(
+  //     description: 'Supermercado BH',
+  //     value: 1000,
+  //     date: DateTime.now(),
+  //     category: const CategoryModel(
+  //       id: 110044,
+  //       description: 'Supermercado',
+  //       iconCode: 58261,
+  //       colorCode: 4294945600,
+  //     ),
+  //   )
+  // ];
 
   @override
   Future<void> register({
@@ -120,6 +121,31 @@ class ExpensesControllerImpl extends ChangeNotifier
       _log.error('Erro ao deletar despesa', e, s);
 
       deleteState = expensesDeleteState.error;
+      notifyListeners();
+
+      throw Failure();
+    }
+  }
+
+  @override
+  Future<void> findExpensesByPeriod(
+    DateTime initialDate,
+    DateTime finalDate,
+    int userId,
+  ) async {
+    try {
+      state = expensesState.loading;
+      notifyListeners();
+
+      expensesList =
+          await _services.findExpensesByPeriod(initialDate, finalDate, userId);
+
+      state = expensesState.success;
+      notifyListeners();
+    } on Exception catch (e, s) {
+      _log.error('Erro ao buscar despesas', e, s);
+
+      state = expensesState.error;
       notifyListeners();
 
       throw Failure();

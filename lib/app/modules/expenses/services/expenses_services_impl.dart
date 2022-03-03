@@ -18,4 +18,12 @@ class ExpensesServicesImpl implements ExpensesServices {
 
   @override
   Future<void> delete(int expenseId) => _repository.delete(expenseId);
+
+  @override
+  Future<List<ExpenseModel>> findExpensesByPeriod(
+    DateTime initialDate,
+    DateTime finalDate,
+    int userId,
+  ) =>
+      _repository.findExpensesByPeriod(initialDate, finalDate, userId);
 }

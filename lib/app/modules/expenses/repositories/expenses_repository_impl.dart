@@ -43,7 +43,7 @@ class ExpensesRepositoryImpl implements ExpensesRepository {
         data: <String, dynamic>{
           'descricao': expenseModel.description,
           'valor': expenseModel.value,
-          'data': expenseModel.date,
+          'data': expenseModel.date.toIso8601String(),
           'id_categoria': expenseModel.category.id
         },
       );
@@ -61,6 +61,33 @@ class ExpensesRepositoryImpl implements ExpensesRepository {
           );
     } on RestClientException catch (e, s) {
       _log.error('Erro ao deletar despesa', e, s);
+      throw Failure();
+    }
+  }
+
+  @override
+  Future<List<ExpenseModel>> findExpensesByPeriod(
+    DateTime initialDate,
+    DateTime finalDate,
+    int userId,
+  ) async {
+    try {
+      final result = await _restClient.auth().get<List<dynamic>>(
+        '/users/$userId/categories/period',
+        queryParameters: <String, dynamic>{
+          'initial_date': initialDate.toIso8601String(),
+          'final_date': finalDate.toIso8601String(),
+        },
+      );
+
+      if (result.data != null) {
+        final expensesList = List<Map<String, dynamic>>.from(result.data!);
+        return expensesList.map(ExpenseModel.fromMap).toList();
+      }
+
+      return <ExpenseModel>[];
+    } on RestClientException catch (e, s) {
+      _log.error('Erro ao buscar despesa', e, s);
       throw Failure();
     }
   }

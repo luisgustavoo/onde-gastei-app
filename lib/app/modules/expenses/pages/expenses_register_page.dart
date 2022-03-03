@@ -198,9 +198,9 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                         return DropdownMenuItem<CategoryModel>(
                           value: category,
                           child: ListTile(
-                            // key: Key(
-                            //   'list_tile_items_key_${category.id}_expenses_register_page',
-                            // ),
+                            key: Key(
+                              'list_tile_items_key_${category.id}_expenses_register_page',
+                            ),
                             leading: CircleAvatar(
                               backgroundColor: Color(category.colorCode),
                               child: Icon(
@@ -251,12 +251,20 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                               );
 
                               message = 'Despesa registrada com sucesso!';
+
+                              _resetFields();
                             } else {
                               await expensesController.update(
-                                description: widget.expenseModel!.description,
-                                value: widget.expenseModel!.value,
-                                date: widget.expenseModel!.date,
+                                description: descriptionController.text.trim(),
+                                value:
+                                    Validators.parseLocalFormatValueToIso4217(
+                                  valueController.text,
+                                ),
+                                date: Validators.parseLocalFormatDateToIso8601(
+                                  dateController.text,
+                                ),
                                 category: _selectedCategory!,
+                                userId: userModel?.userId ?? 0,
                                 expenseId: widget.expenseModel!.expenseId ?? 0,
                               );
                               message = 'Despesa atualizada com sucesso!';
@@ -275,8 +283,6 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                               label: 'Fechar',
                               onPressed: () {},
                             );
-
-                            _resetFields();
                           } on Failure {
                             snackBar = OndeGasteiSnackBar.buildSnackBar(
                               key: const Key(

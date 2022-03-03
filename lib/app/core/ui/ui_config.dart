@@ -18,22 +18,25 @@ class UiConfig {
           ),
           color: Colors.transparent,
           elevation: 0,
-          iconTheme: const IconThemeData(
-            color: Constants.iconThemeColor,
-          ),
           titleTextStyle: GoogleFonts.jost(
             color: Constants.titleTextStyleColor,
             fontSize: 23.sp,
             fontWeight: FontWeight.w500,
           ),
           centerTitle: true,
+          iconTheme: const IconThemeData(
+            color: Constants.iconThemeColor,
+          ),
+        ),
+        iconTheme: const IconThemeData(
+          color: Constants.iconThemeColor,
         ),
         primaryColor: Constants.primaryColor,
         primaryColorDark: Constants.primaryColorDark,
         primaryColorLight: Constants.primaryColorLight,
         primarySwatch: Constants.primarySwatch,
         textTheme: TextTheme(
-          bodyText1: GoogleFonts.jost(
+          bodyText2: GoogleFonts.jost(
             color: Constants.bodyText2Color,
           ),
           subtitle1: GoogleFonts.jost(

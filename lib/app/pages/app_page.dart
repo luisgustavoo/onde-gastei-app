@@ -27,7 +27,7 @@ class AppPage extends StatefulWidget {
 class _AppPageState extends State<AppPage> {
   int currentIndex = 0;
 
-  final initialDate = DateTime(DateTime.now().year, DateTime.now().month);
+  final initialDate = DateTime(DateTime.now().year, DateTime.now().month - 2);
   final finalDate = DateTime(
     DateTime.now().year,
     DateTime.now().month + 1,
@@ -44,6 +44,9 @@ class _AppPageState extends State<AppPage> {
       if (userModel != null) {
         await widget.appController.findCategories(userModel!.userId);
 
+        await widget.appController
+            .findExpenses(initialDate, finalDate, userModel!.userId);
+
         // await widget.appController.fetchHomeData(
         //   userId: userModel!.userId,
         //   initialDate: initialDate,
@@ -58,6 +61,7 @@ class _AppPageState extends State<AppPage> {
     final pageController = PageController();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: PageView(
         onPageChanged: (pageIndex) {
           widget.appController.tabIndex = pageIndex;

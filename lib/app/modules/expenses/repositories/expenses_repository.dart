@@ -6,4 +6,10 @@ abstract class ExpensesRepository {
   Future<void> update(ExpenseModel expenseModel, int expenseId);
 
   Future<void> delete(int expenseId);
+
+  Future<List<ExpenseModel>> findExpensesByPeriod(
+    DateTime initialDate,
+    DateTime finalDate,
+    int userId,
+  );
 }
