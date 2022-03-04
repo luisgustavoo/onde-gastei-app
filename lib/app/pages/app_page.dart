@@ -133,8 +133,15 @@ class _AppPageState extends State<AppPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed(ExpensesRegisterPage.router);
+        onPressed: () async {
+          final edited = await Navigator.of(context)
+              .pushNamed(ExpensesRegisterPage.router) as bool?;
+          if (edited != null) {
+            if (edited) {
+              await widget.appController
+                  .findExpenses(initialDate, finalDate, userModel!.userId);
+            }
+          }
         },
         child: const Icon(Icons.add),
       ),

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
-import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/widgets/expenses_list_tile.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +17,11 @@ class ExpensesPage extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: OndeGasteiTextForm(
+              onChanged: (description) {
+                context
+                    .read<ExpensesControllerImpl>()
+                    .filterExpensesList(description);
+              },
               label: 'Pesquisar',
               prefixIcon: const Icon(Icons.search),
             ),
@@ -32,26 +35,47 @@ class ExpensesPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   const Text('Order por'),
-                  PopupMenuButton<String>(
-                    itemBuilder: (context) => [
-                      const PopupMenuItem<String>(
-                        value: '0',
-                        child: Text('Maior data'),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: '1',
-                        child: Text('Menor data'),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: '2',
-                        child: Text('Maior valor'),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: '3',
-                        child: Text('Menor valor'),
-                      ),
-                    ],
-                    icon: const Icon(Icons.arrow_drop_down),
+                  SizedBox(
+                    height: 30.h,
+                    width: 30.w,
+                    child: PopupMenuButton<String>(
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context) => [
+                        PopupMenuItem<String>(
+                          onTap: () {
+                            context
+                                .read<ExpensesControllerImpl>()
+                                .orderByExpensesList(1);
+                          },
+                          child: const Text('Maior data'),
+                        ),
+                        PopupMenuItem<String>(
+                          onTap: () {
+                            context
+                                .read<ExpensesControllerImpl>()
+                                .orderByExpensesList(2);
+                          },
+                          child: const Text('Menor data'),
+                        ),
+                        PopupMenuItem<String>(
+                          onTap: () {
+                            context
+                                .read<ExpensesControllerImpl>()
+                                .orderByExpensesList(3);
+                          },
+                          child: const Text('Maior valor'),
+                        ),
+                        PopupMenuItem<String>(
+                          onTap: () {
+                            context
+                                .read<ExpensesControllerImpl>()
+                                .orderByExpensesList(4);
+                          },
+                          child: const Text('Menor valor'),
+                        ),
+                      ],
+                      icon: const Icon(Icons.arrow_drop_down),
+                    ),
                   ),
                 ],
               ),

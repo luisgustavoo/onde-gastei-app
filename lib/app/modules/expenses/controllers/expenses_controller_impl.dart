@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
@@ -21,22 +22,9 @@ class ExpensesControllerImpl extends ChangeNotifier
   final ExpensesServices _services;
   final Log _log;
   List<ExpenseModel> expensesList = <ExpenseModel>[];
+  List<ExpenseModel> expensesListBeforeFilter = <ExpenseModel>[];
   expensesState state = expensesState.idle;
   expensesDeleteState deleteState = expensesDeleteState.idle;
-
-  // final expensesList = <ExpenseModel>[
-  //   ExpenseModel(
-  //     description: 'Supermercado BH',
-  //     value: 1000,
-  //     date: DateTime.now(),
-  //     category: const CategoryModel(
-  //       id: 110044,
-  //       description: 'Supermercado',
-  //       iconCode: 58261,
-  //       colorCode: 4294945600,
-  //     ),
-  //   )
-  // ];
 
   @override
   Future<void> register({
@@ -140,6 +128,8 @@ class ExpensesControllerImpl extends ChangeNotifier
       expensesList =
           await _services.findExpensesByPeriod(initialDate, finalDate, userId);
 
+      expensesListBeforeFilter = expensesList;
+
       state = expensesState.success;
       notifyListeners();
     } on Exception catch (e, s) {
@@ -150,5 +140,48 @@ class ExpensesControllerImpl extends ChangeNotifier
 
       throw Failure();
     }
+  }
+
+  void filterExpensesList(String description) {
+    expensesList = expensesListBeforeFilter;
+
+    if (description.isNotEmpty) {
+      expensesList = List<ExpenseModel>.from(
+        expensesList.where(
+          (expense) => expense.description.toLowerCase().contains(
+                description.toLowerCase(),
+              ),
+        ),
+      );
+    }
+
+    notifyListeners();
+  }
+
+  void orderByExpensesList(int orderNumber) {
+    /* 
+    1 = Maior Data
+    2 = Menor Data
+    3 = Maior Valor
+    4 = Menor Valor  
+    */
+
+    switch (orderNumber) {
+      case 1:
+        expensesList.sort((a, b) => b.date.compareTo(a.date));
+        break;
+      case 2:
+        expensesList.sort((a, b) => a.date.compareTo(b.date));
+        break;
+      case 3:
+        expensesList.sort((a, b) => b.value.compareTo(a.value));
+        break;
+      case 4:
+        expensesList.sort((a, b) => a.value.compareTo(b.value));
+        break;
+      default:
+        expensesList.sort((a, b) => b.date.compareTo(a.date));
+    }
+    notifyListeners();
   }
 }
