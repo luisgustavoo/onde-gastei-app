@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
+import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/expenses/widgets/expenses_list_tile.dart';
 import 'package:provider/provider.dart';
@@ -8,8 +9,15 @@ import 'package:provider/provider.dart';
 class ExpensesPage extends StatelessWidget {
   const ExpensesPage({Key? key}) : super(key: key);
 
+  static const router = 'expenses';
+
   @override
   Widget build(BuildContext context) {
+    // final expensesList =
+    //     context.select<ExpensesControllerImpl, List<ExpenseModel>>(
+    //   (expensesController) => expensesController.expensesList,
+    // );
+
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
@@ -34,12 +42,11 @@ class ExpensesPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Text('Order por'),
+                  const Text('Ordenar por'),
                   SizedBox(
                     height: 30.h,
                     width: 30.w,
                     child: PopupMenuButton<String>(
-                      padding: EdgeInsets.zero,
                       itemBuilder: (context) => [
                         PopupMenuItem<String>(
                           onTap: () {
@@ -99,58 +106,21 @@ class ExpensesPage extends StatelessWidget {
                   }
 
                   return ListView.builder(
+                    key: const Key('expenses_list_key_expenses_page'),
                     physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       final expense = expensesController.expensesList[index];
 
                       return ExpensesListTile(
+                        key: Key(
+                          'expenses_list_tile_key_${index}_expenses_page',
+                        ),
                         expenseModel: expense,
                         expensesController: expensesController,
                         isFirst: index == 0,
                         isLast:
                             index == expensesController.expensesList.length - 1,
                       );
-
-                      // return ListTile(
-                      //   onTap: () {
-                      //     Navigator.of(context).pushNamed(
-                      //       ExpensesRegisterPage.router,
-                      //       arguments: expense,
-                      //     );
-                      //   },
-                      //   leading: Column(
-                      //     children: [
-                      //       // Visibility(child: Expanded(child: VerticalDivider(color: Colors.black, thickness: 2,)), visible: index != 0),
-                      //       CircleAvatar(
-                      //         backgroundColor:
-                      //             Color(expense.category.colorCode),
-                      //         child: Icon(
-                      //           IconData(
-                      //             expense.category.iconCode,
-                      //             fontFamily: 'MaterialIcons',
-                      //           ),
-                      //           color: Colors.white,
-                      //         ),
-                      //       ),
-                      //       // Visibility(child: Expanded(child: VerticalDivider(color: Colors.black, thickness: 2,)), visible: index != expensesController.expensesList.length - 1),
-                      //     ],
-                      //   ),
-                      //   title: Text(
-                      //     expense.description,
-                      //     style: const TextStyle(fontWeight: FontWeight.bold),
-                      //   ),
-                      //   subtitle: Text(
-                      //     DateFormat('dd/MM/y', 'pt_BR').format(expense.date),
-                      //   ),
-                      //   trailing: Text(
-                      //     NumberFormat.currency(locale: 'pt_BR', symbol: r'R$')
-                      //         .format(expense.value),
-                      //     style: TextStyle(
-                      //       fontSize: 15.sp,
-                      //       fontWeight: FontWeight.bold,
-                      //     ),
-                      //   ),
-                      // );
                     },
                     itemCount: expensesController.expensesList.length,
                   );
