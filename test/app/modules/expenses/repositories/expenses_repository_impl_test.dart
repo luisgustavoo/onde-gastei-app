@@ -98,17 +98,17 @@ void main() {
   group('Group test expense update', () {
     test('Should update expense with success', () async {
       //Arrange
-      final data = <String, dynamic>{
-        'descricao': expenseModel.description,
-        'valor': expenseModel.value,
-        'data': expenseModel.date,
-        'id_categoria': expenseModel.category.id
-      };
+      // final data = <String, dynamic>{
+      //   'descricao': expenseModel.description,
+      //   'valor': expenseModel.value,
+      //   'data': expenseModel.date,
+      //   'id_categoria': expenseModel.category.id
+      // };
 
       when(
         () => mockRestClient.put<Map<String, dynamic>>(
           any(),
-          data: data,
+          data: any(named: 'data'),
         ),
       ).thenAnswer((_) async => MockRestClientResponse(statusCode: 200));
 
@@ -117,23 +117,23 @@ void main() {
 
       //Assert
       verify(
-        () => mockRestClient.put<Map<String, dynamic>>(any(), data: data),
+        () => mockRestClient.put<Map<String, dynamic>>(any(), data: any(named: 'data')),
       ).called(1);
     });
 
     test('Should throws exception', () async {
       //Arrange
-      final data = <String, dynamic>{
-        'descricao': expenseModel.description,
-        'valor': expenseModel.value,
-        'data': expenseModel.date,
-        'id_categoria': expenseModel.category.id
-      };
+      // final data = <String, dynamic>{
+      //   'descricao': expenseModel.description,
+      //   'valor': expenseModel.value,
+      //   'data': expenseModel.date,
+      //   'id_categoria': expenseModel.category.id
+      // };
 
       when(
         () => mockRestClient.put<Map<String, dynamic>>(
           any(),
-          data: data,
+          data: any(named: 'data'),
         ),
       ).thenThrow(RestClientException(error: 'Error'));
 
@@ -143,7 +143,7 @@ void main() {
       //Assert
       expect(() => call(expenseModel, 1), throwsA(isA<Failure>()));
       verify(
-        () => mockRestClient.put<Map<String, dynamic>>(any(), data: data),
+        () => mockRestClient.put<Map<String, dynamic>>(any(), data: any(named: 'data')),
       ).called(1);
     });
   });

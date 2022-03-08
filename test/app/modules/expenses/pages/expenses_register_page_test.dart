@@ -358,6 +358,7 @@ void main() {
           value: any<double>(named: 'value'),
           date: any<DateTime>(named: 'date'),
           category: any<CategoryModel>(named: 'category'),
+          userId: any(named: 'userId'),
           expenseId: any(named: 'expenseId'),
         ),
       ).thenAnswer((_) async => _);
@@ -395,6 +396,7 @@ void main() {
           value: any<double>(named: 'value'),
           date: any<DateTime>(named: 'date'),
           category: any<CategoryModel>(named: 'category'),
+          userId: any(named: 'userId'),
           expenseId: any(named: 'expenseId'),
         ),
       ).thenThrow(Failure());
