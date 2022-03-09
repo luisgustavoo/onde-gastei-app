@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
@@ -21,7 +22,13 @@ class SplashPageState extends State<SplashPage> {
     super.initState();
 
     Future.microtask(() async {
-      if (await widget.authController.isLogged()) {
+      userModel = await widget.authController.getUser();
+
+      if (!mounted) {
+        return;
+      }
+
+      if (userModel != null) {
         await Navigator.of(context).pushReplacementNamed(AppPage.router);
       } else {
         await Navigator.of(context).pushReplacementNamed(LoginPage.router);

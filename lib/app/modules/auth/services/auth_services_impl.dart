@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
@@ -6,6 +8,7 @@ import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_security_storage.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
 
@@ -87,4 +90,22 @@ class AuthServicesImpl implements AuthService {
       confirmModel.refreshToken,
     );
   }
+
+  @override
+  Future<UserModel> fetchUserData() async {
+    try {
+      final user = await _repository.fetchUserData();
+      await _saveLocalUserData(user);
+      return user;
+    } on Exception {
+      throw Failure(message: 'Erro ao buscar dados do usuario');
+    }
+  }
+
+  Future<void> _saveLocalUserData(UserModel user) => _localStorage.write(
+        'user',
+        jsonEncode(
+          user.toMap(),
+        ),
+      );
 }

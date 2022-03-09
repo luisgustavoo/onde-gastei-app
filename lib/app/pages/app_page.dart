@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/controllers/app_controller.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
+import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_page.dart';
@@ -9,14 +10,14 @@ import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
 import 'package:provider/provider.dart';
 
-UserModel? userModel;
+DateFilter? dateFilter;
 
 class AppPage extends StatefulWidget {
   const AppPage({
     required this.appController,
     Key? key,
   }) : super(key: key);
-  static const router = '/app';
+  static const router = 'app';
 
   final AppController appController;
 
@@ -27,6 +28,8 @@ class AppPage extends StatefulWidget {
 class _AppPageState extends State<AppPage> {
   int currentIndex = 0;
 
+  // final initialDate = DateTime(DateTime.now().year, DateTime.now().month);
+  // TODO(datefilter): Retirar depois, apenas para teste
   final initialDate = DateTime(DateTime.now().year, DateTime.now().month - 2);
   final finalDate = DateTime(
     DateTime.now().year,
@@ -39,7 +42,9 @@ class _AppPageState extends State<AppPage> {
     Future.microtask(() async {
       // TODO(buscardadosiniciaisdoapp):  CARREGAR OS DADOS DAS TELAS HOME, EXPENSES, CATEGORIES E PERFIL
 
-      userModel = await widget.appController.fetchUserData();
+      // userModel = await widget.appController.fetchUserData();
+
+      dateFilter = DateFilter(initialDate: initialDate, finalDate: finalDate);
 
       if (userModel != null) {
         await widget.appController.findCategories(userModel!.userId);

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
-import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/expenses/widgets/expenses_list_tile.dart';
 import 'package:provider/provider.dart';
 
 class ExpensesPage extends StatelessWidget {
-  const ExpensesPage({Key? key}) : super(key: key);
+  const ExpensesPage({ Key? key}) : super(key: key);
 
   static const router = 'expenses';
 

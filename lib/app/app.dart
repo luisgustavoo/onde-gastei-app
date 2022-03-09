@@ -13,6 +13,7 @@ import 'package:onde_gastei_app/app/core/rest_client/dio_rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
@@ -33,6 +34,8 @@ import 'package:onde_gastei_app/app/modules/home/services/home_service_impl.dart
 import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
+
+UserModel? userModel;
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -112,7 +115,6 @@ class App extends StatelessWidget {
             create: (context) => HomeRepositoryImpl(
               restClient: context.read<DioRestClient>(),
               log: context.read<LogImpl>(),
-              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
             ),
           ),
           Provider(
@@ -123,7 +125,6 @@ class App extends StatelessWidget {
           ChangeNotifierProvider(
             create: (context) => HomeControllerImpl(
               service: context.read<HomeServiceImpl>(),
-              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
             ),
           ),
           // ========== AUTHENTICATION ==========

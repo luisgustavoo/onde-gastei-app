@@ -239,7 +239,7 @@ void main() {
           value: any<double>(named: 'value'),
           date: any<DateTime>(named: 'date'),
           category: any<CategoryModel>(named: 'category'),
-          userId: 0,
+          userId: any<int>(named: 'userId'),
         ),
       ).thenAnswer((_) async => _);
 
@@ -301,7 +301,7 @@ void main() {
           value: any<double>(named: 'value'),
           date: any<DateTime>(named: 'date'),
           category: any<CategoryModel>(named: 'category'),
-          userId: 0,
+          userId: any<int>(named: 'userId'),
         ),
       ).thenThrow(Failure());
 

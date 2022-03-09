@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
@@ -5,6 +7,7 @@ import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
 
@@ -25,10 +28,21 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
   authState state = authState.idle;
 
   @override
-  Future<bool> isLogged() async {
-    final localUser = await _localStorage.read<String>('user');
+  Future<UserModel?> getUser() async {
+    try {
+      UserModel? user;
 
-    return localUser != null && localUser.isNotEmpty;
+      final localUser = await _localStorage.read<String>('user');
+
+      if (localUser != null && localUser.isNotEmpty) {
+        user = UserModel.fromMap(jsonDecode(localUser) as Map<String, dynamic>);
+      }
+
+      return user;
+    } on Exception catch (e, s) {
+      _log.error('Erro ao buscar dados do usuario', e, s);
+      throw Failure(message: 'Erro ao buscar dados do usuario');
+    }
   }
 
   @override
@@ -95,5 +109,14 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
   @override
   Future<void> logout() async {
     await _localStorage.clear();
+  }
+
+  @override
+  Future<UserModel> fetchUserData() async {
+    try {
+      return _service.fetchUserData();
+    } on Exception {
+      throw Failure(message: 'Erro ao buscar dados do usuario');
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
@@ -10,7 +11,6 @@ import 'package:onde_gastei_app/app/modules/categories/controllers/categories_co
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/widgets/color_picker.dart';
 import 'package:onde_gastei_app/app/modules/categories/widgets/icon_picker.dart';
-import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 

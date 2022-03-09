@@ -6,6 +6,7 @@ import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.d
 import 'package:onde_gastei_app/app/core/local_storages/local_security_storage.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_services_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/view_models/confirm_login_model.dart';
@@ -323,6 +324,33 @@ void main() {
 
       //Assert
       expect(() => call(email, password), throwsA(isA<Failure>()));
+    });
+  });
+
+  group('Group test fetchUserData', () {
+    test('Should fetchUserData with success', () async {
+      // Arrange
+      final userExpected =
+          UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
+
+      when(() => localStorage.write<String>(any(), any()))
+          .thenAnswer((_) async => _);
+
+      when(() => repository.fetchUserData())
+          .thenAnswer((_) async => userExpected);
+      //Act
+      final user = await service.fetchUserData();
+      //Assert
+      expect(user, userExpected);
+    });
+
+    test('Should throws exception', () async {
+      // Arrange
+      when(() => repository.fetchUserData()).thenThrow(Failure());
+      //Act
+      final call = service.fetchUserData;
+      //Assert
+      expect(call(), throwsA(isA<Failure>()));
     });
   });
 }

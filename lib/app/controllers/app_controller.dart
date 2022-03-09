@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
@@ -25,8 +24,6 @@ class AppController extends ChangeNotifier {
   }
 
   int get tabIndex => _tabIndex;
-
-  Future<UserModel?> fetchUserData() => homeController.fetchUserData();
 
   Future<void> findCategories(int userId) =>
       categoriesController.findCategories(userId);

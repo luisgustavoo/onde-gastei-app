@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/view_models/confirm_login_model.dart';
 
+import '../../../../core/fixture/fixture_reader.dart';
 import '../../../../core/log/mock_log.dart';
 import '../../../../core/rest_client/mock_rest_client.dart';
 import '../../../../core/rest_client/mock_rest_client_exception.dart';
@@ -271,6 +276,60 @@ void main() {
 
       //Act
       final call = authRepository.confirmLogin;
+
+      //Assert
+      expect(call, throwsA(isA<Failure>()));
+    });
+  });
+
+  group('Group test fetchUserData', () {
+    test('Should fetch user data with success', () async {
+      // Arrange
+      final jsonData = FixtureReader.getJsonData(
+        'app/modules/auth/repositories/fixture/get_data_by_token_response.json',
+      );
+      final responseData = jsonDecode(jsonData) as Map<String, dynamic>;
+
+      final userExpected = UserModel(
+        userId: int.parse(responseData['id_usuario'].toString()),
+        name: responseData['nome'].toString(),
+        email: responseData['email'].toString(),
+      );
+
+      final mockResponse =
+          MockRestClientResponse(statusCode: 200, data: responseData);
+
+      when(() => restClient.get<Map<String, dynamic>>(any()))
+          .thenAnswer((_) async => mockResponse);
+
+      //Act
+      final user = await authRepository.fetchUserData();
+
+      //Assert
+      expect(user, userExpected);
+    });
+
+    test('Should throws UserNotFoundException', () async {
+      // Arrange
+      final mockResponse =
+          MockRestClientResponse(statusCode: 200, data: <String, dynamic>{});
+
+      when(() => restClient.get<Map<String, dynamic>>(any()))
+          .thenAnswer((_) async => mockResponse);
+
+      //Act
+      final call = authRepository.fetchUserData;
+
+      //Assert
+      expect(call, throwsA(isA<UserNotFoundException>()));
+    });
+
+    test('Should throws Failure', () async {
+      // Arrange
+      when(() => restClient.get<Map<String, dynamic>>(any()))
+          .thenThrow(RestClientException(error: 'Error'));
+      //Act
+      final call = authRepository.fetchUserData;
 
       //Assert
       expect(call, throwsA(isA<Failure>()));

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
-import 'package:onde_gastei_app/app/pages/app_page.dart';
 
 class ExpensesListTile extends StatelessWidget {
   const ExpensesListTile({
@@ -34,7 +34,7 @@ class ExpensesListTile extends StatelessWidget {
             await expensesController.findExpensesByPeriod(
               DateTime(2022),
               DateTime.now(),
-              userModel?.userId ?? 0,
+              userModel!.userId,
             );
           }
         }

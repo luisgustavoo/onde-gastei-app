@@ -6,6 +6,7 @@ import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
@@ -32,7 +33,7 @@ void main() {
     );
   });
 
-  group('Group test isLogged', () {
+  group('Group test getUser', () {
     test('Should user is logged', () async {
       // Arrange
       const localUser = '''
@@ -45,10 +46,10 @@ void main() {
       when(() => localStorage.read<String>('user'))
           .thenAnswer((_) async => localUser);
       //Act
-      final isLogged = await controller.isLogged();
+      final user = await controller.getUser();
 
       //Assert
-      expect(isLogged, isTrue);
+      expect(user, isNotNull);
       verify(() => localStorage.read<String>('user')).called(1);
     });
 
@@ -57,11 +58,21 @@ void main() {
       when(() => localStorage.read<String>('user'))
           .thenAnswer((_) async => null);
       //Act
-      final isLogged = await controller.isLogged();
+      final user = await controller.getUser();
 
       //Assert
-      expect(isLogged, isFalse);
+      expect(user, isNull);
       verify(() => localStorage.read<String>('user')).called(1);
+    });
+
+    test('Should throws exception', () async {
+      // Arrange
+      when(() => localStorage.read<String>('user')).thenThrow(Exception());
+      //Act
+      final call = controller.getUser;
+
+      //Assert
+      expect(call(), throwsA(isA<Failure>()));
     });
   });
 
@@ -195,6 +206,34 @@ void main() {
           any(),
         ),
       ).called(1);
+    });
+  });
+
+  group('Group test fetchUserData', () {
+    test('Should fetchUserData with success', () async {
+      // Arrange
+      final userExpected =
+          UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
+
+      when(() => service.fetchUserData()).thenAnswer((_) async => userExpected);
+
+      //Act
+      final user = await controller.fetchUserData();
+
+      //Assert
+      expect(user, userExpected);
+      verify(() => service.fetchUserData()).called(1);
+    });
+
+    test('Should throws exception', () async {
+      // Arrange
+      when(() => service.fetchUserData()).thenThrow(Exception());
+
+      //Act
+      final call = controller.fetchUserData;
+
+      //Assert
+      expect(call(), throwsA(isA<Failure>()));
     });
   });
 }

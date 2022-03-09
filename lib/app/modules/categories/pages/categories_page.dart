@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_register_page.dart';
+import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
-class CategoriesPage extends StatelessWidget {
+class CategoriesPage extends StatefulWidget {
   const CategoriesPage({Key? key}) : super(key: key);
 
   static const router = '/categories';
 
+  @override
+  State<CategoriesPage> createState() => _CategoriesPageState();
+}
+
+class _CategoriesPageState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
     final categoriesController = context.read<CategoriesControllerImpl>();
@@ -27,7 +34,7 @@ class CategoriesPage extends StatelessWidget {
                 if (edited != null) {
                   if (edited == true) {
                     await categoriesController
-                        .findCategories(userModel?.userId ?? 0);
+                        .findCategories(userModel!.userId);
                   }
                 }
               },
@@ -59,7 +66,7 @@ class CategoriesPage extends StatelessWidget {
             return ListView.builder(
               physics: const BouncingScrollPhysics(),
               itemCount: categoriesController.categoriesList.length,
-              itemBuilder: (context, index) {
+              itemBuilder: (_, index) {
                 final category = categoriesController.categoriesList[index];
 
                 return ListTile(
@@ -76,7 +83,19 @@ class CategoriesPage extends StatelessWidget {
                     if (edited != null) {
                       if (edited == true) {
                         await categoriesController
-                            .findCategories(userModel?.userId ?? 0);
+                            .findCategories(userModel!.userId);
+
+                        if (!mounted) {
+                          return;
+                        }
+
+                        await context
+                            .read<ExpensesControllerImpl>()
+                            .findExpensesByPeriod(
+                              dateFilter!.initialDate,
+                              dateFilter!.finalDate,
+                              userModel!.userId,
+                            );
                       }
                     }
                   },

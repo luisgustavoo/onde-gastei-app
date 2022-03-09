@@ -1,32 +1,23 @@
-import 'dart:convert';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
-import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/services/home_service.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/percentage_categories_view_model.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categories_view_model.dart';
 
-import '../../../../core/local_storage/mock_local_storage.dart';
-
 class MockHomeService extends Mock implements HomeService {}
 
 void main() {
   late HomeService service;
-  late LocalStorage localStorage;
   late HomeController controller;
 
   setUp(() {
     service = MockHomeService();
-    localStorage = MockLocalStorage();
     controller = HomeControllerImpl(
       service: service,
-      localStorage: localStorage,
     );
   });
 
@@ -104,68 +95,6 @@ void main() {
       verifyNever(
         () => service.findPercentageByCategories(any(), any(), any()),
       );
-    });
-  });
-
-  group('Group test fetchUserData', () {
-    test('Should fetchUserData with success', () async {
-      // Arrange
-      final userExpected =
-          UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
-
-      when(() => localStorage.read<String>(any()))
-          .thenAnswer((_) async => jsonEncode(userExpected.toMap()));
-      //Act
-      final user = await controller.fetchUserData();
-
-      //Assert
-      expect(user, userExpected);
-      verify(() => localStorage.read<String>(any())).called(1);
-    });
-
-    test('Should local user is empty', () async {
-      // Arrange
-      final userExpected =
-          UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
-
-      when(() => localStorage.read<String>(any())).thenAnswer((_) async => '');
-      when(() => service.fetchUserData()).thenAnswer((_) async => userExpected);
-      //Act
-      final user = await controller.fetchUserData();
-
-      //Assert
-      expect(user, userExpected);
-      verify(() => localStorage.read<String>(any())).called(1);
-      verify(() => service.fetchUserData()).called(1);
-    });
-
-    test('Should local user is null', () async {
-      // Arrange
-      final userExpected =
-          UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
-
-      when(() => localStorage.read<String>(any()))
-          .thenAnswer((_) async => null);
-      when(() => service.fetchUserData()).thenAnswer((_) async => userExpected);
-      //Act
-      final user = await controller.fetchUserData();
-
-      //Assert
-      expect(user, userExpected);
-      verify(() => localStorage.read<String>(any())).called(1);
-      verify(() => service.fetchUserData()).called(1);
-    });
-
-    test('Should throws exception', () async {
-      // Arrange
-      when(() => localStorage.read<String>(any())).thenThrow(Exception());
-
-      //Act
-      final call = controller.fetchUserData;
-
-      //Assert
-      expect(call, throwsA(isA<Failure>()));
-      verifyNever(() => service.fetchUserData());
     });
   });
 }
