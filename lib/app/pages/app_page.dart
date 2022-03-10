@@ -36,10 +36,40 @@ class _AppPageState extends State<AppPage> {
     DateTime.now().month + 1,
   ).subtract(const Duration(days: 1));
 
+  final pages = <Widget>[
+    const HomePage(),
+    const ExpensesPage(),
+    const CategoriesPage(),
+    // Container(
+    //   color: Colors.yellow,
+    //   child: Center(
+    //     child: TextButton(
+    //       onPressed: () async {
+    //         // TODO(logout): Apenas para teste retirar depois
+
+    //         final authController = context.read<AuthControllerImpl>();
+    //         await authController.logout();
+
+    //         if (!mounted) {
+    //           return;
+    //         }
+
+    //         await Navigator.of(context).pushNamedAndRemoveUntil(
+    //           SplashPage.router,
+    //           (route) => false,
+    //         );
+    //       },
+    //       child: const Text('Logout'),
+    //     ),
+    //   ),
+    // ),
+  ];
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(() async {
+
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
       // TODO(buscardadosiniciaisdoapp):  CARREGAR OS DADOS DAS TELAS HOME, EXPENSES, CATEGORIES E PERFIL
 
       // userModel = await widget.appController.fetchUserData();
@@ -49,57 +79,27 @@ class _AppPageState extends State<AppPage> {
       if (userModel != null) {
         await widget.appController.findCategories(userModel!.userId);
 
-        await widget.appController
-            .findExpenses(initialDate, finalDate, userModel!.userId);
+        await widget.appController.findExpenses(
+            dateFilter!.initialDate, dateFilter!.finalDate, userModel!.userId);
 
-        // await widget.appController.fetchHomeData(
-        //   userId: userModel!.userId,
-        //   initialDate: initialDate,
-        //   finalDate: finalDate,
-        // );
+        await widget.appController.fetchHomeData(
+          userId: userModel!.userId,
+          initialDate: initialDate,
+          finalDate: finalDate,
+        );
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final pageController = PageController();
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: PageView(
-        onPageChanged: (pageIndex) {
-          widget.appController.tabIndex = pageIndex;
-        },
-        controller: pageController,
-        children: [
-          const HomePage(),
-          const ExpensesPage(),
-          const CategoriesPage(),
-          Container(
-            color: Colors.yellow,
-            child: Center(
-              child: TextButton(
-                onPressed: () async {
-                  // TODO(logout): Apenas para teste retirar depois
-
-                  final authController = context.read<AuthControllerImpl>();
-                  await authController.logout();
-
-                  if (!mounted) {
-                    return;
-                  }
-
-                  await Navigator.of(context).pushNamedAndRemoveUntil(
-                    SplashPage.router,
-                    (route) => false,
-                  );
-                },
-                child: const Text('Logout'),
-              ),
-            ),
-          )
-        ],
+      body: Consumer<AppController>(
+        builder: (_, appController, __) => IndexedStack(
+          index: appController.tabIndex,
+          children: pages,
+        ),
       ),
       bottomNavigationBar: Consumer<AppController>(
         builder: (context, appController, _) {
@@ -108,11 +108,7 @@ class _AppPageState extends State<AppPage> {
             elevation: 0,
             currentIndex: appController.tabIndex,
             onTap: (currentIndex) {
-              pageController.animateToPage(
-                currentIndex,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.ease,
-              );
+              widget.appController.tabIndex = currentIndex;
             },
             items: const [
               BottomNavigationBarItem(
@@ -143,8 +139,11 @@ class _AppPageState extends State<AppPage> {
               .pushNamed(ExpensesRegisterPage.router) as bool?;
           if (edited != null) {
             if (edited) {
-              await widget.appController
-                  .findExpenses(initialDate, finalDate, userModel!.userId);
+              await widget.appController.findExpenses(
+                dateFilter!.initialDate,
+                dateFilter!.finalDate,
+                userModel!.userId,
+              );
             }
           }
         },

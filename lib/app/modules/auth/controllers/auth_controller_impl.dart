@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
@@ -79,6 +80,8 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
       notifyListeners();
 
       await _service.login(email, password);
+
+      userModel = await fetchUserData();
 
       state = authState.success;
       notifyListeners();

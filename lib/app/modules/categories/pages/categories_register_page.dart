@@ -151,7 +151,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                     onPressed: () {
                       Navigator.of(dialogContext).pop();
                     },
-                    child: const Text('Cancelar'),
+                    child: const Text('Cancelar', style: TextStyle(color: Colors.black)),
                   ),
                   TextButton(
                     key: const Key(

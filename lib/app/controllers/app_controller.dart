@@ -28,6 +28,17 @@ class AppController extends ChangeNotifier {
   Future<void> findCategories(int userId) =>
       categoriesController.findCategories(userId);
 
+  Future<void> fetchHomeData({
+    required int userId,
+    required DateTime initialDate,
+    required DateTime finalDate,
+  }) =>
+      homeController.fetchHomeData(
+        userId: userId,
+        initialDate: initialDate,
+        finalDate: finalDate,
+      );
+
   Future<void> findExpenses(
     DateTime initialDate,
     DateTime finalDate,

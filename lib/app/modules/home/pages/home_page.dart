@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/home/widgets/indicador.dart';
+import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
+
+import 'package:fl_chart/fl_chart.dart';
+
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,10 +27,9 @@ class _HomePageState extends State<HomePage> {
 
     return SafeArea(
       child: Scaffold(
-        body: Selector<HomeControllerImpl, homeState>(
-          selector: (_, homeController) => homeController.state,
-          builder: (_, state, __) {
-            if (state == homeState.loading) {
+        body: Consumer<HomeControllerImpl>(
+          builder: (_, homeController, __) {
+            if (homeController.state == homeState.loading) {
               return Center(
                 child: CircularProgressIndicator(
                   color: Theme.of(context).primaryColor,
@@ -33,6 +39,7 @@ class _HomePageState extends State<HomePage> {
             }
 
             return ListView(
+              physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.only(
                 left: 16.w,
                 right: 16.w,
@@ -51,15 +58,130 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(fontSize: 20.sp),
                         children: [
                           TextSpan(
-                            text: '100,00',
+                            text: NumberFormat.currency(
+                              locale: 'pt-BR',
+                              name: '',
+                              decimalDigits: 2,
+                            ).format(homeController.totalExpenses),
                             style: TextStyle(
-                              fontSize: 50.sp,
+                              fontSize: 40.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           )
                         ],
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: SizedBox(
+                        height: 80.h,
+                        child: ListView(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          children: homeController.totalExpensesCategoriesList
+                              .map((e) {
+                            return SizedBox(
+                              width: 70
+                                  .w, //MediaQuery.of(context).size.width * 0.25,
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor:
+                                        Color(e.category.colorCode),
+                                    minRadius: 25,
+                                    child: Icon(
+                                      IconData(
+                                        e.category.iconCode,
+                                        fontFamily: 'MaterialIcons',
+                                      ),
+                                      color: Colors.white,
+                                      size: 30,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      NumberFormat.currency(
+                                        locale: 'pt-BR',
+                                        symbol: '',
+                                        decimalDigits: 2,
+                                      ).format(e.totalValue),
+                                      style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16.h,
+                    ),
+                    SizedBox(
+                      height: 250,
+                      width: MediaQuery.of(context).size.width,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          PieChart(
+                            PieChartData(
+                              sections: homeController.percentageCategoriesList
+                                  .map(
+                                    (e) => PieChartSectionData(
+                                      radius: 65,
+                                      color: Color(e.category.colorCode),
+                                      value: e.percentage,
+                                      title:
+                                          '${e.percentage.toStringAsPrecision(2)}%',
+                                      titleStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.sp,
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Período',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                DateFormat.yMd('pt_BR').format(
+                                  dateFilter!.initialDate,
+                                ),
+                              ),
+                              Text(
+                                DateFormat.yMd('pt_BR').format(
+                                  dateFilter!.finalDate,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: homeController.percentageCategoriesList
+                          .map((e) => Indicator(
+                                color: Color(e.category.colorCode),
+                                text: e.category.description,
+                                isSquare: true,
+                              ))
+                          .toList(),
+                    )
                   ],
                 )
               ],

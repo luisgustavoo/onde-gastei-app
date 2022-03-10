@@ -18,7 +18,9 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
       <TotalExpensesCategoriesViewModel>[];
   List<PercentageCategoriesViewModel> percentageCategoriesList =
       <PercentageCategoriesViewModel>[];
-  homeState state = homeState.idle;
+  homeState state = homeState.loading;
+
+  double totalExpenses = 0;
 
   @override
   Future<void> fetchHomeData({
@@ -38,6 +40,8 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
         finalDate,
       );
 
+      totalExpenses = getTotalExpenses();
+
       state = homeState.success;
       notifyListeners();
     } on Exception {
@@ -46,5 +50,15 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
 
       throw Failure(message: 'Erro ao buscar dados da home page');
     }
+  }
+
+  double getTotalExpenses() {
+    totalExpensesCategoriesList.fold<double>(
+      0,
+      (previousValue, expensesCategories) =>
+          totalExpenses += expensesCategories.totalValue,
+    );
+
+    return totalExpenses;
   }
 }
