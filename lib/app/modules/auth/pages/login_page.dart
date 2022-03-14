@@ -6,6 +6,7 @@ import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
+import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
@@ -13,9 +14,13 @@ import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({required AuthController authController, Key? key})
+      : _authController = authController,
+        super(key: key);
 
   static const router = '/login';
+
+  final AuthController _authController;
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -31,13 +36,15 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authController = context.watch<AuthControllerImpl>();
+    final authControllerState = context.select<AuthControllerImpl, authState>(
+      (authController) => authController.state,
+    );
 
     return ScaffoldMessenger(
       key: _scaffoldMessagedKey,
       child: Scaffold(
         body: IgnorePointer(
-          ignoring: authController.state == authState.loading,
+          ignoring: authControllerState == authState.loading,
           child: ListView(
             children: [
               Padding(
@@ -53,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 32.h,
                     ),
-                    _buildForm(context, authController),
+                    _buildForm(context, authControllerState),
                   ],
                 ),
               )
@@ -64,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Form _buildForm(BuildContext context, AuthControllerImpl authController) {
+  Form _buildForm(BuildContext context, authState authControllerState) {
     return Form(
       key: _formKey,
       child: Column(
@@ -120,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(
             height: 32.h,
           ),
-          _buildOndeGasteiButton(context, authController),
+          _buildOndeGasteiButton(context, authControllerState),
           SizedBox(
             height: 32.h,
           ),
@@ -143,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
 
   OndeGasteiButton _buildOndeGasteiButton(
     BuildContext context,
-    AuthControllerImpl authController,
+    authState authControllerState,
   ) {
     return OndeGasteiButton(
       Text(
@@ -161,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
           SnackBar? snackBar;
 
           try {
-            await authController.login(
+            await widget._authController.login(
               _emailController.text,
               _passwordController.text,
             );
@@ -215,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
           }
         }
       },
-      isLoading: authController.state == authState.loading,
+      isLoading: authControllerState == authState.loading,
     );
   }
 

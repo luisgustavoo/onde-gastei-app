@@ -14,20 +14,26 @@ import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
 class ExpensesRegisterPage extends StatefulWidget {
   const ExpensesRegisterPage({
-    this.expenseModel,
-    this.isEditing = false,
+    required ExpensesController expensesController,
+    ExpenseModel? expenseModel,
+    bool isEditing = false,
     Key? key,
-  }) : super(key: key);
+  })  : _expensesController = expensesController,
+        _expenseModel = expenseModel,
+        _isEditing = isEditing,
+        super(key: key);
 
-  static const router = 'expenses/register';
-  final bool isEditing;
-  final ExpenseModel? expenseModel;
+  static const router = '/expenses/register';
+  final bool _isEditing;
+  final ExpenseModel? _expenseModel;
+  final ExpensesController _expensesController;
 
   @override
   State<ExpensesRegisterPage> createState() => _ExpensesRegisterPageState();
@@ -50,14 +56,15 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
   void initState() {
     super.initState();
     descriptionController = TextEditingController(
-      text:
-          widget.expenseModel != null ? widget.expenseModel!.description : null,
+      text: widget._expenseModel != null
+          ? widget._expenseModel!.description
+          : null,
     );
 
     dateController = TextEditingController(
       text: DateFormat.yMd('pt_BR').format(
-        widget.expenseModel != null
-            ? widget.expenseModel!.date
+        widget._expenseModel != null
+            ? widget._expenseModel!.date
             : DateTime.now(),
       ),
     );
@@ -68,21 +75,26 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
         symbol: r'R$',
         decimalDigits: 2,
       ).format(
-        widget.expenseModel != null ? widget.expenseModel!.value : 0,
+        widget._expenseModel != null ? widget._expenseModel!.value : 0,
       ),
     );
 
-    if (widget.expenseModel != null) {
-      _selectedCategory = widget.expenseModel!.category;
+    if (widget._expenseModel != null) {
+      _selectedCategory = widget._expenseModel!.category;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final expensesController = context.read<ExpensesControllerImpl>();
-    final state = context.select<ExpensesControllerImpl, expensesState>(
+    final expensesControllerstate =
+        context.select<ExpensesControllerImpl, expensesState>(
       (expensesController) => expensesController.state,
     );
+    final expensesControllerDeleteState =
+        context.select<ExpensesControllerImpl, expensesDeleteState>(
+      (expensesController) => expensesController.deleteState,
+    );
+
     final categoriesList =
         context.select<CategoriesControllerImpl, List<CategoryModel>>(
       (categoriesController) => categoriesController.categoriesList,
@@ -100,11 +112,11 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
           ),
           title: const Text('Despesa'),
           actions: [
-            _buildDeleteButton(context, expensesController),
+            _buildDeleteButton(context, expensesControllerDeleteState),
           ],
         ),
         body: IgnorePointer(
-          ignoring: state == expensesState.loading,
+          ignoring: expensesControllerstate == expensesState.loading,
           child: ListView(
             padding: EdgeInsets.only(top: 32.h, left: 16.w, right: 16.w),
             physics: const BouncingScrollPhysics(),
@@ -236,8 +248,8 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                           try {
                             _edited = true;
 
-                            if (!widget.isEditing) {
-                              await expensesController.register(
+                            if (!widget._isEditing) {
+                              await widget._expensesController.register(
                                 description: descriptionController.text.trim(),
                                 value:
                                     Validators.parseLocalFormatValueToIso4217(
@@ -254,7 +266,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
 
                               _resetFields();
                             } else {
-                              await expensesController.update(
+                              await widget._expensesController.update(
                                 description: descriptionController.text.trim(),
                                 value:
                                     Validators.parseLocalFormatValueToIso4217(
@@ -265,7 +277,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                                 ),
                                 category: _selectedCategory!,
                                 userId: userModel?.userId,
-                                expenseId: widget.expenseModel!.expenseId ?? 0,
+                                expenseId: widget._expenseModel!.expenseId ?? 0,
                               );
                               message = 'Despesa atualizada com sucesso!';
                             }
@@ -288,7 +300,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                               key: const Key(
                                 'snack_bar_error_key_expenses_register_page',
                               ),
-                              content: widget.isEditing
+                              content: widget._isEditing
                                   ? const Text('Erro ao atualizar despesa!')
                                   : const Text('Erro ao registrar despesa!'),
                               backgroundColor: Colors.red,
@@ -301,7 +313,8 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                               .showSnackBar(snackBar);
                         }
                       },
-                      isLoading: state == expensesState.loading,
+                      isLoading:
+                          expensesControllerstate == expensesState.loading,
                       key: const Key(
                         'register_button_key_expenses_register_page',
                       ),
@@ -317,15 +330,15 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
   }
 
   Visibility _buildDeleteButton(
-    BuildContext pageContext,
-    ExpensesControllerImpl expensesController,
+    BuildContext context,
+    expensesDeleteState expensesDeleteState,
   ) {
     return Visibility(
-      visible: widget.isEditing,
+      visible: widget._isEditing,
       child: IconButton(
         onPressed: () async {
           await showDialog<void>(
-            context: pageContext,
+            context: context,
             barrierDismissible: false,
             builder: (dialogContext) {
               return AlertDialog(
@@ -334,7 +347,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                 ),
                 title: const Text('Deletar despesa'),
                 content: Text(
-                  'Deseja deletar a despesa ${widget.expenseModel?.description}?',
+                  'Deseja deletar a despesa ${widget._expenseModel?.description}?',
                 ),
                 actions: [
                   TextButton(
@@ -351,8 +364,8 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                       try {
                         _edited = true;
 
-                        await expensesController.delete(
-                          expenseId: widget.expenseModel?.expenseId ?? 0,
+                        await widget._expensesController.delete(
+                          expenseId: widget._expenseModel?.expenseId ?? 0,
                         );
 
                         if (!mounted) {
@@ -363,8 +376,8 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                           Navigator.of(dialogContext).pop(_edited);
                         }
 
-                        if (Navigator.of(pageContext).canPop()) {
-                          Navigator.of(pageContext).pop(_edited);
+                        if (Navigator.of(context).canPop()) {
+                          Navigator.of(context).pop(_edited);
                         }
                       } on Failure {
                         final snackBar = OndeGasteiSnackBar.buildSnackBar(
@@ -381,8 +394,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                             .showSnackBar(snackBar);
                       }
                     },
-                    child: expensesController.deleteState ==
-                            categoriesDeleteState.loading
+                    child: expensesDeleteState == categoriesDeleteState.loading
                         ? SizedBox(
                             height: 15.h,
                             width: 15.w,

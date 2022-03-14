@@ -8,12 +8,16 @@ import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/widgets/expenses_list_tile.dart';
+import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:provider/provider.dart';
+
+late MockExpensesControllerImpl mockExpensesController;
+late MockHomeControllerImpl mockHomeControllerImpl;
 
 class MockExpensesControllerImpl extends Mock
     implements ExpensesControllerImpl {}
 
-late MockExpensesControllerImpl mockExpensesController;
+class MockHomeControllerImpl extends Mock implements HomeControllerImpl {}
 
 final mockExpensesList = List<ExpenseModel>.generate(
   1000,
@@ -36,6 +40,9 @@ Widget createExpensesPage() {
     providers: [
       ChangeNotifierProvider<ExpensesControllerImpl>(
         create: (context) => mockExpensesController,
+      ),
+      ChangeNotifierProvider<HomeControllerImpl>(
+        create: (context) => mockHomeControllerImpl,
       ),
     ],
     child: ScreenUtilInit(
@@ -62,6 +69,7 @@ Widget createExpensesPage() {
 void main() {
   setUp(() {
     mockExpensesController = MockExpensesControllerImpl();
+    mockHomeControllerImpl = MockHomeControllerImpl();
   });
 
   group('group test ExpensesPage', () {

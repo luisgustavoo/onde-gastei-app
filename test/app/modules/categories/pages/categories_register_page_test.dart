@@ -27,6 +27,7 @@ Widget createCategoriesRegisterPage() {
           CategoriesRegisterPage.router: (context) {
             if (isEditing) {
               return CategoriesRegisterPage(
+                categoriesController: mockCategoriesControllerImpl,
                 categoryModel: const CategoryModel(
                   description: 'Test',
                   iconCode: 1,
@@ -35,7 +36,9 @@ Widget createCategoriesRegisterPage() {
                 isEditing: isEditing,
               );
             }
-            return const CategoriesRegisterPage();
+            return CategoriesRegisterPage(
+              categoriesController: mockCategoriesControllerImpl,
+            );
           }
         },
       ),
@@ -69,6 +72,9 @@ void main() {
       when(() => mockCategoriesControllerImpl.state)
           .thenReturn(categoriesState.idle);
 
+      when(() => mockCategoriesControllerImpl.stateDelete)
+          .thenReturn(categoriesDeleteState.idle);
+
       await tester.pumpWidget(createCategoriesRegisterPage());
 
       expect(find.text('Categoria'), findsOneWidget);
@@ -84,6 +90,9 @@ void main() {
       final buildColor = find.byKey(
         const Key('build_color_key_register_categories_page'),
       );
+      final saveButton =
+          find.byKey(const Key('save_button_register_categories_page'));
+
       expect(
         find.widgetWithIcon(
           IconButton,
@@ -94,13 +103,17 @@ void main() {
 
       expect(buildIcon, findsOneWidget);
       expect(buildColor, findsOneWidget);
+      expect(saveButton, findsOneWidget);
 
-      expect(find.widgetWithText(ElevatedButton, 'Salvar'), findsOneWidget);
+      // expect(find.widgetWithText(OndeGasteiButton, 'Salvar'), findsOneWidget);
     });
 
     testWidgets('Should TextFormField is empty', (tester) async {
       when(() => mockCategoriesControllerImpl.state)
           .thenReturn(categoriesState.idle);
+
+      when(() => mockCategoriesControllerImpl.stateDelete)
+          .thenReturn(categoriesDeleteState.idle);
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 
@@ -109,7 +122,7 @@ void main() {
       );
 
       final saveButton = find.byKey(
-        const Key('button_save_register_categories_page'),
+        const Key('save_button_register_categories_page'),
       );
 
       expect(find.widgetWithText(ElevatedButton, 'Salvar'), findsOneWidget);
@@ -126,6 +139,9 @@ void main() {
     testWidgets('Should create category with success', (tester) async {
       when(() => mockCategoriesControllerImpl.state)
           .thenReturn(categoriesState.idle);
+
+      when(() => mockCategoriesControllerImpl.stateDelete)
+          .thenReturn(categoriesDeleteState.idle);
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 
@@ -146,7 +162,7 @@ void main() {
           find.byKey(const Key('gesture_color_key_register_categories_page'));
 
       final saveButton = find.byKey(
-        const Key('button_save_register_categories_page'),
+        const Key('save_button_register_categories_page'),
       );
 
       final iconsDialog =
@@ -195,6 +211,9 @@ void main() {
       when(() => mockCategoriesControllerImpl.state)
           .thenReturn(categoriesState.idle);
 
+      when(() => mockCategoriesControllerImpl.stateDelete)
+          .thenReturn(categoriesDeleteState.idle);
+
       await tester.pumpWidget(createCategoriesRegisterPage());
 
       when(() => mockCategoriesControllerImpl.register(any()))
@@ -211,7 +230,7 @@ void main() {
           find.byKey(const Key('gesture_color_key_register_categories_page'));
 
       final saveButton = find.byKey(
-        const Key('button_save_register_categories_page'),
+        const Key('save_button_register_categories_page'),
       );
 
       final iconsDialog =
@@ -260,6 +279,9 @@ void main() {
       when(() => mockCategoriesControllerImpl.state)
           .thenReturn(categoriesState.idle);
 
+      when(() => mockCategoriesControllerImpl.stateDelete)
+          .thenReturn(categoriesDeleteState.idle);
+
       await tester.pumpWidget(createCategoriesRegisterPage());
 
       when(
@@ -277,7 +299,7 @@ void main() {
           find.byKey(const Key('gesture_color_key_register_categories_page'));
 
       final saveButton = find.byKey(
-        const Key('button_save_register_categories_page'),
+        const Key('save_button_register_categories_page'),
       );
 
       final iconsDialog =
@@ -327,6 +349,9 @@ void main() {
       when(() => mockCategoriesControllerImpl.state)
           .thenReturn(categoriesState.idle);
 
+      when(() => mockCategoriesControllerImpl.stateDelete)
+          .thenReturn(categoriesDeleteState.idle);
+
       await tester.pumpWidget(createCategoriesRegisterPage());
 
       when(() => mockCategoriesControllerImpl.updateCategory(any(), any()))
@@ -343,7 +368,7 @@ void main() {
           find.byKey(const Key('gesture_color_key_register_categories_page'));
 
       final saveButton = find.byKey(
-        const Key('button_save_register_categories_page'),
+        const Key('save_button_register_categories_page'),
       );
 
       final iconsDialog =
@@ -462,7 +487,6 @@ void main() {
 
       await tester.tap(deleteButtonDialog);
       await tester.pumpAndSettle();
-
 
       expect(find.text('Erro ao deletar categoria'), findsOneWidget);
     });

@@ -21,7 +21,9 @@ Widget createRegisterPage() {
         initialRoute: RegisterPage.router,
         routes: {
           RegisterPage.router: (context) {
-            return const RegisterPage();
+            return RegisterPage(
+              authController: mockAuthControllerImpl,
+            );
           }
         },
       ),

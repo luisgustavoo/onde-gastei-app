@@ -31,7 +31,8 @@ import 'package:onde_gastei_app/app/modules/expenses/services/expenses_services_
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/repositories/home_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/services/home_service_impl.dart';
-import 'package:onde_gastei_app/app/modules/splash/splash_page.dart';
+import 'package:onde_gastei_app/app/modules/splash/controllers/splash_controller.dart';
+import 'package:onde_gastei_app/app/modules/splash/pages/splash_page.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
@@ -89,6 +90,15 @@ class App extends StatelessWidget {
             ),
           ),
           // ========== REST SERVICES ==========
+
+          // ========== SPLASH ==========
+          Provider(
+            create: (context) => SplashController(
+              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+              log: context.read<LogImpl>(),
+            ),
+          ),
+          // ========== SPLASH ==========
 
           // ========== AUTHENTICATION ==========
           Provider(
@@ -197,17 +207,21 @@ class App extends StatelessWidget {
           routes: {
             SplashPage.router: (context) {
               return SplashPage(
-                authController: context.read<AuthControllerImpl>(),
+                splashController: context.read<SplashController>(),
               );
             },
             AppPage.router: (context) => AppPage(
                   appController: context.read<AppController>(),
                 ),
             LoginPage.router: (context) {
-              return const LoginPage();
+              return LoginPage(
+                authController: context.read<AuthControllerImpl>(),
+              );
             },
             RegisterPage.router: (context) {
-              return const RegisterPage();
+              return RegisterPage(
+                authController: context.read<AuthControllerImpl>(),
+              );
             },
             ExpensesRegisterPage.router: (context) {
               if (ModalRoute.of(context)!.settings.arguments != null) {
@@ -215,11 +229,14 @@ class App extends StatelessWidget {
                     ModalRoute.of(context)!.settings.arguments! as ExpenseModel;
 
                 return ExpensesRegisterPage(
+                  expensesController: context.read<ExpensesControllerImpl>(),
                   expenseModel: expenseModel,
                   isEditing: true,
                 );
               }
-              return const ExpensesRegisterPage();
+              return ExpensesRegisterPage(
+                expensesController: context.read<ExpensesControllerImpl>(),
+              );
             },
             CategoriesPage.router: (context) {
               return const CategoriesPage();
@@ -233,12 +250,16 @@ class App extends StatelessWidget {
                 final isEditing = arguments['editing'] as bool;
 
                 return CategoriesRegisterPage(
+                  categoriesController:
+                      context.read<CategoriesControllerImpl>(),
                   categoryModel: categoryModel,
                   isEditing: isEditing,
                 );
               }
 
-              return const CategoriesRegisterPage();
+              return CategoriesRegisterPage(
+                categoriesController: context.read<CategoriesControllerImpl>(),
+              );
             }
           },
         ),

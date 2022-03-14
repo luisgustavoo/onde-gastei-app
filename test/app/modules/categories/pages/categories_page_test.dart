@@ -5,16 +5,35 @@ import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
+import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:provider/provider.dart';
 
 late CategoriesControllerImpl mockCategoriesControllerImpl;
+late ExpensesControllerImpl mockExpensesControllerImpl;
+late HomeControllerImpl mockHomeControllerImpl;
 
 class MockCategoriesControllerImpl extends Mock
     implements CategoriesControllerImpl {}
 
+class MockExpensesControllerImpl extends Mock
+    implements ExpensesControllerImpl {}
+
+class MockHomeControllerImpl extends Mock implements HomeControllerImpl {}
+
 Widget createCategoriesPage() {
-  return ChangeNotifierProvider<CategoriesControllerImpl>(
-    create: (context) => mockCategoriesControllerImpl,
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider<HomeControllerImpl>(
+        create: (context) => mockHomeControllerImpl,
+      ),
+      ChangeNotifierProvider<ExpensesControllerImpl>(
+        create: (context) => mockExpensesControllerImpl,
+      ),
+      ChangeNotifierProvider<CategoriesControllerImpl>(
+        create: (context) => mockCategoriesControllerImpl,
+      ),
+    ],
     child: ScreenUtilInit(
       builder: () => MaterialApp(
         initialRoute: CategoriesPage.router,
@@ -40,6 +59,8 @@ final mockCategoriesList = List<CategoryModel>.generate(
 void main() {
   setUp(() {
     mockCategoriesControllerImpl = MockCategoriesControllerImpl();
+    mockHomeControllerImpl = MockHomeControllerImpl();
+    mockExpensesControllerImpl = MockExpensesControllerImpl();
   });
 
   group('Group test categories page', () {

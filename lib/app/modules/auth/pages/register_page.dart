@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
+import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
+import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage({required AuthController authController, Key? key})
+      : _authController = authController,
+        super(key: key);
 
   static const String router = '/register';
+
+  final AuthController _authController;
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -28,7 +34,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authController = context.watch<AuthControllerImpl>();
+    final authControllerState = context.select<AuthControllerImpl, authState>(
+      (authController) => authController.state,
+    );
 
     return ScaffoldMessenger(
       key: _scaffoldMessagedKey,
@@ -37,10 +45,10 @@ class _RegisterPageState extends State<RegisterPage> {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: IgnorePointer(
-            ignoring: authController.state == authState.loading,
+            ignoring: authControllerState == authState.loading,
             child: ListView(
               children: [
-                _buildForm(context, authController),
+                _buildForm(context, authControllerState),
               ],
             ),
           ),
@@ -49,7 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Form _buildForm(BuildContext context, AuthControllerImpl authController) {
+  Form _buildForm(BuildContext context, authState authControllerState) {
     return Form(
       key: _formKey,
       child: Column(
@@ -122,7 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
           SizedBox(
             height: 32.h,
           ),
-          _buildOndeGasteiButton(context, authController)
+          _buildOndeGasteiButton(context, authControllerState)
         ],
       ),
     );
@@ -130,7 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   OndeGasteiButton _buildOndeGasteiButton(
     BuildContext context,
-    AuthControllerImpl authController,
+    authState authControllerState,
   ) {
     return OndeGasteiButton(
       Text(
@@ -149,15 +157,11 @@ class _RegisterPageState extends State<RegisterPage> {
           SnackBar snackBar;
 
           try {
-            await authController.register(
+            await widget._authController.register(
               nameController.text,
               emailController.text,
               passwordController.text,
             );
-
-            if (!mounted) {
-              return;
-            }
 
             snackBar = OndeGasteiSnackBar.buildSnackBar(
               key: const Key('snack_bar_success_key_register_page'),
@@ -178,7 +182,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ],
                 ),
               ),
-              backgroundColor: Theme.of(context).primaryColor,
+              backgroundColor: Constants.primaryColor,
               label: 'Fechar',
               onPressed: () {},
             );
@@ -209,7 +213,7 @@ class _RegisterPageState extends State<RegisterPage> {
           _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
         }
       },
-      isLoading: authController.state == authState.loading,
+      isLoading: authControllerState == authState.loading,
     );
   }
 

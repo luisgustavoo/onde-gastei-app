@@ -1,44 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
-import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
-import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
 
 class ExpensesListTile extends StatelessWidget {
   const ExpensesListTile({
     required this.expenseModel,
-    required this.expensesController,
     required this.isFirst,
     required this.isLast,
+    required this.onTap,
     Key? key,
   }) : super(key: key);
 
   final ExpenseModel expenseModel;
-  final ExpensesController expensesController;
   final bool isFirst;
   final bool isLast;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () async {
-        final edited = await Navigator.of(context).pushNamed(
-          ExpensesRegisterPage.router,
-          arguments: expenseModel,
-        ) as bool?;
-
-        if (edited != null) {
-          if (edited) {
-            await expensesController.findExpensesByPeriod(
-              DateTime(2022),
-              DateTime.now(),
-              userModel!.userId,
-            );
-          }
-        }
-      },
+      onTap: onTap,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: SizedBox(

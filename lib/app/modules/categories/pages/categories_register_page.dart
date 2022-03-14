@@ -7,6 +7,7 @@ import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
+import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/widgets/color_picker.dart';
@@ -16,15 +17,20 @@ import 'package:validatorless/validatorless.dart';
 
 class CategoriesRegisterPage extends StatefulWidget {
   const CategoriesRegisterPage({
-    this.categoryModel,
-    this.isEditing = false,
+    required CategoriesController categoriesController,
+    CategoryModel? categoryModel,
+    bool isEditing = false,
     Key? key,
-  }) : super(key: key);
+  })  : _categoriesController = categoriesController,
+        _categoryModel = categoryModel,
+        _isEditing = isEditing,
+        super(key: key);
 
   static const router = '/categories/register';
 
-  final CategoryModel? categoryModel;
-  final bool isEditing;
+  final CategoriesController _categoriesController;
+  final CategoryModel? _categoryModel;
+  final bool _isEditing;
 
   @override
   State<CategoriesRegisterPage> createState() => _CategoriesRegisterPageState();
@@ -49,29 +55,37 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
   void initState() {
     super.initState();
     categoriesTextController =
-        TextEditingController(text: widget.categoryModel?.description);
+        TextEditingController(text: widget._categoryModel?.description);
 
     _icon = ValueNotifier<IconData>(
       IconData(
-        widget.categoryModel?.iconCode ?? Constants.defaultIconCode,
+        widget._categoryModel?.iconCode ?? Constants.defaultIconCode,
         fontFamily: 'MaterialIcons',
       ),
     );
 
     _color = ValueNotifier<Color>(
-      Color(widget.categoryModel?.colorCode ?? Constants.defaultColorCode),
+      Color(widget._categoryModel?.colorCode ?? Constants.defaultColorCode),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final categoriesController = context.watch<CategoriesControllerImpl>();
+    final categoriesControllerState =
+        context.select<CategoriesControllerImpl, categoriesState>(
+      (categoriesController) => categoriesController.state,
+    );
+
+    final categoriesControllerDeleteState =
+        context.select<CategoriesControllerImpl, categoriesDeleteState>(
+      (categoriesController) => categoriesController.stateDelete,
+    );
 
     return SafeArea(
       child: ScaffoldMessenger(
         key: _scaffoldMessagedKey,
         child: IgnorePointer(
-          ignoring: categoriesController.state == categoriesState.loading,
+          ignoring: categoriesControllerState == categoriesState.loading,
           child: Scaffold(
             appBar: AppBar(
               title: const Text('Categoria'),
@@ -81,7 +95,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                 onPressed: () => Navigator.of(context).pop(_edited),
               ),
               actions: [
-                _buildDeleteButton(context, categoriesController),
+                _buildDeleteButton(context, categoriesControllerDeleteState),
               ],
             ),
             body: Padding(
@@ -111,9 +125,8 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                         height: 40.h,
                       ),
                       _buildSaveButton(
-                        categoriesController,
-                        categoriesController.state,
                         context,
+                        categoriesControllerState,
                       )
                     ],
                   ),
@@ -127,15 +140,15 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
   }
 
   Visibility _buildDeleteButton(
-    BuildContext registerPageContext,
-    CategoriesControllerImpl categoriesController,
+    BuildContext context,
+    categoriesDeleteState stateDelete,
   ) {
     return Visibility(
-      visible: widget.isEditing,
+      visible: widget._isEditing,
       child: IconButton(
         onPressed: () async {
           await showDialog<void>(
-            context: registerPageContext,
+            context: context,
             barrierDismissible: false,
             builder: (dialogContext) {
               return AlertDialog(
@@ -144,14 +157,17 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                 ),
                 title: const Text('Deletar categoria'),
                 content: Text(
-                  'Deseja deletar a categoria ${widget.categoryModel?.description}?',
+                  'Deseja deletar a categoria ${widget._categoryModel?.description}?',
                 ),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(dialogContext).pop();
                     },
-                    child: const Text('Cancelar', style: TextStyle(color: Colors.black)),
+                    child: const Text(
+                      'Cancelar',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
                   TextButton(
                     key: const Key(
@@ -162,8 +178,8 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                       try {
                         _edited = true;
 
-                        await categoriesController
-                            .deleteCategory(widget.categoryModel?.id ?? 0);
+                        await widget._categoriesController
+                            .deleteCategory(widget._categoryModel?.id ?? 0);
 
                         if (!mounted) {
                           return;
@@ -173,8 +189,8 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                           Navigator.of(dialogContext).pop(_edited);
                         }
 
-                        if (Navigator.of(registerPageContext).canPop()) {
-                          Navigator.of(registerPageContext).pop(_edited);
+                        if (Navigator.of(context).canPop()) {
+                          Navigator.of(context).pop(_edited);
                         }
                       } on Failure {
                         final snackBar = OndeGasteiSnackBar.buildSnackBar(
@@ -191,8 +207,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                             .showSnackBar(snackBar);
                       }
                     },
-                    child: categoriesController.stateDelete ==
-                            categoriesDeleteState.loading
+                    child: stateDelete == categoriesDeleteState.loading
                         ? SizedBox(
                             height: 15.h,
                             width: 15.w,
@@ -222,16 +237,16 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
   }
 
   OndeGasteiButton _buildSaveButton(
-    CategoriesControllerImpl categoriesController,
-    categoriesState state,
     BuildContext context,
+    categoriesState state,
   ) {
     return OndeGasteiButton(
       Text(
         'Salvar',
         style: TextStyle(color: Colors.white, fontSize: 17.sp),
       ),
-      key: const Key('button_save_register_categories_page'),
+      key: const Key('save_button_register_categories_page'),
+      width: MediaQuery.of(context).size.width * 0.9,
       isLoading: state == categoriesState.loading,
       onPressed: () async {
         final formValid = _formKey.currentState?.validate() ?? false;
@@ -244,7 +259,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
           String message;
 
           try {
-            if (!widget.isEditing) {
+            if (!widget._isEditing) {
               final categoryModel = CategoryModel(
                 description: categoriesTextController.text,
                 iconCode: _icon.value.codePoint,
@@ -252,20 +267,20 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                 userId: userModel?.userId,
               );
 
-              await categoriesController.register(categoryModel);
+              await widget._categoriesController.register(categoryModel);
               message = 'Categoria criada com sucesso!';
 
               _resetFields();
             } else {
               final categoryInputModel = CategoryInputModel(
-                id: widget.categoryModel!.id,
+                id: widget._categoryModel!.id,
                 description: categoriesTextController.text,
                 iconCode: _icon.value.codePoint,
                 colorCode: _color.value.value,
               );
 
-              await categoriesController.updateCategory(
-                widget.categoryModel?.id ?? 0,
+              await widget._categoriesController.updateCategory(
+                widget._categoryModel?.id ?? 0,
                 categoryInputModel,
               );
               message = 'Categoria atualizada com sucesso!';
@@ -289,7 +304,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
               key: const Key(
                 'snack_bar_error_key_register_update_categories_page',
               ),
-              content: widget.isEditing
+              content: widget._isEditing
                   ? const Text('Erro ao atualizar categoria!')
                   : const Text('Erro ao criar categoria!'),
               backgroundColor: Colors.red,

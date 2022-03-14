@@ -77,11 +77,14 @@ Widget createExpensesRegisterPage() {
           ExpensesRegisterPage.router: (context) {
             if (isEditing) {
               return ExpensesRegisterPage(
+                expensesController: mockExpensesControllerImpl,
                 expenseModel: expenseModel,
                 isEditing: isEditing,
               );
             }
-            return const ExpensesRegisterPage();
+            return ExpensesRegisterPage(
+              expensesController: mockExpensesControllerImpl,
+            );
           }
         },
       ),
@@ -100,6 +103,9 @@ void main() {
     testWidgets('Test if register expense page shows up', (tester) async {
       when(() => mockExpensesControllerImpl.state)
           .thenReturn(expensesState.idle);
+
+      when(() => mockExpensesControllerImpl.deleteState)
+          .thenReturn(expensesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
@@ -154,6 +160,9 @@ void main() {
       when(() => mockExpensesControllerImpl.state)
           .thenReturn(expensesState.idle);
 
+      when(() => mockExpensesControllerImpl.deleteState)
+          .thenReturn(expensesDeleteState.idle);
+
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
 
@@ -193,6 +202,9 @@ void main() {
       when(() => mockExpensesControllerImpl.state)
           .thenReturn(expensesState.idle);
 
+      when(() => mockExpensesControllerImpl.deleteState)
+          .thenReturn(expensesDeleteState.idle);
+
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
 
@@ -229,6 +241,9 @@ void main() {
     testWidgets('Should register expenses with success', (tester) async {
       when(() => mockExpensesControllerImpl.state)
           .thenReturn(expensesState.idle);
+
+      when(() => mockExpensesControllerImpl.deleteState)
+          .thenReturn(expensesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
@@ -292,6 +307,9 @@ void main() {
       when(() => mockExpensesControllerImpl.state)
           .thenReturn(expensesState.idle);
 
+      when(() => mockExpensesControllerImpl.deleteState)
+          .thenReturn(expensesDeleteState.idle);
+
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
 
@@ -349,6 +367,9 @@ void main() {
       when(() => mockExpensesControllerImpl.state)
           .thenReturn(expensesState.idle);
 
+      when(() => mockExpensesControllerImpl.deleteState)
+          .thenReturn(expensesDeleteState.idle);
+
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
 
@@ -387,6 +408,9 @@ void main() {
       when(() => mockExpensesControllerImpl.state)
           .thenReturn(expensesState.idle);
 
+      when(() => mockExpensesControllerImpl.deleteState)
+          .thenReturn(expensesDeleteState.idle);
+
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
 
@@ -420,44 +444,44 @@ void main() {
       expect(find.text('Erro ao atualizar despesa!'), findsOneWidget);
     });
 
-    testWidgets('Should delete expense with success', (tester) async {
-      isEditing = true;
+    // testWidgets('Should delete expense with success', (tester) async {
+    //   isEditing = true;
 
-      when(() => mockExpensesControllerImpl.state)
-          .thenReturn(expensesState.idle);
+    //   when(() => mockExpensesControllerImpl.state)
+    //       .thenReturn(expensesState.idle);
 
-      when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(expensesDeleteState.idle);
+    //   when(() => mockExpensesControllerImpl.deleteState)
+    //       .thenReturn(expensesDeleteState.idle);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+    //   when(() => mockCategoriesControllerImpl.categoriesList)
+    //       .thenReturn(mockCategoriesList);
 
-      when(
-        () => mockExpensesControllerImpl.delete(
-          expenseId: any(named: 'expenseId'),
-        ),
-      ).thenAnswer((_) async => _);
+    //   when(
+    //     () => mockExpensesControllerImpl.delete(
+    //       expenseId: any(named: 'expenseId'),
+    //     ),
+    //   ).thenAnswer((_) async => _);
 
-      await tester.pumpWidget(createExpensesRegisterPage());
+    //   await tester.pumpWidget(createExpensesRegisterPage());
 
-      final deleteIcon = find.byKey(
-        const Key('icon_delete_key_register_expenses_page'),
-      );
+    //   final deleteIcon = find.byKey(
+    //     const Key('icon_delete_key_register_expenses_page'),
+    //   );
 
-      final deleteButtonDialog = find.byKey(
-        const Key('delete_button_dialog_register_expenses_page'),
-      );
+    //   final deleteButtonDialog = find.byKey(
+    //     const Key('delete_button_dialog_register_expenses_page'),
+    //   );
 
-      await tester.tap(deleteIcon);
-      await tester.pumpAndSettle();
+    //   await tester.tap(deleteIcon);
+    //   await tester.pumpAndSettle();
 
-      await tester.tap(deleteButtonDialog);
-      await tester.pumpAndSettle();
+    //   await tester.tap(deleteButtonDialog);
+    //   await tester.pumpAndSettle();
 
-      expect(deleteButtonDialog, findsNothing);
-      expect(find.byType(AlertDialog), findsNothing);
-      expect(find.byWidget(createExpensesRegisterPage()), findsNothing);
-    });
+    //   expect(deleteButtonDialog, findsNothing);
+    //   expect(find.byType(AlertDialog), findsNothing);
+    //   expect(find.byWidget(createExpensesRegisterPage()), findsNothing);
+    // });
 
     testWidgets('Should delete expense with success', (tester) async {
       isEditing = true;

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
@@ -27,24 +25,6 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
   final Log _log;
   final LocalStorage _localStorage;
   authState state = authState.idle;
-
-  @override
-  Future<UserModel?> getUser() async {
-    try {
-      UserModel? user;
-
-      final localUser = await _localStorage.read<String>('user');
-
-      if (localUser != null && localUser.isNotEmpty) {
-        user = UserModel.fromMap(jsonDecode(localUser) as Map<String, dynamic>);
-      }
-
-      return user;
-    } on Exception catch (e, s) {
-      _log.error('Erro ao buscar dados do usuario', e, s);
-      throw Failure(message: 'Erro ao buscar dados do usuario');
-    }
-  }
 
   @override
   Future<void> register(String name, String email, String password) async {

@@ -4,6 +4,7 @@ import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_register_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
     final categoriesController = context.read<CategoriesControllerImpl>();
+    final expensesController = context.read<ExpensesControllerImpl>();
+    final homeController = context.read<HomeControllerImpl>();
 
     return SafeArea(
       child: Scaffold(
@@ -82,20 +85,22 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
                     if (edited != null) {
                       if (edited == true) {
-                        await categoriesController
-                            .findCategories(userModel!.userId);
+                        final futures = [
+                          categoriesController
+                              .findCategories(userModel!.userId),
+                          expensesController.findExpensesByPeriod(
+                            dateFilter!.initialDate,
+                            dateFilter!.finalDate,
+                            userModel!.userId,
+                          ),
+                          homeController.fetchHomeData(
+                            userId: userModel!.userId,
+                            initialDate: dateFilter!.initialDate,
+                            finalDate: dateFilter!.finalDate,
+                          )
+                        ];
 
-                        if (!mounted) {
-                          return;
-                        }
-
-                        await context
-                            .read<ExpensesControllerImpl>()
-                            .findExpensesByPeriod(
-                              dateFilter!.initialDate,
-                              dateFilter!.finalDate,
-                              userModel!.userId,
-                            );
+                        await Future.wait(futures);
                       }
                     }
                   },

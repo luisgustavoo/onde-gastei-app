@@ -33,49 +33,6 @@ void main() {
     );
   });
 
-  group('Group test getUser', () {
-    test('Should user is logged', () async {
-      // Arrange
-      const localUser = '''
-        {
-            "id_usuario": 1,
-            "nome": "test",
-            "email": "test"
-        }
-      ''';
-      when(() => localStorage.read<String>('user'))
-          .thenAnswer((_) async => localUser);
-      //Act
-      final user = await controller.getUser();
-
-      //Assert
-      expect(user, isNotNull);
-      verify(() => localStorage.read<String>('user')).called(1);
-    });
-
-    test('Should user is not logged', () async {
-      // Arrange
-      when(() => localStorage.read<String>('user'))
-          .thenAnswer((_) async => null);
-      //Act
-      final user = await controller.getUser();
-
-      //Assert
-      expect(user, isNull);
-      verify(() => localStorage.read<String>('user')).called(1);
-    });
-
-    test('Should throws exception', () async {
-      // Arrange
-      when(() => localStorage.read<String>('user')).thenThrow(Exception());
-      //Act
-      final call = controller.getUser;
-
-      //Assert
-      expect(call(), throwsA(isA<Failure>()));
-    });
-  });
-
   group('Group test register', () {
     test('Should register user with success', () async {
       // Arrange
@@ -144,12 +101,17 @@ void main() {
       // Arrange
       const email = 'Test';
       const password = 'password';
+      final userExpected =
+          UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
+
       when(() => service.login(any(), any())).thenAnswer((_) async => _);
+      when(() => service.fetchUserData()).thenAnswer((_) async => userExpected);
       //Act
       await controller.login(email, password);
 
       //Assert
       verify(() => service.login(any(), any())).called(1);
+      verify(() => service.fetchUserData()).called(1);
     });
 
     test('Should throws UserNotFoundException', () async {

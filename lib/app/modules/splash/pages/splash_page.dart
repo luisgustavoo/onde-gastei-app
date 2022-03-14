@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/core/ui/logo.dart';
-import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
+import 'package:onde_gastei_app/app/modules/splash/controllers/splash_controller.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({required this.authController, Key? key}) : super(key: key);
+  const SplashPage({required this.splashController, Key? key})
+      : super(key: key);
 
   static const router = '/splash';
 
-  final AuthController authController;
+  final SplashController splashController;
 
   @override
   State<SplashPage> createState() => SplashPageState();
@@ -21,18 +22,15 @@ class SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
 
-    Future.microtask(() async {
-      userModel = await widget.authController.getUser();
-
-      if (!mounted) {
-        return;
-      }
-
-      if (userModel != null) {
-        await Navigator.of(context).pushReplacementNamed(AppPage.router);
-      } else {
-        await Navigator.of(context).pushReplacementNamed(LoginPage.router);
-      }
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      widget.splashController.getUser().then((user) {
+        if (user != null) {
+          userModel = user;
+          Navigator.of(context).pushReplacementNamed(AppPage.router);
+        } else {
+          Navigator.of(context).pushReplacementNamed(LoginPage.router);
+        }
+      });
     });
   }
 

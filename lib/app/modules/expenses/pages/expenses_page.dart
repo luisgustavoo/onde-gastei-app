@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/widgets/expenses_list_tile.dart';
+import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
+import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
-class ExpensesPage extends StatelessWidget {
-  const ExpensesPage({ Key? key}) : super(key: key);
+class ExpensesPage extends StatefulWidget {
+  const ExpensesPage({Key? key}) : super(key: key);
 
-  static const router = 'expenses';
+  static const router = '/expenses';
 
   @override
+  State<ExpensesPage> createState() => _ExpensesPageState();
+}
+
+class _ExpensesPageState extends State<ExpensesPage> {
+  @override
   Widget build(BuildContext context) {
-    // final expensesList =
-    //     context.select<ExpensesControllerImpl, List<ExpenseModel>>(
-    //   (expensesController) => expensesController.expensesList,
-    // );
+    final expensesController = context.read<ExpensesControllerImpl>();
+    final homeController = context.read<HomeControllerImpl>();
 
     return SafeArea(
       child: Scaffold(
@@ -25,9 +32,7 @@ class ExpensesPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: OndeGasteiTextForm(
               onChanged: (description) {
-                context
-                    .read<ExpensesControllerImpl>()
-                    .filterExpensesList(description);
+                expensesController.filterExpensesList(description);
               },
               label: 'Pesquisar',
               prefixIcon: const Icon(Icons.search),
@@ -49,33 +54,25 @@ class ExpensesPage extends StatelessWidget {
                       itemBuilder: (context) => [
                         PopupMenuItem<String>(
                           onTap: () {
-                            context
-                                .read<ExpensesControllerImpl>()
-                                .orderByExpensesList(1);
+                            expensesController.orderByExpensesList(1);
                           },
                           child: const Text('Maior data'),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            context
-                                .read<ExpensesControllerImpl>()
-                                .orderByExpensesList(2);
+                            expensesController.orderByExpensesList(2);
                           },
                           child: const Text('Menor data'),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            context
-                                .read<ExpensesControllerImpl>()
-                                .orderByExpensesList(3);
+                            expensesController.orderByExpensesList(3);
                           },
                           child: const Text('Maior valor'),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            context
-                                .read<ExpensesControllerImpl>()
-                                .orderByExpensesList(4);
+                            expensesController.orderByExpensesList(4);
                           },
                           child: const Text('Menor valor'),
                         ),
@@ -107,15 +104,39 @@ class ExpensesPage extends StatelessWidget {
                   return ListView.builder(
                     key: const Key('expenses_list_key_expenses_page'),
                     physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
+                    itemBuilder: (_, index) {
                       final expense = expensesController.expensesList[index];
 
                       return ExpensesListTile(
+                        onTap: () async {
+                          final edited = await Navigator.of(context).pushNamed(
+                            ExpensesRegisterPage.router,
+                            arguments: expense,
+                          ) as bool?;
+
+                          if (edited != null) {
+                            if (edited) {
+                              final futures = [
+                                expensesController.findExpensesByPeriod(
+                                  dateFilter!.initialDate,
+                                  dateFilter!.finalDate,
+                                  userModel!.userId,
+                                ),
+                                homeController.fetchHomeData(
+                                  userId: userModel!.userId,
+                                  initialDate: dateFilter!.initialDate,
+                                  finalDate: dateFilter!.finalDate,
+                                ),
+                              ];
+
+                              await Future.wait(futures);
+                            }
+                          }
+                        },
                         key: Key(
                           'expenses_list_tile_key_${index}_expenses_page',
                         ),
                         expenseModel: expense,
-                        expensesController: expensesController,
                         isFirst: index == 0,
                         isLast:
                             index == expensesController.expensesList.length - 1,

@@ -5,8 +5,8 @@ import 'package:onde_gastei_app/app/core/ui/extensions/theme_extension.dart';
 class OndeGasteiButton extends StatelessWidget {
   OndeGasteiButton(
     Widget child, {
-    double width = 300,
     double height = 60,
+    double? width = 300,
     double borderRadius = 20,
     Color? color,
     VoidCallback? onPressed,
@@ -23,7 +23,7 @@ class OndeGasteiButton extends StatelessWidget {
 
   final Widget _child;
   final double _height;
-  final double _width;
+  final double? _width;
   final double _borderRadius;
   final Color? _color;
   final VoidCallback? _onPressed;
@@ -37,7 +37,7 @@ class OndeGasteiButton extends StatelessWidget {
         return ElevatedButton(
           style: ButtonStyle(
             fixedSize: MaterialStateProperty.all<Size>(
-              Size(_width.w, _height.h),
+              Size(_width!.w, _height.h),
             ),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(

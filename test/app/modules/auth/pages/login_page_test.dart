@@ -34,7 +34,9 @@ Widget createLoginPagePage() {
         navigatorObservers: [mockNavigatorObserver],
         routes: {
           LoginPage.router: (context) {
-            return const LoginPage();
+            return LoginPage(
+              authController: mockAuthControllerImpl,
+            );
           },
           AppPage.router: (context) => Container(),
         },
@@ -50,7 +52,7 @@ void main() {
     registerFallbackValue(MockRoute());
   });
 
-  group('Group test login pate', () {
+  group('Group test login page', () {
     testWidgets('Test if login page shows up', (tester) async {
       when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
 

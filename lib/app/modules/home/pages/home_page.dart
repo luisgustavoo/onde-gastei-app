@@ -1,15 +1,13 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:onde_gastei_app/app/app.dart';
+import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/widgets/indicador.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
-
-import 'package:fl_chart/fl_chart.dart';
-
-import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,8 +21,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    // final homeController = context.watch<HomeControllerImpl>();
-
     return SafeArea(
       child: Scaffold(
         body: Consumer<HomeControllerImpl>(
@@ -81,8 +77,8 @@ class _HomePageState extends State<HomePage> {
                           children: homeController.totalExpensesCategoriesList
                               .map((e) {
                             return SizedBox(
-                              width: 70
-                                  .w, //MediaQuery.of(context).size.width * 0.25,
+                              width: 70.w,
+                              //MediaQuery.of(context).size.width * 0.25,
                               child: Column(
                                 children: [
                                   CircleAvatar(
@@ -106,8 +102,9 @@ class _HomePageState extends State<HomePage> {
                                         decimalDigits: 2,
                                       ).format(e.totalValue),
                                       style: TextStyle(
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   )
@@ -132,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                               sections: homeController.percentageCategoriesList
                                   .map(
                                     (e) => PieChartSectionData(
-                                      radius: 65,
+                                      radius: 65.r,
                                       color: Color(e.category.colorCode),
                                       value: e.percentage,
                                       title:
@@ -150,10 +147,12 @@ class _HomePageState extends State<HomePage> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
+                              Text(
                                 'Período',
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               Text(
                                 DateFormat.yMd('pt_BR').format(
@@ -171,15 +170,16 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Column(
-                      mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: homeController.percentageCategoriesList
-                          .map((e) => Indicator(
-                                color: Color(e.category.colorCode),
-                                text: e.category.description,
-                                isSquare: true,
-                              ))
+                          .map(
+                            (e) => Indicator(
+                              color: Color(e.category.colorCode),
+                              text: e.category.description,
+                              isSquare: true,
+                            ),
+                          )
                           .toList(),
                     )
                   ],
@@ -223,7 +223,57 @@ class _BuildAppBarHomePage extends StatelessWidget {
             const Spacer(),
             IconButton(
               splashRadius: 25.r,
-              onPressed: () {},
+              onPressed: () {
+                showModalBottomSheet<void>(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  context: context,
+                  builder: (_) {
+                    return SizedBox(
+                      height: 200,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(),
+                                  ),
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
+                                  Expanded(
+                                    child: TextFormField(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            OndeGasteiButton(
+                              const Text('Aplicar'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
               icon: const Icon(
                 Icons.date_range,
                 size: 22,

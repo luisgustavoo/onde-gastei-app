@@ -40,7 +40,7 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
         finalDate,
       );
 
-      totalExpenses = getTotalExpenses();
+      getTotalExpenses();
 
       state = homeState.success;
       notifyListeners();
@@ -53,6 +53,8 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
   }
 
   double getTotalExpenses() {
+    totalExpenses = 0;
+
     totalExpensesCategoriesList.fold<double>(
       0,
       (previousValue, expensesCategories) =>
