@@ -57,10 +57,6 @@ class _AppPageState extends State<AppPage> {
     super.initState();
 
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      // TODO(buscardadosiniciaisdoapp):  CARREGAR OS DADOS DAS TELAS HOME, EXPENSES, CATEGORIES E PERFIL
-
-      // userModel = await widget.appController.fetchUserData();
-
       if (userModel != null) {
         final futures = [
           widget.appController.findCategories(userModel!.userId),
@@ -77,7 +73,6 @@ class _AppPageState extends State<AppPage> {
         ];
 
         await Future.wait(futures);
-
       }
     });
   }
@@ -86,44 +81,94 @@ class _AppPageState extends State<AppPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Consumer<AppController>(
-        builder: (_, appController, __) => IndexedStack(
-          index: appController.tabIndex,
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 600),
+        transitionBuilder: (child, animation) {
+          return ScaleTransition(scale: animation, child: child);
+        },
+        child: IndexedStack(
+          key: ValueKey<int>(currentIndex),
+          index: currentIndex,
           children: pages,
         ),
+
+        // Consumer<AppController>(
+        //   key: ValueKey<int>(currentIndex),
+        //   builder: (_, appController, __) {
+        //     return IndexedStack(
+        //       index: appController.tabIndex,
+        //       children: pages,
+        //     );
+        //   },
+        // ),
       ),
-      bottomNavigationBar: Consumer<AppController>(
-        builder: (context, appController, _) {
-          return BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            elevation: 0,
-            currentIndex: appController.tabIndex,
-            onTap: (currentIndex) {
-              widget.appController.tabIndex = currentIndex;
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home_outlined,
-                ),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list_alt_outlined),
-                label: 'Extrato',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.category_outlined),
-                label: 'Categorias',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
-                label: 'Perfil',
-              ),
-            ],
-          );
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        elevation: 0,
+        currentIndex: currentIndex,
+        onTap: (index) async {
+          setState(() {
+            currentIndex = index;
+          });
+          // widget.appController.tabIndex = index;
         },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home_outlined,
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list_alt_outlined),
+            label: 'Extrato',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.category_outlined),
+            label: 'Categorias',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: 'Perfil',
+          ),
+        ],
       ),
+
+      // Consumer<AppController>(
+      //   builder: (context, appController, _) {
+      //     return BottomNavigationBar(
+      //       type: BottomNavigationBarType.fixed,
+      //       elevation: 0,
+      //       currentIndex: appController.tabIndex,
+      //       onTap: (index) async {
+      //         setState(() {
+      //           currentIndex = index;
+      //         });
+      //         // widget.appController.tabIndex = index;
+      //       },
+      //       items: const [
+      //         BottomNavigationBarItem(
+      //           icon: Icon(
+      //             Icons.home_outlined,
+      //           ),
+      //           label: 'Home',
+      //         ),
+      //         BottomNavigationBarItem(
+      //           icon: Icon(Icons.list_alt_outlined),
+      //           label: 'Extrato',
+      //         ),
+      //         BottomNavigationBarItem(
+      //           icon: Icon(Icons.category_outlined),
+      //           label: 'Categorias',
+      //         ),
+      //         BottomNavigationBarItem(
+      //           icon: Icon(Icons.person_outline),
+      //           label: 'Perfil',
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final edited = await Navigator.of(context)
