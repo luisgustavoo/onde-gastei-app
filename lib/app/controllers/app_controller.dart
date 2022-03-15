@@ -45,5 +45,8 @@ class AppController extends ChangeNotifier {
     int userId,
   ) =>
       expensesController.findExpensesByPeriod(
-          userId: userId, initialDate: initialDate, finalDate: finalDate);
+        userId: userId,
+        initialDate: initialDate,
+        finalDate: finalDate,
+      );
 }

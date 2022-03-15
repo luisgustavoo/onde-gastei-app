@@ -37,7 +37,9 @@ class SplashPageState extends State<SplashPage> {
       widget.splashController.getUser().then((user) {
         if (user != null) {
           userModel = user;
-          Navigator.of(context).pushReplacementNamed(AppPage.router);
+          Navigator.of(context).pushReplacementNamed(
+            AppPage.router,
+          );
         } else {
           Navigator.of(context).pushReplacementNamed(LoginPage.router);
         }

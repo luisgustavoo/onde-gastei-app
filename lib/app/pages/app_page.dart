@@ -5,7 +5,6 @@ import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dar
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
 import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
-import 'package:provider/provider.dart';
 
 class AppPage extends StatefulWidget {
   const AppPage({
@@ -22,35 +21,6 @@ class AppPage extends StatefulWidget {
 
 class _AppPageState extends State<AppPage> {
   int currentIndex = 0;
-
-  final pages = <Widget>[
-    const HomePage(),
-    const ExpensesPage(),
-    const CategoriesPage(),
-    // Container(
-    //   color: Colors.yellow,
-    //   child: Center(
-    //     child: TextButton(
-    //       onPressed: () async {
-    //         // TODO(logout): Apenas para teste retirar depois
-
-    //         final authController = context.read<AuthControllerImpl>();
-    //         await authController.logout();
-
-    //         if (!mounted) {
-    //           return;
-    //         }
-
-    //         await Navigator.of(context).pushNamedAndRemoveUntil(
-    //           SplashPage.router,
-    //           (route) => false,
-    //         );
-    //       },
-    //       child: const Text('Logout'),
-    //     ),
-    //   ),
-    // ),
-  ];
 
   @override
   void initState() {
@@ -89,7 +59,11 @@ class _AppPageState extends State<AppPage> {
         child: IndexedStack(
           key: ValueKey<int>(currentIndex),
           index: currentIndex,
-          children: pages,
+          children: const [
+            HomePage(),
+            ExpensesPage(),
+            CategoriesPage(),
+          ],
         ),
 
         // Consumer<AppController>(
@@ -172,7 +146,7 @@ class _AppPageState extends State<AppPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final edited = await Navigator.of(context)
-              .pushNamed(ExpensesRegisterPage.router) as bool?;
+              .pushNamed<bool?>(ExpensesRegisterPage.router);
           if (edited != null) {
             if (edited) {
               final futures = [

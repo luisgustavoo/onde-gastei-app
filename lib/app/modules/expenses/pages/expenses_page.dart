@@ -6,7 +6,6 @@ import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_contro
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/widgets/expenses_list_tile.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
-import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
 class ExpensesPage extends StatefulWidget {
@@ -109,10 +108,11 @@ class _ExpensesPageState extends State<ExpensesPage> {
 
                       return ExpensesListTile(
                         onTap: () async {
-                          final edited = await Navigator.of(context).pushNamed(
+                          final edited =
+                              await Navigator.of(context).pushNamed<bool?>(
                             ExpensesRegisterPage.router,
                             arguments: expense,
-                          ) as bool?;
+                          );
 
                           if (edited != null) {
                             if (edited) {

@@ -8,14 +8,12 @@ import 'package:onde_gastei_app/app/core/helpers/input_formatter/date_input_form
 import 'package:onde_gastei_app/app/core/helpers/validators/validators.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
+import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
+import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/widgets/indicador.dart';
-import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
-
-import '../../expenses/controllers/expenses_controller.dart';
-import '../../expenses/controllers/expenses_controller_impl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -38,6 +36,13 @@ class _HomePageState extends State<HomePage> {
       dateFilter!.finalDate,
     ),
   );
+
+  @override
+  void dispose() {
+    super.dispose();
+    initialDateController.dispose();
+    finalDateController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
