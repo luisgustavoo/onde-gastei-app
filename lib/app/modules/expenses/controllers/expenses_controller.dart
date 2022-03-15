@@ -20,5 +20,9 @@ abstract class ExpensesController {
 
   Future<void> delete({required int expenseId});
 
-  Future<void> findExpensesByPeriod(DateTime initialDate, DateTime finalDate, int userId);
+  Future<void> findExpensesByPeriod({
+    required int userId,
+    required DateTime initialDate,
+    required DateTime finalDate,
+  });
 }

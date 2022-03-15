@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/controllers/app_controller.dart';
-import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
 import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:provider/provider.dart';
-
-DateFilter? dateFilter;
 
 class AppPage extends StatefulWidget {
   const AppPage({
@@ -25,14 +22,6 @@ class AppPage extends StatefulWidget {
 
 class _AppPageState extends State<AppPage> {
   int currentIndex = 0;
-
-  // final initialDate = DateTime(DateTime.now().year, DateTime.now().month);
-  // TODO(datefilter): Retirar depois, apenas para teste
-  final initialDate = DateTime(DateTime.now().year, DateTime.now().month - 2);
-  final finalDate = DateTime(
-    DateTime.now().year,
-    DateTime.now().month + 1,
-  ).subtract(const Duration(days: 1));
 
   final pages = <Widget>[
     const HomePage(),
@@ -72,8 +61,6 @@ class _AppPageState extends State<AppPage> {
 
       // userModel = await widget.appController.fetchUserData();
 
-      dateFilter = DateFilter(initialDate: initialDate, finalDate: finalDate);
-
       if (userModel != null) {
         final futures = [
           widget.appController.findCategories(userModel!.userId),
@@ -84,26 +71,13 @@ class _AppPageState extends State<AppPage> {
           ),
           widget.appController.fetchHomeData(
             userId: userModel!.userId,
-            initialDate: initialDate,
-            finalDate: finalDate,
+            initialDate: dateFilter!.initialDate,
+            finalDate: dateFilter!.finalDate,
           ),
         ];
 
         await Future.wait(futures);
 
-        // await widget.appController.findCategories(userModel!.userId);
-
-        // await widget.appController.findExpenses(
-        //   dateFilter!.initialDate,
-        //   dateFilter!.finalDate,
-        //   userModel!.userId,
-        // );
-
-        // await widget.appController.fetchHomeData(
-        //   userId: userModel!.userId,
-        //   initialDate: initialDate,
-        //   finalDate: finalDate,
-        // );
       }
     });
   }
@@ -155,20 +129,20 @@ class _AppPageState extends State<AppPage> {
           final edited = await Navigator.of(context)
               .pushNamed(ExpensesRegisterPage.router) as bool?;
           if (edited != null) {
-            final futures = [
-              widget.appController.findExpenses(
-                dateFilter!.initialDate,
-                dateFilter!.finalDate,
-                userModel!.userId,
-              ),
-              widget.appController.fetchHomeData(
-                userId: userModel!.userId,
-                initialDate: dateFilter!.initialDate,
-                finalDate: dateFilter!.finalDate,
-              ),
-            ];
-
             if (edited) {
+              final futures = [
+                widget.appController.findExpenses(
+                  dateFilter!.initialDate,
+                  dateFilter!.finalDate,
+                  userModel!.userId,
+                ),
+                widget.appController.fetchHomeData(
+                  userId: userModel!.userId,
+                  initialDate: dateFilter!.initialDate,
+                  finalDate: dateFilter!.finalDate,
+                ),
+              ];
+
               await Future.wait(futures);
 
               // await widget.appController.findExpenses(

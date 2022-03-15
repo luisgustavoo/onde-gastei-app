@@ -118,9 +118,9 @@ class _ExpensesPageState extends State<ExpensesPage> {
                             if (edited) {
                               final futures = [
                                 expensesController.findExpensesByPeriod(
-                                  dateFilter!.initialDate,
-                                  dateFilter!.finalDate,
-                                  userModel!.userId,
+                                  userId: userModel!.userId,
+                                  initialDate: dateFilter!.initialDate,
+                                  finalDate: dateFilter!.finalDate,
                                 ),
                                 homeController.fetchHomeData(
                                   userId: userModel!.userId,

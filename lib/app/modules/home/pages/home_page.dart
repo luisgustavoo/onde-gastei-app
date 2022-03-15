@@ -1,13 +1,21 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:onde_gastei_app/app/app.dart';
+import 'package:onde_gastei_app/app/core/helpers/input_formatter/date_input_formatter_ptbr.dart';
+import 'package:onde_gastei_app/app/core/helpers/validators/validators.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
+import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
+import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/widgets/indicador.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
+
+import '../../expenses/controllers/expenses_controller.dart';
+import '../../expenses/controllers/expenses_controller_impl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,8 +27,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  TextEditingController initialDateController = TextEditingController(
+    text: DateFormat.yMd('pt_BR').format(
+      dateFilter!.initialDate,
+    ),
+  );
+
+  TextEditingController finalDateController = TextEditingController(
+    text: DateFormat.yMd('pt_BR').format(
+      dateFilter!.finalDate,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
+    final expensesController = context.read<ExpensesControllerImpl>();
+
     return SafeArea(
       child: Scaffold(
         body: Consumer<HomeControllerImpl>(
@@ -41,7 +63,12 @@ class _HomePageState extends State<HomePage> {
                 right: 16.w,
               ),
               children: [
-                const _BuildAppBarHomePage(),
+                _BuildAppBarHomePage(
+                  initialDateController: initialDateController,
+                  finalDateController: finalDateController,
+                  homeController: homeController,
+                  expensesController: expensesController,
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -195,8 +222,17 @@ class _HomePageState extends State<HomePage> {
 
 class _BuildAppBarHomePage extends StatelessWidget {
   const _BuildAppBarHomePage({
+    required this.initialDateController,
+    required this.finalDateController,
+    required this.homeController,
+    required this.expensesController,
     Key? key,
   }) : super(key: key);
+
+  final TextEditingController initialDateController;
+  final TextEditingController finalDateController;
+  final HomeController homeController;
+  final ExpensesController expensesController;
 
   @override
   Widget build(BuildContext context) {
@@ -247,13 +283,67 @@ class _BuildAppBarHomePage extends StatelessWidget {
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   Expanded(
-                                    child: TextFormField(),
+                                    child: OndeGasteiTextForm(
+                                      onTap: () async {
+                                        final result = await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(2022),
+                                          lastDate: DateTime(2099),
+                                        );
+
+                                        if (result != null) {
+                                          dateFilter!.initialDate = result;
+
+                                          initialDateController.text =
+                                              DateFormat.yMd('pt_BR')
+                                                  .format(result);
+                                        }
+                                      },
+                                      label: 'Data Inicial',
+                                      readOnly: true,
+                                      controller: initialDateController,
+                                      prefixIcon: const Icon(Icons.date_range),
+                                      textInputType: TextInputType.datetime,
+                                      inputFormatters: <TextInputFormatter>[
+                                        LengthLimitingTextInputFormatter(10),
+                                        DateInputFormatterPtbr(),
+                                      ],
+                                      validator: Validators.date(),
+                                    ),
                                   ),
                                   SizedBox(
                                     width: 8.w,
                                   ),
                                   Expanded(
-                                    child: TextFormField(),
+                                    child: OndeGasteiTextForm(
+                                      onTap: () async {
+                                        final result = await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(2022),
+                                          lastDate: DateTime(2099),
+                                        );
+
+                                        if (result != null) {
+                                          dateFilter!.finalDate = result;
+
+                                          finalDateController.text =
+                                              DateFormat.yMd('pt_BR')
+                                                  .format(result);
+                                        }
+                                      },
+                                      label: 'Data Final',
+                                      controller: finalDateController,
+                                      readOnly: true,
+                                      prefixIcon: const Icon(Icons.date_range),
+                                      textInputType: TextInputType.datetime,
+                                      inputFormatters: <TextInputFormatter>[
+                                        LengthLimitingTextInputFormatter(10),
+                                        DateInputFormatterPtbr(),
+                                      ],
+                                      validator: Validators.date(),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -261,11 +351,29 @@ class _BuildAppBarHomePage extends StatelessWidget {
                             const SizedBox(
                               height: 16,
                             ),
-                            OndeGasteiButton(
-                              const Text('Aplicar'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.w),
+                              child: OndeGasteiButton(
+                                const Text('Aplicar'),
+                                width: MediaQuery.of(context).size.width,
+                                onPressed: () async {
+                                  Navigator.of(context).pop();
+                                  final futures = [
+                                    homeController.fetchHomeData(
+                                      userId: userModel!.userId,
+                                      initialDate: dateFilter!.initialDate,
+                                      finalDate: dateFilter!.finalDate,
+                                    ),
+                                    expensesController.findExpensesByPeriod(
+                                      userId: userModel!.userId,
+                                      initialDate: dateFilter!.initialDate,
+                                      finalDate: dateFilter!.finalDate,
+                                    )
+                                  ];
+
+                                  await Future.wait(futures);
+                                },
+                              ),
                             )
                           ],
                         ),

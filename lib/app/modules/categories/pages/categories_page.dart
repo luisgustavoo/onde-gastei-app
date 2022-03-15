@@ -89,9 +89,9 @@ class _CategoriesPageState extends State<CategoriesPage> {
                           categoriesController
                               .findCategories(userModel!.userId),
                           expensesController.findExpensesByPeriod(
-                            dateFilter!.initialDate,
-                            dateFilter!.finalDate,
-                            userModel!.userId,
+                            userId: userModel!.userId,
+                            initialDate: dateFilter!.initialDate,
+                            finalDate: dateFilter!.finalDate,
                           ),
                           homeController.fetchHomeData(
                             userId: userModel!.userId,

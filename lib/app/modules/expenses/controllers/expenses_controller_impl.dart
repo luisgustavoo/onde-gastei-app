@@ -116,11 +116,11 @@ class ExpensesControllerImpl extends ChangeNotifier
   }
 
   @override
-  Future<void> findExpensesByPeriod(
-    DateTime initialDate,
-    DateTime finalDate,
-    int userId,
-  ) async {
+  Future<void> findExpensesByPeriod({
+    required int userId,
+    required DateTime initialDate,
+    required DateTime finalDate,
+  }) async {
     try {
       state = expensesState.loading;
       notifyListeners();

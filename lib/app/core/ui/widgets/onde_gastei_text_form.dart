@@ -13,6 +13,8 @@ class OndeGasteiTextForm extends StatelessWidget {
     this.textAlign = TextAlign.start,
     this.inputFormatters,
     this.onChanged,
+    this.onTap,
+    this.readOnly = false,
     Key? key,
   })  : _obscureTextNotifier = ValueNotifier<bool>(obscureText),
         assert(
@@ -32,6 +34,8 @@ class OndeGasteiTextForm extends StatelessWidget {
   final TextAlign textAlign;
   final List<TextInputFormatter>? inputFormatters;
   final Function(String)? onChanged;
+  final Function()? onTap;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,8 @@ class OndeGasteiTextForm extends StatelessWidget {
           textAlign: textAlign,
           inputFormatters: inputFormatters,
           onChanged: onChanged,
+          onTap: onTap,
+          readOnly: readOnly,
           decoration: InputDecoration(
             hintText: label,
             prefixIcon: prefixIcon,

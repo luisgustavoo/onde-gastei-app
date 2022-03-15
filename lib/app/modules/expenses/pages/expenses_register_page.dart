@@ -86,7 +86,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final expensesControllerstate =
+    final expensesControllerState =
         context.select<ExpensesControllerImpl, expensesState>(
       (expensesController) => expensesController.state,
     );
@@ -116,7 +116,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
           ],
         ),
         body: IgnorePointer(
-          ignoring: expensesControllerstate == expensesState.loading,
+          ignoring: expensesControllerState == expensesState.loading,
           child: ListView(
             padding: EdgeInsets.only(top: 32.h, left: 16.w, right: 16.w),
             physics: const BouncingScrollPhysics(),
@@ -152,22 +152,36 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                       controller: dateController,
                       label: 'Data',
                       prefixIcon: const Icon(Icons.date_range),
-                      suffixIcon: IconButton(
-                        onPressed: () async {
-                          final result = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2022),
-                            lastDate: DateTime(2099),
-                          );
+                      readOnly: true,
+                      onTap: () async {
+                        final result = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2022),
+                          lastDate: DateTime(2099),
+                        );
 
-                          if (result != null) {
-                            dateController.text =
-                                DateFormat.yMd('pt_BR').format(result);
-                          }
-                        },
-                        icon: const Icon(Icons.search_outlined),
-                      ),
+                        if (result != null) {
+                          dateController.text =
+                              DateFormat.yMd('pt_BR').format(result);
+                        }
+                      },
+                      // suffixIcon: IconButton(
+                      //   onPressed: () async {
+                      //     final result = await showDatePicker(
+                      //       context: context,
+                      //       initialDate: DateTime.now(),
+                      //       firstDate: DateTime(2022),
+                      //       lastDate: DateTime(2099),
+                      //     );
+                      //
+                      //     if (result != null) {
+                      //       dateController.text =
+                      //           DateFormat.yMd('pt_BR').format(result);
+                      //     }
+                      //   },
+                      //   icon: const Icon(Icons.search_outlined),
+                      // ),
                       textInputType: TextInputType.datetime,
                       inputFormatters: <TextInputFormatter>[
                         LengthLimitingTextInputFormatter(10),
@@ -314,7 +328,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                         }
                       },
                       isLoading:
-                          expensesControllerstate == expensesState.loading,
+                          expensesControllerState == expensesState.loading,
                       key: const Key(
                         'register_button_key_expenses_register_page',
                       ),
