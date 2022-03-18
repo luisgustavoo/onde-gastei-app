@@ -7,38 +7,38 @@ import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_imp
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
 import 'package:provider/provider.dart';
 
-late AuthControllerImpl mockAuthControllerImpl;
-
 class MockAuthControllerImpl extends Mock implements AuthControllerImpl {}
 
-Widget createRegisterPage() {
-  return ChangeNotifierProvider<AuthControllerImpl>(
-    create: (context) => mockAuthControllerImpl,
-    child: ScreenUtilInit(
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: () => MaterialApp(
-        initialRoute: RegisterPage.router,
-        routes: {
-          RegisterPage.router: (context) {
-            return RegisterPage(
-              authController: mockAuthControllerImpl,
-            );
-          }
-        },
-      ),
-    ),
-  );
-}
-
 void main() {
+  late AuthControllerImpl mockAuthControllerImpl;
+
+  Widget createRegisterPage() {
+    return ChangeNotifierProvider<AuthControllerImpl>(
+      create: (context) => mockAuthControllerImpl,
+      child: ScreenUtilInit(
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: () => MaterialApp(
+          initialRoute: RegisterPage.router,
+          routes: {
+            RegisterPage.router: (context) {
+              return RegisterPage(
+                authController: mockAuthControllerImpl,
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
   setUp(() {
     mockAuthControllerImpl = MockAuthControllerImpl();
   });
 
   group('Group test register page', () {
     testWidgets('Test if register page shows up', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       await tester.pumpWidget(createRegisterPage());
 
@@ -77,7 +77,7 @@ void main() {
     });
 
     testWidgets('Should TextFormFields is empty', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenAnswer((_) async => _);
@@ -112,7 +112,7 @@ void main() {
     });
 
     testWidgets('Should E-mail invalid ', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenAnswer((_) async => _);
@@ -146,7 +146,7 @@ void main() {
 
     testWidgets('Should password must be at least 6 characters long',
         (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenAnswer((_) async => _);
@@ -183,7 +183,7 @@ void main() {
 
     testWidgets('Should password and confirm password are not the same',
         (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenAnswer((_) async => _);
@@ -219,7 +219,7 @@ void main() {
     });
 
     testWidgets('Should register user with success', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenAnswer((_) async => _);
@@ -280,7 +280,7 @@ void main() {
     });
 
     testWidgets('Should trows UserExistsException', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenThrow(UserExistsException());
@@ -324,7 +324,7 @@ void main() {
     });
 
     testWidgets('Should trows generic Exception', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       when(() => mockAuthControllerImpl.register(any(), any(), any()))
           .thenThrow(Exception());

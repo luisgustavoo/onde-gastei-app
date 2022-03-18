@@ -85,13 +85,13 @@ class _ExpensesPageState extends State<ExpensesPage> {
             Expanded(
               child: Consumer<ExpensesControllerImpl>(
                 builder: (context, expensesController, _) {
-                  if (expensesController.state == expensesState.error) {
+                  if (expensesController.state == ExpensesState.error) {
                     return const Center(
                       child: Text('Erro ao buscar despesas'),
                     );
                   }
 
-                  if (expensesController.state == expensesState.loading) {
+                  if (expensesController.state == ExpensesState.loading) {
                     return Center(
                       child: CircularProgressIndicator(
                         color: Theme.of(context).primaryColor,
@@ -108,11 +108,10 @@ class _ExpensesPageState extends State<ExpensesPage> {
 
                       return ExpensesListTile(
                         onTap: () async {
-                          final edited =
-                              await Navigator.of(context).pushNamed<bool?>(
+                          final edited = await Navigator.of(context).pushNamed(
                             ExpensesRegisterPage.router,
                             arguments: expense,
-                          );
+                          ) as bool?;
 
                           if (edited != null) {
                             if (edited) {

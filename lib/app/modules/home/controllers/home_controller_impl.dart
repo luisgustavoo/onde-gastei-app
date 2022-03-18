@@ -5,7 +5,7 @@ import 'package:onde_gastei_app/app/modules/home/services/home_service.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/percentage_categories_view_model.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categories_view_model.dart';
 
-enum homeState { idle, loading, error, success }
+enum HomeState { idle, loading, error, success }
 
 class HomeControllerImpl extends ChangeNotifier implements HomeController {
   HomeControllerImpl({
@@ -18,7 +18,7 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
       <TotalExpensesCategoriesViewModel>[];
   List<PercentageCategoriesViewModel> percentageCategoriesList =
       <PercentageCategoriesViewModel>[];
-  homeState state = homeState.loading;
+  HomeState state = HomeState.loading;
 
   double totalExpenses = 0;
 
@@ -29,7 +29,7 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
     required DateTime finalDate,
   }) async {
     try {
-      state = homeState.loading;
+      state = HomeState.loading;
       notifyListeners();
 
       totalExpensesCategoriesList = await _service
@@ -42,10 +42,10 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
 
       getTotalExpenses();
 
-      state = homeState.success;
+      state = HomeState.success;
       notifyListeners();
     } on Exception {
-      state = homeState.error;
+      state = HomeState.error;
       notifyListeners();
 
       throw Failure(message: 'Erro ao buscar dados da home page');

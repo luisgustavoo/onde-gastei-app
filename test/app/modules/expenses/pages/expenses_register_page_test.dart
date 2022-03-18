@@ -14,10 +14,6 @@ import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_contro
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
 import 'package:provider/provider.dart';
 
-late ExpensesControllerImpl mockExpensesControllerImpl;
-
-late CategoriesControllerImpl mockCategoriesControllerImpl;
-
 class MockCategoriesControllerImpl extends Mock
     implements CategoriesControllerImpl {}
 
@@ -26,86 +22,92 @@ class MockExpensesControllerImpl extends Mock
 
 class MockCategoryModel extends Mock implements CategoryModel {}
 
-bool isEditing = false;
+void main() {
+  late ExpensesControllerImpl mockExpensesControllerImpl;
 
-final mockCategoriesList = List<CategoryModel>.generate(
-  100,
-  (index) => CategoryModel(
-    id: index,
-    description: 'Test $index',
-    iconCode: 58261,
-    colorCode: 4284513675,
-    userId: 1,
-  ),
-);
+  late CategoriesControllerImpl mockCategoriesControllerImpl;
 
-final expenseModel = ExpenseModel(
-  expenseId: 1,
-  description: 'Supermercado BH',
-  value: 1,
-  date: DateTime.now(),
-  category: const CategoryModel(
-    id: 1,
-    description: 'Test 1',
-    iconCode: 58261,
-    colorCode: 4284513675,
-    userId: 1,
-  ),
-  userId: 1,
-);
+  var isEditing = false;
 
-Widget createExpensesRegisterPage() {
-  return MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => mockCategoriesControllerImpl),
-      ChangeNotifierProvider(create: (context) => mockExpensesControllerImpl),
-    ],
-    child: ScreenUtilInit(
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: () => MaterialApp(
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('pt', 'BR'),
-        ],
-        initialRoute: ExpensesRegisterPage.router,
-        routes: {
-          ExpensesRegisterPage.router: (context) {
-            if (isEditing) {
-              return ExpensesRegisterPage(
-                expensesController: mockExpensesControllerImpl,
-                expenseModel: expenseModel,
-                isEditing: isEditing,
-              );
-            }
-            return ExpensesRegisterPage(
-              expensesController: mockExpensesControllerImpl,
-            );
-          }
-        },
-      ),
+  final mockCategoriesList = List<CategoryModel>.generate(
+    100,
+    (index) => CategoryModel(
+      id: index,
+      description: 'Test $index',
+      iconCode: 58261,
+      colorCode: 4284513675,
+      userId: 1,
     ),
   );
-}
 
-void main() {
+  final expenseModel = ExpenseModel(
+    expenseId: 1,
+    description: 'Supermercado BH',
+    value: 1,
+    date: DateTime.now(),
+    category: const CategoryModel(
+      id: 1,
+      description: 'Test 1',
+      iconCode: 58261,
+      colorCode: 4284513675,
+      userId: 1,
+    ),
+    userId: 1,
+  );
+
+  Widget createExpensesRegisterPage() {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => mockCategoriesControllerImpl,
+        ),
+        ChangeNotifierProvider(create: (context) => mockExpensesControllerImpl),
+      ],
+      child: ScreenUtilInit(
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: () => MaterialApp(
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('pt', 'BR'),
+          ],
+          initialRoute: ExpensesRegisterPage.router,
+          routes: {
+            ExpensesRegisterPage.router: (context) {
+              if (isEditing) {
+                return ExpensesRegisterPage(
+                  expensesController: mockExpensesControllerImpl,
+                  expenseModel: expenseModel,
+                  isEditing: isEditing,
+                );
+              }
+              return ExpensesRegisterPage(
+                expensesController: mockExpensesControllerImpl,
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
   setUp(() {
     mockExpensesControllerImpl = MockExpensesControllerImpl();
     mockCategoriesControllerImpl = MockCategoriesControllerImpl();
-    registerFallbackValue(MockCategoryModel());
+    // registerFallbackValue(MockCategoryModel());
   });
 
   group('Group test ExpensesRegisterPage', () {
     testWidgets('Test if register expense page shows up', (tester) async {
       when(() => mockExpensesControllerImpl.state)
-          .thenReturn(expensesState.idle);
+          .thenReturn(ExpensesState.idle);
 
       when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(expensesDeleteState.idle);
+          .thenReturn(ExpensesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
@@ -158,10 +160,10 @@ void main() {
 
     testWidgets('Should TextFormFields is empty', (tester) async {
       when(() => mockExpensesControllerImpl.state)
-          .thenReturn(expensesState.idle);
+          .thenReturn(ExpensesState.idle);
 
       when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(expensesDeleteState.idle);
+          .thenReturn(ExpensesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
@@ -200,10 +202,10 @@ void main() {
 
     testWidgets('Should date e value invalid', (tester) async {
       when(() => mockExpensesControllerImpl.state)
-          .thenReturn(expensesState.idle);
+          .thenReturn(ExpensesState.idle);
 
       when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(expensesDeleteState.idle);
+          .thenReturn(ExpensesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
@@ -240,10 +242,10 @@ void main() {
 
     testWidgets('Should register expenses with success', (tester) async {
       when(() => mockExpensesControllerImpl.state)
-          .thenReturn(expensesState.idle);
+          .thenReturn(ExpensesState.idle);
 
       when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(expensesDeleteState.idle);
+          .thenReturn(ExpensesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
@@ -305,10 +307,10 @@ void main() {
     testWidgets('Should throws exception when register expenses',
         (tester) async {
       when(() => mockExpensesControllerImpl.state)
-          .thenReturn(expensesState.idle);
+          .thenReturn(ExpensesState.idle);
 
       when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(expensesDeleteState.idle);
+          .thenReturn(ExpensesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
@@ -365,10 +367,10 @@ void main() {
     testWidgets('Should update expenses with success', (tester) async {
       isEditing = true;
       when(() => mockExpensesControllerImpl.state)
-          .thenReturn(expensesState.idle);
+          .thenReturn(ExpensesState.idle);
 
       when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(expensesDeleteState.idle);
+          .thenReturn(ExpensesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
@@ -406,10 +408,10 @@ void main() {
     testWidgets('Should throw exception when updating expense', (tester) async {
       isEditing = true;
       when(() => mockExpensesControllerImpl.state)
-          .thenReturn(expensesState.idle);
+          .thenReturn(ExpensesState.idle);
 
       when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(expensesDeleteState.idle);
+          .thenReturn(ExpensesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
@@ -448,10 +450,10 @@ void main() {
     //   isEditing = true;
 
     //   when(() => mockExpensesControllerImpl.state)
-    //       .thenReturn(expensesState.idle);
+    //       .thenReturn(ExpensesState.idle);
 
     //   when(() => mockExpensesControllerImpl.deleteState)
-    //       .thenReturn(expensesDeleteState.idle);
+    //       .thenReturn(ExpensesDeleteState.idle);
 
     //   when(() => mockCategoriesControllerImpl.categoriesList)
     //       .thenReturn(mockCategoriesList);
@@ -487,10 +489,10 @@ void main() {
       isEditing = true;
 
       when(() => mockExpensesControllerImpl.state)
-          .thenReturn(expensesState.idle);
+          .thenReturn(ExpensesState.idle);
 
       when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(expensesDeleteState.idle);
+          .thenReturn(ExpensesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
@@ -526,10 +528,10 @@ void main() {
       isEditing = true;
 
       when(() => mockExpensesControllerImpl.state)
-          .thenReturn(expensesState.idle);
+          .thenReturn(ExpensesState.idle);
 
       when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(expensesDeleteState.idle);
+          .thenReturn(ExpensesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);

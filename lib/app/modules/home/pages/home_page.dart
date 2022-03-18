@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,9 +10,7 @@ import 'package:onde_gastei_app/app/core/helpers/input_formatter/date_input_form
 import 'package:onde_gastei_app/app/core/helpers/validators/validators.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
-import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
-import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/widgets/indicador.dart';
 import 'package:provider/provider.dart';
@@ -25,39 +25,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController initialDateController = TextEditingController(
-    text: DateFormat.yMd('pt_BR').format(
-      dateFilter!.initialDate,
-    ),
-  );
-
-  TextEditingController finalDateController = TextEditingController(
-    text: DateFormat.yMd('pt_BR').format(
-      dateFilter!.finalDate,
-    ),
-  );
-
-  @override
-  void dispose() {
-    super.dispose();
-    initialDateController.dispose();
-    finalDateController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final expensesController = context.read<ExpensesControllerImpl>();
+    final homeController = context.read<HomeControllerImpl>();
 
     return SafeArea(
       child: Scaffold(
+        appBar: _buildAppBar(context, homeController, expensesController),
         body: Consumer<HomeControllerImpl>(
           builder: (_, homeController, __) {
-            if (homeController.state == homeState.loading) {
+            if (homeController.state == HomeState.loading) {
               return Center(
                 child: CircularProgressIndicator(
                   color: Theme.of(context).primaryColor,
                   strokeWidth: 1.w,
                 ),
+              );
+            }
+
+            if (homeController.state == HomeState.error) {
+              return const Center(
+                child: Text('Erro ao buscar dados'),
               );
             }
 
@@ -68,12 +57,12 @@ class _HomePageState extends State<HomePage> {
                 right: 16.w,
               ),
               children: [
-                _BuildAppBarHomePage(
-                  initialDateController: initialDateController,
-                  finalDateController: finalDateController,
-                  homeController: homeController,
-                  expensesController: expensesController,
-                ),
+                // _BuildAppBarHomePage(
+                //   initialDateController: initialDateController,
+                //   finalDateController: finalDateController,
+                //   homeController: homeController,
+                //   expensesController: expensesController,
+                // ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -82,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Text.rich(
                       TextSpan(
-                        text: r'R$, ',
+                        text: r'R$',
                         style: TextStyle(fontSize: 20.sp),
                         children: [
                           TextSpan(
@@ -116,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                                   CircleAvatar(
                                     backgroundColor:
                                         Color(e.category.colorCode),
-                                    minRadius: 25,
+                                    minRadius: 25.r,
                                     child: Icon(
                                       IconData(
                                         e.category.iconCode,
@@ -150,70 +139,8 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       height: 16.h,
                     ),
-                    SizedBox(
-                      height: 250,
-                      width: MediaQuery.of(context).size.width,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          PieChart(
-                            PieChartData(
-                              sections: homeController.percentageCategoriesList
-                                  .map(
-                                    (e) => PieChartSectionData(
-                                      radius: 65.r,
-                                      color: Color(e.category.colorCode),
-                                      value: e.percentage,
-                                      title:
-                                          '${e.percentage.toStringAsPrecision(2)}%',
-                                      titleStyle: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.sp,
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Período',
-                                style: TextStyle(
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                DateFormat.yMd('pt_BR').format(
-                                  dateFilter!.initialDate,
-                                ),
-                              ),
-                              Text(
-                                DateFormat.yMd('pt_BR').format(
-                                  dateFilter!.finalDate,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: homeController.percentageCategoriesList
-                          .map(
-                            (e) => Indicator(
-                              color: Color(e.category.colorCode),
-                              text: e.category.description,
-                              isSquare: true,
-                            ),
-                          )
-                          .toList(),
-                    )
+                    _buildChart(context, homeController),
+                    _buildChartSubtitle(homeController)
                   ],
                 )
               ],
@@ -223,146 +150,216 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
 
-class _BuildAppBarHomePage extends StatelessWidget {
-  const _BuildAppBarHomePage({
-    required this.initialDateController,
-    required this.finalDateController,
-    required this.homeController,
-    required this.expensesController,
-    Key? key,
-  }) : super(key: key);
-
-  final TextEditingController initialDateController;
-  final TextEditingController finalDateController;
-  final HomeController homeController;
-  final ExpensesController expensesController;
-
-  @override
-  Widget build(BuildContext context) {
+  Column _buildChartSubtitle(HomeControllerImpl homeController) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text.rich(
-              TextSpan(
-                text: 'Olá, ',
-                style: TextStyle(fontSize: 17.sp),
-                children: [
-                  TextSpan(
-                    text: userModel!.name,
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
+      children: homeController.percentageCategoriesList
+          .map(
+            (e) => Indicator(
+              color: Color(e.category.colorCode),
+              text: e.category.description,
+              isSquare: true,
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  SizedBox _buildChart(
+    BuildContext context,
+    HomeControllerImpl homeController,
+  ) {
+    return SizedBox(
+      height: 250.h,
+      width: MediaQuery.of(context).size.width,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          PieChart(
+            PieChartData(
+              sections: homeController.percentageCategoriesList
+                  .map(
+                    (e) => PieChartSectionData(
+                      radius: 65.r,
+                      color: Color(e.category.colorCode),
+                      value: e.percentage,
+                      title: '${e.percentage.toStringAsFixed(2)}%',
+                      titleStyle: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp,
+                      ),
                     ),
                   )
-                ],
-              ),
+                  .toList(),
             ),
-            const Spacer(),
-            IconButton(
-              splashRadius: 25.r,
-              onPressed: () {
-                showModalBottomSheet<void>(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Período',
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                DateFormat.yMd('pt_BR').format(
+                  dateFilter!.initialDate,
+                ),
+              ),
+              Text(
+                DateFormat.yMd('pt_BR').format(
+                  dateFilter!.finalDate,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  AppBar _buildAppBar(
+    BuildContext context,
+    HomeControllerImpl homeController,
+    ExpensesControllerImpl expensesController,
+  ) {
+    return AppBar(
+      title: Row(
+        children: [
+          Text.rich(
+            TextSpan(
+              text: 'Olá, ',
+              style: TextStyle(
+                fontSize: 17.sp,
+              ),
+              children: [
+                TextSpan(
+                  text: userModel!.name,
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
                   ),
-                  context: context,
-                  builder: (_) {
-                    return SizedBox(
-                      height: 200,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20.w),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Expanded(
-                                    child: OndeGasteiTextForm(
-                                      onTap: () async {
-                                        final result = await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(2022),
-                                          lastDate: DateTime(2099),
-                                        );
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        IconButton(
+          key: const Key('date_filter_key_home_page'),
+          splashRadius: 25.r,
+          onPressed: () {
+            final initialDateController = TextEditingController();
+            final finalDateController = TextEditingController();
 
-                                        if (result != null) {
-                                          dateFilter!.initialDate = result;
+            showModalBottomSheet<void>(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              context: context,
+              builder: (_) {
+                return SizedBox(
+                  height: 200.h,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Expanded(
+                              child: OndeGasteiTextForm(
+                                key: const Key(
+                                  'initial_date_filter_key_home_page',
+                                ),
+                                onTap: () async {
+                                  final result = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2022),
+                                    lastDate: DateTime(2099),
+                                  );
 
-                                          initialDateController.text =
-                                              DateFormat.yMd('pt_BR')
-                                                  .format(result);
-                                        }
-                                      },
-                                      label: 'Data Inicial',
-                                      readOnly: true,
-                                      controller: initialDateController,
-                                      prefixIcon: const Icon(Icons.date_range),
-                                      textInputType: TextInputType.datetime,
-                                      inputFormatters: <TextInputFormatter>[
-                                        LengthLimitingTextInputFormatter(10),
-                                        DateInputFormatterPtbr(),
-                                      ],
-                                      validator: Validators.date(),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 8.w,
-                                  ),
-                                  Expanded(
-                                    child: OndeGasteiTextForm(
-                                      onTap: () async {
-                                        final result = await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(2022),
-                                          lastDate: DateTime(2099),
-                                        );
+                                  if (result != null) {
+                                    dateFilter!.initialDate = result;
 
-                                        if (result != null) {
-                                          dateFilter!.finalDate = result;
-
-                                          finalDateController.text =
-                                              DateFormat.yMd('pt_BR')
-                                                  .format(result);
-                                        }
-                                      },
-                                      label: 'Data Final',
-                                      controller: finalDateController,
-                                      readOnly: true,
-                                      prefixIcon: const Icon(Icons.date_range),
-                                      textInputType: TextInputType.datetime,
-                                      inputFormatters: <TextInputFormatter>[
-                                        LengthLimitingTextInputFormatter(10),
-                                        DateInputFormatterPtbr(),
-                                      ],
-                                      validator: Validators.date(),
-                                    ),
-                                  ),
+                                    initialDateController.text =
+                                        DateFormat.yMd('pt_BR').format(result);
+                                  }
+                                },
+                                label: 'Data Inicial',
+                                readOnly: true,
+                                controller: initialDateController,
+                                prefixIcon: const Icon(Icons.date_range),
+                                textInputType: TextInputType.datetime,
+                                inputFormatters: <TextInputFormatter>[
+                                  LengthLimitingTextInputFormatter(10),
+                                  DateInputFormatterPtbr(),
                                 ],
+                                validator: Validators.date(),
                               ),
                             ),
-                            const SizedBox(
-                              height: 16,
+                            SizedBox(
+                              width: 8.w,
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16.w),
-                              child: OndeGasteiButton(
-                                const Text('Aplicar'),
-                                width: MediaQuery.of(context).size.width,
-                                onPressed: () async {
+                            Expanded(
+                              child: OndeGasteiTextForm(
+                                key: const Key(
+                                  'final_date_filter_key_home_page',
+                                ),
+                                onTap: () async {
+                                  final result = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2022),
+                                    lastDate: DateTime(2099),
+                                  );
+
+                                  if (result != null) {
+                                    dateFilter!.finalDate = result;
+
+                                    finalDateController.text =
+                                        DateFormat.yMd('pt_BR').format(result);
+                                  }
+                                },
+                                label: 'Data Final',
+                                controller: finalDateController,
+                                readOnly: true,
+                                prefixIcon: const Icon(Icons.date_range),
+                                textInputType: TextInputType.datetime,
+                                inputFormatters: <TextInputFormatter>[
+                                  LengthLimitingTextInputFormatter(10),
+                                  DateInputFormatterPtbr(),
+                                ],
+                                validator: Validators.date(),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        OndeGasteiButton(
+                          const Text('Aplicar'),
+                          key: const Key('apply_button_key_home_page'),
+                          width: MediaQuery.of(context).size.width,
+                          disable: true,
+                          onPressed: initialDateController.text.isNotEmpty &&
+                                  finalDateController.text.isEmpty
+                              ? () async {
                                   Navigator.of(context).pop();
+
                                   final futures = [
                                     homeController.fetchHomeData(
                                       userId: userModel!.userId,
@@ -377,24 +374,198 @@ class _BuildAppBarHomePage extends StatelessWidget {
                                   ];
 
                                   await Future.wait(futures);
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+                                }
+                              : null,
+                        )
+                      ],
+                    ),
+                  ),
                 );
               },
-              icon: const Icon(
-                Icons.date_range,
-                size: 22,
-              ),
-            ),
-          ],
-        )
+            );
+          },
+          icon: const Icon(
+            Icons.date_range,
+            size: 22,
+          ),
+        ),
       ],
     );
   }
 }
+
+
+
+// class _BuildAppBarHomePage extends StatelessWidget {
+//   const _BuildAppBarHomePage({
+//     required this.initialDateController,
+//     required this.finalDateController,
+//     required this.homeController,
+//     required this.expensesController,
+//     Key? key,
+//   }) : super(key: key);
+
+//   final TextEditingController initialDateController;
+//   final TextEditingController finalDateController;
+//   final HomeController homeController;
+//   final ExpensesController expensesController;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Row(
+//           children: [
+//             Text.rich(
+//               TextSpan(
+//                 text: 'Olá, ',
+//                 style: TextStyle(fontSize: 17.sp),
+//                 children: [
+//                   TextSpan(
+//                     text: userModel!.name,
+//                     style: TextStyle(
+//                       fontSize: 20.sp,
+//                       fontWeight: FontWeight.bold,
+//                     ),
+//                   )
+//                 ],
+//               ),
+//             ),
+//             const Spacer(),
+//             IconButton(
+//               splashRadius: 25.r,
+//               onPressed: () {
+//                 showModalBottomSheet<void>(
+//                   shape: const RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.only(
+//                       topLeft: Radius.circular(20),
+//                       topRight: Radius.circular(20),
+//                     ),
+//                   ),
+//                   context: context,
+//                   builder: (_) {
+//                     return SizedBox(
+//                       height: 200,
+//                       child: Center(
+//                         child: Column(
+//                           mainAxisAlignment: MainAxisAlignment.center,
+//                           mainAxisSize: MainAxisSize.min,
+//                           children: <Widget>[
+//                             Padding(
+//                               padding: EdgeInsets.symmetric(horizontal: 20.w),
+//                               child: Row(
+//                                 mainAxisAlignment:
+//                                     MainAxisAlignment.spaceAround,
+//                                 children: [
+//                                   Expanded(
+//                                     child: OndeGasteiTextForm(
+//                                       onTap: () async {
+//                                         final result = await showDatePicker(
+//                                           context: context,
+//                                           initialDate: DateTime.now(),
+//                                           firstDate: DateTime(2022),
+//                                           lastDate: DateTime(2099),
+//                                         );
+
+//                                         if (result != null) {
+//                                           dateFilter!.initialDate = result;
+
+//                                           initialDateController.text =
+//                                               DateFormat.yMd('pt_BR')
+//                                                   .format(result);
+//                                         }
+//                                       },
+//                                       label: 'Data Inicial',
+//                                       readOnly: true,
+//                                       controller: initialDateController,
+//                                       prefixIcon: const Icon(Icons.date_range),
+//                                       textInputType: TextInputType.datetime,
+//                                       inputFormatters: <TextInputFormatter>[
+//                                         LengthLimitingTextInputFormatter(10),
+//                                         DateInputFormatterPtbr(),
+//                                       ],
+//                                       validator: Validators.date(),
+//                                     ),
+//                                   ),
+//                                   SizedBox(
+//                                     width: 8.w,
+//                                   ),
+//                                   Expanded(
+//                                     child: OndeGasteiTextForm(
+//                                       onTap: () async {
+//                                         final result = await showDatePicker(
+//                                           context: context,
+//                                           initialDate: DateTime.now(),
+//                                           firstDate: DateTime(2022),
+//                                           lastDate: DateTime(2099),
+//                                         );
+
+//                                         if (result != null) {
+//                                           dateFilter!.finalDate = result;
+
+//                                           finalDateController.text =
+//                                               DateFormat.yMd('pt_BR')
+//                                                   .format(result);
+//                                         }
+//                                       },
+//                                       label: 'Data Final',
+//                                       controller: finalDateController,
+//                                       readOnly: true,
+//                                       prefixIcon: const Icon(Icons.date_range),
+//                                       textInputType: TextInputType.datetime,
+//                                       inputFormatters: <TextInputFormatter>[
+//                                         LengthLimitingTextInputFormatter(10),
+//                                         DateInputFormatterPtbr(),
+//                                       ],
+//                                       validator: Validators.date(),
+//                                     ),
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                             const SizedBox(
+//                               height: 16,
+//                             ),
+//                             Padding(
+//                               padding: EdgeInsets.symmetric(horizontal: 16.w),
+//                               child: OndeGasteiButton(
+//                                 const Text('Aplicar'),
+//                                 width: MediaQuery.of(context).size.width,
+//                                 onPressed: () async {
+//                                   Navigator.of(context).pop();
+//                                   final futures = [
+//                                     homeController.fetchHomeData(
+//                                       userId: userModel!.userId,
+//                                       initialDate: dateFilter!.initialDate,
+//                                       finalDate: dateFilter!.finalDate,
+//                                     ),
+//                                     expensesController.findExpensesByPeriod(
+//                                       userId: userModel!.userId,
+//                                       initialDate: dateFilter!.initialDate,
+//                                       finalDate: dateFilter!.finalDate,
+//                                     )
+//                                   ];
+
+//                                   await Future.wait(futures);
+//                                 },
+//                               ),
+//                             )
+//                           ],
+//                         ),
+//                       ),
+//                     );
+//                   },
+//                 );
+//               },
+//               icon: const Icon(
+//                 Icons.date_range,
+//                 size: 22,
+//               ),
+//             ),
+//           ],
+//         )
+//       ],
+//     );
+//   }
+// }

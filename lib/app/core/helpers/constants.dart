@@ -29,6 +29,8 @@ class Constants {
 
   static const labelStyleColor = Color(0xFFC0C2D1);
 
+  static const buttonColorDisabled = Colors.grey;
+
   static MaterialColor get primarySwatch => MaterialColor(
         0xFF32B768,
         <int, Color>{

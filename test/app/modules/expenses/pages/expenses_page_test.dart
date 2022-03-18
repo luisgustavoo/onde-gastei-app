@@ -11,62 +11,62 @@ import 'package:onde_gastei_app/app/modules/expenses/widgets/expenses_list_tile.
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:provider/provider.dart';
 
-late MockExpensesControllerImpl mockExpensesController;
-late MockHomeControllerImpl mockHomeControllerImpl;
-
 class MockExpensesControllerImpl extends Mock
     implements ExpensesControllerImpl {}
 
 class MockHomeControllerImpl extends Mock implements HomeControllerImpl {}
 
-final mockExpensesList = List<ExpenseModel>.generate(
-  1000,
-  (index) => ExpenseModel(
-    expenseId: index,
-    description: 'Expense $index',
-    date: DateTime.now(),
-    value: 1,
-    category: CategoryModel(
-      description: 'Category $index',
-      iconCode: 58261,
-      colorCode: 4284513675,
-    ),
-    userId: 1,
-  ),
-);
+void main() {
+  late MockExpensesControllerImpl mockExpensesController;
+  late MockHomeControllerImpl mockHomeControllerImpl;
 
-Widget createExpensesPage() {
-  return MultiProvider(
-    providers: [
-      ChangeNotifierProvider<ExpensesControllerImpl>(
-        create: (context) => mockExpensesController,
+  final mockExpensesList = List<ExpenseModel>.generate(
+    1000,
+    (index) => ExpenseModel(
+      expenseId: index,
+      description: 'Expense $index',
+      date: DateTime.now(),
+      value: 1,
+      category: CategoryModel(
+        description: 'Category $index',
+        iconCode: 58261,
+        colorCode: 4284513675,
       ),
-      ChangeNotifierProvider<HomeControllerImpl>(
-        create: (context) => mockHomeControllerImpl,
-      ),
-    ],
-    child: ScreenUtilInit(
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: () => MaterialApp(
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('pt', 'BR'),
-        ],
-        initialRoute: ExpensesPage.router,
-        routes: {
-          ExpensesPage.router: (context) => const ExpensesPage(),
-        },
-      ),
+      userId: 1,
     ),
   );
-}
 
-void main() {
+  Widget createExpensesPage() {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ExpensesControllerImpl>(
+          create: (context) => mockExpensesController,
+        ),
+        ChangeNotifierProvider<HomeControllerImpl>(
+          create: (context) => mockHomeControllerImpl,
+        ),
+      ],
+      child: ScreenUtilInit(
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: () => MaterialApp(
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('pt', 'BR'),
+          ],
+          initialRoute: ExpensesPage.router,
+          routes: {
+            ExpensesPage.router: (context) => const ExpensesPage(),
+          },
+        ),
+      ),
+    );
+  }
+
   setUp(() {
     mockExpensesController = MockExpensesControllerImpl();
     mockHomeControllerImpl = MockHomeControllerImpl();
@@ -74,7 +74,7 @@ void main() {
 
   group('group test ExpensesPage', () {
     testWidgets('Test if expense page shows up', (tester) async {
-      when(() => mockExpensesController.state).thenReturn(expensesState.idle);
+      when(() => mockExpensesController.state).thenReturn(ExpensesState.idle);
 
       when(() => mockExpensesController.expensesList)
           .thenReturn(mockExpensesList);
@@ -88,7 +88,7 @@ void main() {
     });
 
     testWidgets('Should show error when loading expenses page', (tester) async {
-      when(() => mockExpensesController.state).thenReturn(expensesState.error);
+      when(() => mockExpensesController.state).thenReturn(ExpensesState.error);
 
       await tester.pumpWidget(createExpensesPage());
 
@@ -97,7 +97,7 @@ void main() {
 
     testWidgets('Must test list scrolling', (tester) async {
       when(() => mockExpensesController.state)
-          .thenReturn(expensesState.success);
+          .thenReturn(ExpensesState.success);
 
       when(() => mockExpensesController.expensesList)
           .thenReturn(mockExpensesList);

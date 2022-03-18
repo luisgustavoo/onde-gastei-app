@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authControllerState = context.select<AuthControllerImpl, authState>(
+    final authControllerState = context.select<AuthControllerImpl, AuthState>(
       (authController) => authController.state,
     );
 
@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       key: _scaffoldMessagedKey,
       child: Scaffold(
         body: IgnorePointer(
-          ignoring: authControllerState == authState.loading,
+          ignoring: authControllerState == AuthState.loading,
           child: ListView(
             children: [
               Padding(
@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Form _buildForm(BuildContext context, authState authControllerState) {
+  Form _buildForm(BuildContext context, AuthState authControllerState) {
     return Form(
       key: _formKey,
       child: Column(
@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
 
   OndeGasteiButton _buildOndeGasteiButton(
     BuildContext context,
-    authState authControllerState,
+    AuthState authControllerState,
   ) {
     return OndeGasteiButton(
       Text(
@@ -222,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
           }
         }
       },
-      isLoading: authControllerState == authState.loading,
+      isLoading: authControllerState == AuthState.loading,
     );
   }
 

@@ -10,7 +10,7 @@ import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
 
-enum authState { idle, loading, error, success }
+enum AuthState { idle, loading, error, success }
 
 class AuthControllerImpl extends ChangeNotifier implements AuthController {
   AuthControllerImpl({
@@ -24,29 +24,29 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
   final AuthService _service;
   final Log _log;
   final LocalStorage _localStorage;
-  authState state = authState.idle;
+  AuthState state = AuthState.idle;
 
   @override
   Future<void> register(String name, String email, String password) async {
     try {
-      state = authState.loading;
+      state = AuthState.loading;
       notifyListeners();
 
       await _service.register(name, email, password);
 
-      state = authState.success;
+      state = AuthState.success;
       notifyListeners();
     } on UserExistsException catch (e, s) {
       _log.error('Email já cadastrado, por favor escolha outro e-mail', e, s);
 
-      state = authState.error;
+      state = AuthState.error;
       notifyListeners();
 
       throw UserExistsException();
     } on Exception catch (e, s) {
       _log.error('Erro ao registrar usuário', e, s);
 
-      state = authState.error;
+      state = AuthState.error;
       notifyListeners();
 
       throw Failure();
@@ -56,33 +56,33 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
   @override
   Future<void> login(String email, String password) async {
     try {
-      state = authState.loading;
+      state = AuthState.loading;
       notifyListeners();
 
       await _service.login(email, password);
 
       userModel = await fetchUserData();
 
-      state = authState.success;
+      state = AuthState.success;
       notifyListeners();
     } on UserNotFoundException catch (e, s) {
       _log.error('Login e senha inválidos', e, s);
 
-      state = authState.error;
+      state = AuthState.error;
       notifyListeners();
 
       throw UserNotFoundException();
     } on UnverifiedEmailException catch (e, s) {
       _log.error('E-mail não verificado!', e, s);
 
-      state = authState.error;
+      state = AuthState.error;
       notifyListeners();
 
       throw UnverifiedEmailException();
     } on Exception catch (e, s) {
       _log.error('Erro ao realizar login tente novamente mais tarde!!!', e, s);
 
-      state = authState.error;
+      state = AuthState.error;
       notifyListeners();
 
       throw Failure();

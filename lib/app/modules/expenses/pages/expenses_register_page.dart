@@ -87,11 +87,11 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
   @override
   Widget build(BuildContext context) {
     final expensesControllerState =
-        context.select<ExpensesControllerImpl, expensesState>(
+        context.select<ExpensesControllerImpl, ExpensesState>(
       (expensesController) => expensesController.state,
     );
     final expensesControllerDeleteState =
-        context.select<ExpensesControllerImpl, expensesDeleteState>(
+        context.select<ExpensesControllerImpl, ExpensesDeleteState>(
       (expensesController) => expensesController.deleteState,
     );
 
@@ -116,7 +116,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
           ],
         ),
         body: IgnorePointer(
-          ignoring: expensesControllerState == expensesState.loading,
+          ignoring: expensesControllerState == ExpensesState.loading,
           child: ListView(
             padding: EdgeInsets.only(top: 32.h, left: 16.w, right: 16.w),
             physics: const BouncingScrollPhysics(),
@@ -328,7 +328,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                         }
                       },
                       isLoading:
-                          expensesControllerState == expensesState.loading,
+                          expensesControllerState == ExpensesState.loading,
                       key: const Key(
                         'register_button_key_expenses_register_page',
                       ),
@@ -345,7 +345,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
 
   Visibility _buildDeleteButton(
     BuildContext context,
-    expensesDeleteState expensesDeleteState,
+    ExpensesDeleteState expensesDeleteState,
   ) {
     return Visibility(
       visible: widget._isEditing,
@@ -408,7 +408,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                             .showSnackBar(snackBar);
                       }
                     },
-                    child: expensesDeleteState == categoriesDeleteState.loading
+                    child: expensesDeleteState == CategoriesDeleteState.loading
                         ? SizedBox(
                             height: 15.h,
                             width: 15.w,

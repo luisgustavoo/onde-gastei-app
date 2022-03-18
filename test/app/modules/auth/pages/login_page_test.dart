@@ -16,36 +16,36 @@ class MockRoute extends Mock implements Route<dynamic> {}
 
 class MockAuthControllerImpl extends Mock implements AuthControllerImpl {}
 
-late NavigatorObserver mockNavigatorObserver;
-late AuthControllerImpl mockAuthControllerImpl;
-
-Widget createLoginPagePage() {
-  return MultiProvider(
-    providers: [
-      ChangeNotifierProvider<AuthControllerImpl>(
-        create: (context) => mockAuthControllerImpl,
-      ),
-    ],
-    child: ScreenUtilInit(
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: () => MaterialApp(
-        initialRoute: LoginPage.router,
-        navigatorObservers: [mockNavigatorObserver],
-        routes: {
-          LoginPage.router: (context) {
-            return LoginPage(
-              authController: mockAuthControllerImpl,
-            );
-          },
-          AppPage.router: (context) => Container(),
-        },
-      ),
-    ),
-  );
-}
-
 void main() {
+  late NavigatorObserver mockNavigatorObserver;
+  late AuthControllerImpl mockAuthControllerImpl;
+
+  Widget createLoginPagePage() {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthControllerImpl>(
+          create: (context) => mockAuthControllerImpl,
+        ),
+      ],
+      child: ScreenUtilInit(
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: () => MaterialApp(
+          initialRoute: LoginPage.router,
+          navigatorObservers: [mockNavigatorObserver],
+          routes: {
+            LoginPage.router: (context) {
+              return LoginPage(
+                authController: mockAuthControllerImpl,
+              );
+            },
+            AppPage.router: (context) => Container(),
+          },
+        ),
+      ),
+    );
+  }
+
   setUp(() {
     mockAuthControllerImpl = MockAuthControllerImpl();
     mockNavigatorObserver = MockNavigatorObserver();
@@ -54,7 +54,7 @@ void main() {
 
   group('Group test login page', () {
     testWidgets('Test if login page shows up', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       await tester.pumpWidget(createLoginPagePage());
 
@@ -70,7 +70,7 @@ void main() {
     });
 
     testWidgets('Should TextFormFields is empty', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
       await tester.pumpWidget(createLoginPagePage());
 
       final email = find.byKey(const ValueKey('email_key_login_page'));
@@ -92,7 +92,7 @@ void main() {
       expect(find.text('Senha obrigatória'), findsOneWidget);
     });
     testWidgets('Should E-mail invalid', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
       await tester.pumpWidget(createLoginPagePage());
 
       final email = find.byKey(const ValueKey('email_key_login_page'));
@@ -116,7 +116,7 @@ void main() {
 
     testWidgets('Should password must be at least 6 characters long',
         (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       await tester.pumpWidget(createLoginPagePage());
 
@@ -142,7 +142,7 @@ void main() {
     });
 
     testWidgets('Should login with success', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       when(() => mockAuthControllerImpl.login(any(), any()))
           .thenAnswer((_) async => _);
@@ -180,7 +180,7 @@ void main() {
     });
 
     testWidgets('Should trows UserNotFoundException', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       when(() => mockAuthControllerImpl.login(any(), any()))
           .thenThrow(UserNotFoundException());
@@ -209,7 +209,7 @@ void main() {
     });
 
     testWidgets('Should trows UnverifiedEmailException', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       when(() => mockAuthControllerImpl.login(any(), any()))
           .thenThrow(UnverifiedEmailException());
@@ -241,7 +241,7 @@ void main() {
     });
 
     testWidgets('Should trows generic Exception', (tester) async {
-      when(() => mockAuthControllerImpl.state).thenReturn(authState.idle);
+      when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       when(() => mockAuthControllerImpl.login(any(), any()))
           .thenThrow(Exception());

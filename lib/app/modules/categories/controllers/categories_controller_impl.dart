@@ -6,8 +6,8 @@ import 'package:onde_gastei_app/app/modules/categories/controllers/categories_co
 import 'package:onde_gastei_app/app/modules/categories/services/categories_service.dart';
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 
-enum categoriesState { idle, loading, error, success }
-enum categoriesDeleteState { idle, loading, error, success }
+enum CategoriesState { idle, loading, error, success }
+enum CategoriesDeleteState { idle, loading, error, success }
 
 class CategoriesControllerImpl extends ChangeNotifier
     implements CategoriesController {
@@ -30,25 +30,25 @@ class CategoriesControllerImpl extends ChangeNotifier
   //   notifyListeners();
   // }
 
-  categoriesState state = categoriesState.idle;
-  categoriesDeleteState stateDelete = categoriesDeleteState.idle;
+  CategoriesState state = CategoriesState.idle;
+  CategoriesDeleteState stateDelete = CategoriesDeleteState.idle;
 
   @override
   Future<void> register(CategoryModel categoryModel) async {
     try {
-      state = categoriesState.loading;
+      state = CategoriesState.loading;
       notifyListeners();
 
       await _service.register(categoryModel);
 
       // categoriesList.add(categoryModel);
 
-      state = categoriesState.success;
+      state = CategoriesState.success;
       notifyListeners();
     } on Exception catch (e, s) {
       _log.error('Erro ao registrar categoria', e, s);
 
-      state = categoriesState.error;
+      state = CategoriesState.error;
       notifyListeners();
 
       throw Failure();
@@ -61,7 +61,7 @@ class CategoriesControllerImpl extends ChangeNotifier
     CategoryInputModel categoryInputModel,
   ) async {
     try {
-      state = categoriesState.loading;
+      state = CategoriesState.loading;
       notifyListeners();
 
       await _service.updateCategory(categoryId, categoryInputModel);
@@ -74,12 +74,12 @@ class CategoriesControllerImpl extends ChangeNotifier
       //   colorCode: categoryInputModel.colorCode,
       // );
 
-      state = categoriesState.success;
+      state = CategoriesState.success;
       notifyListeners();
     } on Exception catch (e, s) {
       _log.error('Erro ao atualizar categoria', e, s);
 
-      state = categoriesState.error;
+      state = CategoriesState.error;
       notifyListeners();
 
       throw Failure();
@@ -89,7 +89,7 @@ class CategoriesControllerImpl extends ChangeNotifier
   @override
   Future<void> deleteCategory(int categoryId) async {
     try {
-      stateDelete = categoriesDeleteState.loading;
+      stateDelete = CategoriesDeleteState.loading;
       notifyListeners();
 
       await _service.deleteCategory(categoryId);
@@ -98,12 +98,12 @@ class CategoriesControllerImpl extends ChangeNotifier
       //   categoriesList.indexWhere((element) => element.id == categoryId),
       // );
 
-      stateDelete = categoriesDeleteState.success;
+      stateDelete = CategoriesDeleteState.success;
       notifyListeners();
     } on Exception catch (e, s) {
       _log.error('Erro ao excluir categoria', e, s);
 
-      stateDelete = categoriesDeleteState.error;
+      stateDelete = CategoriesDeleteState.error;
       notifyListeners();
 
       throw Failure();
@@ -113,17 +113,17 @@ class CategoriesControllerImpl extends ChangeNotifier
   @override
   Future<void> findCategories(int userId) async {
     try {
-      state = categoriesState.loading;
+      state = CategoriesState.loading;
       notifyListeners();
 
       categoriesList = await _service.findCategories(userId);
 
-      state = categoriesState.success;
+      state = CategoriesState.success;
       notifyListeners();
     } on Exception catch (e, s) {
       _log.error('Erro ao buscar categorias', e, s);
 
-      state = categoriesState.error;
+      state = CategoriesState.error;
       notifyListeners();
 
       throw Failure();

@@ -31,7 +31,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
             IconButton(
               onPressed: () async {
                 final edited = await Navigator.of(context)
-                    .pushNamed<bool?>(CategoriesRegisterPage.router);
+                    .pushNamed(CategoriesRegisterPage.router) as bool?;
 
                 if (edited != null) {
                   if (edited == true) {
@@ -50,13 +50,13 @@ class _CategoriesPageState extends State<CategoriesPage> {
         ),
         body: Consumer<CategoriesControllerImpl>(
           builder: (context, categoriesController, _) {
-            if (categoriesController.state == categoriesState.error) {
+            if (categoriesController.state == CategoriesState.error) {
               return const Center(
                 child: Text('Erro ao buscar categorias'),
               );
             }
 
-            if (categoriesController.state == categoriesState.loading) {
+            if (categoriesController.state == CategoriesState.loading) {
               return Center(
                 child: CircularProgressIndicator(
                   color: Theme.of(context).primaryColor,
@@ -74,13 +74,13 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 return ListTile(
                   key: Key('list_tile_key_${index}_categories_page'),
                   onTap: () async {
-                    final edited = await Navigator.of(context).pushNamed<bool?>(
+                    final edited = await Navigator.of(context).pushNamed(
                       CategoriesRegisterPage.router,
                       arguments: <String, dynamic>{
                         'category': category,
                         'editing': true,
                       },
-                    );
+                    ) as bool?;
 
                     if (edited != null) {
                       if (edited == true) {

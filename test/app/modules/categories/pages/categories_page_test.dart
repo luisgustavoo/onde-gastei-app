@@ -9,10 +9,6 @@ import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_contro
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:provider/provider.dart';
 
-late CategoriesControllerImpl mockCategoriesControllerImpl;
-late ExpensesControllerImpl mockExpensesControllerImpl;
-late HomeControllerImpl mockHomeControllerImpl;
-
 class MockCategoriesControllerImpl extends Mock
     implements CategoriesControllerImpl {}
 
@@ -21,42 +17,46 @@ class MockExpensesControllerImpl extends Mock
 
 class MockHomeControllerImpl extends Mock implements HomeControllerImpl {}
 
-Widget createCategoriesPage() {
-  return MultiProvider(
-    providers: [
-      ChangeNotifierProvider<HomeControllerImpl>(
-        create: (context) => mockHomeControllerImpl,
-      ),
-      ChangeNotifierProvider<ExpensesControllerImpl>(
-        create: (context) => mockExpensesControllerImpl,
-      ),
-      ChangeNotifierProvider<CategoriesControllerImpl>(
-        create: (context) => mockCategoriesControllerImpl,
-      ),
-    ],
-    child: ScreenUtilInit(
-      builder: () => MaterialApp(
-        initialRoute: CategoriesPage.router,
-        routes: {
-          CategoriesPage.router: (context) => const CategoriesPage(),
-        },
-      ),
+void main() {
+  late CategoriesControllerImpl mockCategoriesControllerImpl;
+  late ExpensesControllerImpl mockExpensesControllerImpl;
+  late HomeControllerImpl mockHomeControllerImpl;
+
+  final mockCategoriesList = List<CategoryModel>.generate(
+    100,
+    (index) => CategoryModel(
+      id: index,
+      description: 'Test $index',
+      iconCode: 58261,
+      colorCode: 4284513675,
+      userId: 1,
     ),
   );
-}
 
-final mockCategoriesList = List<CategoryModel>.generate(
-  100,
-  (index) => CategoryModel(
-    id: index,
-    description: 'Test $index',
-    iconCode: 58261,
-    colorCode: 4284513675,
-    userId: 1,
-  ),
-);
+  Widget createCategoriesPage() {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<HomeControllerImpl>(
+          create: (context) => mockHomeControllerImpl,
+        ),
+        ChangeNotifierProvider<ExpensesControllerImpl>(
+          create: (context) => mockExpensesControllerImpl,
+        ),
+        ChangeNotifierProvider<CategoriesControllerImpl>(
+          create: (context) => mockCategoriesControllerImpl,
+        ),
+      ],
+      child: ScreenUtilInit(
+        builder: () => MaterialApp(
+          initialRoute: CategoriesPage.router,
+          routes: {
+            CategoriesPage.router: (context) => const CategoriesPage(),
+          },
+        ),
+      ),
+    );
+  }
 
-void main() {
   setUp(() {
     mockCategoriesControllerImpl = MockCategoriesControllerImpl();
     mockHomeControllerImpl = MockHomeControllerImpl();
@@ -72,7 +72,7 @@ void main() {
           .thenReturn(mockCategoriesList);
 
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.success);
+          .thenReturn(CategoriesState.success);
 
       await tester.pumpWidget(createCategoriesPage());
 
@@ -93,7 +93,7 @@ void main() {
           .thenReturn(mockCategoriesList);
 
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.loading);
+          .thenReturn(CategoriesState.loading);
 
       await tester.pumpWidget(createCategoriesPage());
 
@@ -113,7 +113,7 @@ void main() {
           .thenReturn(mockCategoriesList);
 
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.error);
+          .thenReturn(CategoriesState.error);
 
       await tester.pumpWidget(createCategoriesPage());
 
@@ -132,7 +132,7 @@ void main() {
           .thenReturn(mockCategoriesList);
 
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.success);
+          .thenReturn(CategoriesState.success);
 
       await tester.pumpWidget(createCategoriesPage());
 

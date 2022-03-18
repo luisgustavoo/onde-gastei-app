@@ -57,7 +57,7 @@ void main() {
   });
 
   group('Group test splash page', () {
-    testWidgets('Test if  splash page navigate to AppPage', (tester) async {
+    testWidgets('Test if login page shows up', (tester) async {
       final userExpected = UserModel(
         userId: 1,
         name: 'Test',

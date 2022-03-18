@@ -34,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authControllerState = context.select<AuthControllerImpl, authState>(
+    final authControllerState = context.select<AuthControllerImpl, AuthState>(
       (authController) => authController.state,
     );
 
@@ -45,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: IgnorePointer(
-            ignoring: authControllerState == authState.loading,
+            ignoring: authControllerState == AuthState.loading,
             child: ListView(
               children: [
                 _buildForm(context, authControllerState),
@@ -57,7 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Form _buildForm(BuildContext context, authState authControllerState) {
+  Form _buildForm(BuildContext context, AuthState authControllerState) {
     return Form(
       key: _formKey,
       child: Column(
@@ -138,7 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   OndeGasteiButton _buildOndeGasteiButton(
     BuildContext context,
-    authState authControllerState,
+    AuthState authControllerState,
   ) {
     return OndeGasteiButton(
       Text(
@@ -213,7 +213,7 @@ class _RegisterPageState extends State<RegisterPage> {
           _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
         }
       },
-      isLoading: authControllerState == authState.loading,
+      isLoading: authControllerState == AuthState.loading,
     );
   }
 

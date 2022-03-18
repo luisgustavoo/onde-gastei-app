@@ -10,58 +10,58 @@ import 'package:onde_gastei_app/app/modules/categories/pages/categories_register
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 import 'package:provider/provider.dart';
 
-late CategoriesControllerImpl mockCategoriesControllerImpl;
-
-bool isEditing = false;
-
 class MockCategoriesControllerImpl extends Mock
     implements CategoriesControllerImpl {}
 
-Widget createCategoriesRegisterPage() {
-  return ChangeNotifierProvider<CategoriesControllerImpl>(
-    create: (context) => mockCategoriesControllerImpl,
-    child: ScreenUtilInit(
-      builder: () => MaterialApp(
-        initialRoute: CategoriesRegisterPage.router,
-        routes: {
-          CategoriesRegisterPage.router: (context) {
-            if (isEditing) {
+void main() {
+  late CategoriesControllerImpl mockCategoriesControllerImpl;
+
+  var isEditing = false;
+
+  const categoryModel = CategoryModel(
+    description: 'Test',
+    iconCode: 1,
+    colorCode: 1,
+    userId: 1,
+  );
+
+  const categoryInputModel = CategoryInputModel(
+    description: 'Test',
+    iconCode: 1,
+    colorCode: 1,
+  );
+
+  Widget createCategoriesRegisterPage() {
+    return ChangeNotifierProvider<CategoriesControllerImpl>(
+      create: (context) => mockCategoriesControllerImpl,
+      child: ScreenUtilInit(
+        builder: () => MaterialApp(
+          initialRoute: CategoriesRegisterPage.router,
+          routes: {
+            CategoriesRegisterPage.router: (context) {
+              if (isEditing) {
+                return CategoriesRegisterPage(
+                  categoriesController: mockCategoriesControllerImpl,
+                  categoryModel: const CategoryModel(
+                    description: 'Test',
+                    iconCode: 1,
+                    colorCode: 1,
+                  ),
+                  isEditing: isEditing,
+                );
+              }
               return CategoriesRegisterPage(
                 categoriesController: mockCategoriesControllerImpl,
-                categoryModel: const CategoryModel(
-                  description: 'Test',
-                  iconCode: 1,
-                  colorCode: 1,
-                ),
-                isEditing: isEditing,
               );
             }
-            return CategoriesRegisterPage(
-              categoriesController: mockCategoriesControllerImpl,
-            );
-          }
-        },
+          },
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-void main() {
   setUp(() {
     mockCategoriesControllerImpl = MockCategoriesControllerImpl();
-
-    const categoryModel = CategoryModel(
-      description: 'Test',
-      iconCode: 1,
-      colorCode: 1,
-      userId: 1,
-    );
-
-    const categoryInputModel = CategoryInputModel(
-      description: 'Test',
-      iconCode: 1,
-      colorCode: 1,
-    );
 
     registerFallbackValue(categoryModel);
     registerFallbackValue(categoryInputModel);
@@ -70,10 +70,10 @@ void main() {
   group('Group test RegisterCategoriesPage ', () {
     testWidgets('Test if register categories page shows up', (tester) async {
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.idle);
+          .thenReturn(CategoriesState.idle);
 
       when(() => mockCategoriesControllerImpl.stateDelete)
-          .thenReturn(categoriesDeleteState.idle);
+          .thenReturn(CategoriesDeleteState.idle);
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 
@@ -110,10 +110,10 @@ void main() {
 
     testWidgets('Should TextFormField is empty', (tester) async {
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.idle);
+          .thenReturn(CategoriesState.idle);
 
       when(() => mockCategoriesControllerImpl.stateDelete)
-          .thenReturn(categoriesDeleteState.idle);
+          .thenReturn(CategoriesDeleteState.idle);
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 
@@ -138,10 +138,10 @@ void main() {
 
     testWidgets('Should create category with success', (tester) async {
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.idle);
+          .thenReturn(CategoriesState.idle);
 
       when(() => mockCategoriesControllerImpl.stateDelete)
-          .thenReturn(categoriesDeleteState.idle);
+          .thenReturn(CategoriesDeleteState.idle);
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 
@@ -149,7 +149,7 @@ void main() {
           .thenAnswer((_) async => _);
 
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.idle);
+          .thenReturn(CategoriesState.idle);
 
       final categoryTextField = find.byKey(
         const Key('categories_key_register_categories'),
@@ -209,10 +209,10 @@ void main() {
     testWidgets('Should throw exception when creating category',
         (tester) async {
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.idle);
+          .thenReturn(CategoriesState.idle);
 
       when(() => mockCategoriesControllerImpl.stateDelete)
-          .thenReturn(categoriesDeleteState.idle);
+          .thenReturn(CategoriesDeleteState.idle);
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 
@@ -277,10 +277,10 @@ void main() {
       isEditing = true;
 
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.idle);
+          .thenReturn(CategoriesState.idle);
 
       when(() => mockCategoriesControllerImpl.stateDelete)
-          .thenReturn(categoriesDeleteState.idle);
+          .thenReturn(CategoriesDeleteState.idle);
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 
@@ -347,10 +347,10 @@ void main() {
       isEditing = true;
 
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.idle);
+          .thenReturn(CategoriesState.idle);
 
       when(() => mockCategoriesControllerImpl.stateDelete)
-          .thenReturn(categoriesDeleteState.idle);
+          .thenReturn(CategoriesDeleteState.idle);
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 
@@ -415,10 +415,10 @@ void main() {
       isEditing = true;
 
       when(() => mockCategoriesControllerImpl.stateDelete)
-          .thenReturn(categoriesDeleteState.idle);
+          .thenReturn(CategoriesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.idle);
+          .thenReturn(CategoriesState.idle);
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 
@@ -457,10 +457,10 @@ void main() {
       isEditing = true;
 
       when(() => mockCategoriesControllerImpl.stateDelete)
-          .thenReturn(categoriesDeleteState.idle);
+          .thenReturn(CategoriesDeleteState.idle);
 
       when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(categoriesState.idle);
+          .thenReturn(CategoriesState.idle);
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 

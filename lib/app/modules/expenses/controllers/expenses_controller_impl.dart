@@ -7,9 +7,9 @@ import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/services/expenses_services.dart';
 
-enum expensesState { idle, loading, error, success }
+enum ExpensesState { idle, loading, error, success }
 
-enum expensesDeleteState { idle, loading, error, success }
+enum ExpensesDeleteState { idle, loading, error, success }
 
 class ExpensesControllerImpl extends ChangeNotifier
     implements ExpensesController {
@@ -23,8 +23,8 @@ class ExpensesControllerImpl extends ChangeNotifier
   final Log _log;
   List<ExpenseModel> expensesList = <ExpenseModel>[];
   List<ExpenseModel> expensesListBeforeFilter = <ExpenseModel>[];
-  expensesState state = expensesState.idle;
-  expensesDeleteState deleteState = expensesDeleteState.idle;
+  ExpensesState state = ExpensesState.idle;
+  ExpensesDeleteState deleteState = ExpensesDeleteState.idle;
 
   @override
   Future<void> register({
@@ -35,7 +35,7 @@ class ExpensesControllerImpl extends ChangeNotifier
     int? userId,
   }) async {
     try {
-      state = expensesState.loading;
+      state = ExpensesState.loading;
       notifyListeners();
 
       final expenseModel = ExpenseModel(
@@ -48,12 +48,12 @@ class ExpensesControllerImpl extends ChangeNotifier
 
       await _services.register(expenseModel);
 
-      state = expensesState.success;
+      state = ExpensesState.success;
       notifyListeners();
     } on Exception catch (e, s) {
       _log.error('Erro ao registrar despesa', e, s);
 
-      state = expensesState.error;
+      state = ExpensesState.error;
       notifyListeners();
 
       throw Failure();
@@ -70,7 +70,7 @@ class ExpensesControllerImpl extends ChangeNotifier
     int? userId,
   }) async {
     try {
-      state = expensesState.loading;
+      state = ExpensesState.loading;
       notifyListeners();
 
       final expenseModel = ExpenseModel(
@@ -83,12 +83,12 @@ class ExpensesControllerImpl extends ChangeNotifier
 
       await _services.update(expenseModel, expenseId);
 
-      state = expensesState.success;
+      state = ExpensesState.success;
       notifyListeners();
     } on Exception catch (e, s) {
       _log.error('Erro ao atualizar despesa', e, s);
 
-      state = expensesState.error;
+      state = ExpensesState.error;
       notifyListeners();
 
       throw Failure();
@@ -98,17 +98,17 @@ class ExpensesControllerImpl extends ChangeNotifier
   @override
   Future<void> delete({required int expenseId}) async {
     try {
-      deleteState = expensesDeleteState.loading;
+      deleteState = ExpensesDeleteState.loading;
       notifyListeners();
 
       await _services.delete(expenseId);
 
-      deleteState = expensesDeleteState.success;
+      deleteState = ExpensesDeleteState.success;
       notifyListeners();
     } on Exception catch (e, s) {
       _log.error('Erro ao deletar despesa', e, s);
 
-      deleteState = expensesDeleteState.error;
+      deleteState = ExpensesDeleteState.error;
       notifyListeners();
 
       throw Failure();
@@ -122,7 +122,7 @@ class ExpensesControllerImpl extends ChangeNotifier
     required DateTime finalDate,
   }) async {
     try {
-      state = expensesState.loading;
+      state = ExpensesState.loading;
       notifyListeners();
 
       expensesList =
@@ -130,12 +130,12 @@ class ExpensesControllerImpl extends ChangeNotifier
 
       expensesListBeforeFilter = expensesList;
 
-      state = expensesState.success;
+      state = ExpensesState.success;
       notifyListeners();
     } on Exception catch (e, s) {
       _log.error('Erro ao buscar despesas', e, s);
 
-      state = expensesState.error;
+      state = ExpensesState.error;
       notifyListeners();
 
       throw Failure();

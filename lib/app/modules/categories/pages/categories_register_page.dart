@@ -72,12 +72,12 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
   @override
   Widget build(BuildContext context) {
     final categoriesControllerState =
-        context.select<CategoriesControllerImpl, categoriesState>(
+        context.select<CategoriesControllerImpl, CategoriesState>(
       (categoriesController) => categoriesController.state,
     );
 
     final categoriesControllerDeleteState =
-        context.select<CategoriesControllerImpl, categoriesDeleteState>(
+        context.select<CategoriesControllerImpl, CategoriesDeleteState>(
       (categoriesController) => categoriesController.stateDelete,
     );
 
@@ -85,7 +85,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
       child: ScaffoldMessenger(
         key: _scaffoldMessagedKey,
         child: IgnorePointer(
-          ignoring: categoriesControllerState == categoriesState.loading,
+          ignoring: categoriesControllerState == CategoriesState.loading,
           child: Scaffold(
             appBar: AppBar(
               title: const Text('Categoria'),
@@ -141,7 +141,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
 
   Visibility _buildDeleteButton(
     BuildContext context,
-    categoriesDeleteState stateDelete,
+    CategoriesDeleteState stateDelete,
   ) {
     return Visibility(
       visible: widget._isEditing,
@@ -207,7 +207,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                             .showSnackBar(snackBar);
                       }
                     },
-                    child: stateDelete == categoriesDeleteState.loading
+                    child: stateDelete == CategoriesDeleteState.loading
                         ? SizedBox(
                             height: 15.h,
                             width: 15.w,
@@ -238,7 +238,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
 
   OndeGasteiButton _buildSaveButton(
     BuildContext context,
-    categoriesState state,
+    CategoriesState state,
   ) {
     return OndeGasteiButton(
       Text(
@@ -247,7 +247,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
       ),
       key: const Key('save_button_register_categories_page'),
       width: MediaQuery.of(context).size.width * 0.9,
-      isLoading: state == categoriesState.loading,
+      isLoading: state == CategoriesState.loading,
       onPressed: () async {
         final formValid = _formKey.currentState?.validate() ?? false;
 
@@ -472,7 +472,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                 Navigator.of(context).pop();
               },
               borderRadius: BorderRadius.circular(50),
-              child: Container(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: color,
