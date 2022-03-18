@@ -100,8 +100,7 @@ void main() {
       await tester.enterText(email, '');
       await tester.enterText(password, '');
       await tester.enterText(confirmPassword, '');
-
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       await tester.tap(registerButton);
       await tester.pumpAndSettle();
@@ -135,8 +134,7 @@ void main() {
       await tester.enterText(email, 'test');
       await tester.enterText(password, 'password');
       await tester.enterText(confirmPassword, 'password');
-
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       await tester.tap(buttonRegister);
       await tester.pumpAndSettle();
@@ -169,8 +167,7 @@ void main() {
       await tester.enterText(email, 'test@test.com');
       await tester.enterText(password, '123');
       await tester.enterText(confirmPassword, '123');
-
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       await tester.tap(buttonRegister);
       await tester.pumpAndSettle();
@@ -206,8 +203,7 @@ void main() {
       await tester.enterText(email, 'test@test.com');
       await tester.enterText(password, '123');
       await tester.enterText(confirmPassword, '1234');
-
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       await tester.tap(buttonRegister);
       await tester.pumpAndSettle();
@@ -242,8 +238,7 @@ void main() {
       await tester.enterText(email, 'test@test.com');
       await tester.enterText(password, 'password');
       await tester.enterText(confirmPassword, 'password');
-
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.text('Test'), findsOneWidget);
       expect(find.text('test@test.com'), findsOneWidget);
@@ -303,8 +298,7 @@ void main() {
       await tester.enterText(email, 'test@test.com');
       await tester.enterText(password, 'password');
       await tester.enterText(confirmPassword, 'password');
-
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.text('Test'), findsOneWidget);
       expect(find.text('test@test.com'), findsOneWidget);
@@ -347,8 +341,7 @@ void main() {
       await tester.enterText(email, 'test@test.com');
       await tester.enterText(password, 'password');
       await tester.enterText(confirmPassword, 'password');
-
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.text('Test'), findsOneWidget);
       expect(find.text('test@test.com'), findsOneWidget);

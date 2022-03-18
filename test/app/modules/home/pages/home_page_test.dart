@@ -28,8 +28,6 @@ class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 class MockRoute extends Mock implements Route<dynamic> {}
 
-class MockFuture<T> extends Mock implements Future<T> {}
-
 void main() {
   late HomeControllerImpl mockHomeControllerImpl;
   late ExpensesControllerImpl mockExpensesControllerImpl;

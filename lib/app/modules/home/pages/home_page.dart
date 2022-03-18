@@ -69,25 +69,32 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       height: 16.h,
                     ),
-                    Text.rich(
-                      TextSpan(
-                        text: r'R$',
-                        style: TextStyle(fontSize: 20.sp),
-                        children: [
-                          TextSpan(
-                            text: NumberFormat.currency(
-                              locale: 'pt-BR',
-                              name: '',
-                              decimalDigits: 2,
-                            ).format(homeController.totalExpenses),
-                            style: TextStyle(
-                              fontSize: 40.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ],
-                      ),
+                    Text(
+                      NumberFormat.currency(
+                        locale: 'pt-BR',
+                        name: '',
+                        decimalDigits: 2,
+                      ).format(homeController.totalExpenses),
                     ),
+                    // Text.rich(
+                    //   TextSpan(
+                    //     text: r'R$',
+                    //     style: TextStyle(fontSize: 20.sp),
+                    //     children: [
+                    //       TextSpan(
+                    //         text: NumberFormat.currency(
+                    //           locale: 'pt-BR',
+                    //           name: '',
+                    //           decimalDigits: 2,
+                    //         ).format(homeController.totalExpenses),
+                    //         style: TextStyle(
+                    //           fontSize: 40.sp,
+                    //           fontWeight: FontWeight.bold,
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       child: SizedBox(
@@ -267,6 +274,22 @@ class _HomePageState extends State<HomePage> {
               ),
               context: context,
               builder: (_) {
+                final disableApplyFilterButton = ValueNotifier<bool>(true);
+
+                initialDateController.addListener(() {
+                  if (initialDateController.text.isNotEmpty &&
+                      finalDateController.text.isNotEmpty) {
+                    disableApplyFilterButton.value = false;
+                  }
+                });
+
+                finalDateController.addListener(() {
+                  if (initialDateController.text.isNotEmpty &&
+                      finalDateController.text.isNotEmpty) {
+                    disableApplyFilterButton.value = false;
+                  }
+                });
+
                 return SizedBox(
                   height: 200.h,
                   child: Padding(
@@ -350,32 +373,36 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(
                           height: 16,
                         ),
-                        OndeGasteiButton(
-                          const Text('Aplicar'),
-                          key: const Key('apply_button_key_home_page'),
-                          width: MediaQuery.of(context).size.width,
-                          disable: true,
-                          onPressed: initialDateController.text.isNotEmpty &&
-                                  finalDateController.text.isEmpty
-                              ? () async {
-                                  Navigator.of(context).pop();
+                        ValueListenableBuilder<bool>(
+                          valueListenable: disableApplyFilterButton,
+                          builder: (context, disable, _) {
+                            return OndeGasteiButton(
+                              const Text('Aplicar'),
+                              key: const Key('apply_button_key_home_page'),
+                              width: MediaQuery.of(context).size.width,
+                              disable: disable,
+                              onPressed: disable
+                                  ? null
+                                  : () async {
+                                      Navigator.of(context).pop();
 
-                                  final futures = [
-                                    homeController.fetchHomeData(
-                                      userId: userModel!.userId,
-                                      initialDate: dateFilter!.initialDate,
-                                      finalDate: dateFilter!.finalDate,
-                                    ),
-                                    expensesController.findExpensesByPeriod(
-                                      userId: userModel!.userId,
-                                      initialDate: dateFilter!.initialDate,
-                                      finalDate: dateFilter!.finalDate,
-                                    )
-                                  ];
+                                      final futures = [
+                                        homeController.fetchHomeData(
+                                          userId: userModel!.userId,
+                                          initialDate: dateFilter!.initialDate,
+                                          finalDate: dateFilter!.finalDate,
+                                        ),
+                                        expensesController.findExpensesByPeriod(
+                                          userId: userModel!.userId,
+                                          initialDate: dateFilter!.initialDate,
+                                          finalDate: dateFilter!.finalDate,
+                                        )
+                                      ];
 
-                                  await Future.wait(futures);
-                                }
-                              : null,
+                                      await Future.wait(futures);
+                                    },
+                            );
+                          },
                         )
                       ],
                     ),
