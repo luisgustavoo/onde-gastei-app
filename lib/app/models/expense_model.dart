@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 
+@immutable
 class ExpenseModel {
-  ExpenseModel({
+  const ExpenseModel({
     required this.description,
     required this.value,
     required this.date,
@@ -36,4 +38,25 @@ class ExpenseModel {
       'category': category.toMap(),
     };
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ExpenseModel &&
+          runtimeType == other.runtimeType &&
+          expenseId == other.expenseId &&
+          description == other.description &&
+          value == other.value &&
+          date == other.date &&
+          category == other.category &&
+          userId == other.userId;
+
+  @override
+  int get hashCode =>
+      expenseId.hashCode ^
+      description.hashCode ^
+      value.hashCode ^
+      date.hashCode ^
+      category.hashCode ^
+      userId.hashCode;
 }

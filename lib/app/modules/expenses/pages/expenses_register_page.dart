@@ -224,9 +224,9 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                         return DropdownMenuItem<CategoryModel>(
                           value: category,
                           child: ListTile(
-                            key: Key(
-                              'list_tile_items_key_${category.id}_expenses_register_page',
-                            ),
+                            // key: Key(
+                            //   'list_tile_items_key_${category.id}_expenses_register_page',
+                            // ),
                             leading: CircleAvatar(
                               backgroundColor: Color(category.colorCode),
                               child: Icon(

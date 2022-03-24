@@ -1,0 +1,14 @@
+[
+  {
+    "id_despesa": 76,
+    "descricao": "Livro Como Fazer Amigos e Influenciar Pessoas",
+    "valor": 28.0,
+    "data": "2022-03-10T00:00:00.000",
+    "categoria": {
+      "id_categoria": 110050,
+      "descricao": "Compras",
+      "codigo_icone": 58266,
+      "codigo_cor": 4294924066
+    }
+  }
+]

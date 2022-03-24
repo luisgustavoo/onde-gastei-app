@@ -130,7 +130,17 @@ void main() {
       await tester.pumpWidget(createHomePage());
 
       expect(find.text('Olá, Test'), findsOneWidget);
-      expect(find.text(r'R$ 1.500,00', findRichText: true), findsOneWidget);
+      expect(
+        find.text(
+          'R\$${NumberFormat.currency(
+            locale: 'pt-BR',
+            name: '',
+            decimalDigits: 2,
+          ).format(1500)}',
+          findRichText: true,
+        ),
+        findsOneWidget,
+      );
       expect(find.text('Período'), findsOneWidget);
       expect(find.text('01/01/2022'), findsOneWidget);
       expect(find.text('31/03/2022'), findsOneWidget);
@@ -169,7 +179,7 @@ void main() {
     });
 
     testWidgets('Test data filter on HomePage', (tester) async {
-      userModel = UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
+      userModel = UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
 
       dateFilter = DateFilter(
         initialDate: DateTime(2022),
@@ -246,10 +256,12 @@ void main() {
 
       expect(find.byType(Dialog), findsOneWidget);
 
-      final firstDayMonth = find.descendant(
-        of: find.byType(GridView),
-        matching: find.widgetWithText(Container, '1'),
-      );
+      // final firstDayMonth = find.descendant(
+      //   of: find.byType(GridView),
+      //   matching: find.widgetWithText(Container, '1'),
+      // );
+
+      final firstDayMonth = find.text('1');
 
       expect(
         firstDayMonth,
@@ -283,10 +295,12 @@ void main() {
       await tester.tap(finalDateFilter.last);
       await tester.pumpAndSettle();
 
-      final lastDayMonth = find.descendant(
-        of: find.byType(GridView),
-        matching: find.widgetWithText(Container, '28'),
-      );
+      // final lastDayMonth = find.descendant(
+      //   of: find.byType(GridView),
+      //   matching: find.widgetWithText(Container, '28'),
+      // );
+
+      final lastDayMonth = find.text('28');
 
       expect(
         lastDayMonth,

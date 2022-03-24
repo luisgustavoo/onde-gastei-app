@@ -69,32 +69,25 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       height: 16.h,
                     ),
-                    Text(
-                      NumberFormat.currency(
-                        locale: 'pt-BR',
-                        name: '',
-                        decimalDigits: 2,
-                      ).format(homeController.totalExpenses),
+                    Text.rich(
+                      TextSpan(
+                        text: r'R$',
+                        style: TextStyle(fontSize: 20.sp),
+                        children: [
+                          TextSpan(
+                            text: NumberFormat.currency(
+                              locale: 'pt-BR',
+                              name: '',
+                              decimalDigits: 2,
+                            ).format(homeController.totalExpenses),
+                            style: TextStyle(
+                              fontSize: 40.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                    // Text.rich(
-                    //   TextSpan(
-                    //     text: r'R$',
-                    //     style: TextStyle(fontSize: 20.sp),
-                    //     children: [
-                    //       TextSpan(
-                    //         text: NumberFormat.currency(
-                    //           locale: 'pt-BR',
-                    //           name: '',
-                    //           decimalDigits: 2,
-                    //         ).format(homeController.totalExpenses),
-                    //         style: TextStyle(
-                    //           fontSize: 40.sp,
-                    //           fontWeight: FontWeight.bold,
-                    //         ),
-                    //       )
-                    //     ],
-                    //   ),
-                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       child: SizedBox(

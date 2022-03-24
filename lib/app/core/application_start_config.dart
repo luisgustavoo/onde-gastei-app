@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/core/helpers/environments.dart';
 
 class ApplicationStartConfig {
-  Future<void> congifureApp() async {
+  Future<void> configureApp() async {
     WidgetsFlutterBinding.ensureInitialized();
     await _firebaseConfig();
     await _loadEnvs();

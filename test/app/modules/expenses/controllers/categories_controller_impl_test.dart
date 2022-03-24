@@ -12,7 +12,20 @@ import '../../../../core/log/mock_log.dart';
 
 class MockExpensesServices extends Mock implements ExpensesServices {}
 
-class MockExpenseModel extends Mock implements ExpenseModel {}
+// class MockExpenseModel extends Mock implements ExpenseModel {}
+class MockExpenseModel extends ExpenseModel {
+  const MockExpenseModel({
+    required String description,
+    required double value,
+    required DateTime date,
+    required CategoryModel category,
+  }) : super(
+          description: description,
+          value: value,
+          date: date,
+          category: category,
+        );
+}
 
 void main() {
   late ExpensesServices mockServices;
@@ -27,7 +40,20 @@ void main() {
       log: mockLog,
     );
 
-    registerFallbackValue(MockExpenseModel());
+    registerFallbackValue(
+      MockExpenseModel(
+        description: 'Test 1',
+        value: 1,
+        date: DateTime.now(),
+        category: const CategoryModel(
+          id: 1,
+          description: 'Test',
+          iconCode: 1,
+          colorCode: 1,
+          userId: 1,
+        ),
+      ),
+    );
   });
 
   group('Group test register', () {

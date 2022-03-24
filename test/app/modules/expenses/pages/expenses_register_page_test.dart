@@ -20,7 +20,19 @@ class MockCategoriesControllerImpl extends Mock
 class MockExpensesControllerImpl extends Mock
     implements ExpensesControllerImpl {}
 
-class MockCategoryModel extends Mock implements CategoryModel {}
+// class MockCategoryModel extends Mock implements CategoryModel {}
+
+class MockCategoryModel extends CategoryModel {
+  const MockCategoryModel({
+    required String description,
+    required int iconCode,
+    required int colorCode,
+  }) : super(
+          description: description,
+          iconCode: iconCode,
+          colorCode: colorCode,
+        );
+}
 
 void main() {
   late ExpensesControllerImpl mockExpensesControllerImpl;
@@ -39,6 +51,14 @@ void main() {
       userId: 1,
     ),
   );
+
+  // const categoryModel = CategoryModel(
+  //   id: 1,
+  //   description: 'Test 1',
+  //   iconCode: 58261,
+  //   colorCode: 4284513675,
+  //   userId: 1,
+  // );
 
   final expenseModel = ExpenseModel(
     expenseId: 1,
@@ -98,7 +118,13 @@ void main() {
   setUp(() {
     mockExpensesControllerImpl = MockExpensesControllerImpl();
     mockCategoriesControllerImpl = MockCategoriesControllerImpl();
-    // registerFallbackValue(MockCategoryModel());
+    registerFallbackValue(
+      const MockCategoryModel(
+        description: 'Test 1',
+        iconCode: 58261,
+        colorCode: 4284513675,
+      ),
+    );
   });
 
   group('Group test ExpensesRegisterPage', () {
@@ -178,9 +204,9 @@ void main() {
         const Key('value_key_expenses_register_page'),
       );
 
-      final date = find.byKey(
-        const Key('date_key_expenses_register_page'),
-      );
+      // final date = find.byKey(
+      //   const Key('date_key_expenses_register_page'),
+      // );
 
       final registerButton = find.byKey(
         const Key('register_button_key_expenses_register_page'),
@@ -188,7 +214,7 @@ void main() {
 
       await tester.enterText(description, '');
       await tester.enterText(value, '');
-      await tester.enterText(date, '');
+      // await tester.enterText(date, '');
       await tester.pumpAndSettle();
 
       await tester.tap(registerButton);
@@ -196,7 +222,7 @@ void main() {
 
       expect(find.text('Informe a descrição'), findsOneWidget);
       expect(find.text('Informe o valor'), findsOneWidget);
-      expect(find.text('Informe a data'), findsOneWidget);
+      // expect(find.text('Informe a data'), findsOneWidget);
       expect(find.text('Informe a categoria'), findsOneWidget);
     });
 
@@ -220,9 +246,9 @@ void main() {
         const Key('value_key_expenses_register_page'),
       );
 
-      final date = find.byKey(
-        const Key('date_key_expenses_register_page'),
-      );
+      // final date = find.byKey(
+      //   const Key('date_key_expenses_register_page'),
+      // );
 
       final registerButton = find.byKey(
         const Key('register_button_key_expenses_register_page'),
@@ -230,14 +256,14 @@ void main() {
 
       await tester.enterText(description, 'Test');
       await tester.enterText(value, 'a');
-      await tester.enterText(date, '01/01/0001');
+      // await tester.enterText(date, '01/01/0001');
       await tester.pumpAndSettle();
 
       await tester.tap(registerButton);
       await tester.pumpAndSettle();
 
       expect(find.text('Valor invalido'), findsOneWidget);
-      expect(find.text('Data inválida'), findsOneWidget);
+      // expect(find.text('Data inválida'), findsOneWidget);
     });
 
     testWidgets('Should register expenses with success', (tester) async {
@@ -270,16 +296,16 @@ void main() {
         const Key('value_key_expenses_register_page'),
       );
 
-      final date = find.byKey(
-        const Key('date_key_expenses_register_page'),
-      );
+      // final date = find.byKey(
+      //   const Key('date_key_expenses_register_page'),
+      // );
 
       final categories = find.byKey(
         const Key('categories_key_expenses_register_page'),
       );
 
       // final categoryItem = find.byKey(
-      //   const Key('list_tile_item_key_0_expenses_register_page'),
+      //   const Key('list_tile_item_key_1_expenses_register_page'),
       // );
 
       final registerButton = find.byKey(
@@ -288,7 +314,7 @@ void main() {
 
       await tester.enterText(description, 'Test');
       await tester.enterText(value, r'R$ 1,00');
-      await tester.enterText(date, '01/01/2022');
+      // await tester.enterText(date, '01/01/2022');
       await tester.tap(categories);
       await tester.pumpAndSettle();
 
