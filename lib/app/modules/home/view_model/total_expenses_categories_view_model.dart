@@ -1,9 +1,9 @@
-// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
-
+import 'package:flutter/foundation.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 
+@immutable
 class TotalExpensesCategoriesViewModel {
-  TotalExpensesCategoriesViewModel({
+  const TotalExpensesCategoriesViewModel({
     required this.totalValue,
     required this.category,
   });

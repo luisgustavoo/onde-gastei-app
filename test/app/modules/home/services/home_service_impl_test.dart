@@ -25,10 +25,10 @@ void main() {
       const userId = 1;
       final initialDate = DateTime.now();
       final finalDate = DateTime.now();
-      final totalExpensesCategoriesExpected = [
+      const totalExpensesCategoriesExpected = [
         TotalExpensesCategoriesViewModel(
           totalValue: 1,
-          category: const CategoryModel(
+          category: CategoryModel(
             id: 1,
             description: 'Test',
             iconCode: 1,

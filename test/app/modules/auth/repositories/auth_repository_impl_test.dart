@@ -245,7 +245,7 @@ void main() {
       final mockResponse =
           MockRestClientResponse<Map<String, dynamic>>(data: responseData);
 
-      final confirmLoginExpected = ConfirmLoginModel(
+      const confirmLoginExpected = ConfirmLoginModel(
         accessToken: 'Bla bla bla',
         refreshToken: 'Bla bla bla',
       );

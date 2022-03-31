@@ -21,12 +21,12 @@ class DetailsExpensesCategoriesControllerImpl extends ChangeNotifier
   DetailsExpensesCategoriesState state = DetailsExpensesCategoriesState.idle;
 
   @override
-  Future<List<ExpenseModel>> findExpensesByCategories(
-    int userId,
-    int categoryId,
-    DateTime initialDate,
-    DateTime finalDate,
-  ) async {
+  Future<List<ExpenseModel>> findExpensesByCategories({
+    required int userId,
+    required int categoryId,
+    required DateTime initialDate,
+    required DateTime finalDate,
+  }) async {
     try {
       state = DetailsExpensesCategoriesState.loading;
       notifyListeners();

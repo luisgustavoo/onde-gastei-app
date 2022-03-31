@@ -1,7 +1,8 @@
-// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
+import 'package:flutter/foundation.dart';
 
+@immutable
 class UserModel {
-  UserModel({
+  const UserModel({
     required this.userId,
     required this.name,
     required this.email,
@@ -16,7 +17,7 @@ class UserModel {
   }
 
   final int userId;
-  String name;
+  final String name;
   final String email;
 
   Map<String, dynamic> toMap() {

@@ -9,7 +9,9 @@ import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/core/helpers/input_formatter/date_input_formatter_ptbr.dart';
 import 'package:onde_gastei_app/app/core/helpers/validators/validators.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
+import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_loading.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
+import 'package:onde_gastei_app/app/modules/details_expenses_categories/pages/details_expenses_categories_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/widgets/indicador.dart';
@@ -36,12 +38,7 @@ class _HomePageState extends State<HomePage> {
         body: Consumer<HomeControllerImpl>(
           builder: (_, homeController, __) {
             if (homeController.state == HomeState.loading) {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).primaryColor,
-                  strokeWidth: 1.w,
-                ),
-              );
+              const OndeGasteiLoading();
             }
 
             if (homeController.state == HomeState.error) {
@@ -102,18 +99,30 @@ class _HomePageState extends State<HomePage> {
                               //MediaQuery.of(context).size.width * 0.25,
                               child: Column(
                                 children: [
-                                  CircleAvatar(
-                                    backgroundColor:
-                                        Color(e.category.colorCode),
-                                    minRadius: 25.r,
-                                    child: Icon(
-                                      IconData(
-                                        e.category.iconCode,
-                                        fontFamily: 'MaterialIcons',
+                                  GestureDetector(
+                                    child: CircleAvatar(
+                                      backgroundColor:
+                                          Color(e.category.colorCode),
+                                      minRadius: 25.r,
+                                      child: Icon(
+                                        IconData(
+                                          e.category.iconCode,
+                                          fontFamily: 'MaterialIcons',
+                                        ),
+                                        color: Colors.white,
+                                        size: 30,
                                       ),
-                                      color: Colors.white,
-                                      size: 30,
                                     ),
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(
+                                        DetailsExpensesCategoriesPage.router,
+                                        arguments: <String, dynamic>{
+                                          'user_id': userModel!.userId,
+                                          'category_id': e.category.id,
+                                          'category_name': e.category.description,
+                                        },
+                                      );
+                                    },
                                   ),
                                   Expanded(
                                     child: Text(
@@ -413,8 +422,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
 
 // class _BuildAppBarHomePage extends StatelessWidget {
 //   const _BuildAppBarHomePage({

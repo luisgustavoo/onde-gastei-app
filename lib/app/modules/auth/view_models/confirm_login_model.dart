@@ -1,7 +1,9 @@
-// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
 
+import 'package:flutter/foundation.dart';
+
+@immutable
 class ConfirmLoginModel {
-  ConfirmLoginModel({
+  const ConfirmLoginModel({
     required this.accessToken,
     required this.refreshToken,
   });

@@ -101,7 +101,7 @@ void main() {
       // Arrange
       const email = 'Test';
       const password = 'password';
-      final userExpected =
+      const userExpected =
           UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
 
       when(() => service.login(any(), any())).thenAnswer((_) async => _);
@@ -174,7 +174,7 @@ void main() {
   group('Group test fetchUserData', () {
     test('Should fetchUserData with success', () async {
       // Arrange
-      final userExpected =
+      const userExpected =
           UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
 
       when(() => service.fetchUserData()).thenAnswer((_) async => userExpected);

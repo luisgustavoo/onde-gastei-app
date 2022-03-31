@@ -164,7 +164,7 @@ void main() {
       final mockCredentialFirebaseUser =
           MockUserCredential(mockUser: mockFirebaseUser);
 
-      final confirmLoginModel = ConfirmLoginModel(
+      const confirmLoginModel = ConfirmLoginModel(
         accessToken: 'Bearer test',
         refreshToken: 'Bearer test',
       );
@@ -211,7 +211,7 @@ void main() {
       const password = 'password';
       final mockCredentialFirebaseUser = MockUserCredential();
 
-      final confirmLoginModel = ConfirmLoginModel(
+      const confirmLoginModel = ConfirmLoginModel(
         accessToken: 'Bearer test',
         refreshToken: 'Bearer test',
       );
@@ -330,7 +330,7 @@ void main() {
   group('Group test fetchUserData', () {
     test('Should fetchUserData with success', () async {
       // Arrange
-      final userExpected =
+      const userExpected =
           UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
 
       when(() => localStorage.write<String>(any(), any()))

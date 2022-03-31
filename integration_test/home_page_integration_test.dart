@@ -103,7 +103,7 @@ void main() {
   });
 
   testWidgets('Test if home page shows up', (tester) async {
-    userModel = UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
+    userModel = const UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
 
     dateFilter = DateFilter(
       initialDate: DateTime(2022),

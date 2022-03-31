@@ -105,7 +105,7 @@ void main() {
 
   group('Group test HomePage', () {
     testWidgets('Test if home page shows up', (tester) async {
-      userModel = UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
+      userModel = const UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
 
       dateFilter = DateFilter(
         initialDate: DateTime(2022),
@@ -151,7 +151,7 @@ void main() {
     });
 
     testWidgets('Test if loading home page', (tester) async {
-      userModel = UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
+      userModel = const UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
 
       dateFilter = DateFilter(
         initialDate: DateTime(2022),
@@ -179,7 +179,7 @@ void main() {
     });
 
     testWidgets('Test data filter on HomePage', (tester) async {
-      userModel = UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
+      userModel = const UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
 
       dateFilter = DateFilter(
         initialDate: DateTime(2022),

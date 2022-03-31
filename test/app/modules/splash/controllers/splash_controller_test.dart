@@ -31,7 +31,7 @@ void main() {
             "email": "test@domain.com"
         }
       ''';
-      final userExpected = UserModel(
+      const userExpected = UserModel(
         userId: 1,
         name: 'test',
         email: 'test@domain.com',

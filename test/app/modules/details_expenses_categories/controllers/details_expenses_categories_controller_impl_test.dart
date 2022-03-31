@@ -50,10 +50,10 @@ void main() {
 
       //Act
       final expensesCategoriesList = await controller.findExpensesByCategories(
-        1,
-        1,
-        DateTime.now(),
-        DateTime.now(),
+        userId: 1,
+        categoryId: 1,
+        initialDate: DateTime.now(),
+        finalDate: DateTime.now(),
       );
 
       //Assert
@@ -77,10 +77,10 @@ void main() {
 
       //Act
       final expensesCategoriesList = await controller.findExpensesByCategories(
-        1,
-        1,
-        DateTime.now(),
-        DateTime.now(),
+        userId: 1,
+        categoryId: 1,
+        initialDate: DateTime.now(),
+        finalDate: DateTime.now(),
       );
 
       //Assert
@@ -108,10 +108,10 @@ void main() {
       //Assert
       expect(
         () => call(
-          1,
-          1,
-          DateTime.now(),
-          DateTime.now(),
+          userId: 1,
+          categoryId: 1,
+          initialDate: DateTime.now(),
+          finalDate: DateTime.now(),
         ),
         throwsA(
           isA<Failure>(),

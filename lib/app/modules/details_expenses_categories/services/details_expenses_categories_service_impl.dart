@@ -4,9 +4,9 @@ import 'package:onde_gastei_app/app/modules/details_expenses_categories/services
 
 class DetailsExpensesCategoriesServiceImpl
     implements DetailsExpensesCategoriesService {
-  DetailsExpensesCategoriesServiceImpl(
-      {required DetailsExpensesCategoriesRepository repository})
-      : _repository = repository;
+  DetailsExpensesCategoriesServiceImpl({
+    required DetailsExpensesCategoriesRepository repository,
+  }) : _repository = repository;
 
   final DetailsExpensesCategoriesRepository _repository;
 

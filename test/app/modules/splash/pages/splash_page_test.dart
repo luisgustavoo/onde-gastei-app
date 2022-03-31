@@ -58,7 +58,7 @@ void main() {
 
   group('Group test splash page', () {
     testWidgets('Test if login page shows up', (tester) async {
-      final userExpected = UserModel(
+      const userExpected = UserModel(
         userId: 1,
         name: 'Test',
         email: 'test@domain.com',

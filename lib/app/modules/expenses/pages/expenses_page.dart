@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/app.dart';
+import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_loading.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
@@ -92,12 +93,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                   }
 
                   if (expensesController.state == ExpensesState.loading) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).primaryColor,
-                        strokeWidth: 1.w,
-                      ),
-                    );
+                    return const OndeGasteiLoading();
                   }
 
                   return ListView.builder(

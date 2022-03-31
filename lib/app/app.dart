@@ -25,6 +25,10 @@ import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dar
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_register_page.dart';
 import 'package:onde_gastei_app/app/modules/categories/repositories/categories_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/services/categories_service_impl.dart';
+import 'package:onde_gastei_app/app/modules/details_expenses_categories/controllers/details_expenses_categories_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/details_expenses_categories/pages/details_expenses_categories_page.dart';
+import 'package:onde_gastei_app/app/modules/details_expenses_categories/repositories/details_expenses_categories_repository_impl.dart';
+import 'package:onde_gastei_app/app/modules/details_expenses_categories/services/details_expenses_categories_service_impl.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/repositories/expenses_repository_impl.dart';
@@ -140,7 +144,7 @@ class App extends StatelessWidget {
               service: context.read<HomeServiceImpl>(),
             ),
           ),
-          // ========== AUTHENTICATION ==========
+          // ========== HOME ==========
 
           // ========== CATEGORIES ==========
           Provider(
@@ -191,6 +195,27 @@ class App extends StatelessWidget {
             ),
           ),
           // ========== APP ==========
+
+          // ========== DETAILS EXPENSES CATEGORY ==========
+          Provider(
+            create: (context) => DetailsExpensesCategoriesRepositoryImpl(
+              restClient: context.read<DioRestClient>(),
+              log: context.read<LogImpl>(),
+            ),
+          ),
+          Provider(
+            create: (context) => DetailsExpensesCategoriesServiceImpl(
+              repository:
+                  context.read<DetailsExpensesCategoriesRepositoryImpl>(),
+            ),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => DetailsExpensesCategoriesControllerImpl(
+              service: context.read<DetailsExpensesCategoriesServiceImpl>(),
+              log: context.read<LogImpl>(),
+            ),
+          ),
+          // ========== DETAILS EXPENSES CATEGORY ==========
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -263,7 +288,23 @@ class App extends StatelessWidget {
               return CategoriesRegisterPage(
                 categoriesController: context.read<CategoriesControllerImpl>(),
               );
-            }
+            },
+            DetailsExpensesCategoriesPage.router: (context) {
+              final arguments = ModalRoute.of(context)!.settings.arguments!
+                  as Map<String, dynamic>;
+
+              final userId = int.parse(arguments['user_id'].toString());
+              final categoryId = int.parse(arguments['category_id'].toString());
+              final categoryName = arguments['category_name'].toString();
+
+              return DetailsExpensesCategoriesPage(
+                userId: userId,
+                categoryId: categoryId,
+                categoryName: categoryName,
+                controller:
+                    context.read<DetailsExpensesCategoriesControllerImpl>(),
+              );
+            },
           },
         ),
       ),
