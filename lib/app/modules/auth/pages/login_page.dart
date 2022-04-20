@@ -9,18 +9,24 @@ import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({required AuthController authController, Key? key})
-      : _authController = authController,
+  const LoginPage({
+    required AuthController authController,
+    required UserController userController,
+    Key? key,
+  })  : _authController = authController,
+        _userController = userController,
         super(key: key);
 
   static const router = '/login';
 
   final AuthController _authController;
+  final UserController _userController;
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -127,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(
             height: 32.h,
           ),
-          _buildOndeGasteiButton(context, authControllerState),
+          _buildSaveButton(context, authControllerState),
           SizedBox(
             height: 32.h,
           ),
@@ -148,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  OndeGasteiButton _buildOndeGasteiButton(
+  OndeGasteiButton _buildSaveButton(
     BuildContext context,
     AuthState authControllerState,
   ) {
@@ -172,6 +178,8 @@ class _LoginPageState extends State<LoginPage> {
               _emailController.text,
               _passwordController.text,
             );
+
+            await widget._userController.fetchUserData();
 
             if (!mounted) {
               return;

@@ -1,4 +1,3 @@
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/view_models/confirm_login_model.dart';
 
 abstract class AuthRepository {
@@ -7,6 +6,4 @@ abstract class AuthRepository {
   Future<String> login(String email, String password);
 
   Future<ConfirmLoginModel> confirmLogin();
-
-  Future<UserModel> fetchUserData();
 }

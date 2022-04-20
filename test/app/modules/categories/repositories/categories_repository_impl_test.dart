@@ -148,21 +148,21 @@ void main() {
       );
       final responseData = jsonDecode(jsonData) as List<dynamic>;
 
-      final categoriesList = List<Map<String, dynamic>>.from(responseData);
+      final mockCategoriesList = List<Map<String, dynamic>>.from(responseData);
 
-      final categoriesModelExpected =
-          categoriesList.map(CategoryModel.fromMap).toList();
+      final categoriesListExpected =
+      mockCategoriesList.map(CategoryModel.fromMap).toList();
 
       when(() => restClient.get<List<Map<String, dynamic>>>(any())).thenAnswer(
         (_) async =>
-            MockRestClientResponse(statusCode: 200, data: categoriesList),
+            MockRestClientResponse(statusCode: 200, data: mockCategoriesList),
       );
 
       //Act
-      final categoriesModel = await repository.findCategories(1);
+      final categoriesList = await repository.findCategories(1);
 
       //Assert
-      expect(categoriesModel, categoriesModelExpected);
+      expect(categoriesList, categoriesListExpected);
       verify(() => restClient.get<List<Map<String, dynamic>>>(any())).called(1);
     });
 

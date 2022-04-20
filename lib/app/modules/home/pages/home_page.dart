@@ -5,22 +5,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:onde_gastei_app/app/app.dart';
+import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/helpers/input_formatter/date_input_formatter_ptbr.dart';
 import 'package:onde_gastei_app/app/core/helpers/validators/validators.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_loading.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/details_expenses_categories/pages/details_expenses_categories_page.dart';
-import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
+import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/widgets/indicador.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({required this.homeController, required this.expensesController, required this.dateFilter, Key? key}) : super(key: key);
 
   static const router = '/home';
+  final HomeController homeController;
+  final ExpensesController expensesController;
+  final DateFilter dateFilter;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -29,12 +35,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final expensesController = context.read<ExpensesControllerImpl>();
-    final homeController = context.read<HomeControllerImpl>();
+
+    final user = context.select<UserControllerImpl, UserModel>(
+      (userController) => userController.user,
+    );
 
     return SafeArea(
       child: Scaffold(
-        appBar: _buildAppBar(context, homeController, expensesController),
+        appBar: _buildAppBar(context, widget.homeController, widget.expensesController, user),
         body: Consumer<HomeControllerImpl>(
           builder: (_, homeController, __) {
             if (homeController.state == HomeState.loading) {
@@ -117,9 +125,11 @@ class _HomePageState extends State<HomePage> {
                                       Navigator.of(context).pushNamed(
                                         DetailsExpensesCategoriesPage.router,
                                         arguments: <String, dynamic>{
-                                          'user_id': userModel!.userId,
+                                          'user_id': user.userId,
                                           'category_id': e.category.id,
-                                          'category_name': e.category.description,
+                                          'category_name':
+                                              e.category.description,
+                                          'date_filter': widget.dateFilter
                                         },
                                       );
                                     },
@@ -217,12 +227,12 @@ class _HomePageState extends State<HomePage> {
               ),
               Text(
                 DateFormat.yMd('pt_BR').format(
-                  dateFilter!.initialDate,
+                  widget.dateFilter.initialDate,
                 ),
               ),
               Text(
                 DateFormat.yMd('pt_BR').format(
-                  dateFilter!.finalDate,
+                  widget.dateFilter.finalDate,
                 ),
               ),
             ],
@@ -234,8 +244,9 @@ class _HomePageState extends State<HomePage> {
 
   AppBar _buildAppBar(
     BuildContext context,
-    HomeControllerImpl homeController,
-    ExpensesControllerImpl expensesController,
+    HomeController homeController,
+    ExpensesController expensesController,
+    UserModel user,
   ) {
     return AppBar(
       title: Row(
@@ -248,7 +259,8 @@ class _HomePageState extends State<HomePage> {
               ),
               children: [
                 TextSpan(
-                  text: userModel!.name,
+                  // text: userModel!.name,
+                  text: user.name,
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
@@ -317,7 +329,7 @@ class _HomePageState extends State<HomePage> {
                                   );
 
                                   if (result != null) {
-                                    dateFilter!.initialDate = result;
+                                    widget.dateFilter.initialDate = result;
 
                                     initialDateController.text =
                                         DateFormat.yMd('pt_BR').format(result);
@@ -352,7 +364,7 @@ class _HomePageState extends State<HomePage> {
                                   );
 
                                   if (result != null) {
-                                    dateFilter!.finalDate = result;
+                                    widget.dateFilter.finalDate = result;
 
                                     finalDateController.text =
                                         DateFormat.yMd('pt_BR').format(result);
@@ -390,14 +402,14 @@ class _HomePageState extends State<HomePage> {
 
                                       final futures = [
                                         homeController.fetchHomeData(
-                                          userId: userModel!.userId,
-                                          initialDate: dateFilter!.initialDate,
-                                          finalDate: dateFilter!.finalDate,
+                                          userId: user.userId,
+                                          initialDate: widget.dateFilter.initialDate,
+                                          finalDate: widget.dateFilter.finalDate,
                                         ),
                                         expensesController.findExpensesByPeriod(
-                                          userId: userModel!.userId,
-                                          initialDate: dateFilter!.initialDate,
-                                          finalDate: dateFilter!.finalDate,
+                                          userId: user.userId,
+                                          initialDate: widget.dateFilter.initialDate,
+                                          finalDate: widget.dateFilter.finalDate,
                                         )
                                       ];
 

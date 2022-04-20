@@ -14,14 +14,12 @@ import 'package:onde_gastei_app/app/core/rest_client/dio_rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_services_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
-import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_register_page.dart';
 import 'package:onde_gastei_app/app/modules/categories/repositories/categories_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/services/categories_service_impl.dart';
@@ -36,14 +34,14 @@ import 'package:onde_gastei_app/app/modules/expenses/services/expenses_services_
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/repositories/home_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/services/home_service_impl.dart';
-import 'package:onde_gastei_app/app/modules/splash/controllers/splash_controller.dart';
 import 'package:onde_gastei_app/app/modules/splash/pages/splash_page.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/user/repositories/user_repository_impl.dart';
+import 'package:onde_gastei_app/app/modules/user/services/user_service_impl.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
-UserModel? userModel;
-
-DateFilter? dateFilter;
+// UserModel? userModel;
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -89,25 +87,35 @@ class App extends StatelessWidget {
           ),
           // ========== REST SERVICES ==========
 
-          // ========== REST SERVICES ==========
+          // ========== USER ==========
+          Provider(
+            create: (context) => UserRepositoryImpl(
+              restClient: context.read<DioRestClient>(),
+              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+              log: context.read<LogImpl>(),
+            ),
+          ),
+          Provider(
+            create: (context) => UserServiceImpl(
+              repository: context.read<UserRepositoryImpl>(),
+            ),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => UserControllerImpl(
+              service: context.read<UserServiceImpl>(),
+              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+              log: context.read<LogImpl>(),
+            ),
+          ),
+          // ========== USER ==========
+
+          // ========== AUTHENTICATION ==========
           Provider(
             create: (context) => AuthRepositoryImpl(
               restClient: context.read<DioRestClient>(),
               log: context.read<LogImpl>(),
             ),
           ),
-          // ========== REST SERVICES ==========
-
-          // ========== SPLASH ==========
-          Provider(
-            create: (context) => SplashController(
-              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
-              log: context.read<LogImpl>(),
-            ),
-          ),
-          // ========== SPLASH ==========
-
-          // ========== AUTHENTICATION ==========
           Provider(
             create: (context) => AuthServicesImpl(
               repository: context.read<AuthRepositoryImpl>(),
@@ -192,6 +200,7 @@ class App extends StatelessWidget {
               homeController: context.read<HomeControllerImpl>(),
               categoriesController: context.read<CategoriesControllerImpl>(),
               expensesController: context.read<ExpensesControllerImpl>(),
+              userController: context.read<UserControllerImpl>(),
             ),
           ),
           // ========== APP ==========
@@ -235,15 +244,20 @@ class App extends StatelessWidget {
           routes: {
             SplashPage.router: (context) {
               return SplashPage(
-                splashController: context.read<SplashController>(),
+                userController: context.read<UserControllerImpl>(),
               );
             },
             AppPage.router: (context) => AppPage(
-                  appController: context.read<AppController>(),
+                  homeController: context.read<HomeControllerImpl>(),
+                  expensesController: context.read<ExpensesControllerImpl>(),
+                  categoriesController:
+                      context.read<CategoriesControllerImpl>(),
+                  userController: context.read<UserControllerImpl>(),
                 ),
             LoginPage.router: (context) {
               return LoginPage(
                 authController: context.read<AuthControllerImpl>(),
+                userController: context.read<UserControllerImpl>(),
               );
             },
             RegisterPage.router: (context) {
@@ -266,9 +280,9 @@ class App extends StatelessWidget {
                 expensesController: context.read<ExpensesControllerImpl>(),
               );
             },
-            CategoriesPage.router: (context) {
-              return const CategoriesPage();
-            },
+            // CategoriesPage.router: (context) {
+            //   return const CategoriesPage();
+            // },
             CategoriesRegisterPage.router: (context) {
               if (ModalRoute.of(context)!.settings.arguments != null) {
                 final arguments = ModalRoute.of(context)!.settings.arguments!
@@ -296,6 +310,7 @@ class App extends StatelessWidget {
               final userId = int.parse(arguments['user_id'].toString());
               final categoryId = int.parse(arguments['category_id'].toString());
               final categoryName = arguments['category_name'].toString();
+              final dateFilter = arguments['date_filter'] as DateFilter;
 
               return DetailsExpensesCategoriesPage(
                 userId: userId,
@@ -303,6 +318,7 @@ class App extends StatelessWidget {
                 categoryName: categoryName,
                 controller:
                     context.read<DetailsExpensesCategoriesControllerImpl>(),
+                dateFilter: dateFilter,
               );
             },
           },

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
 
@@ -61,8 +59,6 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
 
       await _service.login(email, password);
 
-      userModel = await fetchUserData();
-
       state = AuthState.success;
       notifyListeners();
     } on UserNotFoundException catch (e, s) {
@@ -92,14 +88,5 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
   @override
   Future<void> logout() async {
     await _localStorage.clear();
-  }
-
-  @override
-  Future<UserModel> fetchUserData() async {
-    try {
-      return _service.fetchUserData();
-    } on Exception {
-      throw Failure(message: 'Erro ao buscar dados do usuario');
-    }
   }
 }

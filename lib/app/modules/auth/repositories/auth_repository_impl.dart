@@ -4,7 +4,6 @@ import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dar
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository.dart';
 import 'package:onde_gastei_app/app/modules/auth/view_models/confirm_login_model.dart';
 
@@ -81,25 +80,6 @@ class AuthRepositoryImpl implements AuthRepository {
     } on RestClientException catch (e, s) {
       _log.error('Erro ao confirmar login', e, s);
       throw Failure(message: 'Erro ao confirmar login');
-    }
-  }
-
-  @override
-  Future<UserModel> fetchUserData() async {
-    try {
-      final result = await _restClient.auth().get<Map<String, dynamic>>(
-            '/users/',
-          );
-
-      if (result.data == null || result.data!.isEmpty) {
-        throw UserNotFoundException();
-      }
-
-      return UserModel.fromMap(result.data!);
-    } on RestClientException catch (e, s) {
-      _log.error('Erro ao buscar dados do usuário', e, s);
-
-      throw Failure(message: 'Erro ao buscar dados do usuário');
     }
   }
 }

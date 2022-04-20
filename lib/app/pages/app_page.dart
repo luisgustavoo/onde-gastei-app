@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/app.dart';
-import 'package:onde_gastei_app/app/controllers/app_controller.dart';
+import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
+import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
+import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
+import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
+import 'package:provider/provider.dart';
 
 class AppPage extends StatefulWidget {
   const AppPage({
-    required this.appController,
+    required this.userController,
+    required this.homeController,
+    required this.expensesController,
+    required this.categoriesController,
     Key? key,
   }) : super(key: key);
   static const router = '/app';
 
-  final AppController appController;
+  final UserController userController;
+  final HomeController homeController;
+  final ExpensesController expensesController;
+  final CategoriesController categoriesController;
 
   @override
   State<AppPage> createState() => _AppPageState();
@@ -21,34 +32,45 @@ class AppPage extends StatefulWidget {
 
 class _AppPageState extends State<AppPage> {
   int currentIndex = 0;
+  final dateFilter = DateFilter(
+    initialDate: DateTime(DateTime.now().year, DateTime.now().month),
+    finalDate: DateTime(
+      DateTime.now().year,
+      DateTime.now().month + 1,
+    ).subtract(
+      const Duration(days: 1),
+    ),
+  );
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      if (userModel != null) {
-        final futures = [
-          widget.appController.findCategories(userModel!.userId),
-          widget.appController.findExpenses(
-            dateFilter!.initialDate,
-            dateFilter!.finalDate,
-            userModel!.userId,
-          ),
-          widget.appController.fetchHomeData(
-            userId: userModel!.userId,
-            initialDate: dateFilter!.initialDate,
-            finalDate: dateFilter!.finalDate,
-          ),
-        ];
+      final user = context.read<UserControllerImpl>().user;
 
-        await Future.wait(futures);
-      }
+      final futures = [
+        widget.homeController.fetchHomeData(
+          userId: user.userId,
+          initialDate: dateFilter.initialDate,
+          finalDate: dateFilter.finalDate,
+        ),
+        widget.categoriesController.findCategories(user.userId),
+        widget.expensesController.findExpensesByPeriod(
+          userId: user.userId,
+          initialDate: dateFilter.initialDate,
+          finalDate: dateFilter.finalDate,
+        ),
+      ];
+
+      await Future.wait(futures);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserControllerImpl>().user;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: AnimatedSwitcher(
@@ -59,10 +81,23 @@ class _AppPageState extends State<AppPage> {
         child: IndexedStack(
           key: ValueKey<int>(currentIndex),
           index: currentIndex,
-          children: const [
-            HomePage(),
-            ExpensesPage(),
-            CategoriesPage(),
+          children: [
+            HomePage(
+              homeController: widget.homeController,
+              expensesController: widget.expensesController,
+              dateFilter: dateFilter,
+            ),
+            ExpensesPage(
+              expensesController: widget.expensesController,
+              homeController: widget.homeController,
+              dateFilter: dateFilter,
+            ),
+            CategoriesPage(
+              categoriesController: widget.categoriesController,
+              expensesController: widget.expensesController,
+              homeController: widget.homeController,
+              dateFilter: dateFilter,
+            ),
           ],
         ),
 
@@ -150,30 +185,20 @@ class _AppPageState extends State<AppPage> {
           if (edited != null) {
             if (edited) {
               final futures = [
-                widget.appController.findExpenses(
-                  dateFilter!.initialDate,
-                  dateFilter!.finalDate,
-                  userModel!.userId,
+                widget.homeController.fetchHomeData(
+                  userId: user.userId,
+                  initialDate: dateFilter.initialDate,
+                  finalDate: dateFilter.finalDate,
                 ),
-                widget.appController.fetchHomeData(
-                  userId: userModel!.userId,
-                  initialDate: dateFilter!.initialDate,
-                  finalDate: dateFilter!.finalDate,
+                widget.categoriesController.findCategories(user.userId),
+                widget.expensesController.findExpensesByPeriod(
+                  userId: user.userId,
+                  initialDate: dateFilter.initialDate,
+                  finalDate: dateFilter.finalDate,
                 ),
               ];
 
               await Future.wait(futures);
-
-              // await widget.appController.findExpenses(
-              //   dateFilter!.initialDate,
-              //   dateFilter!.finalDate,
-              //   userModel!.userId,
-              // );
-              // await widget.appController.fetchHomeData(
-              //   userId: userModel!.userId,
-              //   initialDate: dateFilter!.initialDate,
-              //   finalDate: dateFilter!.finalDate,
-              // );
             }
           }
         },

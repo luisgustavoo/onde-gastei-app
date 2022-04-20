@@ -4,7 +4,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
@@ -15,9 +14,12 @@ import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/percentage_categories_view_model.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categories_view_model.dart';
 import 'package:onde_gastei_app/app/modules/home/widgets/indicador.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 
 class MockHomeControllerImpl extends Mock implements HomeControllerImpl {}
+
+class MockUserControllerImpl extends Mock implements UserControllerImpl {}
 
 class MockExpensesControllerImpl extends Mock
     implements ExpensesControllerImpl {}
@@ -29,6 +31,7 @@ class MockRoute extends Mock implements Route<dynamic> {}
 void main() {
   late HomeControllerImpl mockHomeControllerImpl;
   late ExpensesControllerImpl mockExpensesControllerImpl;
+  late UserControllerImpl mockUserControllerImpl;
   late NavigatorObserver mockNavigatorObserver;
 
   final mockTotalExpensesCategoriesList =
@@ -62,6 +65,18 @@ void main() {
     ),
   );
 
+  final dateFilter = DateFilter(
+    initialDate: DateTime(2022),
+    finalDate: DateTime(
+      DateTime.now().year,
+      DateTime.now().month + 1,
+    ).subtract(
+      const Duration(days: 1),
+    ),
+  );
+
+  const userModel =  UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
+
   Widget createHomePage() {
     return MultiProvider(
       providers: [
@@ -88,7 +103,7 @@ void main() {
           ],
           initialRoute: HomePage.router,
           routes: {
-            HomePage.router: (context) => const HomePage(),
+            HomePage.router: (context) => HomePage(homeController: mockHomeControllerImpl, expensesController: mockExpensesControllerImpl, dateFilter: dateFilter,),
           },
         ),
       ),
@@ -96,6 +111,7 @@ void main() {
   }
 
   setUp(() {
+    mockUserControllerImpl = MockUserControllerImpl();
     mockHomeControllerImpl = MockHomeControllerImpl();
     mockExpensesControllerImpl = MockExpensesControllerImpl();
     mockNavigatorObserver = MockNavigatorObserver();
@@ -103,17 +119,8 @@ void main() {
   });
 
   testWidgets('Test if home page shows up', (tester) async {
-    userModel = const UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
 
-    dateFilter = DateFilter(
-      initialDate: DateTime(2022),
-      finalDate: DateTime(
-        DateTime.now().year,
-        DateTime.now().month + 1,
-      ).subtract(
-        const Duration(days: 1),
-      ),
-    );
+    when(() => mockUserControllerImpl.user).thenReturn(userModel);
 
     when(() => mockHomeControllerImpl.state).thenReturn(HomeState.idle);
 

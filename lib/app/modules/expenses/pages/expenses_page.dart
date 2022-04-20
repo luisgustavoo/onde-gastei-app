@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:onde_gastei_app/app/app.dart';
+import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_loading.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
+import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/widgets/expenses_list_tile.dart';
-import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 
 class ExpensesPage extends StatefulWidget {
-  const ExpensesPage({Key? key}) : super(key: key);
+  const ExpensesPage({
+    required this.expensesController,
+    required this.homeController,
+    required this.dateFilter,
+    Key? key,
+  }) : super(key: key);
 
   static const router = '/expenses';
+  final HomeController homeController;
+  final ExpensesController expensesController;
+  final DateFilter dateFilter;
 
   @override
   State<ExpensesPage> createState() => _ExpensesPageState();
@@ -21,8 +32,9 @@ class ExpensesPage extends StatefulWidget {
 class _ExpensesPageState extends State<ExpensesPage> {
   @override
   Widget build(BuildContext context) {
-    final expensesController = context.read<ExpensesControllerImpl>();
-    final homeController = context.read<HomeControllerImpl>();
+    final user = context.select<UserControllerImpl, UserModel>(
+      (userController) => userController.user,
+    );
 
     return SafeArea(
       child: Scaffold(
@@ -32,7 +44,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: OndeGasteiTextForm(
               onChanged: (description) {
-                expensesController.filterExpensesList(description);
+                widget.expensesController.filterExpensesList(description);
               },
               label: 'Pesquisar',
               prefixIcon: const Icon(Icons.search),
@@ -54,25 +66,25 @@ class _ExpensesPageState extends State<ExpensesPage> {
                       itemBuilder: (context) => [
                         PopupMenuItem<String>(
                           onTap: () {
-                            expensesController.orderByExpensesList(1);
+                            widget.expensesController.sortExpenseList(1);
                           },
                           child: const Text('Maior data'),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            expensesController.orderByExpensesList(2);
+                            widget.expensesController.sortExpenseList(2);
                           },
                           child: const Text('Menor data'),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            expensesController.orderByExpensesList(3);
+                            widget.expensesController.sortExpenseList(3);
                           },
                           child: const Text('Maior valor'),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            expensesController.orderByExpensesList(4);
+                            widget.expensesController.sortExpenseList(4);
                           },
                           child: const Text('Menor valor'),
                         ),
@@ -112,15 +124,15 @@ class _ExpensesPageState extends State<ExpensesPage> {
                           if (edited != null) {
                             if (edited) {
                               final futures = [
-                                expensesController.findExpensesByPeriod(
-                                  userId: userModel!.userId,
-                                  initialDate: dateFilter!.initialDate,
-                                  finalDate: dateFilter!.finalDate,
+                                widget.expensesController.findExpensesByPeriod(
+                                  userId: user.userId,
+                                  initialDate: widget.dateFilter.initialDate,
+                                  finalDate: widget.dateFilter.finalDate,
                                 ),
-                                homeController.fetchHomeData(
-                                  userId: userModel!.userId,
-                                  initialDate: dateFilter!.initialDate,
-                                  finalDate: dateFilter!.finalDate,
+                                widget.homeController.fetchHomeData(
+                                  userId: user.userId,
+                                  initialDate: widget.dateFilter.initialDate,
+                                  finalDate: widget.dateFilter.finalDate,
                                 ),
                               ];
 

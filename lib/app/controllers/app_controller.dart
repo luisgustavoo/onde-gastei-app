@@ -2,17 +2,20 @@ import 'package:flutter/foundation.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller.dart';
 
 class AppController extends ChangeNotifier {
   AppController({
     required this.homeController,
     required this.categoriesController,
     required this.expensesController,
+    required this.userController,
   });
 
   final HomeController homeController;
   final CategoriesController categoriesController;
   final ExpensesController expensesController;
+  final UserController userController;
 
   int _tabIndex = 0;
 
@@ -24,6 +27,8 @@ class AppController extends ChangeNotifier {
   }
 
   int get tabIndex => _tabIndex;
+
+  Future<void> fethUserData() => userController.fetchUserData();
 
   Future<void> findCategories(int userId) =>
       categoriesController.findCategories(userId);

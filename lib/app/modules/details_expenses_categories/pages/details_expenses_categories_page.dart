@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/app.dart';
+import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_loading.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/details_expenses_categories/controllers/details_expenses_categories_controller.dart';
@@ -13,6 +13,7 @@ class DetailsExpensesCategoriesPage extends StatefulWidget {
     required this.categoryId,
     required this.categoryName,
     required this.controller,
+    required this.dateFilter,
     Key? key,
   }) : super(key: key);
 
@@ -22,6 +23,7 @@ class DetailsExpensesCategoriesPage extends StatefulWidget {
   final int categoryId;
   final String categoryName;
   final DetailsExpensesCategoriesController controller;
+  final DateFilter dateFilter;
 
   @override
   State<DetailsExpensesCategoriesPage> createState() =>
@@ -37,8 +39,8 @@ class _DetailsExpensesCategoriesPageState
       await widget.controller.findExpensesByCategories(
         userId: widget.userId,
         categoryId: widget.categoryId,
-        initialDate: dateFilter!.initialDate,
-        finalDate: dateFilter!.finalDate,
+        initialDate: widget.dateFilter.initialDate,
+        finalDate: widget.dateFilter.finalDate,
       );
     });
   }

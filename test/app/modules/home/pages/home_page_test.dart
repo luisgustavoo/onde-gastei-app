@@ -5,12 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
@@ -32,6 +30,16 @@ void main() {
   late HomeControllerImpl mockHomeControllerImpl;
   late ExpensesControllerImpl mockExpensesControllerImpl;
   late NavigatorObserver mockNavigatorObserver;
+
+  final dateFilter = DateFilter(
+    initialDate: DateTime(DateTime.now().year, DateTime.now().month),
+    finalDate: DateTime(
+      DateTime.now().year,
+      DateTime.now().month + 1,
+    ).subtract(
+      const Duration(days: 1),
+    ),
+  );
 
   final mockTotalExpensesCategoriesList =
       List<TotalExpensesCategoriesViewModel>.generate(
@@ -89,7 +97,11 @@ void main() {
           ],
           initialRoute: HomePage.router,
           routes: {
-            HomePage.router: (context) => const HomePage(),
+            HomePage.router: (context) => HomePage(
+                  homeController: mockHomeControllerImpl,
+                  expensesController: mockExpensesControllerImpl,
+                  dateFilter: dateFilter,
+                ),
           },
         ),
       ),
@@ -105,17 +117,6 @@ void main() {
 
   group('Group test HomePage', () {
     testWidgets('Test if home page shows up', (tester) async {
-      userModel = const UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
-
-      dateFilter = DateFilter(
-        initialDate: DateTime(2022),
-        finalDate: DateTime(
-          DateTime.now().year,
-          DateTime.now().month + 1,
-        ).subtract(
-          const Duration(days: 1),
-        ),
-      );
 
       when(() => mockHomeControllerImpl.state).thenReturn(HomeState.idle);
 
@@ -151,17 +152,6 @@ void main() {
     });
 
     testWidgets('Test if loading home page', (tester) async {
-      userModel = const UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
-
-      dateFilter = DateFilter(
-        initialDate: DateTime(2022),
-        finalDate: DateTime(
-          DateTime.now().year,
-          DateTime.now().month + 1,
-        ).subtract(
-          const Duration(days: 1),
-        ),
-      );
 
       when(() => mockHomeControllerImpl.state).thenReturn(HomeState.loading);
 
@@ -179,18 +169,7 @@ void main() {
     });
 
     testWidgets('Test data filter on HomePage', (tester) async {
-      userModel = const UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
 
-      dateFilter = DateFilter(
-        initialDate: DateTime(2022),
-        finalDate: DateTime(
-          DateTime.now().year,
-          DateTime.now().month + 1,
-        ).subtract(
-          const Duration(days: 1),
-        ),
-      );
-      //
       final currentMonth = DateTime.now().month;
       final currentYear = DateTime.now().year;
 
@@ -288,7 +267,7 @@ void main() {
         findsOneWidget,
       );
 
-      expect(dateFilter!.initialDate, DateTime(currentYear, currentMonth));
+      expect(dateFilter.initialDate, DateTime(currentYear, currentMonth));
       // Fim Data Inicial
 
       // Data Final
@@ -327,7 +306,7 @@ void main() {
         findsOneWidget,
       );
 
-      expect(dateFilter!.finalDate, DateTime(currentYear, currentMonth, 28));
+      expect(dateFilter.finalDate, DateTime(currentYear, currentMonth, 28));
       // Fim Data Final
 
       await tester.tap(applyButton);

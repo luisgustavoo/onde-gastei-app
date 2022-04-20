@@ -7,6 +7,7 @@ import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dar
 import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +17,12 @@ class MockRoute extends Mock implements Route<dynamic> {}
 
 class MockAuthControllerImpl extends Mock implements AuthControllerImpl {}
 
+class MockUserControllerImpl extends Mock implements UserControllerImpl {}
+
 void main() {
   late NavigatorObserver mockNavigatorObserver;
   late AuthControllerImpl mockAuthControllerImpl;
+  late UserControllerImpl mockUserControllerImpl;
 
   Widget createLoginPagePage() {
     return MultiProvider(
@@ -36,7 +40,7 @@ void main() {
           routes: {
             LoginPage.router: (context) {
               return LoginPage(
-                authController: mockAuthControllerImpl,
+                authController: mockAuthControllerImpl, userController: mockUserControllerImpl,
               );
             },
             AppPage.router: (context) => Container(),
@@ -47,6 +51,7 @@ void main() {
   }
 
   setUp(() {
+    mockUserControllerImpl = MockUserControllerImpl();
     mockAuthControllerImpl = MockAuthControllerImpl();
     mockNavigatorObserver = MockNavigatorObserver();
     registerFallbackValue(MockRoute());

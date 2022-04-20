@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/helpers/input_formatter/currency_input_formatter_ptbr.dart';
@@ -13,9 +12,11 @@ import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
@@ -98,6 +99,10 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
     final categoriesList =
         context.select<CategoriesControllerImpl, List<CategoryModel>>(
       (categoriesController) => categoriesController.categoriesList,
+    );
+
+    final user = context.select<UserControllerImpl, UserModel>(
+          (userController) => userController.user,
     );
 
     return ScaffoldMessenger(
@@ -273,7 +278,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                                   dateController.text,
                                 ),
                                 category: _selectedCategory!,
-                                userId: userModel?.userId,
+                                userId: user.userId,
                               );
 
                               message = 'Despesa registrada com sucesso!';
@@ -290,7 +295,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                                   dateController.text,
                                 ),
                                 category: _selectedCategory!,
-                                userId: userModel?.userId,
+                                userId: user.userId,
                                 expenseId: widget._expenseModel!.expenseId ?? 0,
                               );
                               message = 'Despesa atualizada com sucesso!';

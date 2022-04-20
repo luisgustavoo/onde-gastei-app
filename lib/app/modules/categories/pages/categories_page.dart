@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:onde_gastei_app/app/app.dart';
+import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_loading.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
+import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_register_page.dart';
-import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
-import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
+import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesPage extends StatefulWidget {
-  const CategoriesPage({Key? key}) : super(key: key);
+  const CategoriesPage({
+    required this.categoriesController,
+    required this.expensesController,
+    required this.homeController,
+    required this.dateFilter,
+    Key? key,
+  }) : super(key: key);
 
   static const router = '/categories';
+  final CategoriesController categoriesController;
+  final ExpensesController expensesController;
+  final HomeController homeController;
+  final DateFilter dateFilter;
 
   @override
   State<CategoriesPage> createState() => _CategoriesPageState();
@@ -20,9 +33,9 @@ class CategoriesPage extends StatefulWidget {
 class _CategoriesPageState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
-    final categoriesController = context.read<CategoriesControllerImpl>();
-    final expensesController = context.read<ExpensesControllerImpl>();
-    final homeController = context.read<HomeControllerImpl>();
+    final user = context.select<UserControllerImpl, UserModel>(
+      (userController) => userController.user,
+    );
 
     return SafeArea(
       child: Scaffold(
@@ -36,8 +49,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
                 if (edited != null) {
                   if (edited == true) {
-                    await categoriesController
-                        .findCategories(userModel!.userId);
+                    await widget.categoriesController
+                        .findCategories(user.userId);
                   }
                 }
               },
@@ -81,18 +94,18 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     if (edited != null) {
                       if (edited == true) {
                         final futures = [
-                          categoriesController
-                              .findCategories(userModel!.userId),
-                          expensesController.findExpensesByPeriod(
-                            userId: userModel!.userId,
-                            initialDate: dateFilter!.initialDate,
-                            finalDate: dateFilter!.finalDate,
+                          widget.homeController.fetchHomeData(
+                            userId: user.userId,
+                            initialDate: widget.dateFilter.initialDate,
+                            finalDate: widget.dateFilter.finalDate,
                           ),
-                          homeController.fetchHomeData(
-                            userId: userModel!.userId,
-                            initialDate: dateFilter!.initialDate,
-                            finalDate: dateFilter!.finalDate,
-                          )
+                          widget.categoriesController
+                              .findCategories(user.userId),
+                          widget.expensesController.findExpensesByPeriod(
+                            userId: user.userId,
+                            initialDate: widget.dateFilter.initialDate,
+                            finalDate: widget.dateFilter.finalDate,
+                          ),
                         ];
 
                         await Future.wait(futures);

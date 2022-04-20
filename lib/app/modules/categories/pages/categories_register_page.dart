@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:onde_gastei_app/app/app.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/widgets/color_picker.dart';
 import 'package:onde_gastei_app/app/modules/categories/widgets/icon_picker.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
@@ -81,6 +82,10 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
       (categoriesController) => categoriesController.stateDelete,
     );
 
+    final user = context.select<UserControllerImpl, UserModel>(
+      (userController) => userController.user,
+    );
+
     return SafeArea(
       child: ScaffoldMessenger(
         key: _scaffoldMessagedKey,
@@ -127,6 +132,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                       _buildSaveButton(
                         context,
                         categoriesControllerState,
+                        user,
                       )
                     ],
                   ),
@@ -239,6 +245,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
   OndeGasteiButton _buildSaveButton(
     BuildContext context,
     CategoriesState state,
+    UserModel user,
   ) {
     return OndeGasteiButton(
       Text(
@@ -264,7 +271,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                 description: categoriesTextController.text,
                 iconCode: _icon.value.codePoint,
                 colorCode: _color.value.value,
-                userId: userModel?.userId,
+                userId: user.userId,
               );
 
               await widget._categoriesController.register(categoryModel);

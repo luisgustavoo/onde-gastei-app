@@ -1,18 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
-import 'package:onde_gastei_app/app/modules/profile/repositories/profile_repository.dart';
-import 'package:onde_gastei_app/app/modules/profile/services/profile_service_impl.dart';
+import 'package:onde_gastei_app/app/modules/user/repositories/user_repository.dart';
+import 'package:onde_gastei_app/app/modules/user/services/user_service_impl.dart';
 
-class MockProfileRepository extends Mock implements ProfileRepository {}
+class MockProfileRepository extends Mock implements UserRepository {}
 
 void main() {
-  late ProfileRepository mockProfileRepository;
-  late ProfileServiceImpl service;
+  late UserRepository mockProfileRepository;
+  late UserServiceImpl service;
 
   setUp(() {
     mockProfileRepository = MockProfileRepository();
-    service = ProfileServiceImpl(repository: mockProfileRepository);
+    service = UserServiceImpl(repository: mockProfileRepository);
   });
 
   group('Group test updateUserName', () {

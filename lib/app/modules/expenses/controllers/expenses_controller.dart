@@ -25,4 +25,8 @@ abstract class ExpensesController {
     required DateTime initialDate,
     required DateTime finalDate,
   });
+
+  void filterExpensesList(String description);
+
+  void sortExpenseList(int orderNumber);
 }

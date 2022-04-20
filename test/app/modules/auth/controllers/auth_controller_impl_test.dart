@@ -6,7 +6,6 @@ import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
@@ -101,17 +100,15 @@ void main() {
       // Arrange
       const email = 'Test';
       const password = 'password';
-      const userExpected =
-          UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
 
       when(() => service.login(any(), any())).thenAnswer((_) async => _);
-      when(() => service.fetchUserData()).thenAnswer((_) async => userExpected);
+
       //Act
       await controller.login(email, password);
 
       //Assert
       verify(() => service.login(any(), any())).called(1);
-      verify(() => service.fetchUserData()).called(1);
+
     });
 
     test('Should throws UserNotFoundException', () async {
@@ -171,31 +168,5 @@ void main() {
     });
   });
 
-  group('Group test fetchUserData', () {
-    test('Should fetchUserData with success', () async {
-      // Arrange
-      const userExpected =
-          UserModel(userId: 1, name: 'Test', email: 'test@domain.com');
 
-      when(() => service.fetchUserData()).thenAnswer((_) async => userExpected);
-
-      //Act
-      final user = await controller.fetchUserData();
-
-      //Assert
-      expect(user, userExpected);
-      verify(() => service.fetchUserData()).called(1);
-    });
-
-    test('Should throws exception', () async {
-      // Arrange
-      when(() => service.fetchUserData()).thenThrow(Exception());
-
-      //Act
-      final call = controller.fetchUserData;
-
-      //Assert
-      expect(call(), throwsA(isA<Failure>()));
-    });
-  });
 }

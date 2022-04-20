@@ -142,6 +142,7 @@ class ExpensesControllerImpl extends ChangeNotifier
     }
   }
 
+  @override
   void filterExpensesList(String description) {
     expensesList = expensesListBeforeFilter;
 
@@ -158,7 +159,8 @@ class ExpensesControllerImpl extends ChangeNotifier
     notifyListeners();
   }
 
-  void orderByExpensesList(int orderNumber) {
+  @override
+  void sortExpenseList(int orderNumber) {
     /* 
     1 = Maior Data
     2 = Menor Data
