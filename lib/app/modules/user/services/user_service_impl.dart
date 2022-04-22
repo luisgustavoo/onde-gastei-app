@@ -14,4 +14,7 @@ class UserServiceImpl implements UserService {
   @override
   Future<void> updateUserName(int userId, String newUserName) =>
       _repository.updateUserName(userId, newUserName);
+
+  @override
+  Future<void> removeLocalUserData() => _repository.removeLocalUserData();
 }

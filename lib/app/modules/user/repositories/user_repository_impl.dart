@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
+import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
@@ -46,7 +47,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<void> updateUserName(int userId, String newUserName) async {
     try {
       await _restClient.auth().put(
-        'users/$userId/update',
+        '/users/$userId/update',
         data: <String, dynamic>{
           'nome': newUserName,
         },
@@ -57,8 +58,12 @@ class UserRepositoryImpl implements UserRepository {
     }
   }
 
+  @override
+  Future<void> removeLocalUserData() =>
+      _localStorage.remove(Constants.localUserKey);
+
   Future<void> _saveLocalUserData(UserModel user) => _localStorage.write(
-        'user',
+        Constants.localUserKey,
         jsonEncode(
           user.toMap(),
         ),

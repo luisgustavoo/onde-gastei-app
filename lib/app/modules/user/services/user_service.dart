@@ -4,4 +4,6 @@ abstract class UserService {
   Future<UserModel> fetchUserData();
 
   Future<void> updateUserName(int userId, String newUserName);
+
+  Future<void> removeLocalUserData();
 }

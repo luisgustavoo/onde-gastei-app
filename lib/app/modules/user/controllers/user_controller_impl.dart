@@ -37,6 +37,8 @@ class UserControllerImpl extends ChangeNotifier implements UserController {
   @override
   Future<void> updateUserName(int userId, String newUserName) async {
     await _service.updateUserName(userId, newUserName);
+    await _service.removeLocalUserData();
+    await fetchUserData();
     notifyListeners();
   }
 
@@ -46,10 +48,11 @@ class UserControllerImpl extends ChangeNotifier implements UserController {
       final localUser = await _localStorage.read<String>('user');
 
       if (localUser != null && localUser.isNotEmpty) {
-        user = UserModel.fromMap(jsonDecode(localUser) as Map<String, dynamic>);
+        return user =
+            UserModel.fromMap(jsonDecode(localUser) as Map<String, dynamic>);
       }
 
-      return user;
+      return null;
     } on Exception catch (e, s) {
       _log.error('Erro ao buscar dados do usuario local', e, s);
       throw Failure(message: 'Erro ao buscar dados do usuario local');

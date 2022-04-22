@@ -77,13 +77,13 @@ class AuthServicesImpl implements AuthService {
   }
 
   Future<void> _saveAccessToken(String accessToken) async =>
-      _localStorage.write(Constants.accessToken, accessToken);
+      _localStorage.write(Constants.accessTokenKey, accessToken);
 
   Future<void> _confirmLogin() async {
     final confirmModel = await _repository.confirmLogin();
     await _saveAccessToken(confirmModel.accessToken);
     await _localSecurityStorage.write(
-      Constants.refreshToken,
+      Constants.refreshTokenKey,
       confirmModel.refreshToken,
     );
   }

@@ -75,7 +75,7 @@ void main() {
     ),
   );
 
-  const userModel =  UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
+  const userModel = UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
 
   Widget createHomePage() {
     return MultiProvider(
@@ -103,7 +103,11 @@ void main() {
           ],
           initialRoute: HomePage.router,
           routes: {
-            HomePage.router: (context) => HomePage(homeController: mockHomeControllerImpl, expensesController: mockExpensesControllerImpl, dateFilter: dateFilter,),
+            HomePage.router: (context) => HomePage(
+                  homeController: mockHomeControllerImpl,
+                  expensesController: mockExpensesControllerImpl,
+                  dateFilter: dateFilter,
+                ),
           },
         ),
       ),
@@ -119,7 +123,6 @@ void main() {
   });
 
   testWidgets('Test if home page shows up', (tester) async {
-
     when(() => mockUserControllerImpl.user).thenReturn(userModel);
 
     when(() => mockHomeControllerImpl.state).thenReturn(HomeState.idle);

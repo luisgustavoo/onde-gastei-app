@@ -9,6 +9,7 @@ import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dar
 import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/user/pages/user_page.dart';
 import 'package:provider/provider.dart';
 
 class AppPage extends StatefulWidget {
@@ -98,6 +99,7 @@ class _AppPageState extends State<AppPage> {
               homeController: widget.homeController,
               dateFilter: dateFilter,
             ),
+            UserPage(userController: widget.userController),
           ],
         ),
 

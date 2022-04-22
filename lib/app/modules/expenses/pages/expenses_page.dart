@@ -108,6 +108,12 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     return const OndeGasteiLoading();
                   }
 
+                  if (expensesController.expensesList.isEmpty) {
+                    return const Center(
+                      child: Text('Nenhuma informação'),
+                    );
+                  }
+
                   return ListView.builder(
                     key: const Key('expenses_list_key_expenses_page'),
                     physics: const BouncingScrollPhysics(),

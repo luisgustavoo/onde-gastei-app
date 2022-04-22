@@ -34,7 +34,7 @@ class AuthInterceptor extends Interceptor {
 
     if (options.extra['auth_required'] == true) {
       final accessToken =
-          await _localStorage.read<String>(Constants.accessToken);
+          await _localStorage.read<String>(Constants.accessTokenKey);
       if (accessToken == null) {
         //logout
 
@@ -107,7 +107,7 @@ class AuthInterceptor extends Interceptor {
   Future<void> _refreshToken() async {
     try {
       final refreshToken =
-          await _localSecurityStorage.read(Constants.refreshToken);
+          await _localSecurityStorage.read(Constants.refreshTokenKey);
 
       final refreshTokenResult =
           await _restClient.auth().put<Map<String, dynamic>>(
@@ -117,11 +117,11 @@ class AuthInterceptor extends Interceptor {
 
       if (refreshTokenResult.data != null) {
         await _localSecurityStorage.write(
-          Constants.refreshToken,
+          Constants.refreshTokenKey,
           refreshTokenResult.data!['refresh_token'].toString(),
         );
         await _localStorage.write(
-          Constants.accessToken,
+          Constants.accessTokenKey,
           refreshTokenResult.data!['access_token'].toString(),
         );
       }
