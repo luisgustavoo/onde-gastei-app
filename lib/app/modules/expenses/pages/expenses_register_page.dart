@@ -478,6 +478,8 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
       ).format(0),
     );
 
+    localController.clear();
+
     _selectedCategory = null;
   }
 
