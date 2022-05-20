@@ -20,8 +20,8 @@ class SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      widget.userController.getLocalUser().then((user) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await widget.userController.getLocalUser().then((user) {
         if (user != null) {
           Navigator.of(context).pushReplacementNamed(
             AppPage.router,
@@ -35,9 +35,9 @@ class SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Logo(),
+        child: Image.asset('assets/splash.png'),
       ),
     );
   }

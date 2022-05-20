@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_loading.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
@@ -35,7 +36,7 @@ class _DetailsExpensesCategoriesPageState
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await widget.controller.findExpensesByCategories(
         userId: widget.userId,
         categoryId: widget.categoryId,
@@ -58,7 +59,10 @@ class _DetailsExpensesCategoriesPageState
           },
           icon: const Icon(Icons.close),
         ),
-        title: Text(widget.categoryName),
+        title: Text(
+          widget.categoryName,
+          // style: const TextStyle(fontFamily: 'Jost'),
+        ),
       ),
       body:
           Selector<DetailsExpensesCategoriesControllerImpl, List<ExpenseModel>>(

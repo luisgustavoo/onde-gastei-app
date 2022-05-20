@@ -32,7 +32,7 @@ class ExpensesPage extends StatefulWidget {
 class _ExpensesPageState extends State<ExpensesPage> {
   @override
   Widget build(BuildContext context) {
-    final user = context.select<UserControllerImpl, UserModel>(
+    final user = context.select<UserControllerImpl, UserModel?>(
       (userController) => userController.user,
     );
 
@@ -131,12 +131,12 @@ class _ExpensesPageState extends State<ExpensesPage> {
                             if (edited) {
                               final futures = [
                                 widget.expensesController.findExpensesByPeriod(
-                                  userId: user.userId,
+                                  userId: user?.userId ?? 0,
                                   initialDate: widget.dateFilter.initialDate,
                                   finalDate: widget.dateFilter.finalDate,
                                 ),
                                 widget.homeController.fetchHomeData(
-                                  userId: user.userId,
+                                  userId: user?.userId ?? 0,
                                   initialDate: widget.dateFilter.initialDate,
                                   finalDate: widget.dateFilter.finalDate,
                                 ),

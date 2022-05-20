@@ -85,7 +85,7 @@ void main() {
       child: ScreenUtilInit(
         minTextAdapt: true,
         splitScreenMode: true,
-        builder: () => MaterialApp(
+        builder: (context, child) => MaterialApp(
           navigatorObservers: [mockNavigatorObserver],
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
@@ -117,7 +117,6 @@ void main() {
 
   group('Group test HomePage', () {
     testWidgets('Test if home page shows up', (tester) async {
-
       when(() => mockHomeControllerImpl.state).thenReturn(HomeState.idle);
 
       when(() => mockHomeControllerImpl.totalExpenses).thenReturn(1500);
@@ -152,7 +151,6 @@ void main() {
     });
 
     testWidgets('Test if loading home page', (tester) async {
-
       when(() => mockHomeControllerImpl.state).thenReturn(HomeState.loading);
 
       when(() => mockHomeControllerImpl.totalExpenses).thenReturn(1);
@@ -169,7 +167,6 @@ void main() {
     });
 
     testWidgets('Test data filter on HomePage', (tester) async {
-
       final currentMonth = DateTime.now().month;
       final currentYear = DateTime.now().year;
 

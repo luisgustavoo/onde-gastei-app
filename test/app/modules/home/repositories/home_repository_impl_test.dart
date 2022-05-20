@@ -36,7 +36,7 @@ void main() {
       final initialDate = DateTime.now();
       final finalDate = DateTime.now();
 
-      const totalExpensesCategoriesExpected =  TotalExpensesCategoriesViewModel(
+      const totalExpensesCategoriesExpected = TotalExpensesCategoriesViewModel(
         totalValue: 1,
         category: CategoryModel(
           id: 1,

@@ -33,14 +33,17 @@ class CategoriesPage extends StatefulWidget {
 class _CategoriesPageState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
-    final user = context.select<UserControllerImpl, UserModel>(
+    final user = context.select<UserControllerImpl, UserModel?>(
       (userController) => userController.user,
     );
 
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Categorias'),
+          title: const Text(
+            'Categorias',
+            // style: TextStyle(fontFamily: 'Jost'),
+          ),
           actions: [
             IconButton(
               onPressed: () async {
@@ -50,7 +53,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 if (edited != null) {
                   if (edited == true) {
                     await widget.categoriesController
-                        .findCategories(user.userId);
+                        .findCategories(user?.userId ?? 0);
                   }
                 }
               },
@@ -74,6 +77,12 @@ class _CategoriesPageState extends State<CategoriesPage> {
               return const OndeGasteiLoading();
             }
 
+            if (categoriesController.categoriesList.isEmpty) {
+              return const Center(
+                child: Text('Nenhuma informação'),
+              );
+            }
+
             return ListView.builder(
               physics: const BouncingScrollPhysics(),
               itemCount: categoriesController.categoriesList.length,
@@ -95,14 +104,14 @@ class _CategoriesPageState extends State<CategoriesPage> {
                       if (edited == true) {
                         final futures = [
                           widget.homeController.fetchHomeData(
-                            userId: user.userId,
+                            userId: user?.userId ?? 0,
                             initialDate: widget.dateFilter.initialDate,
                             finalDate: widget.dateFilter.finalDate,
                           ),
                           widget.categoriesController
-                              .findCategories(user.userId),
+                              .findCategories(user?.userId ?? 0),
                           widget.expensesController.findExpensesByPeriod(
-                            userId: user.userId,
+                            userId: user?.userId ?? 0,
                             initialDate: widget.dateFilter.initialDate,
                             finalDate: widget.dateFilter.finalDate,
                           ),

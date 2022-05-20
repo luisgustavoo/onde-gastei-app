@@ -325,6 +325,4 @@ void main() {
       expect(() => call(email, password), throwsA(isA<Failure>()));
     });
   });
-
-
 }

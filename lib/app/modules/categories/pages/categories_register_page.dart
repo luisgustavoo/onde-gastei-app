@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
@@ -82,7 +83,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
       (categoriesController) => categoriesController.stateDelete,
     );
 
-    final user = context.select<UserControllerImpl, UserModel>(
+    final user = context.select<UserControllerImpl, UserModel?>(
       (userController) => userController.user,
     );
 
@@ -93,7 +94,10 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
           ignoring: categoriesControllerState == CategoriesState.loading,
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('Categoria'),
+              title: const Text(
+                'Categoria',
+                // style: TextStyle(fontFamily: 'Jost'),
+              ),
               leading: IconButton(
                 splashRadius: 20,
                 icon: const Icon(Icons.close),
@@ -245,7 +249,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
   OndeGasteiButton _buildSaveButton(
     BuildContext context,
     CategoriesState state,
-    UserModel user,
+    UserModel? user,
   ) {
     return OndeGasteiButton(
       Text(
@@ -271,7 +275,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                 description: categoriesTextController.text,
                 iconCode: _icon.value.codePoint,
                 colorCode: _color.value.value,
-                userId: user.userId,
+                userId: user?.userId ?? 0,
               );
 
               await widget._categoriesController.register(categoryModel);

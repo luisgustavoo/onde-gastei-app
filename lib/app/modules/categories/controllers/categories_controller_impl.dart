@@ -7,6 +7,7 @@ import 'package:onde_gastei_app/app/modules/categories/services/categories_servi
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
 
 enum CategoriesState { idle, loading, error, success }
+
 enum CategoriesDeleteState { idle, loading, error, success }
 
 class CategoriesControllerImpl extends ChangeNotifier

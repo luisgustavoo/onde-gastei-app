@@ -90,7 +90,7 @@ void main() {
       child: ScreenUtilInit(
         minTextAdapt: true,
         splitScreenMode: true,
-        builder: () => MaterialApp(
+        builder: (context, child) => MaterialApp(
           theme: UiConfig.theme,
           navigatorObservers: [mockNavigatorObserver],
           localizationsDelegates: const [

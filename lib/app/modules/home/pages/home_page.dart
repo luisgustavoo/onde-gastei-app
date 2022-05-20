@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
+import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/helpers/input_formatter/date_input_formatter_ptbr.dart';
 import 'package:onde_gastei_app/app/core/helpers/validators/validators.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
@@ -54,14 +55,14 @@ class _HomePageState extends State<HomePage> {
         ),
         body: Consumer<HomeControllerImpl>(
           builder: (_, homeController, __) {
-            if (homeController.state == HomeState.loading) {
-              const OndeGasteiLoading();
-            }
-
             if (homeController.state == HomeState.error) {
               return const Center(
                 child: Text('Erro ao buscar dados'),
               );
+            }
+
+            if (homeController.state == HomeState.loading) {
+              return const OndeGasteiLoading();
             }
 
             if (homeController.totalExpensesCategoriesList.isEmpty) {
@@ -271,6 +272,7 @@ class _HomePageState extends State<HomePage> {
               text: 'Olá, ',
               style: TextStyle(
                 fontSize: 17.sp,
+                // fontFamily: 'Jost',
               ),
               children: [
                 TextSpan(
@@ -279,6 +281,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
+                    // fontFamily: 'Jost',
                   ),
                 )
               ],
@@ -406,7 +409,14 @@ class _HomePageState extends State<HomePage> {
                           valueListenable: disableApplyFilterButton,
                           builder: (context, disable, _) {
                             return OndeGasteiButton(
-                              const Text('Aplicar'),
+                              Text(
+                                'Aplicar',
+                                style: TextStyle(
+                                  color: disable
+                                      ? Colors.grey.shade700
+                                      : Colors.white,
+                                ),
+                              ),
                               key: const Key('apply_button_key_home_page'),
                               width: MediaQuery.of(context).size.width,
                               disable: disable,

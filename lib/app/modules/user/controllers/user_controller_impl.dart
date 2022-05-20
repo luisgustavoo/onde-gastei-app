@@ -8,6 +8,8 @@ import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller.dart';
 import 'package:onde_gastei_app/app/modules/user/services/user_service.dart';
 
+enum UserState { idle, loading, error, success }
+
 class UserControllerImpl extends ChangeNotifier implements UserController {
   UserControllerImpl({
     required UserService service,
@@ -22,24 +24,48 @@ class UserControllerImpl extends ChangeNotifier implements UserController {
   final LocalStorage _localStorage;
   late UserModel user;
 
+  UserState state = UserState.idle;
+
   @override
   Future<void> fetchUserData() async {
     try {
+      state = UserState.loading;
+      notifyListeners();
+
       user = await _service.fetchUserData();
 
+      state = UserState.success;
       notifyListeners();
     } on Exception catch (e, s) {
       _log.error('Erro ao buscar dados do usuario', e, s);
+
+      state = UserState.error;
+      notifyListeners();
+
       throw Failure(message: 'Erro ao buscar dados do usuario');
     }
   }
 
   @override
   Future<void> updateUserName(int userId, String newUserName) async {
-    await _service.updateUserName(userId, newUserName);
-    await _service.removeLocalUserData();
-    await fetchUserData();
-    notifyListeners();
+    try {
+      state = UserState.loading;
+      notifyListeners();
+
+      await _service.updateUserName(userId, newUserName);
+      await _service.removeLocalUserData();
+      await fetchUserData();
+
+      state = UserState.success;
+      notifyListeners();
+    } on Exception catch (e, s) {
+      _log.error('Erro ao atualizar dados do usuario', e, s);
+
+      state = UserState.error;
+      notifyListeners();
+
+      throw Failure(message: 'Erro ao atualizar dados do usuario');
+    }
   }
 
   @override

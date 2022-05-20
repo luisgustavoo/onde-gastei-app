@@ -60,7 +60,7 @@ void main() {
       child: ScreenUtilInit(
         minTextAdapt: true,
         splitScreenMode: true,
-        builder: () => MaterialApp(
+        builder: (context, child) => MaterialApp(
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
@@ -71,7 +71,11 @@ void main() {
           ],
           initialRoute: ExpensesPage.router,
           routes: {
-            ExpensesPage.router: (context) => ExpensesPage(expensesController: mockExpensesController, homeController: mockHomeControllerImpl, dateFilter: dateFilter),
+            ExpensesPage.router: (context) => ExpensesPage(
+                  expensesController: mockExpensesController,
+                  homeController: mockHomeControllerImpl,
+                  dateFilter: dateFilter,
+                ),
           },
         ),
       ),

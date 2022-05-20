@@ -28,7 +28,7 @@ class AppController extends ChangeNotifier {
 
   int get tabIndex => _tabIndex;
 
-  Future<void> fethUserData() => userController.fetchUserData();
+  Future<void> fetchUserData() => userController.fetchUserData();
 
   Future<void> findCategories(int userId) =>
       categoriesController.findCategories(userId);

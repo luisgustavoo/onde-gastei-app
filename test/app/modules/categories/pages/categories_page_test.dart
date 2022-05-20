@@ -58,7 +58,7 @@ void main() {
         ),
       ],
       child: ScreenUtilInit(
-        builder: () => MaterialApp(
+        builder: (context, child) => MaterialApp(
           initialRoute: CategoriesPage.router,
           routes: {
             CategoriesPage.router: (context) => CategoriesPage(

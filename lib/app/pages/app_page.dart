@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
@@ -43,12 +44,14 @@ class _AppPageState extends State<AppPage> {
     ),
   );
 
+  late UserModel user;
+
   @override
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      final user = context.read<UserControllerImpl>().user;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      user = context.read<UserControllerImpl>().user;
 
       final futures = [
         widget.homeController.fetchHomeData(
@@ -70,7 +73,7 @@ class _AppPageState extends State<AppPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<UserControllerImpl>().user;
+    // final user = context.read<UserControllerImpl>().user;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -132,7 +135,7 @@ class _AppPageState extends State<AppPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list_alt_outlined),
-            label: 'Extrato',
+            label: 'Despesas',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.category_outlined),
@@ -192,7 +195,7 @@ class _AppPageState extends State<AppPage> {
                   initialDate: dateFilter.initialDate,
                   finalDate: dateFilter.finalDate,
                 ),
-                widget.categoriesController.findCategories(user.userId),
+                // widget.categoriesController.findCategories(user.userId),
                 widget.expensesController.findExpensesByPeriod(
                   userId: user.userId,
                   initialDate: dateFilter.initialDate,

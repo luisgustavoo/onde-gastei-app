@@ -7,7 +7,6 @@ class CurrencyInputFormatterPtBr extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-
     try {
       double.parse(
         newValue.text

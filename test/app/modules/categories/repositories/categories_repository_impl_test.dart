@@ -151,7 +151,7 @@ void main() {
       final mockCategoriesList = List<Map<String, dynamic>>.from(responseData);
 
       final categoriesListExpected =
-      mockCategoriesList.map(CategoryModel.fromMap).toList();
+          mockCategoriesList.map(CategoryModel.fromMap).toList();
 
       when(() => restClient.get<List<Map<String, dynamic>>>(any())).thenAnswer(
         (_) async =>
@@ -169,7 +169,9 @@ void main() {
     test('Should return categories empty', () async {
       //Arrange
       when(() => restClient.get<List<Map<String, dynamic>>>(any())).thenAnswer(
-        (_) async => MockRestClientResponse(statusCode: 200, data: null),
+        (_) async => MockRestClientResponse(
+          statusCode: 200,
+        ),
       );
 
       //Act

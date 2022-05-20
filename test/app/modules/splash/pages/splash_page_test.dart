@@ -26,7 +26,7 @@ Widget createSplashPage() {
     child: ScreenUtilInit(
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: () => MaterialApp(
+      builder: (context, child) => MaterialApp(
         navigatorObservers: [mockNavigatorObserver],
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
@@ -57,7 +57,6 @@ void main() {
 
   group('Group test splash page', () {
     testWidgets('Test if login page shows up', (tester) async {
-
       when(
         () => mockNavigatorObserver.didReplace(
           oldRoute: any(named: 'oldRoute'),

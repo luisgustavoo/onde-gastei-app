@@ -34,13 +34,14 @@ void main() {
       child: ScreenUtilInit(
         minTextAdapt: true,
         splitScreenMode: true,
-        builder: () => MaterialApp(
+        builder: (context, child) => MaterialApp(
           initialRoute: LoginPage.router,
           navigatorObservers: [mockNavigatorObserver],
           routes: {
             LoginPage.router: (context) {
               return LoginPage(
-                authController: mockAuthControllerImpl, userController: mockUserControllerImpl,
+                authController: mockAuthControllerImpl,
+                userController: mockUserControllerImpl,
               );
             },
             AppPage.router: (context) => Container(),

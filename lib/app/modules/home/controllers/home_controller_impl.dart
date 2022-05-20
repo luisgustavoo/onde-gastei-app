@@ -18,7 +18,7 @@ class HomeControllerImpl extends ChangeNotifier implements HomeController {
       <TotalExpensesCategoriesViewModel>[];
   List<PercentageCategoriesViewModel> percentageCategoriesList =
       <PercentageCategoriesViewModel>[];
-  HomeState state = HomeState.loading;
+  HomeState state = HomeState.idle;
 
   double totalExpenses = 0;
 

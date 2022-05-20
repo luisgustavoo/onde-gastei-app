@@ -25,7 +25,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  final _scaffoldMessagedKey = GlobalKey<ScaffoldMessengerState>();
+  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
   final nameController = TextEditingController();
   final emailController = TextEditingController();
@@ -39,7 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     return ScaffoldMessenger(
-      key: _scaffoldMessagedKey,
+      key: _scaffoldMessengerKey,
       child: Scaffold(
         appBar: _buildAppBar(),
         body: Padding(
@@ -210,7 +210,7 @@ class _RegisterPageState extends State<RegisterPage> {
             );
           }
 
-          _scaffoldMessagedKey.currentState!.showSnackBar(snackBar);
+          _scaffoldMessengerKey.currentState!.showSnackBar(snackBar);
         }
       },
       isLoading: authControllerState == AuthState.loading,
@@ -243,10 +243,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void dispose() {
-    super.dispose();
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
+    super.dispose();
   }
 }

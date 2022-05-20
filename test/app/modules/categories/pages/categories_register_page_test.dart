@@ -35,7 +35,7 @@ void main() {
     return ChangeNotifierProvider<CategoriesControllerImpl>(
       create: (context) => mockCategoriesControllerImpl,
       child: ScreenUtilInit(
-        builder: () => MaterialApp(
+        builder: (context, child) => MaterialApp(
           initialRoute: CategoriesRegisterPage.router,
           routes: {
             CategoriesRegisterPage.router: (context) {

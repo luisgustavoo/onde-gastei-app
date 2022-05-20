@@ -11,8 +11,8 @@ import '../../../../core/log/mock_log.dart';
 import '../../../../core/rest_client/mock_rest_client.dart';
 import '../../../../core/rest_client/mock_rest_client_response.dart';
 
-
-class MockLocalStorage extends Mock implements SharedPreferencesLocalStorageImpl {}
+class MockLocalStorage extends Mock
+    implements SharedPreferencesLocalStorageImpl {}
 
 void main() {
   late RestClient mockRestClient;
@@ -24,8 +24,11 @@ void main() {
     mockLocalStorage = MockLocalStorage();
     mockRestClient = MockRestClient();
     mockLog = MockLog();
-    repository =
-        UserRepositoryImpl(restClient: mockRestClient, log: mockLog, localStorage: mockLocalStorage);
+    repository = UserRepositoryImpl(
+      restClient: mockRestClient,
+      log: mockLog,
+      localStorage: mockLocalStorage,
+    );
   });
 
   group('Group test updateUserName', () {

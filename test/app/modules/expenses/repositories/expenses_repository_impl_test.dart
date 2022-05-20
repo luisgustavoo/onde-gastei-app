@@ -117,7 +117,10 @@ void main() {
 
       //Assert
       verify(
-        () => mockRestClient.put<Map<String, dynamic>>(any(), data: any(named: 'data')),
+        () => mockRestClient.put<Map<String, dynamic>>(
+          any(),
+          data: any(named: 'data'),
+        ),
       ).called(1);
     });
 
@@ -143,7 +146,10 @@ void main() {
       //Assert
       expect(() => call(expenseModel, 1), throwsA(isA<Failure>()));
       verify(
-        () => mockRestClient.put<Map<String, dynamic>>(any(), data: any(named: 'data')),
+        () => mockRestClient.put<Map<String, dynamic>>(
+          any(),
+          data: any(named: 'data'),
+        ),
       ).called(1);
     });
   });

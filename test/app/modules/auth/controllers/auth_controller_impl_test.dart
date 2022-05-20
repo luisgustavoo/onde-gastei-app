@@ -108,7 +108,6 @@ void main() {
 
       //Assert
       verify(() => service.login(any(), any())).called(1);
-
     });
 
     test('Should throws UserNotFoundException', () async {
@@ -167,6 +166,4 @@ void main() {
       ).called(1);
     });
   });
-
-
 }

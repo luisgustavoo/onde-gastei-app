@@ -101,8 +101,8 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
       (categoriesController) => categoriesController.categoriesList,
     );
 
-    final user = context.select<UserControllerImpl, UserModel>(
-          (userController) => userController.user,
+    final user = context.select<UserControllerImpl, UserModel?>(
+      (userController) => userController.user,
     );
 
     return ScaffoldMessenger(
@@ -115,7 +115,10 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
             },
             icon: const Icon(Icons.close),
           ),
-          title: const Text('Despesa'),
+          title: const Text(
+            'Despesa',
+            // style: TextStyle(fontFamily: 'Jost'),
+          ),
           actions: [
             _buildDeleteButton(context, expensesControllerDeleteState),
           ],
@@ -278,7 +281,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                                   dateController.text,
                                 ),
                                 category: _selectedCategory!,
-                                userId: user.userId,
+                                userId: user?.userId ?? 0,
                               );
 
                               message = 'Despesa registrada com sucesso!';
@@ -295,7 +298,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                                   dateController.text,
                                 ),
                                 category: _selectedCategory!,
-                                userId: user.userId,
+                                userId: user?.userId ?? 0,
                                 expenseId: widget._expenseModel!.expenseId ?? 0,
                               );
                               message = 'Despesa atualizada com sucesso!';
@@ -464,9 +467,9 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
 
   @override
   void dispose() {
-    super.dispose();
     descriptionController.dispose();
     dateController.dispose();
     valueController.dispose();
+    super.dispose();
   }
 }

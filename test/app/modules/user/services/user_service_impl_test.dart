@@ -36,7 +36,7 @@ void main() {
     test('Should update user name throws exception', () async {
       // Arrange
       when(
-            () => mockProfileRepository.updateUserName(any(), any()),
+        () => mockProfileRepository.updateUserName(any(), any()),
       ).thenThrow(Failure());
       //Act
       final call = service.updateUserName;
@@ -44,12 +44,11 @@ void main() {
       //Assert
       expect(() => call(1, 'Test'), throwsA(isA<Failure>()));
       verify(
-            () => mockProfileRepository.updateUserName(
+        () => mockProfileRepository.updateUserName(
           any(),
           any(),
         ),
       ).called(1);
     });
-
   });
 }

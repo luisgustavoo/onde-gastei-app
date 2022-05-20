@@ -18,7 +18,7 @@ void main() {
       child: ScreenUtilInit(
         minTextAdapt: true,
         splitScreenMode: true,
-        builder: () => MaterialApp(
+        builder: (context, child) => MaterialApp(
           initialRoute: RegisterPage.router,
           routes: {
             RegisterPage.router: (context) {
