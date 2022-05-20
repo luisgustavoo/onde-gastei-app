@@ -37,7 +37,7 @@ class SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset('assets/splash.png'),
+        child: Image.asset('assets/images/splash.png'),
       ),
     );
   }
