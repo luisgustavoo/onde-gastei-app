@@ -31,6 +31,7 @@ class ExpensesControllerImpl extends ChangeNotifier
     required String description,
     required double value,
     required DateTime date,
+    required String local,
     required CategoryModel category,
     int? userId,
   }) async {
@@ -42,6 +43,7 @@ class ExpensesControllerImpl extends ChangeNotifier
         description: description,
         value: value,
         date: date,
+        local: local,
         category: category,
         userId: userId,
       );

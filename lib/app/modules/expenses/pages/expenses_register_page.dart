@@ -53,6 +53,8 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
 
   late TextEditingController valueController;
 
+  late TextEditingController localController;
+
   @override
   void initState() {
     super.initState();
@@ -78,6 +80,10 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
       ).format(
         widget._expenseModel != null ? widget._expenseModel!.value : 0,
       ),
+    );
+
+    localController = TextEditingController(
+      text: widget._expenseModel != null ? widget._expenseModel!.local : '',
     );
 
     if (widget._expenseModel != null) {
@@ -200,6 +206,15 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                     SizedBox(
                       height: 32.h,
                     ),
+                    OndeGasteiTextForm(
+                      key: const Key('local_key_expenses_register_page'),
+                      controller: localController,
+                      label: 'Local',
+                      prefixIcon: const Icon(Icons.location_on_outlined),
+                    ),
+                    SizedBox(
+                      height: 32.h,
+                    ),
                     DropdownButtonFormField<CategoryModel>(
                       key: const Key('categories_key_expenses_register_page'),
                       validator: (category) {
@@ -280,6 +295,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                                 date: Validators.parseLocalFormatDateToIso8601(
                                   dateController.text,
                                 ),
+                                local: localController.text.trim(),
                                 category: _selectedCategory!,
                                 userId: user?.userId ?? 0,
                               );

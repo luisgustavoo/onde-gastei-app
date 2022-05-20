@@ -10,6 +10,7 @@ class ExpenseModel {
     required this.category,
     this.userId,
     this.expenseId,
+    this.local,
   });
 
   factory ExpenseModel.fromMap(Map<String, dynamic> map) {
@@ -18,6 +19,7 @@ class ExpenseModel {
       description: map['descricao'].toString(),
       value: double.parse(map['valor'].toString()),
       date: DateTime.parse(map['data'].toString()),
+      local: map['local'].toString(),
       category: CategoryModel.fromMap(map['categoria'] as Map<String, dynamic>),
     );
   }
@@ -26,6 +28,7 @@ class ExpenseModel {
   final String description;
   final double value;
   final DateTime date;
+  final String? local;
   final CategoryModel category;
   final int? userId;
 
@@ -35,6 +38,7 @@ class ExpenseModel {
       'descricao': description,
       'valor': value,
       'data': date,
+      'local': local,
       'category': category.toMap(),
     };
   }
@@ -48,6 +52,7 @@ class ExpenseModel {
           description == other.description &&
           value == other.value &&
           date == other.date &&
+          local == other.local &&
           category == other.category &&
           userId == other.userId;
 
@@ -57,6 +62,7 @@ class ExpenseModel {
       description.hashCode ^
       value.hashCode ^
       date.hashCode ^
+      local.hashCode ^
       category.hashCode ^
       userId.hashCode;
 }
