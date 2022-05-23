@@ -45,6 +45,7 @@ class ExpensesRepositoryImpl implements ExpensesRepository {
           'descricao': expenseModel.description,
           'valor': expenseModel.value,
           'data': expenseModel.date.toIso8601String(),
+          'local': expenseModel.local,
           'id_categoria': expenseModel.category.id
         },
       );

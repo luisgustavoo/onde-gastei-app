@@ -46,7 +46,7 @@ class ExpensesListTile extends StatelessWidget {
           symbol: r'R$',
         ).format(expenseModel.value),
         style: TextStyle(
-          fontSize: 15.sp,
+          fontSize: 13.sp,
           fontWeight: FontWeight.bold,
         ),
       ),

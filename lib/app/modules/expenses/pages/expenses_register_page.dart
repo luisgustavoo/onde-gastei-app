@@ -313,6 +313,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                                 date: Validators.parseLocalFormatDateToIso8601(
                                   dateController.text,
                                 ),
+                                local: localController.text.trim(),
                                 category: _selectedCategory!,
                                 userId: user?.userId ?? 0,
                                 expenseId: widget._expenseModel!.expenseId ?? 0,

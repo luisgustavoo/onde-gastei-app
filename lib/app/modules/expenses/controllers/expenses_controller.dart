@@ -14,6 +14,7 @@ abstract class ExpensesController {
     required String description,
     required double value,
     required DateTime date,
+    required String? local,
     required CategoryModel category,
     required int expenseId,
     int? userId,
