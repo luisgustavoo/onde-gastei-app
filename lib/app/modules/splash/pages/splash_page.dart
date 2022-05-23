@@ -3,6 +3,7 @@ import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({required this.userController, Key? key}) : super(key: key);
@@ -37,7 +38,7 @@ class SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset('assets/images/splash.png'),
+        child: Image.asset('assets/images/splash.png', height: 72.h),
       ),
     );
   }

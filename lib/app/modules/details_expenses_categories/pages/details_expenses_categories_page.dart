@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_loading.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
@@ -33,6 +35,7 @@ class DetailsExpensesCategoriesPage extends StatefulWidget {
 
 class _DetailsExpensesCategoriesPageState
     extends State<DetailsExpensesCategoriesPage> {
+  DateTime? lastDate;
   @override
   void initState() {
     super.initState();
@@ -86,11 +89,28 @@ class _DetailsExpensesCategoriesPageState
             itemBuilder: (_, index) {
               final expense = expensesCategoryList[index];
 
+              if (lastDate == null || lastDate != expense.date) {
+                lastDate = expense.date;
+                return Column(
+                  children: [
+                    Text(
+                      DateFormat('dd/MM/y', 'pt_BR').format(expense.date),
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ExpensesListTile(
+                      onTap: () {},
+                      expenseModel: expense,
+                    ),
+                  ],
+                );
+              }
+
               return ExpensesListTile(
                 onTap: () {},
                 expenseModel: expense,
-                isFirst: index == 0,
-                isLast: index == expensesCategoryList.length - 1,
               );
             },
           );

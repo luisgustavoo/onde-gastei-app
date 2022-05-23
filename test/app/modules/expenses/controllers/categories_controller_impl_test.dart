@@ -66,6 +66,7 @@ void main() {
         description: 'Test',
         value: 1,
         date: DateTime.now(),
+        local: 'Test',
         category: const CategoryModel(
           id: 1,
           description: 'Test',
@@ -93,6 +94,7 @@ void main() {
           description: 'Test',
           value: 1,
           date: DateTime.now(),
+          local: 'Test',
           category: const CategoryModel(
             id: 1,
             description: 'Test',

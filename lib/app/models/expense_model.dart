@@ -19,7 +19,7 @@ class ExpenseModel {
       description: map['descricao'].toString(),
       value: double.parse(map['valor'].toString()),
       date: DateTime.parse(map['data'].toString()),
-      local: map['local'].toString(),
+      local: map['local'] as String?,
       category: CategoryModel.fromMap(map['categoria'] as Map<String, dynamic>),
     );
   }

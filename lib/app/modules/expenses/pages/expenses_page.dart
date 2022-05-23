@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_loading.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
+import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
@@ -30,6 +32,7 @@ class ExpensesPage extends StatefulWidget {
 }
 
 class _ExpensesPageState extends State<ExpensesPage> {
+  DateTime? lastDate;
   @override
   Widget build(BuildContext context) {
     final user = context.select<UserControllerImpl, UserModel?>(
@@ -120,39 +123,33 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     itemBuilder: (_, index) {
                       final expense = expensesController.expensesList[index];
 
-                      return ExpensesListTile(
-                        onTap: () async {
-                          final edited = await Navigator.of(context).pushNamed(
-                            ExpensesRegisterPage.router,
-                            arguments: expense,
-                          ) as bool?;
+                      if (lastDate == null || lastDate != expense.date) {
+                        lastDate = expense.date;
+                        return Column(
+                          children: [
+                            Text(
+                              DateFormat('dd/MM/y', 'pt_BR')
+                                  .format(expense.date),
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            _buildExpensesListTile(
+                              context,
+                              expense,
+                              user,
+                              index,
+                            ),
+                          ],
+                        );
+                      }
 
-                          if (edited != null) {
-                            if (edited) {
-                              final futures = [
-                                widget.expensesController.findExpensesByPeriod(
-                                  userId: user?.userId ?? 0,
-                                  initialDate: widget.dateFilter.initialDate,
-                                  finalDate: widget.dateFilter.finalDate,
-                                ),
-                                widget.homeController.fetchHomeData(
-                                  userId: user?.userId ?? 0,
-                                  initialDate: widget.dateFilter.initialDate,
-                                  finalDate: widget.dateFilter.finalDate,
-                                ),
-                              ];
-
-                              await Future.wait(futures);
-                            }
-                          }
-                        },
-                        key: Key(
-                          'expenses_list_tile_key_${index}_expenses_page',
-                        ),
-                        expenseModel: expense,
-                        isFirst: index == 0,
-                        isLast:
-                            index == expensesController.expensesList.length - 1,
+                      return _buildExpensesListTile(
+                        context,
+                        expense,
+                        user,
+                        index,
                       );
                     },
                     itemCount: expensesController.expensesList.length,
@@ -163,6 +160,45 @@ class _ExpensesPageState extends State<ExpensesPage> {
           ],
         ),
       ),
+    );
+  }
+
+  ExpensesListTile _buildExpensesListTile(
+    BuildContext context,
+    ExpenseModel expense,
+    UserModel? user,
+    int index,
+  ) {
+    return ExpensesListTile(
+      onTap: () async {
+        final edited = await Navigator.of(context).pushNamed(
+          ExpensesRegisterPage.router,
+          arguments: expense,
+        ) as bool?;
+
+        if (edited != null) {
+          if (edited) {
+            final futures = [
+              widget.expensesController.findExpensesByPeriod(
+                userId: user?.userId ?? 0,
+                initialDate: widget.dateFilter.initialDate,
+                finalDate: widget.dateFilter.finalDate,
+              ),
+              widget.homeController.fetchHomeData(
+                userId: user?.userId ?? 0,
+                initialDate: widget.dateFilter.initialDate,
+                finalDate: widget.dateFilter.finalDate,
+              ),
+            ];
+
+            await Future.wait(futures);
+          }
+        }
+      },
+      key: Key(
+        'expenses_list_tile_key_${index}_expenses_page',
+      ),
+      expenseModel: expense,
     );
   }
 }
