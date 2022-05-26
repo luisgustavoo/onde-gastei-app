@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
@@ -15,7 +14,6 @@ import 'package:onde_gastei_app/app/modules/categories/widgets/color_picker.dart
 import 'package:onde_gastei_app/app/modules/categories/widgets/icon_picker.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
-import 'package:validatorless/validatorless.dart';
 
 class CategoriesRegisterPage extends StatefulWidget {
   const CategoriesRegisterPage({
@@ -87,59 +85,61 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
       (userController) => userController.user,
     );
 
-    return SafeArea(
-      child: ScaffoldMessenger(
-        key: _scaffoldMessagedKey,
-        child: IgnorePointer(
-          ignoring: categoriesControllerState == CategoriesState.loading,
-          child: Scaffold(
-            appBar: AppBar(
-              title: const Text(
-                'Categoria',
-                // style: TextStyle(fontFamily: 'Jost'),
-              ),
-              leading: IconButton(
-                splashRadius: 20,
-                icon: const Icon(Icons.close),
-                onPressed: () => Navigator.of(context).pop(_edited),
-              ),
-              actions: [
-                _buildDeleteButton(context, categoriesControllerDeleteState),
-              ],
+    return ScaffoldMessenger(
+      key: _scaffoldMessagedKey,
+      child: IgnorePointer(
+        ignoring: categoriesControllerState == CategoriesState.loading,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Categoria',
+              // style: TextStyle(fontFamily: 'Jost'),
             ),
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Form(
-                        key: _formKey,
-                        child: OndeGasteiTextForm(
-                          key: const Key('categories_key_register_categories'),
-                          label: 'Categoria...',
-                          textAlign: TextAlign.center,
-                          controller: categoriesTextController,
-                          validator: Validatorless.required(
-                            'A categoria é obrigatório',
-                          ),
-                        ),
+            leading: IconButton(
+              splashRadius: 20,
+              icon: const Icon(Icons.close),
+              onPressed: () => Navigator.of(context).pop(_edited),
+            ),
+            actions: [
+              _buildDeleteButton(context, categoriesControllerDeleteState),
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Form(
+                      key: _formKey,
+                      child: OndeGasteiTextForm(
+                        key: const Key('categories_key_register_categories'),
+                        label: 'Categoria...',
+                        textAlign: TextAlign.center,
+                        controller: categoriesTextController,
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return 'A categoria é obrigatório';
+                          }
+
+                          return null;
+                        },
                       ),
-                      SizedBox(
-                        height: 16.h,
-                      ),
-                      _buildIconAndColor(),
-                      SizedBox(
-                        height: 40.h,
-                      ),
-                      _buildSaveButton(
-                        context,
-                        categoriesControllerState,
-                        user,
-                      )
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      height: 16.h,
+                    ),
+                    _buildIconAndColor(),
+                    SizedBox(
+                      height: 40.h,
+                    ),
+                    _buildSaveButton(
+                      context,
+                      categoriesControllerState,
+                      user,
+                    )
+                  ],
                 ),
               ),
             ),

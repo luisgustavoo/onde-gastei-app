@@ -25,6 +25,16 @@ class ExpensesControllerImpl extends ChangeNotifier
   List<ExpenseModel> expensesListBeforeFilter = <ExpenseModel>[];
   ExpensesState state = ExpensesState.idle;
   ExpensesDeleteState deleteState = ExpensesDeleteState.idle;
+  DateTime? lastDate;
+
+  // CategoryModel? _selectedCategory;
+
+  // CategoryModel? get selectedCategory => _selectedCategory;
+
+  // set selectedCategory(CategoryModel? categoryModel) {
+  //   _selectedCategory = categoryModel;
+  //   notifyListeners();
+  // }
 
   @override
   Future<void> register({

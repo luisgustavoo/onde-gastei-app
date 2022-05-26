@@ -15,7 +15,7 @@ import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dar
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 
-class ExpensesPage extends StatefulWidget {
+class ExpensesPage extends StatelessWidget {
   const ExpensesPage({
     required this.expensesController,
     required this.homeController,
@@ -28,12 +28,6 @@ class ExpensesPage extends StatefulWidget {
   final ExpensesController expensesController;
   final DateFilter dateFilter;
 
-  @override
-  State<ExpensesPage> createState() => _ExpensesPageState();
-}
-
-class _ExpensesPageState extends State<ExpensesPage> {
-  DateTime? lastDate;
   @override
   Widget build(BuildContext context) {
     final user = context.select<UserControllerImpl, UserModel?>(
@@ -48,7 +42,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: OndeGasteiTextForm(
               onChanged: (description) {
-                widget.expensesController.filterExpensesList(description);
+                expensesController.filterExpensesList(description);
               },
               label: 'Pesquisar',
               prefixIcon: const Icon(Icons.search),
@@ -70,25 +64,25 @@ class _ExpensesPageState extends State<ExpensesPage> {
                       itemBuilder: (context) => [
                         PopupMenuItem<String>(
                           onTap: () {
-                            widget.expensesController.sortExpenseList(1);
+                            expensesController.sortExpenseList(1);
                           },
                           child: const Text('Maior data'),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            widget.expensesController.sortExpenseList(2);
+                            expensesController.sortExpenseList(2);
                           },
                           child: const Text('Menor data'),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            widget.expensesController.sortExpenseList(3);
+                            expensesController.sortExpenseList(3);
                           },
                           child: const Text('Maior valor'),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            widget.expensesController.sortExpenseList(4);
+                            expensesController.sortExpenseList(4);
                           },
                           child: const Text('Menor valor'),
                         ),
@@ -124,8 +118,9 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     itemBuilder: (_, index) {
                       final expense = expensesController.expensesList[index];
 
-                      if (lastDate == null || lastDate != expense.date) {
-                        lastDate = expense.date;
+                      if (expensesController.lastDate == null ||
+                          expensesController.lastDate != expense.date) {
+                        expensesController.lastDate = expense.date;
                         return Column(
                           children: [
                             Text(
@@ -180,15 +175,15 @@ class _ExpensesPageState extends State<ExpensesPage> {
         if (edited != null) {
           if (edited) {
             final futures = [
-              widget.expensesController.findExpensesByPeriod(
+              expensesController.findExpensesByPeriod(
                 userId: user?.userId ?? 0,
-                initialDate: widget.dateFilter.initialDate,
-                finalDate: widget.dateFilter.finalDate,
+                initialDate: dateFilter.initialDate,
+                finalDate: dateFilter.finalDate,
               ),
-              widget.homeController.fetchHomeData(
+              homeController.fetchHomeData(
                 userId: user?.userId ?? 0,
-                initialDate: widget.dateFilter.initialDate,
-                finalDate: widget.dateFilter.finalDate,
+                initialDate: dateFilter.initialDate,
+                finalDate: dateFilter.finalDate,
               ),
             ];
 

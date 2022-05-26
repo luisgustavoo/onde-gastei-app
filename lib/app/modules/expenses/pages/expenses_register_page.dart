@@ -14,15 +14,13 @@ import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
-import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
-import 'package:validatorless/validatorless.dart';
 
 class ExpensesRegisterPage extends StatefulWidget {
   const ExpensesRegisterPage({
-    required ExpensesController expensesController,
+    required ExpensesControllerImpl expensesController,
     ExpenseModel? expenseModel,
     bool isEditing = false,
     Key? key,
@@ -34,7 +32,7 @@ class ExpensesRegisterPage extends StatefulWidget {
   static const router = '/expenses/register';
   final bool _isEditing;
   final ExpenseModel? _expenseModel;
-  final ExpensesController _expensesController;
+  final ExpensesControllerImpl _expensesController;
 
   @override
   State<ExpensesRegisterPage> createState() => _ExpensesRegisterPageState();
@@ -44,7 +42,6 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldMessagedKey = GlobalKey<ScaffoldMessengerState>();
   bool _edited = false;
-
   CategoryModel? _selectedCategory;
 
   late TextEditingController descriptionController;
@@ -144,7 +141,13 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                       controller: descriptionController,
                       label: 'Descrição',
                       prefixIcon: const Icon(Icons.list),
-                      validator: Validatorless.required('Informe a descrição'),
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'Informe a descrição';
+                        }
+
+                        return null;
+                      },
                     ),
                     SizedBox(
                       height: 32.h,

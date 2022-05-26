@@ -11,7 +11,7 @@ import 'package:onde_gastei_app/app/modules/home/controllers/home_controller.dar
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 
-class CategoriesPage extends StatefulWidget {
+class CategoriesPage extends StatelessWidget {
   const CategoriesPage({
     required this.categoriesController,
     required this.expensesController,
@@ -26,11 +26,6 @@ class CategoriesPage extends StatefulWidget {
   final HomeController homeController;
   final DateFilter dateFilter;
 
-  @override
-  State<CategoriesPage> createState() => _CategoriesPageState();
-}
-
-class _CategoriesPageState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
     final user = context.select<UserControllerImpl, UserModel?>(
@@ -52,7 +47,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
                 if (edited != null) {
                   if (edited == true) {
-                    await widget.categoriesController
+                    await categoriesController
                         .findCategories(user?.userId ?? 0);
                   }
                 }
@@ -103,17 +98,17 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     if (edited != null) {
                       if (edited == true) {
                         final futures = [
-                          widget.homeController.fetchHomeData(
+                          homeController.fetchHomeData(
                             userId: user?.userId ?? 0,
-                            initialDate: widget.dateFilter.initialDate,
-                            finalDate: widget.dateFilter.finalDate,
+                            initialDate: dateFilter.initialDate,
+                            finalDate: dateFilter.finalDate,
                           ),
-                          widget.categoriesController
+                          categoriesController
                               .findCategories(user?.userId ?? 0),
-                          widget.expensesController.findExpensesByPeriod(
+                          expensesController.findExpensesByPeriod(
                             userId: user?.userId ?? 0,
-                            initialDate: widget.dateFilter.initialDate,
-                            finalDate: widget.dateFilter.finalDate,
+                            initialDate: dateFilter.initialDate,
+                            finalDate: dateFilter.finalDate,
                           ),
                         ];
 

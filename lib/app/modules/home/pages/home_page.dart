@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
-import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/helpers/input_formatter/date_input_formatter_ptbr.dart';
 import 'package:onde_gastei_app/app/core/helpers/validators/validators.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
@@ -21,7 +20,7 @@ import 'package:onde_gastei_app/app/modules/home/widgets/indicador.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({
     required this.homeController,
     required this.expensesController,
@@ -35,11 +34,6 @@ class HomePage extends StatefulWidget {
   final DateFilter dateFilter;
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
   Widget build(BuildContext context) {
     final user = context.select<UserControllerImpl, UserModel>(
       (userController) => userController.user,
@@ -49,9 +43,10 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: _buildAppBar(
           context,
-          widget.homeController,
-          widget.expensesController,
+          homeController,
+          expensesController,
           user,
+          dateFilter,
         ),
         body: Consumer<HomeControllerImpl>(
           builder: (_, homeController, __) {
@@ -113,11 +108,14 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       child: SizedBox(
                         height: 80.h,
-                        child: ListView(
+                        child: ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
-                          children: homeController.totalExpensesCategoriesList
-                              .map((e) {
+                          itemCount:
+                              homeController.totalExpensesCategoriesList.length,
+                          itemBuilder: (_, index) {
+                            final expensesCategories = homeController
+                                .totalExpensesCategoriesList[index];
                             return SizedBox(
                               width: 70.w,
                               //MediaQuery.of(context).size.width * 0.25,
@@ -125,12 +123,13 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   GestureDetector(
                                     child: CircleAvatar(
-                                      backgroundColor:
-                                          Color(e.category.colorCode),
+                                      backgroundColor: Color(
+                                        expensesCategories.category.colorCode,
+                                      ),
                                       minRadius: 25.r,
                                       child: Icon(
                                         IconData(
-                                          e.category.iconCode,
+                                          expensesCategories.category.iconCode,
                                           fontFamily: 'MaterialIcons',
                                         ),
                                         color: Colors.white,
@@ -142,10 +141,11 @@ class _HomePageState extends State<HomePage> {
                                         DetailsExpensesCategoriesPage.router,
                                         arguments: <String, dynamic>{
                                           'user_id': user.userId,
-                                          'category_id': e.category.id,
-                                          'category_name':
-                                              e.category.description,
-                                          'date_filter': widget.dateFilter
+                                          'category_id':
+                                              expensesCategories.category.id,
+                                          'category_name': expensesCategories
+                                              .category.description,
+                                          'date_filter': dateFilter
                                         },
                                       );
                                     },
@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                                         locale: 'pt-BR',
                                         symbol: '',
                                         decimalDigits: 2,
-                                      ).format(e.totalValue),
+                                      ).format(expensesCategories.totalValue),
                                       style: TextStyle(
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.bold,
@@ -167,14 +167,18 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                             );
-                          }).toList(),
+                          },
                         ),
                       ),
                     ),
                     SizedBox(
                       height: 16.h,
                     ),
-                    _buildChart(context, homeController),
+                    _buildChart(
+                      context,
+                      homeController,
+                      dateFilter,
+                    ),
                     _buildChartSubtitle(homeController)
                   ],
                 )
@@ -185,284 +189,288 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
 
-  Column _buildChartSubtitle(HomeControllerImpl homeController) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: homeController.percentageCategoriesList
-          .map(
-            (e) => Indicator(
-              color: Color(e.category.colorCode),
-              text: e.category.description,
-              isSquare: true,
-            ),
-          )
-          .toList(),
-    );
-  }
-
-  SizedBox _buildChart(
-    BuildContext context,
-    HomeControllerImpl homeController,
-  ) {
-    return SizedBox(
-      height: 250.h,
-      width: MediaQuery.of(context).size.width,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          PieChart(
-            PieChartData(
-              sections: homeController.percentageCategoriesList
-                  .map(
-                    (e) => PieChartSectionData(
-                      radius: 65.r,
-                      color: Color(e.category.colorCode),
-                      value: e.percentage,
-                      title: '${e.percentage.toStringAsFixed(2)}%',
-                      titleStyle: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
+Column _buildChartSubtitle(HomeControllerImpl homeController) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.end,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: homeController.percentageCategoriesList
+        .map(
+          (e) => Indicator(
+            color: Color(e.category.colorCode),
+            text: e.category.description,
+            isSquare: true,
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Período',
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                DateFormat.yMd('pt_BR').format(
-                  widget.dateFilter.initialDate,
-                ),
-              ),
-              Text(
-                DateFormat.yMd('pt_BR').format(
-                  widget.dateFilter.finalDate,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+        )
+        .toList(),
+  );
+}
 
-  AppBar _buildAppBar(
-    BuildContext context,
-    HomeController homeController,
-    ExpensesController expensesController,
-    UserModel user,
-  ) {
-    return AppBar(
-      title: Row(
-        children: [
-          Text.rich(
-            TextSpan(
-              text: 'Olá, ',
+SizedBox _buildChart(
+  BuildContext context,
+  HomeControllerImpl homeController,
+  DateFilter dateFilter,
+) {
+  return SizedBox(
+    height: 250.h,
+    width: MediaQuery.of(context).size.width,
+    child: Stack(
+      alignment: Alignment.center,
+      children: [
+        PieChart(
+          PieChartData(
+            sections: _buildPieChartSection(homeController),
+          ),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Período',
               style: TextStyle(
-                fontSize: 17.sp,
-                // fontFamily: 'Jost',
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
               ),
-              children: [
-                TextSpan(
-                  // text: userModel!.name,
-                  text: user.name,
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
-                    // fontFamily: 'Jost',
-                  ),
-                )
-              ],
             ),
-          ),
-        ],
-      ),
-      actions: [
-        IconButton(
-          key: const Key('date_filter_key_home_page'),
-          splashRadius: 25.r,
-          onPressed: () {
-            final initialDateController = TextEditingController();
-            final finalDateController = TextEditingController();
-
-            showModalBottomSheet<void>(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
+            Text(
+              DateFormat.yMd('pt_BR').format(
+                dateFilter.initialDate,
               ),
-              context: context,
-              builder: (_) {
-                final disableApplyFilterButton = ValueNotifier<bool>(true);
+            ),
+            Text(
+              DateFormat.yMd('pt_BR').format(
+                dateFilter.finalDate,
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
 
-                initialDateController.addListener(() {
-                  if (initialDateController.text.isNotEmpty &&
-                      finalDateController.text.isNotEmpty) {
-                    disableApplyFilterButton.value = false;
-                  }
-                });
+List<PieChartSectionData> _buildPieChartSection(
+  HomeControllerImpl homeController,
+) {
+  return homeController.percentageCategoriesList
+      .map(
+        (e) => PieChartSectionData(
+          radius: 65.r,
+          color: Color(e.category.colorCode),
+          value: e.percentage,
+          title: '${e.percentage.toStringAsFixed(2)}%',
+          titleStyle: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16.sp,
+          ),
+        ),
+      )
+      .toList();
+}
 
-                finalDateController.addListener(() {
-                  if (initialDateController.text.isNotEmpty &&
-                      finalDateController.text.isNotEmpty) {
-                    disableApplyFilterButton.value = false;
-                  }
-                });
-
-                return SizedBox(
-                  height: 200.h,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Expanded(
-                              child: OndeGasteiTextForm(
-                                key: const Key(
-                                  'initial_date_filter_key_home_page',
-                                ),
-                                onTap: () async {
-                                  final result = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(2022),
-                                    lastDate: DateTime(2099),
-                                  );
-
-                                  if (result != null) {
-                                    widget.dateFilter.initialDate = result;
-
-                                    initialDateController.text =
-                                        DateFormat.yMd('pt_BR').format(result);
-                                  }
-                                },
-                                label: 'Data Inicial',
-                                readOnly: true,
-                                controller: initialDateController,
-                                prefixIcon: const Icon(Icons.date_range),
-                                textInputType: TextInputType.datetime,
-                                inputFormatters: <TextInputFormatter>[
-                                  LengthLimitingTextInputFormatter(10),
-                                  DateInputFormatterPtbr(),
-                                ],
-                                validator: Validators.date(),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 8.w,
-                            ),
-                            Expanded(
-                              child: OndeGasteiTextForm(
-                                key: const Key(
-                                  'final_date_filter_key_home_page',
-                                ),
-                                onTap: () async {
-                                  final result = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(2022),
-                                    lastDate: DateTime(2099),
-                                  );
-
-                                  if (result != null) {
-                                    widget.dateFilter.finalDate = result;
-
-                                    finalDateController.text =
-                                        DateFormat.yMd('pt_BR').format(result);
-                                  }
-                                },
-                                label: 'Data Final',
-                                controller: finalDateController,
-                                readOnly: true,
-                                prefixIcon: const Icon(Icons.date_range),
-                                textInputType: TextInputType.datetime,
-                                inputFormatters: <TextInputFormatter>[
-                                  LengthLimitingTextInputFormatter(10),
-                                  DateInputFormatterPtbr(),
-                                ],
-                                validator: Validators.date(),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        ValueListenableBuilder<bool>(
-                          valueListenable: disableApplyFilterButton,
-                          builder: (context, disable, _) {
-                            return OndeGasteiButton(
-                              Text(
-                                'Aplicar',
-                                style: TextStyle(
-                                  color: disable
-                                      ? Colors.grey.shade700
-                                      : Colors.white,
-                                ),
-                              ),
-                              key: const Key('apply_button_key_home_page'),
-                              width: MediaQuery.of(context).size.width,
-                              disable: disable,
-                              onPressed: disable
-                                  ? null
-                                  : () async {
-                                      Navigator.of(context).pop();
-
-                                      final futures = [
-                                        homeController.fetchHomeData(
-                                          userId: user.userId,
-                                          initialDate:
-                                              widget.dateFilter.initialDate,
-                                          finalDate:
-                                              widget.dateFilter.finalDate,
-                                        ),
-                                        expensesController.findExpensesByPeriod(
-                                          userId: user.userId,
-                                          initialDate:
-                                              widget.dateFilter.initialDate,
-                                          finalDate:
-                                              widget.dateFilter.finalDate,
-                                        )
-                                      ];
-
-                                      await Future.wait(futures);
-                                    },
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-          icon: const Icon(
-            Icons.date_range,
-            size: 22,
+AppBar _buildAppBar(
+  BuildContext context,
+  HomeController homeController,
+  ExpensesController expensesController,
+  UserModel user,
+  DateFilter dateFilter,
+) {
+  return AppBar(
+    title: Row(
+      children: [
+        Text.rich(
+          TextSpan(
+            text: 'Olá, ',
+            style: TextStyle(
+              fontSize: 17.sp,
+              // fontFamily: 'Jost',
+            ),
+            children: [
+              TextSpan(
+                // text: userModel!.name,
+                text: user.name,
+                style: TextStyle(
+                  fontSize: 20.sp, fontWeight: FontWeight.bold,
+                  // fontFamily: 'Jost',
+                ),
+              )
+            ],
           ),
         ),
       ],
-    );
-  }
+    ),
+    actions: [
+      IconButton(
+        key: const Key('date_filter_key_home_page'),
+        splashRadius: 25.r,
+        onPressed: () {
+          final initialDateController = TextEditingController();
+          final finalDateController = TextEditingController();
+
+          showModalBottomSheet<void>(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            context: context,
+            builder: (_) {
+              final disableApplyFilterButton = ValueNotifier<bool>(true);
+
+              initialDateController.addListener(() {
+                if (initialDateController.text.isNotEmpty &&
+                    finalDateController.text.isNotEmpty) {
+                  disableApplyFilterButton.value = false;
+                }
+              });
+
+              finalDateController.addListener(() {
+                if (initialDateController.text.isNotEmpty &&
+                    finalDateController.text.isNotEmpty) {
+                  disableApplyFilterButton.value = false;
+                }
+              });
+
+              return SizedBox(
+                height: 200.h,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: OndeGasteiTextForm(
+                              key: const Key(
+                                'initial_date_filter_key_home_page',
+                              ),
+                              onTap: () async {
+                                final result = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2022),
+                                  lastDate: DateTime(2099),
+                                );
+
+                                if (result != null) {
+                                  dateFilter.initialDate = result;
+
+                                  initialDateController.text =
+                                      DateFormat.yMd('pt_BR').format(result);
+                                }
+                              },
+                              label: 'Data Inicial',
+                              readOnly: true,
+                              controller: initialDateController,
+                              prefixIcon: const Icon(Icons.date_range),
+                              textInputType: TextInputType.datetime,
+                              inputFormatters: <TextInputFormatter>[
+                                LengthLimitingTextInputFormatter(10),
+                                DateInputFormatterPtbr(),
+                              ],
+                              validator: Validators.date(),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          Expanded(
+                            child: OndeGasteiTextForm(
+                              key: const Key(
+                                'final_date_filter_key_home_page',
+                              ),
+                              onTap: () async {
+                                final result = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2022),
+                                  lastDate: DateTime(2099),
+                                );
+
+                                if (result != null) {
+                                  dateFilter.finalDate = result;
+
+                                  finalDateController.text =
+                                      DateFormat.yMd('pt_BR').format(result);
+                                }
+                              },
+                              label: 'Data Final',
+                              controller: finalDateController,
+                              readOnly: true,
+                              prefixIcon: const Icon(Icons.date_range),
+                              textInputType: TextInputType.datetime,
+                              inputFormatters: <TextInputFormatter>[
+                                LengthLimitingTextInputFormatter(10),
+                                DateInputFormatterPtbr(),
+                              ],
+                              validator: Validators.date(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      ValueListenableBuilder<bool>(
+                        valueListenable: disableApplyFilterButton,
+                        builder: (context, disable, _) {
+                          return OndeGasteiButton(
+                            Text(
+                              'Aplicar',
+                              style: TextStyle(
+                                color: disable
+                                    ? Colors.grey.shade700
+                                    : Colors.white,
+                              ),
+                            ),
+                            key: const Key('apply_button_key_home_page'),
+                            width: MediaQuery.of(context).size.width,
+                            disable: disable,
+                            onPressed: disable
+                                ? null
+                                : () async {
+                                    Navigator.of(context).pop();
+
+                                    final futures = [
+                                      homeController.fetchHomeData(
+                                        userId: user.userId,
+                                        initialDate: dateFilter.initialDate,
+                                        finalDate: dateFilter.finalDate,
+                                      ),
+                                      expensesController.findExpensesByPeriod(
+                                        userId: user.userId,
+                                        initialDate: dateFilter.initialDate,
+                                        finalDate: dateFilter.finalDate,
+                                      )
+                                    ];
+
+                                    await Future.wait(futures);
+                                  },
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+        icon: const Icon(
+          Icons.date_range,
+          size: 22,
+        ),
+      ),
+    ],
+  );
 }
+
 
 // class _BuildAppBarHomePage extends StatelessWidget {
 //   const _BuildAppBarHomePage({

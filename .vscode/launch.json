@@ -28,7 +28,8 @@
             "name": "onde_gastei_app (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "args": ["--cache-sksl --purge-persistent-cache"]
         },
         {
             "name": "onde_gastei_app (release mode)",

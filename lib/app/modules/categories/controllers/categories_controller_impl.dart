@@ -23,9 +23,9 @@ class CategoriesControllerImpl extends ChangeNotifier
   List<CategoryModel> categoriesList = <CategoryModel>[];
 
   // CategoryModel? _category;
-  //
+
   // CategoryModel? get category => _category;
-  //
+
   // set category(CategoryModel? categoryModel) {
   //   _category = categoryModel;
   //   notifyListeners();
