@@ -125,7 +125,7 @@ class CategoriesPage extends StatelessWidget {
                   ),
                   title: Text(
                     category.description,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    // style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 );
               },

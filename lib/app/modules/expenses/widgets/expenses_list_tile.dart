@@ -31,7 +31,7 @@ class ExpensesListTile extends StatelessWidget {
         expenseModel.description,
         style: TextStyle(
           fontSize: 15.sp,
-          fontWeight: FontWeight.bold,
+          // fontWeight: FontWeight.bold,
         ),
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
@@ -47,7 +47,7 @@ class ExpensesListTile extends StatelessWidget {
         ).format(expenseModel.value),
         style: TextStyle(
           fontSize: 13.sp,
-          fontWeight: FontWeight.bold,
+          // fontWeight: FontWeight.bold,
         ),
       ),
     );

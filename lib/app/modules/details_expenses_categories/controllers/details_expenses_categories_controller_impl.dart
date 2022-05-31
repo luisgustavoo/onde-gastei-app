@@ -50,4 +50,14 @@ class DetailsExpensesCategoriesControllerImpl extends ChangeNotifier
       throw Failure();
     }
   }
+
+  @override
+  double totalValueByDay(DateTime date) {
+    final listDay = detailsExpensesCategoryList.where((e) => e.date == date);
+
+    return listDay.fold<double>(
+      0,
+      (previousValue, expenses) => previousValue + expenses.value,
+    );
+  }
 }

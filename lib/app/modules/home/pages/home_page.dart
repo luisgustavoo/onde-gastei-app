@@ -159,7 +159,7 @@ class HomePage extends StatelessWidget {
                                       ).format(expensesCategories.totalValue),
                                       style: TextStyle(
                                         fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -263,7 +263,7 @@ List<PieChartSectionData> _buildPieChartSection(
           titleStyle: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 16.sp,
+            fontSize: 14.sp,
           ),
         ),
       )

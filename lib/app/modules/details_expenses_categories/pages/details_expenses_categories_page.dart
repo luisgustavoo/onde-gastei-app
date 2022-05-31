@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_loading.dart';
@@ -67,10 +68,8 @@ class _DetailsExpensesCategoriesPageState
           // style: const TextStyle(fontFamily: 'Jost'),
         ),
       ),
-      body:
-          Selector<DetailsExpensesCategoriesControllerImpl, List<ExpenseModel>>(
-        selector: (_, controller) => controller.detailsExpensesCategoryList,
-        builder: (_, expensesCategoryList, __) {
+      body: Consumer<DetailsExpensesCategoriesControllerImpl>(
+        builder: (_, expensesController, __) {
           if (state == DetailsExpensesCategoriesState.error) {
             return const Center(
               child: Text(
@@ -83,37 +82,96 @@ class _DetailsExpensesCategoriesPageState
             return const OndeGasteiLoading();
           }
 
-          return ListView.builder(
+          return GroupedListView<ExpenseModel, String>(
+            groupBy: (element) => element.date.toString(),
+            elements: expensesController.detailsExpensesCategoryList,
+            sort: false,
             physics: const BouncingScrollPhysics(),
-            itemCount: expensesCategoryList.length,
-            itemBuilder: (_, index) {
-              final expense = expensesCategoryList[index];
-
-              if (lastDate == null || lastDate != expense.date) {
-                lastDate = expense.date;
-                return Column(
+            groupSeparatorBuilder: (groupByValue) {
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Row(
                   children: [
                     Text(
-                      DateFormat('dd/MM/y', 'pt_BR').format(expense.date),
+                      DateFormat.E('pt_BR').format(
+                        DateTime.parse(groupByValue),
+                      ),
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    ExpensesListTile(
-                      onTap: () {},
-                      expenseModel: expense,
+                    const Text(','),
+                    SizedBox(
+                      width: 5.w,
                     ),
+                    Text(
+                      DateFormat('dd/MM/y', 'pt_BR').format(
+                        DateTime.parse(groupByValue),
+                      ),
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      NumberFormat.currency(
+                        locale: 'pt_BR',
+                        symbol: r'R$',
+                      ).format(
+                        expensesController.totalValueByDay(
+                          DateTime.parse(groupByValue),
+                        ),
+                      ),
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
                   ],
-                );
-              }
-
+                ),
+              );
+            },
+            itemBuilder: (context, expense) {
               return ExpensesListTile(
                 onTap: () {},
                 expenseModel: expense,
               );
             },
           );
+
+          // return ListView.builder(
+          //   physics: const BouncingScrollPhysics(),
+          //   itemCount: expensesCategoryList.length,
+          //   itemBuilder: (_, index) {
+          //     final expense = expensesCategoryList[index];
+
+          //     if (lastDate == null || lastDate != expense.date) {
+          //       lastDate = expense.date;
+          //       return Column(
+          //         children: [
+          //           Text(
+          //             DateFormat('dd/MM/y', 'pt_BR').format(expense.date),
+          //             style: TextStyle(
+          //               fontSize: 16.sp,
+          //               fontWeight: FontWeight.bold,
+          //             ),
+          //           ),
+          //           ExpensesListTile(
+          //             onTap: () {},
+          //             expenseModel: expense,
+          //           ),
+          //         ],
+          //       );
+          //     }
+
+          //     return ExpensesListTile(
+          //       onTap: () {},
+          //       expenseModel: expense,
+          //     );
+          //   },
+          // );
         },
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
@@ -112,44 +113,128 @@ class ExpensesPage extends StatelessWidget {
                     );
                   }
 
-                  return ListView.builder(
-                    key: const Key('expenses_list_key_expenses_page'),
+                  return GroupedListView<ExpenseModel, String>(
+                    groupBy: (element) => element.date.toString(),
+                    elements: expensesController.expensesList,
+                    sort: false,
                     physics: const BouncingScrollPhysics(),
-                    itemBuilder: (_, index) {
-                      final expense = expensesController.expensesList[index];
-
-                      if (expensesController.lastDate == null ||
-                          expensesController.lastDate != expense.date) {
-                        expensesController.lastDate = expense.date;
-                        return Column(
+                    groupSeparatorBuilder: (groupByValue) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Row(
                           children: [
                             Text(
-                              DateFormat('dd/MM/y', 'pt_BR')
-                                  .format(expense.date),
+                              DateFormat.E('pt_BR').format(
+                                DateTime.parse(groupByValue),
+                              ),
                               style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            _buildExpensesListTile(
-                              context,
-                              expense,
-                              user,
-                              index,
+                            const Text(','),
+                            SizedBox(
+                              width: 5.w,
                             ),
+                            Text(
+                              DateFormat('dd/MM/y', 'pt_BR').format(
+                                DateTime.parse(groupByValue),
+                              ),
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              NumberFormat.currency(
+                                locale: 'pt_BR',
+                                symbol: r'R$',
+                              ).format(
+                                expensesController.totalValueByDay(
+                                  DateTime.parse(groupByValue),
+                                ),
+                              ),
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
                           ],
-                        );
-                      }
-
+                        ),
+                      );
+                    },
+                    itemBuilder: (context, expense) {
                       return _buildExpensesListTile(
                         context,
                         expense,
                         user,
-                        index,
+                        // index,
                       );
                     },
-                    itemCount: expensesController.expensesList.length,
                   );
+
+                  // return ListView.builder(
+                  //   key: const Key('expenses_list_key_expenses_page'),
+                  //   physics: const BouncingScrollPhysics(),
+                  //   itemBuilder: (_, index) {
+                  //     final expense = expensesController.expensesList[index];
+
+                  //     if (expensesController.lastDate == null ||
+                  //         expensesController.lastDate != expense.date) {
+                  //       expensesController.lastDate = expense.date;
+
+                  //       return Column(
+                  //         children: [
+                  //           Padding(
+                  //             padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  //             child: Row(
+                  //               mainAxisAlignment:
+                  //                   MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 Text(
+                  //                   DateFormat('dd/MM/y', 'pt_BR')
+                  //                       .format(expense.date),
+                  //                   style: TextStyle(
+                  //                     fontSize: 16.sp,
+                  //                     fontWeight: FontWeight.bold,
+                  //                   ),
+                  //                 ),
+                  //                 Text(
+                  //                   NumberFormat.currency(
+                  //                     locale: 'pt_BR',
+                  //                     symbol: r'R$',
+                  //                   ).format(
+                  //                     expensesController
+                  //                         .totalValueByDay(expense.date),
+                  //                   ),
+                  //                   style: TextStyle(
+                  //                     fontSize: 16.sp,
+                  //                     fontWeight: FontWeight.bold,
+                  //                   ),
+                  //                 )
+                  //               ],
+                  //             ),
+                  //           ),
+                  //           _buildExpensesListTile(
+                  //             context,
+                  //             expense,
+                  //             user,
+                  //             index,
+                  //           ),
+                  //         ],
+                  //       );
+                  //     }
+
+                  //     return _buildExpensesListTile(
+                  //       context,
+                  //       expense,
+                  //       user,
+                  //       index,
+                  //     );
+                  //   },
+                  //   itemCount: expensesController.expensesList.length,
+                  // );
                 },
               ),
             ),
@@ -163,7 +248,7 @@ class ExpensesPage extends StatelessWidget {
     BuildContext context,
     ExpenseModel expense,
     UserModel? user,
-    int index,
+    // int index,
   ) {
     return ExpensesListTile(
       onTap: () async {
@@ -191,9 +276,9 @@ class ExpensesPage extends StatelessWidget {
           }
         }
       },
-      key: Key(
-        'expenses_list_tile_key_${index}_expenses_page',
-      ),
+      // key: Key(
+      //   'expenses_list_tile_key_${index}_expenses_page',
+      // ),
       expenseModel: expense,
     );
   }

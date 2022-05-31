@@ -7,4 +7,6 @@ abstract class DetailsExpensesCategoriesController {
     required DateTime initialDate,
     required DateTime finalDate,
   });
+
+  double totalValueByDay(DateTime date);
 }

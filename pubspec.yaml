@@ -52,6 +52,7 @@ dependencies:
   intl: ^0.17.0
   fl_chart: ^0.50.6
   flutter_native_splash: ^2.2.0+1
+  grouped_list: ^5.1.1
   
 
 dev_dependencies:

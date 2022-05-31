@@ -200,4 +200,35 @@ class ExpensesControllerImpl extends ChangeNotifier
     }
     notifyListeners();
   }
+
+  @override
+  double totalValueByDay(DateTime date) {
+    final listDay = expensesList.where((e) => e.date == date);
+
+    return listDay.fold<double>(
+      0,
+      (previousValue, expenses) => previousValue + expenses.value,
+    );
+  }
+
+  @override
+  bool groupDate(ExpenseModel expenseModel) {
+    var group = false;
+
+    expensesList.fold<ExpenseModel>(expensesList.first,
+        (previousElement, element) {
+      if (element == expenseModel) {
+        if (expenseModel.date == previousElement.date) {
+          group = true;
+          return expenseModel;
+        }
+      }
+
+      group = false;
+
+      return previousElement;
+    });
+
+    return group;
+  }
 }
