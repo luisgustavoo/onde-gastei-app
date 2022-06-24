@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:onde_gastei_app/app/core/ui/logo.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({required this.userController, Key? key}) : super(key: key);

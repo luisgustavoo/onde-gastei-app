@@ -24,22 +24,22 @@ class SharedPreferencesLocalStorageImpl implements LocalStorage {
 
     switch (T) {
       case String:
-        value = sp.getString(key) ?? '';
-        return value as T;
+        value = sp.getString(key);
+        return value as T?;
       case int:
-        value = sp.getInt(key) ?? 0;
-        return value as T;
+        value = sp.getInt(key);
+        return value as T?;
       case double:
-        value = sp.getDouble(key) ?? 0;
-        return value as T;
+        value = sp.getDouble(key);
+        return value as T?;
       case bool:
-        value = sp.getBool(key) ?? false;
-        return value as T;
+        value = sp.getBool(key);
+        return value as T?;
       case List:
-        value = sp.getStringList(key) ?? <String>[];
-        return value as T;
+        value = sp.getStringList(key);
+        return value as T?;
       default:
-        return value as T;
+        return value as T?;
     }
   }
 

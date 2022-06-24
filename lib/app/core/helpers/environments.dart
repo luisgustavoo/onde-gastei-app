@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class Environments {
   Environments._();
 
-  static String? param(String paramName)  {
+  static String? param(String paramName) {
     if (kReleaseMode) {
       return FirebaseRemoteConfig.instance.getString(paramName);
     } else {
@@ -14,6 +14,14 @@ class Environments {
   }
 
   static Future<void> loadEnvs() async {
+    if (kReleaseMode) {
+      await FirebaseRemoteConfig.instance.fetchAndActivate();
+    } else {
+      await dotenv.load();
+    }
+  }
+
+  static Future<void> getTheme() async {
     if (kReleaseMode) {
       await FirebaseRemoteConfig.instance.fetchAndActivate();
     } else {

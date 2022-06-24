@@ -5,6 +5,7 @@ import 'package:onde_gastei_app/app/core/helpers/environments.dart';
 class ApplicationStartConfig {
   Future<void> configureApp() async {
     WidgetsFlutterBinding.ensureInitialized();
+    // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
     await _firebaseConfig();
     await _loadEnvs();
   }

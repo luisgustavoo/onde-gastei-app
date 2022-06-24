@@ -5,6 +5,7 @@ class Constants {
 
   static const accessTokenKey = 'access_token_key';
   static const refreshTokenKey = 'refresh_token_key';
+  static const darkThemeKey = 'theme_key';
   static const localUserKey = 'user';
 
   static const int defaultIconCode = 0xe332;

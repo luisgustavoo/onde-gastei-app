@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:onde_gastei_app/app/controllers/app_controller.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
@@ -37,10 +38,24 @@ class _UserPageState extends State<UserPage> {
     return ScaffoldMessenger(
       key: _scaffoldMessengerKey,
       child: Scaffold(
+        appBar: AppBar(
+          title: Consumer<AppController>(
+            builder: (context, appController, child) {
+              return SwitchListTile(
+                title: const Text('Tema escuro'),
+                value: appController.isDark,
+                onChanged: (value) {
+                  appController.toggleTheme(value: value);
+                },
+                // controlAffinity: ListTileControlAffinity.leading,
+              );
+            },
+          ),
+        ),
         body: Padding(
           padding: EdgeInsets.only(left: 16.w, right: 16.w),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Form(
                 key: _formKey,
