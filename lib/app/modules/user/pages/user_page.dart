@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:onde_gastei_app/app/controllers/app_controller.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
@@ -19,49 +19,34 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  late TextEditingController userController;
+  late TextEditingController userNameController;
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   final _formKey = GlobalKey<FormState>();
+  late UserModel user;
 
   @override
   void initState() {
     super.initState();
-    final user = context.read<UserControllerImpl>().user;
+    user = context.read<UserControllerImpl>().user;
 
-    userController = TextEditingController(text: user.name);
+    userNameController = TextEditingController(text: user.name);
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<UserControllerImpl>().user;
-
     return ScaffoldMessenger(
       key: _scaffoldMessengerKey,
       child: Scaffold(
-        appBar: AppBar(
-          title: Consumer<AppController>(
-            builder: (context, appController, child) {
-              return SwitchListTile(
-                title: const Text('Tema escuro'),
-                value: appController.isDark,
-                onChanged: (value) {
-                  appController.toggleTheme(value: value);
-                },
-                // controlAffinity: ListTileControlAffinity.leading,
-              );
-            },
-          ),
-        ),
         body: Padding(
           padding: EdgeInsets.only(left: 16.w, right: 16.w),
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Form(
                 key: _formKey,
                 child: OndeGasteiTextForm(
                   label: 'Nome',
-                  controller: userController,
+                  controller: userNameController,
                   prefixIcon: const Icon(Icons.person_outline),
                   validator: (text) {
                     if (text != null) {
@@ -76,15 +61,16 @@ class _UserPageState extends State<UserPage> {
               const SizedBox(
                 height: 16,
               ),
-              Consumer<UserControllerImpl>(
-                builder: (_, controller, __) {
+              Selector<UserControllerImpl, UserState>(
+                selector: (_, userController) => userController.state,
+                builder: (_, state, __) {
                   return OndeGasteiButton(
                     Text(
                       'Salvar',
                       style: TextStyle(color: Colors.white, fontSize: 17.sp),
                     ),
                     width: MediaQuery.of(context).size.width,
-                    isLoading: controller.state == UserState.loading,
+                    isLoading: state == UserState.loading,
                     onPressed: () async {
                       final validate =
                           _formKey.currentState?.validate() ?? false;
@@ -94,7 +80,7 @@ class _UserPageState extends State<UserPage> {
                         try {
                           await widget.userController.updateUserName(
                             user.userId,
-                            userController.text,
+                            userNameController.text,
                           );
 
                           snackBar = OndeGasteiSnackBar.buildSnackBar(

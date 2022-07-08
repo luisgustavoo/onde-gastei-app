@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/helpers/input_formatter/date_input_formatter_ptbr.dart';
 import 'package:onde_gastei_app/app/core/helpers/validators/validators.dart';
-import 'package:onde_gastei_app/app/core/ui/widgets/loader.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_loading.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
@@ -38,26 +37,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
-    _animation = _controller;
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final user = context.select<UserControllerImpl, UserModel>(
@@ -329,7 +309,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       actions: [
         IconButton(
           key: const Key('date_filter_key_home_page'),
-          splashRadius: 25.r,
+          splashRadius: 20.r,
           onPressed: () {
             final initialDateController = TextEditingController();
             final finalDateController = TextEditingController();

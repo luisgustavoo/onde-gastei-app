@@ -116,7 +116,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(Logo), findsOneWidget);
-      expect(find.text('E-mail inválido'), findsOneWidget);
+      expect(find.text('Email inválido'), findsOneWidget);
       expect(find.text('Senha obrigatória'), findsOneWidget);
     });
 
@@ -151,6 +151,9 @@ void main() {
       when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       when(() => mockAuthControllerImpl.login(any(), any()))
+          .thenAnswer((_) async => _);
+
+      when(() => mockUserControllerImpl.fetchUserData())
           .thenAnswer((_) async => _);
 
       when(

@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
 import 'package:onde_gastei_app/app/modules/splash/pages/splash_page.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
@@ -64,6 +65,11 @@ void main() {
         ),
       ).thenAnswer((_) async => _);
 
+      when(() => mockUserControllerImpl.getLocalUser()).thenAnswer(
+        (_) async =>
+            const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
+
       await tester.pumpWidget(createSplashPage());
 
       verify(
@@ -85,6 +91,11 @@ void main() {
           newRoute: any(named: 'newRoute'),
         ),
       ).thenAnswer((_) async => _);
+
+      when(() => mockUserControllerImpl.getLocalUser()).thenAnswer(
+        (_) async =>
+            const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
 
       await tester.pumpWidget(createSplashPage());
 

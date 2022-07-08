@@ -32,11 +32,19 @@ class AuthServicesImpl implements AuthService {
   @override
   Future<void> register(String name, String email, String password) async {
     try {
-      await _repository.register(name, email, password);
       final firebaseAuth = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      if (firebaseAuth.user == null) {
+        throw FirebaseAuthException(
+          code: 'user-not-found',
+          message: 'Usuario não encontrado',
+        );
+      }
+
+      await _repository.register(name, firebaseAuth.user!.uid);
 
       if (firebaseAuth.user != null) {
         await firebaseAuth.user!.sendEmailVerification();
@@ -50,18 +58,24 @@ class AuthServicesImpl implements AuthService {
   @override
   Future<void> login(String email, String password) async {
     try {
-      final accessToken = await _repository.login(email, password);
-
       final firebaseAuth = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      if (firebaseAuth.user != null) {
-        if (!firebaseAuth.user!.emailVerified) {
-          throw UnverifiedEmailException();
-        }
+      if (firebaseAuth.user == null) {
+        throw FirebaseAuthException(
+          code: 'user-not-found',
+          message: 'Usuario não encontrado',
+        );
       }
+
+      if (!firebaseAuth.user!.emailVerified) {
+        throw UnverifiedEmailException();
+      }
+
+      final accessToken = await _repository.login(firebaseAuth.user!.uid);
+
       await _saveAccessToken(accessToken);
 
       await _confirmLogin();

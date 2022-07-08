@@ -153,7 +153,7 @@ void main() {
       final categoriesListExpected =
           mockCategoriesList.map(CategoryModel.fromMap).toList();
 
-      when(() => restClient.get<List<Map<String, dynamic>>>(any())).thenAnswer(
+      when(() => restClient.get<List<dynamic>>(any())).thenAnswer(
         (_) async =>
             MockRestClientResponse(statusCode: 200, data: mockCategoriesList),
       );
@@ -163,12 +163,12 @@ void main() {
 
       //Assert
       expect(categoriesList, categoriesListExpected);
-      verify(() => restClient.get<List<Map<String, dynamic>>>(any())).called(1);
+      verify(() => restClient.get<List<dynamic>>(any())).called(1);
     });
 
     test('Should return categories empty', () async {
       //Arrange
-      when(() => restClient.get<List<Map<String, dynamic>>>(any())).thenAnswer(
+      when(() => restClient.get<List<dynamic>>(any())).thenAnswer(
         (_) async => MockRestClientResponse(
           statusCode: 200,
         ),
@@ -183,8 +183,7 @@ void main() {
 
     test('Should throws exception', () async {
       //Arrange
-      when(() => restClient.get<List<Map<String, dynamic>>>(any()))
-          .thenThrow(Exception());
+      when(() => restClient.get<List<dynamic>>(any())).thenThrow(Exception());
 
       //Act
       final call = repository.findCategories;

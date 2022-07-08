@@ -22,6 +22,7 @@ void main() {
     date: DateTime.now(),
     value: 1,
     userId: 1,
+    local: 'Test',
     category: const CategoryModel(
       id: 1,
       description: 'Test',
@@ -47,6 +48,7 @@ void main() {
         'descricao': expenseModel.description,
         'valor': expenseModel.value,
         'data': expenseModel.date.toIso8601String(),
+        'local': expenseModel.local,
         'id_usuario': expenseModel.userId,
         'id_categoria': expenseModel.category.id
       };
@@ -73,6 +75,7 @@ void main() {
         'descricao': expenseModel.description,
         'valor': expenseModel.value,
         'data': expenseModel.date.toIso8601String(),
+        'local': expenseModel.local,
         'id_usuario': expenseModel.userId,
         'id_categoria': expenseModel.category.id
       };

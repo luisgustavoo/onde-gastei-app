@@ -57,6 +57,7 @@ class _DetailsExpensesCategoriesPageState
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
+          splashRadius: 20.r,
           onPressed: () {
             Navigator.of(context).pop();
           },

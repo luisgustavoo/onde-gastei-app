@@ -16,7 +16,7 @@ class ExpensesRepositoryImpl implements ExpensesRepository {
   @override
   Future<void> register(ExpenseModel expenseModel) async {
     try {
-      await _restClient.auth().post(
+      await _restClient.auth().post<Map<String, dynamic>>(
         '/expenses/register',
         data: <String, dynamic>{
           'descricao': expenseModel.description,

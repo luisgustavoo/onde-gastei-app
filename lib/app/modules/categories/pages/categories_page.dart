@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_loading.dart';
-import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_register_page.dart';
@@ -28,9 +27,11 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.select<UserControllerImpl, UserModel?>(
-      (userController) => userController.user,
-    );
+    // final user = context.select<UserControllerImpl, UserModel?>(
+    //   (userController) => userController.user,
+    // );
+
+    final user = context.read<UserControllerImpl>().user;
 
     return SafeArea(
       child: Scaffold(
@@ -47,8 +48,7 @@ class CategoriesPage extends StatelessWidget {
 
                 if (edited != null) {
                   if (edited == true) {
-                    await categoriesController
-                        .findCategories(user?.userId ?? 0);
+                    await categoriesController.findCategories(user.userId);
                   }
                 }
               },
@@ -57,6 +57,7 @@ class CategoriesPage extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
                 size: 30.sp,
               ),
+              splashRadius: 20.r,
             )
           ],
         ),
@@ -99,14 +100,13 @@ class CategoriesPage extends StatelessWidget {
                       if (edited == true) {
                         final futures = [
                           homeController.fetchHomeData(
-                            userId: user?.userId ?? 0,
+                            userId: user.userId,
                             initialDate: dateFilter.initialDate,
                             finalDate: dateFilter.finalDate,
                           ),
-                          categoriesController
-                              .findCategories(user?.userId ?? 0),
+                          categoriesController.findCategories(user.userId),
                           expensesController.findExpensesByPeriod(
-                            userId: user?.userId ?? 0,
+                            userId: user.userId,
                             initialDate: dateFilter.initialDate,
                             finalDate: dateFilter.finalDate,
                           ),

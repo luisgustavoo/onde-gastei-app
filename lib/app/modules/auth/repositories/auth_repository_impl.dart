@@ -16,14 +16,13 @@ class AuthRepositoryImpl implements AuthRepository {
   final Log _log;
 
   @override
-  Future<void> register(String name, String email, String password) async {
+  Future<void> register(String name, String firebaseUserId) async {
     try {
       await _restClient.unAuth().post<Map<String, dynamic>>(
         '/auth/register',
         data: <String, dynamic>{
-          'name': name,
-          'email': email,
-          'password': password,
+          'nome': name,
+          'id_usuario_firebase': firebaseUserId,
         },
       );
     } on RestClientException catch (e, s) {
@@ -46,11 +45,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<String> login(String email, String password) async {
+  Future<String> login(String firebaseUserId) async {
     try {
       final result = await _restClient.unAuth().post<Map<String, dynamic>>(
         '/auth/',
-        data: <String, dynamic>{'email': email, 'password': password},
+        data: <String, dynamic>{
+          'id_usuario_firebase': firebaseUserId,
+        },
       );
 
       if (result.data != null) {

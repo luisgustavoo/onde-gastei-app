@@ -9,9 +9,11 @@ import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/expenses/pages/expenses_register_page.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 
 class MockCategoriesControllerImpl extends Mock
@@ -20,7 +22,7 @@ class MockCategoriesControllerImpl extends Mock
 class MockExpensesControllerImpl extends Mock
     implements ExpensesControllerImpl {}
 
-// class MockCategoryModel extends Mock implements CategoryModel {}
+class MockUserControllerImpl extends Mock implements UserControllerImpl {}
 
 class MockCategoryModel extends CategoryModel {
   const MockCategoryModel({
@@ -38,6 +40,8 @@ void main() {
   late ExpensesControllerImpl mockExpensesControllerImpl;
 
   late CategoriesControllerImpl mockCategoriesControllerImpl;
+
+  late UserControllerImpl mockUserControllerImpl;
 
   var isEditing = false;
 
@@ -78,6 +82,9 @@ void main() {
   Widget createExpensesRegisterPage() {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<UserControllerImpl>(
+          create: (context) => mockUserControllerImpl,
+        ),
         ChangeNotifierProvider(
           create: (context) => mockCategoriesControllerImpl,
         ),
@@ -118,6 +125,7 @@ void main() {
   setUp(() {
     mockExpensesControllerImpl = MockExpensesControllerImpl();
     mockCategoriesControllerImpl = MockCategoriesControllerImpl();
+    mockUserControllerImpl = MockUserControllerImpl();
     registerFallbackValue(
       const MockCategoryModel(
         description: 'Test 1',
@@ -137,6 +145,10 @@ void main() {
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
+
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
 
       await tester.pumpWidget(createExpensesRegisterPage());
 
@@ -194,6 +206,10 @@ void main() {
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
 
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
+
       await tester.pumpWidget(createExpensesRegisterPage());
 
       final description = find.byKey(
@@ -236,6 +252,10 @@ void main() {
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
 
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
+
       await tester.pumpWidget(createExpensesRegisterPage());
 
       final description = find.byKey(
@@ -275,6 +295,10 @@ void main() {
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
+
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
 
       when(
         () => mockExpensesControllerImpl.register(
@@ -342,6 +366,10 @@ void main() {
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
 
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
+
       when(
         () => mockExpensesControllerImpl.register(
           description: any<String>(named: 'description'),
@@ -403,6 +431,10 @@ void main() {
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
 
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
+
       when(
         () => mockExpensesControllerImpl.update(
           description: any<String>(named: 'description'),
@@ -445,6 +477,10 @@ void main() {
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
 
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
+
       when(
         () => mockExpensesControllerImpl.update(
           description: any<String>(named: 'description'),
@@ -476,45 +512,6 @@ void main() {
       expect(find.text('Erro ao atualizar despesa!'), findsOneWidget);
     });
 
-    // testWidgets('Should delete expense with success', (tester) async {
-    //   isEditing = true;
-
-    //   when(() => mockExpensesControllerImpl.state)
-    //       .thenReturn(ExpensesState.idle);
-
-    //   when(() => mockExpensesControllerImpl.deleteState)
-    //       .thenReturn(ExpensesDeleteState.idle);
-
-    //   when(() => mockCategoriesControllerImpl.categoriesList)
-    //       .thenReturn(mockCategoriesList);
-
-    //   when(
-    //     () => mockExpensesControllerImpl.delete(
-    //       expenseId: any(named: 'expenseId'),
-    //     ),
-    //   ).thenAnswer((_) async => _);
-
-    //   await tester.pumpWidget(createExpensesRegisterPage());
-
-    //   final deleteIcon = find.byKey(
-    //     const Key('icon_delete_key_register_expenses_page'),
-    //   );
-
-    //   final deleteButtonDialog = find.byKey(
-    //     const Key('delete_button_dialog_register_expenses_page'),
-    //   );
-
-    //   await tester.tap(deleteIcon);
-    //   await tester.pumpAndSettle();
-
-    //   await tester.tap(deleteButtonDialog);
-    //   await tester.pumpAndSettle();
-
-    //   expect(deleteButtonDialog, findsNothing);
-    //   expect(find.byType(AlertDialog), findsNothing);
-    //   expect(find.byWidget(createExpensesRegisterPage()), findsNothing);
-    // });
-
     testWidgets('Should delete expense with success', (tester) async {
       isEditing = true;
 
@@ -526,6 +523,10 @@ void main() {
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
+
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
 
       when(
         () => mockExpensesControllerImpl.delete(
@@ -565,6 +566,10 @@ void main() {
 
       when(() => mockCategoriesControllerImpl.categoriesList)
           .thenReturn(mockCategoriesList);
+
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
 
       when(
         () => mockExpensesControllerImpl.delete(

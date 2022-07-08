@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OndeGasteiTextForm extends StatelessWidget {
   OndeGasteiTextForm({
@@ -63,7 +64,7 @@ class OndeGasteiTextForm extends StatelessWidget {
                       _obscureTextNotifier.value = !_obscureTextNotifier.value;
                     },
                     icon: Icon(value ? Icons.visibility_off : Icons.visibility),
-                    splashRadius: 10,
+                    splashRadius: 20.r,
                   )
                 : suffixIcon,
           ),

@@ -18,13 +18,8 @@ void main() {
       mockDetailsExpensesCategoriesControllerImpl;
 
   final dateFilter = DateFilter(
-    initialDate: DateTime(DateTime.now().year, DateTime.now().month),
-    finalDate: DateTime(
-      DateTime.now().year,
-      DateTime.now().month + 1,
-    ).subtract(
-      const Duration(days: 1),
-    ),
+    initialDate: DateTime(2022),
+    finalDate: DateTime(2022, 2),
   );
 
   Widget createDetailsExpensesCategoriesPage() {
@@ -62,20 +57,22 @@ void main() {
     );
   }
 
-  final expensesByCategoryList = [
-    ExpenseModel(
-      description: 'Test Expenses',
-      value: 1,
+  final mockExpensesList = List<ExpenseModel>.generate(
+    1000,
+    (index) => ExpenseModel(
+      expenseId: index,
+      description: 'Expense $index',
       date: dateFilter.initialDate,
-      category: const CategoryModel(
-        id: 1,
-        description: 'Test Category',
+      value: 1,
+      local: 'Test',
+      category: CategoryModel(
+        description: 'Category $index',
         iconCode: 58261,
         colorCode: 4284513675,
-        userId: 1,
       ),
-    )
-  ];
+      userId: 1,
+    ),
+  );
 
   setUp(() {
     mockDetailsExpensesCategoriesControllerImpl =
@@ -94,7 +91,7 @@ void main() {
           initialDate: dateFilter.initialDate,
           finalDate: dateFilter.finalDate,
         ),
-      ).thenAnswer((_) async => expensesByCategoryList);
+      ).thenAnswer((_) async => mockExpensesList);
 
       when(() => mockDetailsExpensesCategoriesControllerImpl.state)
           .thenReturn(DetailsExpensesCategoriesState.idle);
@@ -102,7 +99,14 @@ void main() {
       when(
         () => mockDetailsExpensesCategoriesControllerImpl
             .detailsExpensesCategoryList,
-      ).thenAnswer((_) => expensesByCategoryList);
+      ).thenAnswer((_) => mockExpensesList);
+
+      when(
+        () => mockDetailsExpensesCategoriesControllerImpl
+            .totalValueByDay(dateFilter.initialDate),
+      ).thenReturn(
+        100,
+      );
       //Act
       await tester.pumpWidget(createDetailsExpensesCategoriesPage());
 
@@ -123,7 +127,7 @@ void main() {
           initialDate: dateFilter.initialDate,
           finalDate: dateFilter.finalDate,
         ),
-      ).thenAnswer((_) async => expensesByCategoryList);
+      ).thenAnswer((_) async => mockExpensesList);
 
       when(() => mockDetailsExpensesCategoriesControllerImpl.state)
           .thenReturn(DetailsExpensesCategoriesState.error);
@@ -131,7 +135,14 @@ void main() {
       when(
         () => mockDetailsExpensesCategoriesControllerImpl
             .detailsExpensesCategoryList,
-      ).thenAnswer((_) => expensesByCategoryList);
+      ).thenAnswer((_) => mockExpensesList);
+
+      when(
+        () => mockDetailsExpensesCategoriesControllerImpl
+            .totalValueByDay(dateFilter.initialDate),
+      ).thenReturn(
+        100,
+      );
       //Act
       await tester.pumpWidget(createDetailsExpensesCategoriesPage());
 
@@ -153,7 +164,7 @@ void main() {
           initialDate: dateFilter.initialDate,
           finalDate: dateFilter.finalDate,
         ),
-      ).thenAnswer((_) async => expensesByCategoryList);
+      ).thenAnswer((_) async => mockExpensesList);
 
       when(() => mockDetailsExpensesCategoriesControllerImpl.state)
           .thenReturn(DetailsExpensesCategoriesState.loading);
@@ -161,7 +172,7 @@ void main() {
       when(
         () => mockDetailsExpensesCategoriesControllerImpl
             .detailsExpensesCategoryList,
-      ).thenAnswer((_) => expensesByCategoryList);
+      ).thenAnswer((_) => mockExpensesList);
       //Act
       await tester.pumpWidget(createDetailsExpensesCategoriesPage());
 

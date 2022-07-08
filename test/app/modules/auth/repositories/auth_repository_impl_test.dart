@@ -27,12 +27,10 @@ void main() {
     test('Should register user with success', () async {
       // Arrange
       const name = 'Blá Blá';
-      const email = 'blabla@teste.com';
-      const password = '123456';
+      const firebaseUserId = '123456';
       const requestData = <String, dynamic>{
-        'name': name,
-        'email': email,
-        'password': password,
+        'nome': name,
+        'id_usuario_firebase': firebaseUserId,
       };
 
       final mockResponse =
@@ -43,7 +41,7 @@ void main() {
       ).thenAnswer((_) async => mockResponse);
 
       //Act
-      await authRepository.register(name, email, password);
+      await authRepository.register(name, firebaseUserId);
 
       //Assert
       verify(
@@ -54,12 +52,10 @@ void main() {
     test('Should throw UserExistsException', () async {
       // Arrange
       const name = 'Blá Blá';
-      const email = 'blabla@teste.com';
-      const password = '123456';
+      const firebaseUserId = '123456';
       const requestData = <String, dynamic>{
-        'name': name,
-        'email': email,
-        'password': password,
+        'nome': name,
+        'id_usuario_firebase': firebaseUserId
       };
       const responseData = <String, dynamic>{
         'message': 'Usuário já cadastrado'
@@ -79,18 +75,16 @@ void main() {
       final call = authRepository.register;
 
       //Assert
-      expect(call(name, email, password), throwsA(isA<UserExistsException>()));
+      expect(call(name, firebaseUserId), throwsA(isA<UserExistsException>()));
     });
 
     test('Should throw Failure', () async {
       // Arrange
       const name = 'Blá Blá';
-      const email = 'blabla@teste.com';
-      const password = '123456';
+      const firebaseUserId = '123456';
       const requestData = <String, dynamic>{
-        'name': name,
-        'email': email,
-        'password': password,
+        'nome': name,
+        'id_usuario_firebase': firebaseUserId
       };
 
       final mockResponse =
@@ -106,18 +100,16 @@ void main() {
       final call = authRepository.register;
 
       //Assert
-      expect(call(name, email, password), throwsA(isA<Failure>()));
+      expect(call(name, firebaseUserId), throwsA(isA<Failure>()));
     });
   });
 
   group('Group test login', () {
     test('Should login with success', () async {
       // Arrange
-      const email = 'blabla@teste.com';
-      const password = '123456';
+      const firebaseUserId = '123456';
       const requestData = <String, dynamic>{
-        'email': email,
-        'password': password,
+        'id_usuario_firebase': firebaseUserId,
       };
 
       const accessTokenExpected = 'Bla bla bla bla';
@@ -135,7 +127,7 @@ void main() {
         () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
       ).thenAnswer((_) async => mockResponse);
       //Act
-      final accessToken = await authRepository.login(email, password);
+      final accessToken = await authRepository.login(firebaseUserId);
 
       //Assert
       verify(
@@ -147,11 +139,9 @@ void main() {
 
     test('Should login is empty', () async {
       // Arrange
-      const email = 'blabla@teste.com';
-      const password = '123456';
+      const firebaseUserId = '123456';
       const requestData = <String, dynamic>{
-        'email': email,
-        'password': password,
+        'id_usuario_firebase': firebaseUserId,
       };
 
       const accessTokenExpected = '';
@@ -163,7 +153,7 @@ void main() {
         () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
       ).thenAnswer((_) async => mockResponse);
       //Act
-      final accessToken = await authRepository.login(email, password);
+      final accessToken = await authRepository.login(firebaseUserId);
 
       //Assert
       expect(accessToken, accessTokenExpected);
@@ -174,11 +164,9 @@ void main() {
 
     test('Should throws UserNotFoundException', () async {
       // Arrange
-      const email = 'blabla@teste.com';
-      const password = '123456';
+      const firebaseUserId = '123456';
       const requestData = <String, dynamic>{
-        'email': email,
-        'password': password,
+        'id_usuario_firebase': firebaseUserId,
       };
 
       const responseData = <String, dynamic>{
@@ -200,16 +188,14 @@ void main() {
       //Assert
       final call = authRepository.login;
 
-      expect(call(email, password), throwsA(isA<UserNotFoundException>()));
+      expect(call(firebaseUserId), throwsA(isA<UserNotFoundException>()));
     });
 
     test('Should throws Failure', () async {
       // Arrange
-      const email = 'blabla@teste.com';
-      const password = '123456';
+      const firebaseUserId = '123456';
       const requestData = <String, dynamic>{
-        'email': email,
-        'password': password,
+        'id_usuario_firebase': firebaseUserId,
       };
 
       final mockResponse =
@@ -225,7 +211,7 @@ void main() {
       //Assert
       final call = authRepository.login;
 
-      expect(call(email, password), throwsA(isA<Failure>()));
+      expect(call(firebaseUserId), throwsA(isA<Failure>()));
     });
   });
 

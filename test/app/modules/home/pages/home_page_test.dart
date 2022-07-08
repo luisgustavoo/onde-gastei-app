@@ -9,12 +9,14 @@ import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/percentage_categories_view_model.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categories_view_model.dart';
 import 'package:onde_gastei_app/app/modules/home/widgets/indicador.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 
 class MockHomeControllerImpl extends Mock implements HomeControllerImpl {}
@@ -26,19 +28,17 @@ class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 class MockRoute extends Mock implements Route<dynamic> {}
 
+class MockUserControllerImpl extends Mock implements UserControllerImpl {}
+
 void main() {
   late HomeControllerImpl mockHomeControllerImpl;
   late ExpensesControllerImpl mockExpensesControllerImpl;
   late NavigatorObserver mockNavigatorObserver;
+  late UserControllerImpl mockUserControllerImpl;
 
   final dateFilter = DateFilter(
-    initialDate: DateTime(DateTime.now().year, DateTime.now().month),
-    finalDate: DateTime(
-      DateTime.now().year,
-      DateTime.now().month + 1,
-    ).subtract(
-      const Duration(days: 1),
-    ),
+    initialDate: DateTime(2022),
+    finalDate: DateTime(2022, 2),
   );
 
   final mockTotalExpensesCategoriesList =
@@ -75,6 +75,9 @@ void main() {
   Widget createHomePage() {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<UserControllerImpl>(
+          create: (context) => mockUserControllerImpl,
+        ),
         ChangeNotifierProvider<HomeControllerImpl>(
           create: (context) => mockHomeControllerImpl,
         ),
@@ -112,6 +115,7 @@ void main() {
     mockHomeControllerImpl = MockHomeControllerImpl();
     mockExpensesControllerImpl = MockExpensesControllerImpl();
     mockNavigatorObserver = MockNavigatorObserver();
+    mockUserControllerImpl = MockUserControllerImpl();
     registerFallbackValue(MockRoute());
   });
 
@@ -126,6 +130,10 @@ void main() {
 
       when(() => mockHomeControllerImpl.percentageCategoriesList)
           .thenReturn(mockPercentageCategoriesList);
+
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
 
       await tester.pumpWidget(createHomePage());
 
@@ -143,7 +151,7 @@ void main() {
       );
       expect(find.text('Período'), findsOneWidget);
       expect(find.text('01/01/2022'), findsOneWidget);
-      expect(find.text('31/03/2022'), findsOneWidget);
+      expect(find.text('01/02/2022'), findsOneWidget);
       expect(find.byType(IconButton), findsWidgets);
       expect(find.byType(CircleAvatar), findsWidgets);
       expect(find.byType(PieChart), findsOneWidget);
@@ -160,6 +168,10 @@ void main() {
 
       when(() => mockHomeControllerImpl.percentageCategoriesList)
           .thenReturn(mockPercentageCategoriesList);
+
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
 
       await tester.pumpWidget(createHomePage());
 
@@ -179,6 +191,10 @@ void main() {
 
       when(() => mockHomeControllerImpl.percentageCategoriesList)
           .thenReturn(mockPercentageCategoriesList);
+
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
 
       when(
         () => mockHomeControllerImpl.fetchHomeData(
@@ -247,7 +263,7 @@ void main() {
       await tester.tap(firstDayMonth);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.widgetWithText(TextButton, 'Ok'));
+      await tester.tap(find.widgetWithText(TextButton, 'OK'));
       await tester.pumpAndSettle();
 
       expect(find.byType(Dialog), findsNothing);
@@ -286,7 +302,7 @@ void main() {
       await tester.tap(lastDayMonth);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.widgetWithText(TextButton, 'Ok'));
+      await tester.tap(find.widgetWithText(TextButton, 'OK'));
       await tester.pumpAndSettle();
 
       expect(find.byType(Dialog), findsNothing);

@@ -5,16 +5,21 @@ import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_register_page.dart';
 import 'package:onde_gastei_app/app/modules/categories/view_model/category_input_model.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 
 class MockCategoriesControllerImpl extends Mock
     implements CategoriesControllerImpl {}
 
+class MockUserControllerImpl extends Mock implements UserControllerImpl {}
+
 void main() {
   late CategoriesControllerImpl mockCategoriesControllerImpl;
+  late UserControllerImpl mockUserControllerImpl;
 
   var isEditing = false;
 
@@ -32,8 +37,15 @@ void main() {
   );
 
   Widget createCategoriesRegisterPage() {
-    return ChangeNotifierProvider<CategoriesControllerImpl>(
-      create: (context) => mockCategoriesControllerImpl,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserControllerImpl>(
+          create: (context) => mockUserControllerImpl,
+        ),
+        ChangeNotifierProvider<CategoriesControllerImpl>(
+          create: (context) => mockCategoriesControllerImpl,
+        ),
+      ],
       child: ScreenUtilInit(
         builder: (context, child) => MaterialApp(
           initialRoute: CategoriesRegisterPage.router,
@@ -62,6 +74,7 @@ void main() {
 
   setUp(() {
     mockCategoriesControllerImpl = MockCategoriesControllerImpl();
+    mockUserControllerImpl = MockUserControllerImpl();
 
     registerFallbackValue(categoryModel);
     registerFallbackValue(categoryInputModel);
@@ -74,6 +87,10 @@ void main() {
 
       when(() => mockCategoriesControllerImpl.stateDelete)
           .thenReturn(CategoriesDeleteState.idle);
+
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 
@@ -115,6 +132,10 @@ void main() {
       when(() => mockCategoriesControllerImpl.stateDelete)
           .thenReturn(CategoriesDeleteState.idle);
 
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
+
       await tester.pumpWidget(createCategoriesRegisterPage());
 
       final categoryTextField = find.byKey(
@@ -142,6 +163,10 @@ void main() {
 
       when(() => mockCategoriesControllerImpl.stateDelete)
           .thenReturn(CategoriesDeleteState.idle);
+
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 
@@ -214,6 +239,10 @@ void main() {
       when(() => mockCategoriesControllerImpl.stateDelete)
           .thenReturn(CategoriesDeleteState.idle);
 
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
+
       await tester.pumpWidget(createCategoriesRegisterPage());
 
       when(() => mockCategoriesControllerImpl.register(any()))
@@ -281,6 +310,10 @@ void main() {
 
       when(() => mockCategoriesControllerImpl.stateDelete)
           .thenReturn(CategoriesDeleteState.idle);
+
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 
@@ -352,6 +385,10 @@ void main() {
       when(() => mockCategoriesControllerImpl.stateDelete)
           .thenReturn(CategoriesDeleteState.idle);
 
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
+
       await tester.pumpWidget(createCategoriesRegisterPage());
 
       when(() => mockCategoriesControllerImpl.updateCategory(any(), any()))
@@ -420,6 +457,10 @@ void main() {
       when(() => mockCategoriesControllerImpl.state)
           .thenReturn(CategoriesState.idle);
 
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
+
       await tester.pumpWidget(createCategoriesRegisterPage());
 
       when(
@@ -461,6 +502,10 @@ void main() {
 
       when(() => mockCategoriesControllerImpl.state)
           .thenReturn(CategoriesState.idle);
+
+      when(() => mockUserControllerImpl.user).thenReturn(
+        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+      );
 
       await tester.pumpWidget(createCategoriesRegisterPage());
 

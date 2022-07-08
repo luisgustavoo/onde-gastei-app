@@ -31,6 +31,16 @@ void main() {
     );
   });
 
+  group('Group test fetchUserData', () {
+    test('Should fetch user data with success', () async {
+      //Arrange
+
+      //Act
+
+      //Assert
+    });
+  });
+
   group('Group test updateUserName', () {
     test('Should update user with success', () async {
       // Arrange

@@ -96,7 +96,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
               // style: TextStyle(fontFamily: 'Jost'),
             ),
             leading: IconButton(
-              splashRadius: 20,
+              splashRadius: 20.r,
               icon: const Icon(Icons.close),
               onPressed: () => Navigator.of(context).pop(_edited),
             ),
@@ -236,7 +236,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
             },
           );
         },
-        splashRadius: 25.r,
+        splashRadius: 20.r,
         icon: const Icon(
           Icons.delete,
           color: Colors.red,

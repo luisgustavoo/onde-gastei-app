@@ -3,11 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
+import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
+import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/pages/categories_page.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_impl.dart';
+import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 
 class MockCategoriesControllerImpl extends Mock
@@ -18,10 +21,13 @@ class MockExpensesControllerImpl extends Mock
 
 class MockHomeControllerImpl extends Mock implements HomeControllerImpl {}
 
+class MockUserControllerImpl extends Mock implements UserControllerImpl {}
+
 void main() {
   late CategoriesControllerImpl mockCategoriesControllerImpl;
   late ExpensesControllerImpl mockExpensesControllerImpl;
   late HomeControllerImpl mockHomeControllerImpl;
+  late UserControllerImpl mockUserControllerImpl;
 
   final mockCategoriesList = List<CategoryModel>.generate(
     100,
@@ -47,6 +53,9 @@ void main() {
   Widget createCategoriesPage() {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<UserControllerImpl>(
+          create: (context) => mockUserControllerImpl,
+        ),
         ChangeNotifierProvider<HomeControllerImpl>(
           create: (context) => mockHomeControllerImpl,
         ),
@@ -60,6 +69,7 @@ void main() {
       child: ScreenUtilInit(
         builder: (context, child) => MaterialApp(
           initialRoute: CategoriesPage.router,
+          theme: UiConfig.themeLight,
           routes: {
             CategoriesPage.router: (context) => CategoriesPage(
                   categoriesController: mockCategoriesControllerImpl,
@@ -77,6 +87,7 @@ void main() {
     mockCategoriesControllerImpl = MockCategoriesControllerImpl();
     mockHomeControllerImpl = MockHomeControllerImpl();
     mockExpensesControllerImpl = MockExpensesControllerImpl();
+    mockUserControllerImpl = MockUserControllerImpl();
   });
 
   testWidgets('Must test list scrolling', (tester) async {
@@ -85,6 +96,10 @@ void main() {
 
     when(() => mockCategoriesControllerImpl.categoriesList)
         .thenReturn(mockCategoriesList);
+
+    when(() => mockUserControllerImpl.user).thenReturn(
+      const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+    );
 
     when(() => mockCategoriesControllerImpl.state)
         .thenReturn(CategoriesState.success);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
+import 'package:onde_gastei_app/app/core/helpers/validators/validators.dart';
 import 'package:onde_gastei_app/app/core/ui/logo.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
@@ -12,7 +13,6 @@ import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
-import 'package:validatorless/validatorless.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -88,9 +88,9 @@ class _LoginPageState extends State<LoginPage> {
             label: 'E-mail',
             prefixIcon: const Icon(Icons.email_outlined),
             textInputType: TextInputType.emailAddress,
-            validator: Validatorless.multiple([
-              Validatorless.required('Email obrigatório'),
-              Validatorless.email('E-mail inválido'),
+            validator: Validators.multiple([
+              Validators.required('Email obrigatório'),
+              Validators.email('Email inválido'),
             ]),
           ),
           SizedBox(
@@ -102,9 +102,9 @@ class _LoginPageState extends State<LoginPage> {
             label: 'Senha',
             obscureText: true,
             prefixIcon: const Icon(Icons.lock_outline),
-            validator: Validatorless.multiple([
-              Validatorless.required('Senha obrigatória'),
-              Validatorless.min(
+            validator: Validators.multiple([
+              Validators.required('Senha obrigatória'),
+              Validators.min(
                 6,
                 'A senha tem que ter no mínimo 6 caracteres',
               ),

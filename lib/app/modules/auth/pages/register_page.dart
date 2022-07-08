@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
+import 'package:onde_gastei_app/app/core/helpers/validators/validators.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_snack_bar.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:provider/provider.dart';
-import 'package:validatorless/validatorless.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({required AuthController authController, Key? key})
@@ -83,9 +83,9 @@ class _RegisterPageState extends State<RegisterPage> {
               label: 'E-mail',
               prefixIcon: const Icon(Icons.email_outlined),
               textInputType: TextInputType.emailAddress,
-              validator: Validatorless.multiple([
-                Validatorless.required('Email obrigatório'),
-                Validatorless.email('E-mail inválido'),
+              validator: Validators.multiple([
+                Validators.required('Email obrigatório'),
+                Validators.email('E-mail inválido'),
               ]),
             ),
           ),
@@ -99,9 +99,9 @@ class _RegisterPageState extends State<RegisterPage> {
               label: 'Senha',
               obscureText: true,
               prefixIcon: const Icon(Icons.lock_outline),
-              validator: Validatorless.multiple([
-                Validatorless.required('Senha obrigatória'),
-                Validatorless.min(
+              validator: Validators.multiple([
+                Validators.required('Senha obrigatória'),
+                Validators.min(
                   6,
                   'A senha tem que ter no mínimo 6 caracteres',
                 ),
@@ -118,9 +118,9 @@ class _RegisterPageState extends State<RegisterPage> {
               label: 'Confirmar senha',
               obscureText: true,
               prefixIcon: const Icon(Icons.lock_outline),
-              validator: Validatorless.multiple([
-                Validatorless.required('Confirmar senha obrigatório'),
-                Validatorless.compare(
+              validator: Validators.multiple([
+                Validators.required('Confirmar senha obrigatório'),
+                Validators.compare(
                   passwordController,
                   'Senha e confirmar senha não são iguais',
                 )
@@ -227,7 +227,7 @@ class _RegisterPageState extends State<RegisterPage> {
   AppBar _buildAppBar() {
     return AppBar(
       leading: IconButton(
-        splashRadius: 20,
+        splashRadius: 20.r,
         icon: const Icon(Icons.close),
         onPressed: () {
           if (Navigator.of(context).canPop()) {

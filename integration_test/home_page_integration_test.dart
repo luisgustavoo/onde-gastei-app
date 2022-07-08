@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
@@ -67,19 +68,18 @@ void main() {
 
   final dateFilter = DateFilter(
     initialDate: DateTime(2022),
-    finalDate: DateTime(
-      DateTime.now().year,
-      DateTime.now().month + 1,
-    ).subtract(
-      const Duration(days: 1),
-    ),
+    finalDate: DateTime(2022, 2),
   );
 
-  const userModel = UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
+  const userModel =
+      UserModel(userId: 1, name: 'Test', firebaseUserId: '123456');
 
   Widget createHomePage() {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<UserControllerImpl>(
+          create: (context) => mockUserControllerImpl,
+        ),
         ChangeNotifierProvider<HomeControllerImpl>(
           create: (context) => mockHomeControllerImpl,
         ),
@@ -138,15 +138,22 @@ void main() {
     await tester.pumpWidget(createHomePage());
 
     expect(find.text('Olá, Test'), findsOneWidget);
+
     expect(
       find.text(
-        '1.500,00',
+        'R\$${NumberFormat.currency(
+          locale: 'pt-BR',
+          name: '',
+          decimalDigits: 2,
+        ).format(1500)}',
+        findRichText: true,
       ),
       findsOneWidget,
     );
+
     expect(find.text('Período'), findsOneWidget);
     expect(find.text('01/01/2022'), findsOneWidget);
-    expect(find.text('31/03/2022'), findsOneWidget);
+    expect(find.text('01/02/2022'), findsOneWidget);
     expect(find.byType(IconButton), findsWidgets);
     expect(find.byType(CircleAvatar), findsWidgets);
     expect(find.byType(PieChart), findsOneWidget);

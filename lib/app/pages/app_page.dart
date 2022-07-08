@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:onde_gastei_app/app/controllers/app_controller.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
@@ -75,57 +73,37 @@ class _AppPageState extends State<AppPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.select<AppController, bool>(
-      (appController) => appController.isDark,
-    );
-
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
-        statusBarColor: Colors.transparent,
-      ),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   const SystemUiOverlayStyle(
+    //     statusBarIconBrightness: Brightness.dark,
+    //     statusBarColor: Colors.transparent,
+    //   ),
+    // );
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 600),
-        transitionBuilder: (child, animation) {
-          return ScaleTransition(scale: animation, child: child);
-        },
-        child: IndexedStack(
-          key: ValueKey<int>(currentIndex),
-          index: currentIndex,
-          children: [
-            HomePage(
-              homeController: widget.homeController,
-              expensesController: widget.expensesController,
-              dateFilter: dateFilter,
-            ),
-            ExpensesPage(
-              expensesController: widget.expensesController,
-              homeController: widget.homeController,
-              dateFilter: dateFilter,
-            ),
-            CategoriesPage(
-              categoriesController: widget.categoriesController,
-              expensesController: widget.expensesController,
-              homeController: widget.homeController,
-              dateFilter: dateFilter,
-            ),
-            UserPage(userController: widget.userController),
-          ],
-        ),
-
-        // Consumer<AppController>(
-        //   key: ValueKey<int>(currentIndex),
-        //   builder: (_, appController, __) {
-        //     return IndexedStack(
-        //       index: appController.tabIndex,
-        //       children: pages,
-        //     );
-        //   },
-        // ),
+      body: IndexedStack(
+        key: ValueKey<int>(currentIndex),
+        index: currentIndex,
+        children: [
+          HomePage(
+            homeController: widget.homeController,
+            expensesController: widget.expensesController,
+            dateFilter: dateFilter,
+          ),
+          ExpensesPage(
+            expensesController: widget.expensesController,
+            homeController: widget.homeController,
+            dateFilter: dateFilter,
+          ),
+          CategoriesPage(
+            categoriesController: widget.categoriesController,
+            expensesController: widget.expensesController,
+            homeController: widget.homeController,
+            dateFilter: dateFilter,
+          ),
+          UserPage(userController: widget.userController),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

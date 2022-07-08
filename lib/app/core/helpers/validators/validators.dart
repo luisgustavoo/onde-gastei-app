@@ -3,6 +3,56 @@ import 'package:flutter/material.dart';
 class Validators {
   Validators._();
 
+  static FormFieldValidator<String> multiple(
+    List<FormFieldValidator<String>> v,
+  ) {
+    return (value) {
+      for (final validator in v) {
+        final result = validator(value);
+        if (result != null) {
+          return result;
+        }
+      }
+      return null;
+    };
+  }
+
+  static FormFieldValidator<String> required(String m) {
+    return (v) {
+      if (v?.isEmpty ?? true) {
+        return m;
+      }
+      return null;
+    };
+  }
+
+  static FormFieldValidator<String> min(int min, String m) {
+    return (v) {
+      if (v?.isEmpty ?? true) {
+        return null;
+      }
+      if ((v?.length ?? 0) < min) {
+        return m;
+      }
+      return null;
+    };
+  }
+
+  static FormFieldValidator<String> email(String m) {
+    return (v) {
+      if (v?.isEmpty ?? true) {
+        return null;
+      }
+      final emailRegex = RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$",
+      );
+      if (emailRegex.hasMatch(v!)) {
+        return null;
+      }
+      return m;
+    };
+  }
+
   static FormFieldValidator<String> value() {
     return (value) {
       var parseValue = 0.0;
@@ -85,5 +135,18 @@ class Validators {
     } on Exception {
       throw const FormatException();
     }
+  }
+
+  static FormFieldValidator<String> compare(
+    TextEditingController? controller,
+    String message,
+  ) {
+    return (value) {
+      final textCompare = controller?.text ?? '';
+      if (value == null || textCompare != value) {
+        return message;
+      }
+      return null;
+    };
   }
 }

@@ -113,6 +113,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
+            splashRadius: 20.r,
             onPressed: () {
               Navigator.of(context).pop(_edited);
             },
@@ -184,6 +185,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                         }
                       },
                       // suffixIcon: IconButton(
+                      //   splashRadius: 20.r,
                       //   onPressed: () async {
                       //     final result = await showDatePicker(
                       //       context: context,
@@ -455,7 +457,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
             },
           );
         },
-        splashRadius: 25.r,
+        splashRadius: 20.r,
         icon: const Icon(
           Icons.delete,
           color: Colors.red,

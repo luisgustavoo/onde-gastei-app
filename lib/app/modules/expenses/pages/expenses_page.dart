@@ -168,72 +168,9 @@ class ExpensesPage extends StatelessWidget {
                         context,
                         expense,
                         user,
-                        // index,
                       );
                     },
                   );
-
-                  // return ListView.builder(
-                  //   key: const Key('expenses_list_key_expenses_page'),
-                  //   physics: const BouncingScrollPhysics(),
-                  //   itemBuilder: (_, index) {
-                  //     final expense = expensesController.expensesList[index];
-
-                  //     if (expensesController.lastDate == null ||
-                  //         expensesController.lastDate != expense.date) {
-                  //       expensesController.lastDate = expense.date;
-
-                  //       return Column(
-                  //         children: [
-                  //           Padding(
-                  //             padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  //             child: Row(
-                  //               mainAxisAlignment:
-                  //                   MainAxisAlignment.spaceBetween,
-                  //               children: [
-                  //                 Text(
-                  //                   DateFormat('dd/MM/y', 'pt_BR')
-                  //                       .format(expense.date),
-                  //                   style: TextStyle(
-                  //                     fontSize: 16.sp,
-                  //                     fontWeight: FontWeight.bold,
-                  //                   ),
-                  //                 ),
-                  //                 Text(
-                  //                   NumberFormat.currency(
-                  //                     locale: 'pt_BR',
-                  //                     symbol: r'R$',
-                  //                   ).format(
-                  //                     expensesController
-                  //                         .totalValueByDay(expense.date),
-                  //                   ),
-                  //                   style: TextStyle(
-                  //                     fontSize: 16.sp,
-                  //                     fontWeight: FontWeight.bold,
-                  //                   ),
-                  //                 )
-                  //               ],
-                  //             ),
-                  //           ),
-                  //           _buildExpensesListTile(
-                  //             context,
-                  //             expense,
-                  //             user,
-                  //             index,
-                  //           ),
-                  //         ],
-                  //       );
-                  //     }
-
-                  //     return _buildExpensesListTile(
-                  //       context,
-                  //       expense,
-                  //       user,
-                  //       index,
-                  //     );
-                  //   },
-                  //   itemCount: expensesController.expensesList.length,
-                  // );
                 },
               ),
             ),
@@ -247,7 +184,6 @@ class ExpensesPage extends StatelessWidget {
     BuildContext context,
     ExpenseModel expense,
     UserModel? user,
-    // int index,
   ) {
     return ExpensesListTile(
       onTap: () async {
@@ -275,9 +211,6 @@ class ExpensesPage extends StatelessWidget {
           }
         }
       },
-      // key: Key(
-      //   'expenses_list_tile_key_${index}_expenses_page',
-      // ),
       expenseModel: expense,
     );
   }
