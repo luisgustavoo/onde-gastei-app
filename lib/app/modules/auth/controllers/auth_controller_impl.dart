@@ -89,4 +89,7 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
   Future<void> logout() async {
     await _localStorage.clear();
   }
+
+  @override
+  Future<void> resetPassword(String email) => _service.resetPassword(email);
 }

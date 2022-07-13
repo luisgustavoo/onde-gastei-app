@@ -31,8 +31,10 @@ class AuthInterceptor extends Interceptor {
     RequestInterceptorHandler handler,
   ) async {
     //super.onRequest(options, handler);
+    final authRequired =
+        options.extra[Constants.restClientAuthRequiredKey] as bool? ?? false;
 
-    if (options.extra['auth_required'] == true) {
+    if (authRequired == true) {
       final accessToken =
           await _localStorage.read<String>(Constants.accessTokenKey);
       if (accessToken == null) {
@@ -48,6 +50,8 @@ class AuthInterceptor extends Interceptor {
       }
 
       options.headers['Authorization'] = accessToken;
+    } else {
+      options.headers.remove('Authorization');
     }
 
     if (!kReleaseMode) {
@@ -85,7 +89,7 @@ class AuthInterceptor extends Interceptor {
 
     final statusCode = err.response?.statusCode;
 
-    if (err.requestOptions.extra['auth_required'] == true) {
+    if (err.requestOptions.extra[Constants.restClientAuthRequiredKey] == true) {
       if (statusCode == 403 || statusCode == 401) {
         await _refreshToken();
         _log

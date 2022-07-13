@@ -126,7 +126,9 @@ class _LoginPageState extends State<LoginPage> {
                   'Esqueceu a senha?',
                   style: TextStyle(fontSize: 12.sp),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  _formKey.currentState?.validate();
+                },
               ),
             ],
           ),

@@ -7,6 +7,7 @@ class Constants {
   static const refreshTokenKey = 'refresh_token_key';
   static const darkThemeKey = 'theme_key';
   static const localUserKey = 'user';
+  static const restClientAuthRequiredKey = 'auth_required';
 
   static const int defaultIconCode = 0xe332;
   static const int defaultColorCode = 0xFF9E9E9E;

@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({required this.userController, Key? key}) : super(key: key);
+  static const router = '/user';
 
   final UserController userController;
 

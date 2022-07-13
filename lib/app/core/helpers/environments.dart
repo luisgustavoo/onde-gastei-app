@@ -15,7 +15,14 @@ class Environments {
 
   static Future<void> loadEnvs() async {
     if (kReleaseMode) {
-      await FirebaseRemoteConfig.instance.fetchAndActivate();
+      final remoteConfig = FirebaseRemoteConfig.instance;
+      await remoteConfig.setConfigSettings(
+        RemoteConfigSettings(
+          fetchTimeout: const Duration(minutes: 1),
+          minimumFetchInterval: const Duration(hours: 1),
+        ),
+      );
+      await remoteConfig.fetchAndActivate();
     } else {
       await dotenv.load();
     }

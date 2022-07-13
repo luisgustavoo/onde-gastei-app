@@ -101,4 +101,9 @@ class AuthServicesImpl implements AuthService {
       confirmModel.refreshToken,
     );
   }
+
+  @override
+  Future<void> resetPassword(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
 }
