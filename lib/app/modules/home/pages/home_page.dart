@@ -99,10 +99,30 @@ class _HomePageState extends State<HomePage> {
                             text: NumberFormat.currency(
                               locale: 'pt-BR',
                               name: '',
-                              decimalDigits: 2,
-                            ).format(homeController.totalExpenses),
+                              decimalDigits: 0,
+                            ).format(homeController.totalExpenses.truncate()),
                             style: TextStyle(
                               fontSize: 40.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ',',
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: NumberFormat.compact(
+                              locale: 'pt-BR',
+                            ).format(
+                              (homeController.totalExpenses -
+                                      homeController.totalExpenses.truncate()) *
+                                  100,
+                            ),
+                            style: TextStyle(
+                              fontSize: 15.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           )

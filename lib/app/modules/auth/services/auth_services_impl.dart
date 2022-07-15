@@ -81,6 +81,9 @@ class AuthServicesImpl implements AuthService {
       await _confirmLogin();
     } on FirebaseAuthException catch (e, s) {
       _log.error('Erro ao realizar login no FirebaseAuth', e, s);
+      if (e.code == 'wrong-password') {
+        throw UserNotFoundException();
+      }
       throw Failure(message: 'Erro ao realizar login no FirebaseAuth');
     } on Exception catch (e) {
       if ((e is UnverifiedEmailException) || (e is UserNotFoundException)) {

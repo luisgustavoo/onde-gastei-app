@@ -10,6 +10,7 @@ import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
+import 'package:onde_gastei_app/app/modules/auth/pages/reset_password_page.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
@@ -127,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 12.sp),
                 ),
                 onPressed: () {
-                  _formKey.currentState?.validate();
+                  Navigator.of(context).pushNamed(ResetPasswordPage.router);
                 },
               ),
             ],
@@ -190,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
             await Navigator.of(context).pushReplacementNamed(AppPage.router);
           } on UserNotFoundException {
             snackBar = OndeGasteiSnackBar.buildSnackBar(
-              content: const Text('Login e senha inválidos!'),
+              content: const Text('Login ou senha inválidos!'),
               backgroundColor: Colors.red,
               label: 'Fechar',
               onPressed: () {},

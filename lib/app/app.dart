@@ -16,6 +16,7 @@ import 'package:onde_gastei_app/app/models/expense_model.dart';
 import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/pages/register_page.dart';
+import 'package:onde_gastei_app/app/modules/auth/pages/reset_password_page.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_services_impl.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller_impl.dart';
@@ -278,9 +279,11 @@ class App extends StatelessWidget {
                 expensesController: context.read<ExpensesControllerImpl>(),
               );
             },
-            // CategoriesPage.router: (context) {
-            //   return const CategoriesPage();
-            // },
+            ResetPasswordPage.router: (context) {
+              return ResetPasswordPage(
+                authController: context.read<AuthControllerImpl>(),
+              );
+            },
             CategoriesRegisterPage.router: (context) {
               if (ModalRoute.of(context)!.settings.arguments != null) {
                 final arguments = ModalRoute.of(context)!.settings.arguments!
