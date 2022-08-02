@@ -89,57 +89,63 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
       key: _scaffoldMessagedKey,
       child: IgnorePointer(
         ignoring: categoriesControllerState == CategoriesState.loading,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              'Categoria',
-              // style: TextStyle(fontFamily: 'Jost'),
+        child: WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).pop(_edited);
+            return _edited;
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'Categoria',
+                // style: TextStyle(fontFamily: 'Jost'),
+              ),
+              leading: IconButton(
+                splashRadius: 20.r,
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.of(context).pop(_edited),
+              ),
+              actions: [
+                _buildDeleteButton(context, categoriesControllerDeleteState),
+              ],
             ),
-            leading: IconButton(
-              splashRadius: 20.r,
-              icon: const Icon(Icons.close),
-              onPressed: () => Navigator.of(context).pop(_edited),
-            ),
-            actions: [
-              _buildDeleteButton(context, categoriesControllerDeleteState),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Form(
-                      key: _formKey,
-                      child: OndeGasteiTextForm(
-                        key: const Key('categories_key_register_categories'),
-                        label: 'Categoria...',
-                        textAlign: TextAlign.center,
-                        controller: categoriesTextController,
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return 'A categoria é obrigatório';
-                          }
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Form(
+                        key: _formKey,
+                        child: OndeGasteiTextForm(
+                          key: const Key('categories_key_register_categories'),
+                          label: 'Categoria...',
+                          textAlign: TextAlign.center,
+                          controller: categoriesTextController,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'A categoria é obrigatório';
+                            }
 
-                          return null;
-                        },
+                            return null;
+                          },
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 16.h,
-                    ),
-                    _buildIconAndColor(),
-                    SizedBox(
-                      height: 40.h,
-                    ),
-                    _buildSaveButton(
-                      context,
-                      categoriesControllerState,
-                      user,
-                    )
-                  ],
+                      SizedBox(
+                        height: 16.h,
+                      ),
+                      _buildIconAndColor(),
+                      SizedBox(
+                        height: 40.h,
+                      ),
+                      _buildSaveButton(
+                        context,
+                        categoriesControllerState,
+                        user,
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -203,6 +209,10 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                           Navigator.of(context).pop(_edited);
                         }
                       } on Failure {
+                        if (Navigator.of(dialogContext).canPop()) {
+                          Navigator.of(dialogContext).pop(_edited);
+                        }
+
                         final snackBar = OndeGasteiSnackBar.buildSnackBar(
                           key: const Key(
                             'snack_bar_fail_delete_key_register_update_categories_page',

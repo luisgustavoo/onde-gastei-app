@@ -110,263 +110,275 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
 
     return ScaffoldMessenger(
       key: _scaffoldMessagedKey,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            splashRadius: 20.r,
-            onPressed: () {
-              Navigator.of(context).pop(_edited);
-            },
-            icon: const Icon(Icons.close),
+      child: WillPopScope(
+        onWillPop: () async {
+          Navigator.of(context).pop(_edited);
+          return _edited;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              splashRadius: 20.r,
+              onPressed: () {
+                Navigator.of(context).pop(_edited);
+              },
+              icon: const Icon(Icons.close),
+            ),
+            title: const Text(
+              'Despesa',
+              // style: TextStyle(fontFamily: 'Jost'),
+            ),
+            actions: [
+              _buildDeleteButton(context, expensesControllerDeleteState),
+            ],
           ),
-          title: const Text(
-            'Despesa',
-            // style: TextStyle(fontFamily: 'Jost'),
-          ),
-          actions: [
-            _buildDeleteButton(context, expensesControllerDeleteState),
-          ],
-        ),
-        body: IgnorePointer(
-          ignoring: expensesControllerState == ExpensesState.loading,
-          child: ListView(
-            padding: EdgeInsets.only(top: 32.h, left: 16.w, right: 16.w),
-            physics: const BouncingScrollPhysics(),
-            children: [
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    OndeGasteiTextForm(
-                      key: const Key('description_key_expenses_register_page'),
-                      controller: descriptionController,
-                      label: 'Descrição',
-                      prefixIcon: const Icon(Icons.list),
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'Informe a descrição';
-                        }
-
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 32.h,
-                    ),
-                    OndeGasteiTextForm(
-                      key: const Key('value_key_expenses_register_page'),
-                      controller: valueController,
-                      label: 'Valor',
-                      prefixIcon: const Icon(Icons.attach_money),
-                      textInputType: TextInputType.number,
-                      inputFormatters: [CurrencyInputFormatterPtBr()],
-                      validator: Validators.value(),
-                    ),
-                    SizedBox(
-                      height: 32.h,
-                    ),
-                    OndeGasteiTextForm(
-                      key: const Key('date_key_expenses_register_page'),
-                      controller: dateController,
-                      label: 'Data',
-                      prefixIcon: const Icon(Icons.date_range),
-                      readOnly: true,
-                      onTap: () async {
-                        final result = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2022),
-                          lastDate: DateTime(2099),
-                        );
-
-                        if (result != null) {
-                          dateController.text =
-                              DateFormat.yMd('pt_BR').format(result);
-                        }
-                      },
-                      // suffixIcon: IconButton(
-                      //   splashRadius: 20.r,
-                      //   onPressed: () async {
-                      //     final result = await showDatePicker(
-                      //       context: context,
-                      //       initialDate: DateTime.now(),
-                      //       firstDate: DateTime(2022),
-                      //       lastDate: DateTime(2099),
-                      //     );
-                      //
-                      //     if (result != null) {
-                      //       dateController.text =
-                      //           DateFormat.yMd('pt_BR').format(result);
-                      //     }
-                      //   },
-                      //   icon: const Icon(Icons.search_outlined),
-                      // ),
-                      textInputType: TextInputType.datetime,
-                      inputFormatters: <TextInputFormatter>[
-                        LengthLimitingTextInputFormatter(10),
-                        DateInputFormatterPtbr(),
-                      ],
-                      validator: Validators.date(),
-                    ),
-                    SizedBox(
-                      height: 32.h,
-                    ),
-                    OndeGasteiTextForm(
-                      key: const Key('local_key_expenses_register_page'),
-                      controller: localController,
-                      label: 'Local',
-                      prefixIcon: const Icon(Icons.location_on_outlined),
-                    ),
-                    SizedBox(
-                      height: 32.h,
-                    ),
-                    DropdownButtonFormField<CategoryModel>(
-                      key: const Key('categories_key_expenses_register_page'),
-                      validator: (category) {
-                        if (category == null) {
-                          return 'Informe a categoria';
-                        }
-                        return null;
-                      },
-                      onChanged: (category) {
-                        setState(() {
-                          _selectedCategory = category;
-                        });
-                      },
-                      value: _selectedCategory,
-                      hint: const Text(
-                        'Selecione a categoria',
-                        style: TextStyle(
-                          color: Constants.hintStyleColor,
-                        ),
-                      ),
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 2.h,
-                          horizontal: _selectedCategory == null ? 8.h : 0,
-                        ),
-                      ),
-                      isExpanded: true,
-                      isDense: false,
-                      items: categoriesList.map((category) {
-                        return DropdownMenuItem<CategoryModel>(
-                          value: category,
-                          child: ListTile(
-                            // key: Key(
-                            //   'list_tile_items_key_${category.id}_expenses_register_page',
-                            // ),
-                            leading: CircleAvatar(
-                              backgroundColor: Color(category.colorCode),
-                              child: Icon(
-                                IconData(
-                                  category.iconCode,
-                                  fontFamily: 'MaterialIcons',
-                                ),
-                                color: Colors.white,
-                              ),
-                            ),
-                            title: Text(category.description),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(
-                      height: 32.h,
-                    ),
-                    OndeGasteiButton(
-                      const Text(
-                        'Salvar',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () async {
-                        final formValid =
-                            _formKey.currentState?.validate() ?? false;
-
-                        if (formValid) {
-                          SnackBar snackBar;
-
-                          String message;
-
-                          try {
-                            _edited = true;
-
-                            if (!widget._isEditing) {
-                              await widget._expensesController.register(
-                                description: descriptionController.text.trim(),
-                                value:
-                                    Validators.parseLocalFormatValueToIso4217(
-                                  valueController.text,
-                                ),
-                                date: Validators.parseLocalFormatDateToIso8601(
-                                  dateController.text,
-                                ),
-                                local: localController.text.trim(),
-                                category: _selectedCategory!,
-                                userId: user?.userId ?? 0,
-                              );
-
-                              message = 'Despesa registrada com sucesso!';
-
-                              _resetFields();
-                            } else {
-                              await widget._expensesController.update(
-                                description: descriptionController.text.trim(),
-                                value:
-                                    Validators.parseLocalFormatValueToIso4217(
-                                  valueController.text,
-                                ),
-                                date: Validators.parseLocalFormatDateToIso8601(
-                                  dateController.text,
-                                ),
-                                local: localController.text.trim(),
-                                category: _selectedCategory!,
-                                userId: user?.userId ?? 0,
-                                expenseId: widget._expenseModel!.expenseId ?? 0,
-                              );
-                              message = 'Despesa atualizada com sucesso!';
-                            }
-
-                            if (!mounted) {
-                              return;
-                            }
-
-                            snackBar = OndeGasteiSnackBar.buildSnackBar(
-                              key: const Key(
-                                'snack_bar_success_key_register_expenses_page',
-                              ),
-                              content: Text(message),
-                              backgroundColor: Theme.of(context).primaryColor,
-                              label: 'Fechar',
-                              onPressed: () {},
-                            );
-                          } on Failure {
-                            snackBar = OndeGasteiSnackBar.buildSnackBar(
-                              key: const Key(
-                                'snack_bar_error_key_expenses_register_page',
-                              ),
-                              content: widget._isEditing
-                                  ? const Text('Erro ao atualizar despesa!')
-                                  : const Text('Erro ao registrar despesa!'),
-                              backgroundColor: Colors.red,
-                              label: 'Fechar',
-                              onPressed: () {},
-                            );
+          body: IgnorePointer(
+            ignoring: expensesControllerState == ExpensesState.loading,
+            child: ListView(
+              padding: EdgeInsets.only(top: 32.h, left: 16.w, right: 16.w),
+              physics: const BouncingScrollPhysics(),
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      OndeGasteiTextForm(
+                        key:
+                            const Key('description_key_expenses_register_page'),
+                        controller: descriptionController,
+                        label: 'Descrição',
+                        prefixIcon: const Icon(Icons.list),
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return 'Informe a descrição';
                           }
 
-                          _scaffoldMessagedKey.currentState!
-                              .showSnackBar(snackBar);
-                        }
-                      },
-                      isLoading:
-                          expensesControllerState == ExpensesState.loading,
-                      key: const Key(
-                        'register_button_key_expenses_register_page',
+                          return null;
+                        },
                       ),
-                    )
-                  ],
+                      SizedBox(
+                        height: 32.h,
+                      ),
+                      OndeGasteiTextForm(
+                        key: const Key('value_key_expenses_register_page'),
+                        controller: valueController,
+                        label: 'Valor',
+                        prefixIcon: const Icon(Icons.attach_money),
+                        textInputType: TextInputType.number,
+                        inputFormatters: [CurrencyInputFormatterPtBr()],
+                        validator: Validators.value(),
+                      ),
+                      SizedBox(
+                        height: 32.h,
+                      ),
+                      OndeGasteiTextForm(
+                        key: const Key('date_key_expenses_register_page'),
+                        controller: dateController,
+                        label: 'Data',
+                        prefixIcon: const Icon(Icons.date_range),
+                        readOnly: true,
+                        onTap: () async {
+                          final result = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2022),
+                            lastDate: DateTime(2099),
+                          );
+
+                          if (result != null) {
+                            dateController.text =
+                                DateFormat.yMd('pt_BR').format(result);
+                          }
+                        },
+                        // suffixIcon: IconButton(
+                        //   splashRadius: 20.r,
+                        //   onPressed: () async {
+                        //     final result = await showDatePicker(
+                        //       context: context,
+                        //       initialDate: DateTime.now(),
+                        //       firstDate: DateTime(2022),
+                        //       lastDate: DateTime(2099),
+                        //     );
+                        //
+                        //     if (result != null) {
+                        //       dateController.text =
+                        //           DateFormat.yMd('pt_BR').format(result);
+                        //     }
+                        //   },
+                        //   icon: const Icon(Icons.search_outlined),
+                        // ),
+                        textInputType: TextInputType.datetime,
+                        inputFormatters: <TextInputFormatter>[
+                          LengthLimitingTextInputFormatter(10),
+                          DateInputFormatterPtbr(),
+                        ],
+                        validator: Validators.date(),
+                      ),
+                      SizedBox(
+                        height: 32.h,
+                      ),
+                      OndeGasteiTextForm(
+                        key: const Key('local_key_expenses_register_page'),
+                        controller: localController,
+                        label: 'Local',
+                        prefixIcon: const Icon(Icons.location_on_outlined),
+                      ),
+                      SizedBox(
+                        height: 32.h,
+                      ),
+                      DropdownButtonFormField<CategoryModel>(
+                        key: const Key('categories_key_expenses_register_page'),
+                        validator: (category) {
+                          if (category == null) {
+                            return 'Informe a categoria';
+                          }
+                          return null;
+                        },
+                        onChanged: (category) {
+                          setState(() {
+                            _selectedCategory = category;
+                          });
+                        },
+                        value: _selectedCategory,
+                        hint: const Text(
+                          'Selecione a categoria',
+                          style: TextStyle(
+                            color: Constants.hintStyleColor,
+                          ),
+                        ),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 2.h,
+                            horizontal: _selectedCategory == null ? 8.h : 0,
+                          ),
+                        ),
+                        isExpanded: true,
+                        isDense: false,
+                        items: categoriesList.map((category) {
+                          return DropdownMenuItem<CategoryModel>(
+                            value: category,
+                            child: ListTile(
+                              // key: Key(
+                              //   'list_tile_items_key_${category.id}_expenses_register_page',
+                              // ),
+                              leading: CircleAvatar(
+                                backgroundColor: Color(category.colorCode),
+                                child: Icon(
+                                  IconData(
+                                    category.iconCode,
+                                    fontFamily: 'MaterialIcons',
+                                  ),
+                                  color: Colors.white,
+                                ),
+                              ),
+                              title: Text(category.description),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      SizedBox(
+                        height: 32.h,
+                      ),
+                      OndeGasteiButton(
+                        const Text(
+                          'Salvar',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () async {
+                          final formValid =
+                              _formKey.currentState?.validate() ?? false;
+
+                          if (formValid) {
+                            SnackBar snackBar;
+
+                            String message;
+
+                            try {
+                              _edited = true;
+
+                              if (!widget._isEditing) {
+                                await widget._expensesController.register(
+                                  description:
+                                      descriptionController.text.trim(),
+                                  value:
+                                      Validators.parseLocalFormatValueToIso4217(
+                                    valueController.text,
+                                  ),
+                                  date:
+                                      Validators.parseLocalFormatDateToIso8601(
+                                    dateController.text,
+                                  ),
+                                  local: localController.text.trim(),
+                                  category: _selectedCategory!,
+                                  userId: user?.userId ?? 0,
+                                );
+
+                                message = 'Despesa registrada com sucesso!';
+
+                                _resetFields();
+                              } else {
+                                await widget._expensesController.update(
+                                  description:
+                                      descriptionController.text.trim(),
+                                  value:
+                                      Validators.parseLocalFormatValueToIso4217(
+                                    valueController.text,
+                                  ),
+                                  date:
+                                      Validators.parseLocalFormatDateToIso8601(
+                                    dateController.text,
+                                  ),
+                                  local: localController.text.trim(),
+                                  category: _selectedCategory!,
+                                  userId: user?.userId ?? 0,
+                                  expenseId:
+                                      widget._expenseModel!.expenseId ?? 0,
+                                );
+                                message = 'Despesa atualizada com sucesso!';
+                              }
+
+                              if (!mounted) {
+                                return;
+                              }
+
+                              snackBar = OndeGasteiSnackBar.buildSnackBar(
+                                key: const Key(
+                                  'snack_bar_success_key_register_expenses_page',
+                                ),
+                                content: Text(message),
+                                backgroundColor: Theme.of(context).primaryColor,
+                                label: 'Fechar',
+                                onPressed: () {},
+                              );
+                            } on Failure {
+                              snackBar = OndeGasteiSnackBar.buildSnackBar(
+                                key: const Key(
+                                  'snack_bar_error_key_expenses_register_page',
+                                ),
+                                content: widget._isEditing
+                                    ? const Text('Erro ao atualizar despesa!')
+                                    : const Text('Erro ao registrar despesa!'),
+                                backgroundColor: Colors.red,
+                                label: 'Fechar',
+                                onPressed: () {},
+                              );
+                            }
+
+                            _scaffoldMessagedKey.currentState!
+                                .showSnackBar(snackBar);
+                          }
+                        },
+                        isLoading:
+                            expensesControllerState == ExpensesState.loading,
+                        key: const Key(
+                          'register_button_key_expenses_register_page',
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

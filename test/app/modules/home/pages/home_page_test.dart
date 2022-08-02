@@ -43,7 +43,7 @@ void main() {
 
   final mockTotalExpensesCategoriesList =
       List<TotalExpensesCategoriesViewModel>.generate(
-    100,
+    10,
     (index) => TotalExpensesCategoriesViewModel(
       totalValue: double.parse(index.toString()),
       category: CategoryModel(
@@ -58,7 +58,7 @@ void main() {
 
   final mockPercentageCategoriesList =
       List<PercentageCategoriesViewModel>.generate(
-    100,
+    10,
     (index) => PercentageCategoriesViewModel(
       value: double.parse(index.toString()),
       percentage: double.parse(index.toString()),
@@ -123,7 +123,8 @@ void main() {
     testWidgets('Test if home page shows up', (tester) async {
       when(() => mockHomeControllerImpl.state).thenReturn(HomeState.idle);
 
-      when(() => mockHomeControllerImpl.totalExpenses).thenReturn(1500);
+      when(() => mockHomeControllerImpl.totalExpenses)
+          .thenReturn(1500);
 
       when(() => mockHomeControllerImpl.totalExpensesCategoriesList)
           .thenReturn(mockTotalExpensesCategoriesList);
@@ -138,6 +139,7 @@ void main() {
       await tester.pumpWidget(createHomePage());
 
       expect(find.text('Olá, Test'), findsOneWidget);
+
       expect(
         find.text(
           'R\$${NumberFormat.currency(

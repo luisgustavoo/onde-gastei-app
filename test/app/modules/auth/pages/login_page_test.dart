@@ -212,7 +212,7 @@ void main() {
 
       expect(find.byType(SnackBar), findsOneWidget);
       expect(
-        find.text('Login e senha inválidos!', findRichText: true),
+        find.text('Login ou senha inválidos!', findRichText: true),
         findsOneWidget,
       );
     });

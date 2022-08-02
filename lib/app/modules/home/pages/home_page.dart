@@ -116,11 +116,14 @@ class _HomePageState extends State<HomePage> {
                           TextSpan(
                             text: NumberFormat.compact(
                               locale: 'pt-BR',
-                            ).format(
-                              (homeController.totalExpenses -
-                                      homeController.totalExpenses.truncate()) *
-                                  100,
-                            ),
+                            )
+                                .format(
+                                  (homeController.totalExpenses -
+                                          homeController.totalExpenses
+                                              .truncate()) *
+                                      100,
+                                )
+                                .padLeft(2, '0'),
                             style: TextStyle(
                               fontSize: 17.sp,
                             ),
@@ -329,11 +332,11 @@ class _HomePageState extends State<HomePage> {
         IconButton(
           key: const Key('date_filter_key_home_page'),
           splashRadius: 20.r,
-          onPressed: () {
+          onPressed: () async {
             final initialDateController = TextEditingController();
             final finalDateController = TextEditingController();
 
-            showModalBottomSheet<void>(
+            await showModalBottomSheet<void>(
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
@@ -485,6 +488,9 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             );
+
+            initialDateController.dispose();
+            finalDateController.dispose();
           },
           icon: const Icon(
             Icons.date_range,

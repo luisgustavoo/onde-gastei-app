@@ -37,7 +37,7 @@ void main() {
 
   final mockTotalExpensesCategoriesList =
       List<TotalExpensesCategoriesViewModel>.generate(
-    100,
+    10,
     (index) => TotalExpensesCategoriesViewModel(
       totalValue: double.parse(index.toString()),
       category: CategoryModel(
@@ -52,7 +52,7 @@ void main() {
 
   final mockPercentageCategoriesList =
       List<PercentageCategoriesViewModel>.generate(
-    100,
+    10,
     (index) => PercentageCategoriesViewModel(
       value: double.parse(index.toString()),
       percentage: double.parse(index.toString()),
