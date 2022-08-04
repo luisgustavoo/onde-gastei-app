@@ -347,19 +347,19 @@ class _HomePageState extends State<HomePage> {
               builder: (_) {
                 final disableApplyFilterButton = ValueNotifier<bool>(true);
 
-                initialDateController.addListener(() {
-                  if (initialDateController.text.isNotEmpty &&
-                      finalDateController.text.isNotEmpty) {
-                    disableApplyFilterButton.value = false;
-                  }
-                });
+                // initialDateController.addListener(() {
+                //   if (initialDateController.text.isNotEmpty &&
+                //       finalDateController.text.isNotEmpty) {
+                //     disableApplyFilterButton.value = false;
+                //   }
+                // });
 
-                finalDateController.addListener(() {
-                  if (initialDateController.text.isNotEmpty &&
-                      finalDateController.text.isNotEmpty) {
-                    disableApplyFilterButton.value = false;
-                  }
-                });
+                // finalDateController.addListener(() {
+                //   if (initialDateController.text.isNotEmpty &&
+                //       finalDateController.text.isNotEmpty) {
+                //     disableApplyFilterButton.value = false;
+                //   }
+                // });
 
                 return SizedBox(
                   height: 200.h,
@@ -390,6 +390,11 @@ class _HomePageState extends State<HomePage> {
 
                                     initialDateController.text =
                                         DateFormat.yMd('pt_BR').format(result);
+
+                                    if (initialDateController.text.isNotEmpty &&
+                                        finalDateController.text.isNotEmpty) {
+                                      disableApplyFilterButton.value = false;
+                                    }
                                   }
                                 },
                                 label: 'Data Inicial',
@@ -425,6 +430,11 @@ class _HomePageState extends State<HomePage> {
 
                                     finalDateController.text =
                                         DateFormat.yMd('pt_BR').format(result);
+
+                                    if (initialDateController.text.isNotEmpty &&
+                                        finalDateController.text.isNotEmpty) {
+                                      disableApplyFilterButton.value = false;
+                                    }
                                   }
                                 },
                                 label: 'Data Final',
@@ -488,6 +498,8 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             );
+
+            await Future<void>.delayed(const Duration(seconds: 1));
 
             initialDateController.dispose();
             finalDateController.dispose();

@@ -27,4 +27,8 @@ class CategoriesServiceImpl implements CategoriesService {
   @override
   Future<List<CategoryModel>> findCategories(int userId) =>
       _repository.findCategories(userId);
+
+  @override
+  Future<int> expenseQuantityByCategoryId(int categoryId) =>
+      _repository.expenseQuantityByCategoryId(categoryId);
 }

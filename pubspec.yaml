@@ -52,6 +52,7 @@ dependencies:
   intl: ^0.17.0
   fl_chart: ^0.55.0
   grouped_list: ^5.1.2
+  firebase_crashlytics: ^2.8.6
   
 
 dev_dependencies:

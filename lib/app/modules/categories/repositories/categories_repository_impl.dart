@@ -82,4 +82,26 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
       throw Failure();
     }
   }
+
+  @override
+  Future<int> expenseQuantityByCategoryId(int categoryId) async {
+    try {
+      final result = await _restClient
+          .auth()
+          .get<Map<String, dynamic>>('/category/$categoryId/expenses-quantity');
+
+      if (result.data != null) {
+        return int.parse(result.data!['quantidade'].toString());
+      }
+
+      throw Exception();
+    } on Exception catch (e, s) {
+      _log.error(
+        'Erro buscar quantidade de despesas da categoria $categoryId',
+        e,
+        s,
+      );
+      throw Failure();
+    }
+  }
 }

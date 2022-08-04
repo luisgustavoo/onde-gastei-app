@@ -12,4 +12,6 @@ abstract class CategoriesService {
   Future<void> deleteCategory(int categoryId);
 
   Future<List<CategoryModel>> findCategories(int userId);
+
+  Future<int> expenseQuantityByCategoryId(int categoryId);
 }

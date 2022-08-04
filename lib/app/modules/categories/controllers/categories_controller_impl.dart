@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:onde_gastei_app/app/core/exceptions/expenses_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
@@ -93,6 +94,12 @@ class CategoriesControllerImpl extends ChangeNotifier
       stateDelete = CategoriesDeleteState.loading;
       notifyListeners();
 
+      final quantity = await _service.expenseQuantityByCategoryId(categoryId);
+
+      if (quantity > 0) {
+        throw ExpensesExistsException();
+      }
+
       await _service.deleteCategory(categoryId);
 
       // categoriesList.removeAt(
@@ -101,6 +108,10 @@ class CategoriesControllerImpl extends ChangeNotifier
 
       stateDelete = CategoriesDeleteState.success;
       notifyListeners();
+    } on ExpensesExistsException {
+      stateDelete = CategoriesDeleteState.error;
+      notifyListeners();
+      rethrow;
     } on Exception catch (e, s) {
       _log.error('Erro ao excluir categoria', e, s);
 

@@ -112,4 +112,30 @@ void main() {
       verify(() => service.findCategories(any())).called(1);
     });
   });
+
+  group('Group test expenseQuantityByCategoryId', () {
+    test('Should to fetch the amount of expenses from a category', () async {
+      //Arrange
+      when(() => repository.expenseQuantityByCategoryId(1))
+          .thenAnswer((_) async => 1);
+
+      //Act
+      final quantity = await service.expenseQuantityByCategoryId(1);
+
+      //Assert
+      expect(quantity, 1);
+    });
+
+    test('Should return exception', () async {
+      //Arrange
+      when(() => repository.expenseQuantityByCategoryId(1))
+          .thenThrow(Failure());
+
+      //Act
+      final call = service.expenseQuantityByCategoryId;
+
+      //Assert
+      expect(() => call(1), throwsA(isA<Failure>()));
+    });
+  });
 }

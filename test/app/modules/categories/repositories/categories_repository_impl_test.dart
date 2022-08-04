@@ -6,6 +6,7 @@ import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
+import 'package:onde_gastei_app/app/core/rest_client/rest_client_response.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/repositories/categories_repository.dart';
 import 'package:onde_gastei_app/app/modules/categories/repositories/categories_repository_impl.dart';
@@ -118,6 +119,7 @@ void main() {
   group('Group test deleteCategory', () {
     test('Should delete category with success', () async {
       // Arrange
+
       when(() => restClient.delete<Map<String, dynamic>>(any()))
           .thenAnswer((_) async => MockRestClientResponse(statusCode: 200));
       //Act
@@ -129,13 +131,14 @@ void main() {
 
     test('Should throws RestClientException', () async {
       // Arrange
+
       when(() => restClient.delete<Map<String, dynamic>>(any()))
           .thenThrow(RestClientException(error: 'Error'));
       //Act
       final call = repository.deleteCategory;
 
       //Assert
-      expect(() => call(1), throwsA(isA<Failure>()));
+      expect(call(1), throwsA(isA<Failure>()));
       verify(() => restClient.delete<Map<String, dynamic>>(any())).called(1);
     });
   });
@@ -190,6 +193,37 @@ void main() {
 
       //Assert
       expect(() => call(1), throwsA(isA<Failure>()));
+    });
+  });
+
+  group('Group test expenseQuantityByCategoryId', () {
+    test('Should to fetch the amount of expenses from a category', () async {
+      //Arrange
+      when(() => restClient.get<Map<String, dynamic>>(any())).thenAnswer(
+        (_) async => RestClientResponse(
+          statusCode: 200,
+          data: <String, dynamic>{'quantidade': 1},
+        ),
+      );
+
+      //Act
+      final quantity = await repository.expenseQuantityByCategoryId(1);
+
+      //Assert
+      expect(quantity, 1);
+    });
+
+    test('Should return null data', () async {
+      //Arrange
+      when(() => restClient.get<Map<String, dynamic>>(any())).thenAnswer(
+        (_) async => RestClientResponse(statusCode: 200),
+      );
+
+      //Act
+      final call = repository.expenseQuantityByCategoryId;
+
+      //Assert
+      expect(call(1), throwsA(isA<Failure>()));
     });
   });
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:onde_gastei_app/app/core/exceptions/expenses_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
@@ -208,6 +209,24 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                         if (Navigator.of(context).canPop()) {
                           Navigator.of(context).pop(_edited);
                         }
+                      } on ExpensesExistsException {
+                        if (Navigator.of(dialogContext).canPop()) {
+                          Navigator.of(dialogContext).pop(_edited);
+                        }
+
+                        final snackBar = OndeGasteiSnackBar.buildSnackBar(
+                          key: const Key(
+                            'snack_bar_fail_delete_key_register_update_categories_page_expenses_exists',
+                          ),
+                          content: const Text(
+                              'Não foi possível deletar categoria. Existe(m) despesas registradas nessa categria.'),
+                          backgroundColor: Colors.red,
+                          label: 'Fechar',
+                          onPressed: () {},
+                        );
+
+                        _scaffoldMessagedKey.currentState!
+                            .showSnackBar(snackBar);
                       } on Failure {
                         if (Navigator.of(dialogContext).canPop()) {
                           Navigator.of(dialogContext).pop(_edited);
