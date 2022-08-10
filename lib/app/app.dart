@@ -11,7 +11,6 @@ import 'package:onde_gastei_app/app/core/local_storages/shared_preferences_local
 import 'package:onde_gastei_app/app/core/logs/firebase_crashlytics_impl.dart';
 import 'package:onde_gastei_app/app/core/logs/firebase_performance_impl.dart';
 import 'package:onde_gastei_app/app/core/logs/log_impl.dart';
-import 'package:onde_gastei_app/app/core/logs/metrics_monitor.dart';
 import 'package:onde_gastei_app/app/core/navigator/onde_gastei_navigator.dart';
 import 'package:onde_gastei_app/app/core/rest_client/dio_rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';

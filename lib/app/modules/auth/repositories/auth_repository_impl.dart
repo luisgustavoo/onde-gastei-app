@@ -1,4 +1,3 @@
-import 'package:firebase_performance/firebase_performance.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';

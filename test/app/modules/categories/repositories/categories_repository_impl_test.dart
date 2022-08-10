@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
-import 'package:onde_gastei_app/app/core/logs/metrics_monitor.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_response.dart';
@@ -24,7 +23,7 @@ void main() {
   late RestClient restClient;
   late Log log;
   late CategoriesRepository repository;
-  late MetricsMonitor metricsMonitor;
+  late MockMetricsMonitor metricsMonitor;
   late Trace trace;
 
   setUp(() {
@@ -38,9 +37,7 @@ void main() {
       metricsMonitor: metricsMonitor,
     );
 
-    when(() => metricsMonitor.addTrace(any())).thenAnswer((_) => trace);
-    when(() => metricsMonitor.startTrace(trace)).thenAnswer((_) async => _);
-    when(() => metricsMonitor.stopTrace(trace)).thenAnswer((_) async => _);
+    metricsMonitor.mockCalledMetrics(trace);
   });
 
   group('Group test register', () {
@@ -63,9 +60,7 @@ void main() {
 
       //Assert
       verify(() => restClient.post(any(), data: mockData)).called(1);
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should throws RestClientException', () async {
@@ -93,9 +88,7 @@ void main() {
       expect(() => call(category), throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
       verify(() => restClient.post(any(), data: mockData)).called(1);
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
   });
 
@@ -119,9 +112,7 @@ void main() {
       //Assert
       verify(() => restClient.put(any(), data: mockData)).called(1);
 
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should throws RestClientException', () async {
@@ -144,9 +135,7 @@ void main() {
       expect(() => call(1, categoryInputModel), throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
       verify(() => restClient.put(any(), data: mockData)).called(1);
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
   });
 
@@ -161,9 +150,7 @@ void main() {
 
       //Assert
       verify(() => restClient.delete<Map<String, dynamic>>(any())).called(1);
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should throws RestClientException', () async {
@@ -178,9 +165,7 @@ void main() {
       expect(call(1), throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
       verify(() => restClient.delete<Map<String, dynamic>>(any())).called(1);
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
   });
 
@@ -208,9 +193,7 @@ void main() {
       //Assert
       expect(categoriesList, categoriesListExpected);
       verify(() => restClient.get<List<dynamic>>(any())).called(1);
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should return categories empty', () async {
@@ -226,9 +209,7 @@ void main() {
 
       //Assert
       expect(categoriesModel, <CategoryModel>[]);
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should throws exception', () async {
@@ -241,9 +222,7 @@ void main() {
       //Assert
       expect(() => call(1), throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
   });
 
@@ -262,9 +241,7 @@ void main() {
 
       //Assert
       expect(quantity, 1);
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should return null data', () async {
@@ -279,9 +256,7 @@ void main() {
       //Assert
       expect(() => call(1), throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(2);
+      metricsMonitor.checkCalledMetrics(trace);
     });
   });
 }

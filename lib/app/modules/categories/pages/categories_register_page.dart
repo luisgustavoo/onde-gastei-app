@@ -219,7 +219,8 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                             'snack_bar_fail_delete_key_register_update_categories_page_expenses_exists',
                           ),
                           content: const Text(
-                              'Não foi possível deletar categoria. Existe(m) despesas registradas nessa categria.'),
+                            'Não foi possível deletar categoria. Existe(m) despesas registradas nessa categria.',
+                          ),
                           backgroundColor: Colors.red,
                           label: 'Fechar',
                           onPressed: () {},

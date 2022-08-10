@@ -1,4 +1,3 @@
-import 'package:firebase_performance/firebase_performance.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/logs/metrics_monitor.dart';
