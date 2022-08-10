@@ -23,7 +23,7 @@ void main() {
   late RestClient restClient;
   late Log log;
   late HomeRepositoryImpl repository;
-  late MetricsMonitor metricsMonitor;
+  late MockMetricsMonitor metricsMonitor;
   late Trace trace;
 
   setUp(() {
@@ -37,9 +37,7 @@ void main() {
       metricsMonitor: metricsMonitor,
     );
 
-    when(() => metricsMonitor.addTrace(any())).thenAnswer((_) => trace);
-    when(() => metricsMonitor.startTrace(trace)).thenAnswer((_) async => _);
-    when(() => metricsMonitor.stopTrace(trace)).thenAnswer((_) async => _);
+    metricsMonitor.mockCalledMetrics(trace);
   });
 
   group('Group test findTotalExpensesByCategories', () {
@@ -79,9 +77,7 @@ void main() {
           .findTotalExpensesByCategories(1, initialDate, finalDate);
       //Assert
       expect(totalExpensesCategories[0], totalExpensesCategoriesExpected);
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should return empty list', () async {
@@ -106,9 +102,7 @@ void main() {
           .findTotalExpensesByCategories(1, initialDate, finalDate);
       //Assert
       expect(totalExpensesCategories, <TotalExpensesCategoriesViewModel>[]);
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should throws RestClientException', () async {
@@ -130,9 +124,7 @@ void main() {
       //Assert
       expect(() => call(1, initialDate, finalDate), throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
   });
 
@@ -176,9 +168,7 @@ void main() {
       );
       //Assert
       expect(percentageCategories[0], percentageCategoriesExpected);
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should return empty list', () async {
@@ -206,9 +196,7 @@ void main() {
       //Assert
       expect(percentageCategories, <PercentageCategoriesViewModel>[]);
 
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should throws RestClientException ', () async {
@@ -230,9 +218,7 @@ void main() {
       //Assert
       expect(() => call(1, initialDate, finalDate), throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
   });
 }
