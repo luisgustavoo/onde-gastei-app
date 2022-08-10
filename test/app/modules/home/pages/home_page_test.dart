@@ -123,8 +123,7 @@ void main() {
     testWidgets('Test if home page shows up', (tester) async {
       when(() => mockHomeControllerImpl.state).thenReturn(HomeState.idle);
 
-      when(() => mockHomeControllerImpl.totalExpenses)
-          .thenReturn(1500);
+      when(() => mockHomeControllerImpl.totalExpenses).thenReturn(1500);
 
       when(() => mockHomeControllerImpl.totalExpensesCategoriesList)
           .thenReturn(mockTotalExpensesCategoriesList);

@@ -131,7 +131,7 @@ class AuthInterceptor extends Interceptor {
       }
     } on Exception catch (e, s) {
       _log.error('Erro ao atualizar refresh token', e, s);
-      // throw UpdateRefreshTokenException();
+      _localStorage.logout();
     }
   }
 

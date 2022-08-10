@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
+import 'package:onde_gastei_app/app/core/navigator/onde_gastei_navigator.dart';
+import 'package:onde_gastei_app/app/modules/auth/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesLocalStorageImpl implements LocalStorage {
@@ -70,5 +74,12 @@ class SharedPreferencesLocalStorageImpl implements LocalStorage {
         await sp.setStringList(key, value as List<String>);
         break;
     }
+  }
+
+  @override
+  void logout() {
+    remove(Constants.localUserKey);
+    FirebaseAuth.instance.signOut();
+    OndeGasteiNavigator.to!.pushReplacementNamed(LoginPage.router);
   }
 }

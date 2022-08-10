@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -7,7 +8,10 @@ import 'package:onde_gastei_app/app/controllers/app_controller.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/local_storages/flutter_secure_storage_local_storage_impl.dart';
 import 'package:onde_gastei_app/app/core/local_storages/shared_preferences_local_storage_impl.dart';
+import 'package:onde_gastei_app/app/core/logs/firebase_crashlytics_impl.dart';
+import 'package:onde_gastei_app/app/core/logs/firebase_performance_impl.dart';
 import 'package:onde_gastei_app/app/core/logs/log_impl.dart';
+import 'package:onde_gastei_app/app/core/logs/metrics_monitor.dart';
 import 'package:onde_gastei_app/app/core/navigator/onde_gastei_navigator.dart';
 import 'package:onde_gastei_app/app/core/rest_client/dio_rest_client.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
@@ -60,9 +64,21 @@ class App extends StatelessWidget {
         providers: [
           // ========== LOG ==========
           Provider(
+            create: (context) => FirebaseCrashlyticsImpl(),
+          ),
+          // ========== LOG ==========
+
+          // ========== LOG ==========
+          Provider(
             create: (context) => LogImpl(),
           ),
           // ========== LOG ==========
+
+          // ========== PERFORMANCE ==========
+          Provider(
+            create: (context) => FirebasePerformanceImpl(),
+          ),
+          // ========== PERFORMANCE ==========
 
           // ========== DATA PERSISTENCE ==========
           Provider(
@@ -80,7 +96,9 @@ class App extends StatelessWidget {
               localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
               localSecurityStorage:
                   context.read<FlutterSecureStorageLocalStorageImpl>(),
-              log: context.read<LogImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
             ),
           ),
           // ========== REST SERVICES ==========
@@ -88,10 +106,11 @@ class App extends StatelessWidget {
           // ========== USER ==========
           Provider(
             create: (context) => UserRepositoryImpl(
-              restClient: context.read<DioRestClient>(),
-              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
-              log: context.read<LogImpl>(),
-            ),
+                restClient: context.read<DioRestClient>(),
+                localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+                log: kReleaseMode
+                    ? context.read<FirebaseCrashlyticsImpl>()
+                    : context.read<LogImpl>()),
           ),
           Provider(
             create: (context) => UserServiceImpl(
@@ -100,10 +119,11 @@ class App extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (context) => UserControllerImpl(
-              service: context.read<UserServiceImpl>(),
-              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
-              log: context.read<LogImpl>(),
-            ),
+                service: context.read<UserServiceImpl>(),
+                localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+                log: kReleaseMode
+                    ? context.read<FirebaseCrashlyticsImpl>()
+                    : context.read<LogImpl>()),
           ),
           // ========== USER ==========
 
@@ -111,7 +131,10 @@ class App extends StatelessWidget {
           Provider(
             create: (context) => AuthRepositoryImpl(
               restClient: context.read<DioRestClient>(),
-              log: context.read<LogImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
+              metricsMonitor: context.read<FirebasePerformanceImpl>(),
             ),
           ),
           Provider(
@@ -120,14 +143,18 @@ class App extends StatelessWidget {
               localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
               localSecurityStorage:
                   context.read<FlutterSecureStorageLocalStorageImpl>(),
-              log: context.read<LogImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
               firebaseAuth: FirebaseAuth.instance,
             ),
           ),
           ChangeNotifierProvider(
             create: (context) => AuthControllerImpl(
               service: context.read<AuthServicesImpl>(),
-              log: context.read<LogImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
               localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
             ),
           ),
@@ -137,7 +164,11 @@ class App extends StatelessWidget {
           Provider(
             create: (context) => HomeRepositoryImpl(
               restClient: context.read<DioRestClient>(),
-              log: context.read<LogImpl>(),
+              // log: context.read<LogImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
+              metricsMonitor: context.read<FirebasePerformanceImpl>(),
             ),
           ),
           Provider(
@@ -156,7 +187,10 @@ class App extends StatelessWidget {
           Provider(
             create: (context) => CategoriesRepositoryImpl(
               restClient: context.read<DioRestClient>(),
-              log: context.read<LogImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
+              metricsMonitor: context.read<FirebasePerformanceImpl>(),
             ),
           ),
           Provider(
@@ -176,7 +210,9 @@ class App extends StatelessWidget {
           Provider(
             create: (context) => ExpensesRepositoryImpl(
               restClient: context.read<DioRestClient>(),
-              log: context.read<LogImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
             ),
           ),
           Provider(
@@ -187,7 +223,9 @@ class App extends StatelessWidget {
           ChangeNotifierProvider(
             create: (context) => ExpensesControllerImpl(
               services: context.read<ExpensesServicesImpl>(),
-              log: context.read<LogImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
             ),
           ),
           // ========== EXPENSES ==========
@@ -208,7 +246,9 @@ class App extends StatelessWidget {
           Provider(
             create: (context) => DetailsExpensesCategoriesRepositoryImpl(
               restClient: context.read<DioRestClient>(),
-              log: context.read<LogImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
             ),
           ),
           Provider(
@@ -220,7 +260,9 @@ class App extends StatelessWidget {
           ChangeNotifierProvider(
             create: (context) => DetailsExpensesCategoriesControllerImpl(
               service: context.read<DetailsExpensesCategoriesServiceImpl>(),
-              log: context.read<LogImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
             ),
           ),
           // ========== DETAILS EXPENSES CATEGORY ==========
@@ -229,6 +271,7 @@ class App extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: UiConfig.title,
           initialRoute: SplashPage.router,
+
           theme: UiConfig.themeLight,
           // builder: asuka.builder,
           navigatorKey: OndeGasteiNavigator.navigatorKey,

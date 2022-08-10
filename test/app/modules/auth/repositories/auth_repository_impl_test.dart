@@ -1,13 +1,16 @@
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/core/logs/metrics_monitor.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/auth/view_models/confirm_login_model.dart';
 
 import '../../../../core/log/mock_log.dart';
+import '../../../../core/log/mock_metrics_monitor.dart';
 import '../../../../core/rest_client/mock_rest_client.dart';
 import '../../../../core/rest_client/mock_rest_client_exception.dart';
 import '../../../../core/rest_client/mock_rest_client_response.dart';
@@ -16,11 +19,23 @@ void main() {
   late AuthRepositoryImpl authRepository;
   late Log log;
   late MockRestClient restClient;
+  late MetricsMonitor metricsMonitor;
+  late Trace trace;
 
   setUp(() {
     log = MockLog();
     restClient = MockRestClient();
-    authRepository = AuthRepositoryImpl(restClient: restClient, log: log);
+    metricsMonitor = MockMetricsMonitor();
+    trace = MockTrace();
+    authRepository = AuthRepositoryImpl(
+      restClient: restClient,
+      log: log,
+      metricsMonitor: metricsMonitor,
+    );
+
+    when(() => metricsMonitor.addTrace(any())).thenAnswer((_) => trace);
+    when(() => metricsMonitor.startTrace(trace)).thenAnswer((_) async => _);
+    when(() => metricsMonitor.stopTrace(trace)).thenAnswer((_) async => _);
   });
 
   group('Group test register ', () {
@@ -47,6 +62,10 @@ void main() {
       verify(
         () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
       ).called(1);
+
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
 
     test('Should throw UserExistsException', () async {
@@ -76,6 +95,10 @@ void main() {
 
       //Assert
       expect(call(name, firebaseUserId), throwsA(isA<UserExistsException>()));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
 
     test('Should throw Failure', () async {
@@ -101,6 +124,10 @@ void main() {
 
       //Assert
       expect(call(name, firebaseUserId), throwsA(isA<Failure>()));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
   });
 
@@ -135,6 +162,10 @@ void main() {
       ).called(1);
 
       expect(accessToken, accessTokenExpected);
+
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
 
     test('Should login is empty', () async {
@@ -160,6 +191,10 @@ void main() {
       verify(
         () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
       ).called(1);
+
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
 
     test('Should throws UserNotFoundException', () async {
@@ -189,6 +224,10 @@ void main() {
       final call = authRepository.login;
 
       expect(call(firebaseUserId), throwsA(isA<UserNotFoundException>()));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
 
     test('Should throws Failure', () async {
@@ -212,6 +251,10 @@ void main() {
       final call = authRepository.login;
 
       expect(call(firebaseUserId), throwsA(isA<Failure>()));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
   });
 
@@ -242,6 +285,10 @@ void main() {
 
       expect(confirmLogin, confirmLoginExpected);
       expect(confirmLogin, isA<ConfirmLoginModel>());
+
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
 
     test('Should throws Failure', () async {
@@ -260,6 +307,10 @@ void main() {
 
       //Assert
       expect(call, throwsA(isA<Failure>()));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
   });
 }

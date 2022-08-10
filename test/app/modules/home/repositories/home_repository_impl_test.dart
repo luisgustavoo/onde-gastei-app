@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/core/logs/metrics_monitor.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
@@ -13,6 +15,7 @@ import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categ
 
 import '../../../../core/fixture/fixture_reader.dart';
 import '../../../../core/log/mock_log.dart';
+import '../../../../core/log/mock_metrics_monitor.dart';
 import '../../../../core/rest_client/mock_rest_client.dart';
 import '../../../../core/rest_client/mock_rest_client_response.dart';
 
@@ -20,14 +23,23 @@ void main() {
   late RestClient restClient;
   late Log log;
   late HomeRepositoryImpl repository;
+  late MetricsMonitor metricsMonitor;
+  late Trace trace;
 
   setUp(() {
     log = MockLog();
     restClient = MockRestClient();
+    metricsMonitor = MockMetricsMonitor();
+    trace = MockTrace();
     repository = HomeRepositoryImpl(
       restClient: restClient,
       log: log,
+      metricsMonitor: metricsMonitor,
     );
+
+    when(() => metricsMonitor.addTrace(any())).thenAnswer((_) => trace);
+    when(() => metricsMonitor.startTrace(trace)).thenAnswer((_) async => _);
+    when(() => metricsMonitor.stopTrace(trace)).thenAnswer((_) async => _);
   });
 
   group('Group test findTotalExpensesByCategories', () {
@@ -67,6 +79,9 @@ void main() {
           .findTotalExpensesByCategories(1, initialDate, finalDate);
       //Assert
       expect(totalExpensesCategories[0], totalExpensesCategoriesExpected);
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
 
     test('Should return empty list', () async {
@@ -91,6 +106,9 @@ void main() {
           .findTotalExpensesByCategories(1, initialDate, finalDate);
       //Assert
       expect(totalExpensesCategories, <TotalExpensesCategoriesViewModel>[]);
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
 
     test('Should throws RestClientException', () async {
@@ -111,6 +129,10 @@ void main() {
       final call = repository.findTotalExpensesByCategories;
       //Assert
       expect(() => call(1, initialDate, finalDate), throwsA(isA<Failure>()));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
   });
 
@@ -154,6 +176,9 @@ void main() {
       );
       //Assert
       expect(percentageCategories[0], percentageCategoriesExpected);
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
 
     test('Should return empty list', () async {
@@ -180,6 +205,10 @@ void main() {
       );
       //Assert
       expect(percentageCategories, <PercentageCategoriesViewModel>[]);
+
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
 
     test('Should throws RestClientException ', () async {
@@ -200,6 +229,10 @@ void main() {
       final call = repository.findPercentageByCategories;
       //Assert
       expect(() => call(1, initialDate, finalDate), throwsA(isA<Failure>()));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      verify(() => metricsMonitor.addTrace(any())).called(1);
+      verify(() => metricsMonitor.startTrace(trace)).called(1);
+      verify(() => metricsMonitor.stopTrace(trace)).called(1);
     });
   });
 }
