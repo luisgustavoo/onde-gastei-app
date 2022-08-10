@@ -119,11 +119,12 @@ class App extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (context) => UserControllerImpl(
-                service: context.read<UserServiceImpl>(),
-                localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
-                log: kReleaseMode
-                    ? context.read<FirebaseCrashlyticsImpl>()
-                    : context.read<LogImpl>()),
+              service: context.read<UserServiceImpl>(),
+              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
+            ),
           ),
           // ========== USER ==========
 
@@ -213,6 +214,7 @@ class App extends StatelessWidget {
               log: kReleaseMode
                   ? context.read<FirebaseCrashlyticsImpl>()
                   : context.read<LogImpl>(),
+              metricsMonitor: context.read<FirebasePerformanceImpl>(),
             ),
           ),
           Provider(
