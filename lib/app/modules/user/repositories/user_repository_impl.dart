@@ -5,6 +5,7 @@ import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dar
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
+import 'package:onde_gastei_app/app/core/logs/metrics_monitor.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
@@ -15,20 +16,28 @@ class UserRepositoryImpl implements UserRepository {
     required RestClient restClient,
     required LocalStorage localStorage,
     required Log log,
+    required MetricsMonitor metricsMonitor,
   })  : _restClient = restClient,
         _localStorage = localStorage,
-        _log = log;
+        _log = log,
+        _metricsMonitor = metricsMonitor;
 
   final RestClient _restClient;
   final Log _log;
   final LocalStorage _localStorage;
+  final MetricsMonitor _metricsMonitor;
 
   @override
   Future<UserModel> fetchUserData() async {
+    final trace = _metricsMonitor.addTrace('fetch-user-data');
     try {
+      await _metricsMonitor.startTrace(trace);
+
       final result = await _restClient.auth().get<Map<String, dynamic>>(
             '/users/',
           );
+
+      await _metricsMonitor.stopTrace(trace);
 
       if (result.data == null || result.data!.isEmpty) {
         throw UserNotFoundException();
@@ -38,22 +47,26 @@ class UserRepositoryImpl implements UserRepository {
       return user;
     } on RestClientException catch (e, s) {
       _log.error('Erro ao buscar dados do usuario', e, s);
-
+      await _metricsMonitor.stopTrace(trace);
       throw Failure(message: 'Erro ao buscar dados do usuario');
     }
   }
 
   @override
   Future<void> updateUserName(int userId, String newUserName) async {
+    final trace = _metricsMonitor.addTrace('update-user-name');
     try {
+      await _metricsMonitor.startTrace(trace);
       await _restClient.auth().put(
         '/users/$userId/update',
         data: <String, dynamic>{
           'nome': newUserName,
         },
       );
+      await _metricsMonitor.stopTrace(trace);
     } on RestClientException catch (e, s) {
       _log.error('Erro ao atualizar nome de usuario', e, s);
+      await _metricsMonitor.stopTrace(trace);
       throw Failure();
     }
   }

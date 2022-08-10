@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
@@ -15,6 +16,7 @@ import 'package:onde_gastei_app/app/modules/user/repositories/user_repository_im
 
 import '../../../../core/fixture/fixture_reader.dart';
 import '../../../../core/log/mock_log.dart';
+import '../../../../core/log/mock_metrics_monitor.dart';
 import '../../../../core/rest_client/mock_rest_client.dart';
 import '../../../../core/rest_client/mock_rest_client_response.dart';
 
@@ -26,16 +28,25 @@ void main() {
   late Log mockLog;
   late UserRepository repository;
   late LocalStorage mockLocalStorage;
+  late MockMetricsMonitor metricsMonitor;
+  late Trace trace;
 
   setUp(() {
     mockLocalStorage = MockLocalStorage();
     mockRestClient = MockRestClient();
     mockLog = MockLog();
+    metricsMonitor = MockMetricsMonitor();
+    trace = MockTrace();
     repository = UserRepositoryImpl(
       restClient: mockRestClient,
       log: mockLog,
       localStorage: mockLocalStorage,
+      metricsMonitor: metricsMonitor,
     );
+
+    when(() => metricsMonitor.addTrace(any())).thenAnswer((_) => trace);
+    when(() => metricsMonitor.startTrace(trace)).thenAnswer((_) async => _);
+    when(() => metricsMonitor.stopTrace(trace)).thenAnswer((_) async => _);
   });
 
   group('Group test fetchUserData', () {
@@ -75,6 +86,7 @@ void main() {
           any(),
         ),
       ).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should user not found', () async {
@@ -92,12 +104,14 @@ void main() {
 
       //Assert
       expect(call(), throwsA(isA<UserNotFoundException>()));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
       verify(
         () => mockRestClient.get<Map<String, dynamic>>(
           any(),
         ),
       ).called(1);
       verifyNever(() => mockLocalStorage.write<String>(any(), any()));
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should throws exception', () async {
@@ -113,12 +127,14 @@ void main() {
 
       //Assert
       expect(call(), throwsA(isA<Failure>()));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
       verify(
         () => mockRestClient.get<Map<String, dynamic>>(
           any(),
         ),
       ).called(1);
       verifyNever(() => mockLocalStorage.write<String>(any(), any()));
+      metricsMonitor.checkCalledMetrics(trace);
     });
   });
 
@@ -149,6 +165,8 @@ void main() {
           data: mockData,
         ),
       ).called(1);
+
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should update user throws exception', () async {
@@ -166,12 +184,14 @@ void main() {
 
       //Assert
       expect(call(1, 'Test'), throwsA(isA<Failure>()));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
       verify(
         () => mockRestClient.put(
           any(),
           data: mockData,
         ),
       ).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
   });
 

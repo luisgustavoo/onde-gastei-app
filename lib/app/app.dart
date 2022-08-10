@@ -106,11 +106,13 @@ class App extends StatelessWidget {
           // ========== USER ==========
           Provider(
             create: (context) => UserRepositoryImpl(
-                restClient: context.read<DioRestClient>(),
-                localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
-                log: kReleaseMode
-                    ? context.read<FirebaseCrashlyticsImpl>()
-                    : context.read<LogImpl>()),
+              restClient: context.read<DioRestClient>(),
+              localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
+              metricsMonitor: context.read<FirebasePerformanceImpl>(),
+            ),
           ),
           Provider(
             create: (context) => UserServiceImpl(
