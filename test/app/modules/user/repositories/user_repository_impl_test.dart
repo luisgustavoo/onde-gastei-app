@@ -44,9 +44,7 @@ void main() {
       metricsMonitor: metricsMonitor,
     );
 
-    when(() => metricsMonitor.addTrace(any())).thenAnswer((_) => trace);
-    when(() => metricsMonitor.startTrace(trace)).thenAnswer((_) async => _);
-    when(() => metricsMonitor.stopTrace(trace)).thenAnswer((_) async => _);
+    metricsMonitor.mockCalledMetrics(trace);
   });
 
   group('Group test fetchUserData', () {

@@ -8,6 +8,12 @@ class MockMetricsMonitor extends Mock implements MetricsMonitor {
     verify(() => startTrace(trace)).called(1);
     verify(() => stopTrace(trace)).called(1);
   }
+
+  void mockCalledMetrics(Trace trace) {
+    when(() => addTrace(any())).thenAnswer((_) => trace);
+    when(() => startTrace(trace)).thenAnswer((_) async => _);
+    when(() => stopTrace(trace)).thenAnswer((_) async => _);
+  }
 }
 
 class MockTrace extends Mock implements Trace {}

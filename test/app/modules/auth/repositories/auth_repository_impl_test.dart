@@ -19,7 +19,7 @@ void main() {
   late AuthRepositoryImpl authRepository;
   late Log log;
   late MockRestClient restClient;
-  late MetricsMonitor metricsMonitor;
+  late MockMetricsMonitor metricsMonitor;
   late Trace trace;
 
   setUp(() {
@@ -33,9 +33,7 @@ void main() {
       metricsMonitor: metricsMonitor,
     );
 
-    when(() => metricsMonitor.addTrace(any())).thenAnswer((_) => trace);
-    when(() => metricsMonitor.startTrace(trace)).thenAnswer((_) async => _);
-    when(() => metricsMonitor.stopTrace(trace)).thenAnswer((_) async => _);
+    metricsMonitor.mockCalledMetrics(trace);
   });
 
   group('Group test register ', () {
@@ -63,9 +61,7 @@ void main() {
         () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
       ).called(1);
 
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should throw UserExistsException', () async {
@@ -96,9 +92,7 @@ void main() {
       //Assert
       expect(call(name, firebaseUserId), throwsA(isA<UserExistsException>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should throw Failure', () async {
@@ -125,9 +119,7 @@ void main() {
       //Assert
       expect(call(name, firebaseUserId), throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
   });
 
@@ -163,9 +155,7 @@ void main() {
 
       expect(accessToken, accessTokenExpected);
 
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should login is empty', () async {
@@ -192,9 +182,7 @@ void main() {
         () => restClient.post<Map<String, dynamic>>(any(), data: requestData),
       ).called(1);
 
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should throws UserNotFoundException', () async {
@@ -225,9 +213,7 @@ void main() {
 
       expect(call(firebaseUserId), throwsA(isA<UserNotFoundException>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should throws Failure', () async {
@@ -252,9 +238,7 @@ void main() {
 
       expect(call(firebaseUserId), throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
   });
 
@@ -286,9 +270,7 @@ void main() {
       expect(confirmLogin, confirmLoginExpected);
       expect(confirmLogin, isA<ConfirmLoginModel>());
 
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should throws Failure', () async {
@@ -308,9 +290,7 @@ void main() {
       //Assert
       expect(call, throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      verify(() => metricsMonitor.addTrace(any())).called(1);
-      verify(() => metricsMonitor.startTrace(trace)).called(1);
-      verify(() => metricsMonitor.stopTrace(trace)).called(1);
+      metricsMonitor.checkCalledMetrics(trace);
     });
   });
 }
