@@ -41,6 +41,7 @@ void main() {
     mockLog = MockLog();
     metricsMonitor = MockMetricsMonitor();
     trace = MockTrace();
+
     expensesRepositoryImpl = ExpensesRepositoryImpl(
       restClient: mockRestClient,
       log: mockLog,
@@ -48,9 +49,7 @@ void main() {
     );
     registerFallbackValue(expenseModel);
 
-    when(() => metricsMonitor.addTrace(any())).thenAnswer((_) => trace);
-    when(() => metricsMonitor.startTrace(trace)).thenAnswer((_) async => _);
-    when(() => metricsMonitor.stopTrace(trace)).thenAnswer((_) async => _);
+    metricsMonitor.mockCalledMetrics(trace);
   });
 
   group('Group test expenses register', () {
@@ -105,7 +104,7 @@ void main() {
       final call = expensesRepositoryImpl.register;
 
       //Assert
-      expect(() => call(expenseModel), throwsA(isA<Failure>()));
+      expect(call(expenseModel), throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
       verify(
         () => mockRestClient.post<Map<String, dynamic>>(any(), data: data),
