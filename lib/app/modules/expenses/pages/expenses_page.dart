@@ -64,25 +64,29 @@ class ExpensesPage extends StatelessWidget {
                       itemBuilder: (context) => [
                         PopupMenuItem<String>(
                           onTap: () {
-                            expensesController.sortExpenseList(1);
+                            expensesController
+                                .sortExpenseList(ExpensesOrderBy.maiorData);
                           },
                           child: const Text('Maior data'),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            expensesController.sortExpenseList(2);
+                            expensesController
+                                .sortExpenseList(ExpensesOrderBy.menorData);
                           },
                           child: const Text('Menor data'),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            expensesController.sortExpenseList(3);
+                            expensesController
+                                .sortExpenseList(ExpensesOrderBy.maiorValor);
                           },
                           child: const Text('Maior valor'),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            expensesController.sortExpenseList(4);
+                            expensesController
+                                .sortExpenseList(ExpensesOrderBy.menorValor);
                           },
                           child: const Text('Menor valor'),
                         ),
@@ -187,10 +191,10 @@ class ExpensesPage extends StatelessWidget {
   ) {
     return ExpensesListTile(
       onTap: () async {
-        final edited = await Navigator.of(context).pushNamed(
+        final edited = await Navigator.of(context).pushNamed<bool?>(
           ExpensesRegisterPage.router,
           arguments: expense,
-        ) as bool?;
+        );
 
         if (edited != null) {
           if (edited) {

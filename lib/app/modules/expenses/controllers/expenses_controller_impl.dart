@@ -11,6 +11,8 @@ enum ExpensesState { idle, loading, error, success }
 
 enum ExpensesDeleteState { idle, loading, error, success }
 
+enum ExpensesOrderBy { maiorData, menorData, maiorValor, menorValor }
+
 class ExpensesControllerImpl extends ChangeNotifier
     implements ExpensesController {
   ExpensesControllerImpl({
@@ -174,7 +176,7 @@ class ExpensesControllerImpl extends ChangeNotifier
   }
 
   @override
-  void sortExpenseList(int orderNumber) {
+  void sortExpenseList(ExpensesOrderBy order) {
     /* 
     1 = Maior Data
     2 = Menor Data
@@ -182,17 +184,17 @@ class ExpensesControllerImpl extends ChangeNotifier
     4 = Menor Valor  
     */
 
-    switch (orderNumber) {
-      case 1:
+    switch (order) {
+      case ExpensesOrderBy.maiorData:
         expensesList.sort((a, b) => b.date.compareTo(a.date));
         break;
-      case 2:
+      case ExpensesOrderBy.menorData:
         expensesList.sort((a, b) => a.date.compareTo(b.date));
         break;
-      case 3:
+      case ExpensesOrderBy.maiorValor:
         expensesList.sort((a, b) => b.value.compareTo(a.value));
         break;
-      case 4:
+      case ExpensesOrderBy.menorValor:
         expensesList.sort((a, b) => a.value.compareTo(b.value));
         break;
       default:

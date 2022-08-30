@@ -181,7 +181,7 @@ class _AppPageState extends State<AppPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final edited = await Navigator.of(context)
-              .pushNamed(ExpensesRegisterPage.router) as bool?;
+              .pushNamed<bool?>(ExpensesRegisterPage.router);
           if (edited != null) {
             if (edited) {
               final futures = [

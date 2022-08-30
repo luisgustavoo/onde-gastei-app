@@ -1,5 +1,6 @@
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/models/expense_model.dart';
+import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
 
 abstract class ExpensesController {
   Future<void> register({
@@ -31,7 +32,7 @@ abstract class ExpensesController {
 
   void filterExpensesList(String description);
 
-  void sortExpenseList(int orderNumber);
+  void sortExpenseList(ExpensesOrderBy order);
 
   double totalValueByDay(DateTime date);
 
