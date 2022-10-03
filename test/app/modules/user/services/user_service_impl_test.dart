@@ -18,8 +18,12 @@ void main() {
 
   group('Group test fetchUserData', () {
     test('Should fetch user data with success', () async {
-      const userExpected =
-          UserModel(userId: 1, name: 'Test', firebaseUserId: '123456');
+      const userExpected = UserModel(
+        userId: 1,
+        name: 'Test',
+        email: 'test@domain.com',
+        firebaseUserId: '123456',
+      );
       when(() => mockUserRepository.fetchUserData()).thenAnswer(
         (_) async => userExpected,
       );

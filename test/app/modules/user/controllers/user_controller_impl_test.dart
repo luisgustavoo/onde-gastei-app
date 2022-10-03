@@ -39,6 +39,7 @@ void main() {
       const userExpected = UserModel(
         userId: 1,
         name: 'Test',
+        email: 'test@domain.com',
         firebaseUserId: '123456',
       );
 
@@ -73,6 +74,7 @@ void main() {
       const userExpected = UserModel(
         userId: 1,
         name: 'Test',
+        email: 'test@domain.com',
         firebaseUserId: '123456',
       );
 
@@ -113,8 +115,13 @@ void main() {
   group('Group test getLocalUser', () {
     test('Should get user with success', () async {
       //Arrange
-      const localUser =
-          UserModel(userId: 1, name: 'Test', firebaseUserId: '123456');
+      const localUser = UserModel(
+        userId: 1,
+        name: 'Test',
+        email: 'test@domain.com',
+        firebaseUserId: '123456',
+      );
+
       when(() => mockLocalStorage.read<String>(any())).thenAnswer(
         (_) async => jsonEncode(
           localUser.toMap(),

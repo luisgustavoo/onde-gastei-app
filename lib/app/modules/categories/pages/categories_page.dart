@@ -44,7 +44,7 @@ class CategoriesPage extends StatelessWidget {
             IconButton(
               onPressed: () async {
                 final edited = await Navigator.of(context)
-                    .pushNamed<bool?>(CategoriesRegisterPage.router);
+                    .pushNamed(CategoriesRegisterPage.router) as bool?;
 
                 if (edited != null) {
                   if (edited == true) {

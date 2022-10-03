@@ -66,8 +66,12 @@ void main() {
       ).thenAnswer((_) async => _);
 
       when(() => mockUserControllerImpl.getLocalUser()).thenAnswer(
-        (_) async =>
-            const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+        (_) async => const UserModel(
+          userId: 1,
+          name: 'Test',
+          email: 'test@domain.com',
+          firebaseUserId: '123456',
+        ),
       );
 
       await tester.pumpWidget(createSplashPage());
@@ -93,8 +97,12 @@ void main() {
       ).thenAnswer((_) async => _);
 
       when(() => mockUserControllerImpl.getLocalUser()).thenAnswer(
-        (_) async =>
-            const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+        (_) async => const UserModel(
+          userId: 1,
+          name: 'Test',
+          email: 'test@domain.com',
+          firebaseUserId: '123456',
+        ),
       );
 
       await tester.pumpWidget(createSplashPage());

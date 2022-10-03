@@ -5,6 +5,7 @@ class UserModel {
   const UserModel({
     required this.userId,
     required this.name,
+    required this.email,
     required this.firebaseUserId,
   });
 
@@ -12,18 +13,21 @@ class UserModel {
     return UserModel(
       userId: map['id_usuario'] as int,
       name: map['nome'] as String,
+      email: map['email'] as String,
       firebaseUserId: map['id_usuario_firebase'] as String,
     );
   }
 
   final int userId;
   final String name;
+  final String email;
   final String firebaseUserId;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id_usuario': userId,
       'nome': name,
+      'email': email,
       'id_usuario_firebase': firebaseUserId,
     };
   }

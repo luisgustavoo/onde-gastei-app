@@ -71,8 +71,12 @@ void main() {
     finalDate: DateTime(2022, 2),
   );
 
-  const userModel =
-      UserModel(userId: 1, name: 'Test', firebaseUserId: '123456');
+  const userModel = UserModel(
+    userId: 1,
+    name: 'Test',
+    email: 'test@domain.com',
+    firebaseUserId: '123456',
+  );
 
   Widget createHomePage() {
     return MultiProvider(

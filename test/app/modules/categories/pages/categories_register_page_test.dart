@@ -89,7 +89,12 @@ void main() {
           .thenReturn(CategoriesDeleteState.idle);
 
       when(() => mockUserControllerImpl.user).thenReturn(
-        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+        const UserModel(
+          userId: 1,
+          name: 'Test',
+          email: 'test@domain.com',
+          firebaseUserId: '123456',
+        ),
       );
 
       await tester.pumpWidget(createCategoriesRegisterPage());
@@ -133,7 +138,12 @@ void main() {
           .thenReturn(CategoriesDeleteState.idle);
 
       when(() => mockUserControllerImpl.user).thenReturn(
-        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+        const UserModel(
+          userId: 1,
+          name: 'Test',
+          email: 'test@domain.com',
+          firebaseUserId: '123456',
+        ),
       );
 
       await tester.pumpWidget(createCategoriesRegisterPage());
@@ -165,7 +175,12 @@ void main() {
           .thenReturn(CategoriesDeleteState.idle);
 
       when(() => mockUserControllerImpl.user).thenReturn(
-        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+        const UserModel(
+          userId: 1,
+          name: 'Test',
+          email: 'test@domain.com',
+          firebaseUserId: '123456',
+        ),
       );
 
       await tester.pumpWidget(createCategoriesRegisterPage());
@@ -240,7 +255,12 @@ void main() {
           .thenReturn(CategoriesDeleteState.idle);
 
       when(() => mockUserControllerImpl.user).thenReturn(
-        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+        const UserModel(
+          userId: 1,
+          name: 'Test',
+          email: 'test@domain.com',
+          firebaseUserId: '123456',
+        ),
       );
 
       await tester.pumpWidget(createCategoriesRegisterPage());
@@ -312,7 +332,12 @@ void main() {
           .thenReturn(CategoriesDeleteState.idle);
 
       when(() => mockUserControllerImpl.user).thenReturn(
-        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+        const UserModel(
+          userId: 1,
+          name: 'Test',
+          email: 'test@domain.com',
+          firebaseUserId: '123456',
+        ),
       );
 
       await tester.pumpWidget(createCategoriesRegisterPage());
@@ -386,7 +411,12 @@ void main() {
           .thenReturn(CategoriesDeleteState.idle);
 
       when(() => mockUserControllerImpl.user).thenReturn(
-        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+        const UserModel(
+          userId: 1,
+          name: 'Test',
+          email: 'test@domain.com',
+          firebaseUserId: '123456',
+        ),
       );
 
       await tester.pumpWidget(createCategoriesRegisterPage());
@@ -458,7 +488,12 @@ void main() {
           .thenReturn(CategoriesState.idle);
 
       when(() => mockUserControllerImpl.user).thenReturn(
-        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+        const UserModel(
+          userId: 1,
+          name: 'Test',
+          email: 'test@domain.com',
+          firebaseUserId: '123456',
+        ),
       );
 
       await tester.pumpWidget(createCategoriesRegisterPage());
@@ -504,7 +539,12 @@ void main() {
           .thenReturn(CategoriesState.idle);
 
       when(() => mockUserControllerImpl.user).thenReturn(
-        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
+        const UserModel(
+          userId: 1,
+          name: 'Test',
+          email: 'test@domain.com',
+          firebaseUserId: '123456',
+        ),
       );
 
       await tester.pumpWidget(createCategoriesRegisterPage());

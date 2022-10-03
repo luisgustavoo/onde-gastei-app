@@ -53,7 +53,8 @@ void main() {
       const userModelExpected = UserModel(
         userId: 1,
         name: 'Luis Gustavo',
-        firebaseUserId: 'l0D9NOWcVTPPwe5taAJgy9iO4nQ2',
+        email: 'test@domain.com',
+        firebaseUserId: '123',
       );
       final jsonData = FixtureReader.getJsonData(
         'app/modules/user/repositories/fixture/find_user_data_response.json',

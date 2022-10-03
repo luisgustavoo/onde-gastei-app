@@ -51,11 +51,16 @@ void main() {
     );
   }
 
+  const userModel = UserModel(
+    userId: 1,
+    name: 'Test',
+    email: 'test@domain.com',
+    firebaseUserId: '123456',
+  );
+
   group('Group test user page', () {
     testWidgets('Test if user page shows up', (tester) async {
-      when(() => mockUserControllerImpl.user).thenReturn(
-        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
-      );
+      when(() => mockUserControllerImpl.user).thenReturn(userModel);
 
       when(() => mockUserControllerImpl.state).thenReturn(UserState.idle);
 
@@ -66,9 +71,7 @@ void main() {
     });
 
     testWidgets('Test user name change', (tester) async {
-      when(() => mockUserControllerImpl.user).thenReturn(
-        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
-      );
+      when(() => mockUserControllerImpl.user).thenReturn(userModel);
 
       when(() => mockUserControllerImpl.state).thenReturn(UserState.idle);
       when(
@@ -100,9 +103,7 @@ void main() {
     });
 
     testWidgets('Test error in changing user name', (tester) async {
-      when(() => mockUserControllerImpl.user).thenReturn(
-        const UserModel(userId: 1, name: 'Test', firebaseUserId: '123456'),
-      );
+      when(() => mockUserControllerImpl.user).thenReturn(userModel);
 
       when(() => mockUserControllerImpl.state).thenReturn(UserState.idle);
       when(

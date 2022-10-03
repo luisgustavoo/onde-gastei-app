@@ -191,10 +191,10 @@ class ExpensesPage extends StatelessWidget {
   ) {
     return ExpensesListTile(
       onTap: () async {
-        final edited = await Navigator.of(context).pushNamed<bool?>(
+        final edited = await Navigator.of(context).pushNamed(
           ExpensesRegisterPage.router,
           arguments: expense,
-        );
+        ) as bool?;
 
         if (edited != null) {
           if (edited) {

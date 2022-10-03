@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
@@ -42,7 +43,14 @@ class UserRepositoryImpl implements UserRepository {
       if (result.data == null || result.data!.isEmpty) {
         throw UserNotFoundException();
       }
-      final user = UserModel.fromMap(result.data!);
+
+      final user = UserModel(
+        userId: int.parse(result.data!['id_usuario'].toString()),
+        name: result.data!['nome'].toString(),
+        email: FirebaseAuth.instance.currentUser?.email ?? '',
+        firebaseUserId: result.data!['id_usuario_firebase'].toString(),
+      );
+
       await _saveLocalUserData(user);
       return user;
     } on RestClientException catch (e, s) {
