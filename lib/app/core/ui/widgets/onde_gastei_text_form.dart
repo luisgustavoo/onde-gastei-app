@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 
 class OndeGasteiTextForm extends StatelessWidget {
   OndeGasteiTextForm({
@@ -57,6 +58,9 @@ class OndeGasteiTextForm extends StatelessWidget {
           decoration: InputDecoration(
             hintText: label,
             prefixIcon: prefixIcon,
+            labelStyle: const TextStyle(color: Colors.red),
+            fillColor: readOnly ? Colors.grey[300] : null,
+            // labelStyle: const TextStyle(color: Constants.textColorDisabled),
             // contentPadding: const EdgeInsets.only(left: 8),
             suffixIcon: obscureText
                 ? IconButton(

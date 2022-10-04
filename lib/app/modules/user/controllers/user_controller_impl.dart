@@ -10,6 +10,8 @@ import 'package:onde_gastei_app/app/modules/user/services/user_service.dart';
 
 enum UserState { idle, loading, error, success }
 
+enum UserDeleteAccountState { idle, loading, error, success }
+
 class UserControllerImpl extends ChangeNotifier implements UserController {
   UserControllerImpl({
     required UserService service,
@@ -25,6 +27,7 @@ class UserControllerImpl extends ChangeNotifier implements UserController {
   late UserModel user;
 
   UserState state = UserState.idle;
+  UserDeleteAccountState stateDeleteAccount = UserDeleteAccountState.idle;
 
   @override
   Future<void> fetchUserData() async {
