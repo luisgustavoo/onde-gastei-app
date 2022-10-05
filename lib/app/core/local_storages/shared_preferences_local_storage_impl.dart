@@ -80,6 +80,7 @@ class SharedPreferencesLocalStorageImpl implements LocalStorage {
   void logout() {
     remove(Constants.localUserKey);
     FirebaseAuth.instance.signOut();
-    OndeGasteiNavigator.to!.pushReplacementNamed(LoginPage.router);
+    OndeGasteiNavigator.to!
+        .pushNamedAndRemoveUntil(LoginPage.router, (route) => false);
   }
 }

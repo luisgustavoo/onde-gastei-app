@@ -89,4 +89,16 @@ class UserRepositoryImpl implements UserRepository {
           user.toMap(),
         ),
       );
+
+  @override
+  Future<void> deleteAccountUser(int userId) async {
+    try {
+      await _restClient.auth().delete<void>(
+            '/users/$userId',
+          );
+    } on RestClientException catch (e, s) {
+      _log.error('Erro ao deletar conta de usuario', e, s);
+      throw Failure();
+    }
+  }
 }

@@ -6,4 +6,6 @@ abstract class UserService {
   Future<void> updateUserName(int userId, String newUserName);
 
   Future<void> removeLocalUserData();
+
+  Future<void> deleteAccountUser(int userId);
 }

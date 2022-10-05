@@ -87,4 +87,23 @@ class UserControllerImpl extends ChangeNotifier implements UserController {
       throw Failure(message: 'Erro ao buscar dados do usuario local');
     }
   }
+
+  @override
+  Future<void> deleteAccountUser(int userId) async {
+    try {
+      stateDeleteAccount = UserDeleteAccountState.loading;
+      notifyListeners();
+      await _service.deleteAccountUser(userId);
+      stateDeleteAccount = UserDeleteAccountState.success;
+      notifyListeners();
+    } on Exception catch (e, s) {
+      stateDeleteAccount = UserDeleteAccountState.error;
+      notifyListeners();
+      _log.error('Erro ao conta de usuario', e, s);
+      throw Failure(message: 'Erro ao conta de usuario');
+    }
+  }
+
+  @override
+  void logout() => _localStorage.logout();
 }

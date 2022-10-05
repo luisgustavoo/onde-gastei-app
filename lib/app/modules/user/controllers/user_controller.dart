@@ -6,4 +6,8 @@ abstract class UserController {
   Future<void> updateUserName(int userId, String newUserName);
 
   Future<UserModel?> getLocalUser();
+
+  Future<void> deleteAccountUser(int userId);
+
+  void logout();
 }

@@ -116,6 +116,11 @@ class App extends StatelessWidget {
           Provider(
             create: (context) => UserServiceImpl(
               repository: context.read<UserRepositoryImpl>(),
+              log: kReleaseMode
+                  ? context.read<FirebaseCrashlyticsImpl>()
+                  : context.read<LogImpl>(),
+              localSecurityStorage:
+                  context.read<FlutterSecureStorageLocalStorageImpl>(),
             ),
           ),
           ChangeNotifierProvider(

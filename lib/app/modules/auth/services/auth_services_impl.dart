@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
@@ -77,11 +79,12 @@ class AuthServicesImpl implements AuthService {
       final accessToken = await _repository.login(firebaseAuth.user!.uid);
 
       await _saveAccessToken(accessToken);
+      await _saveFirebaseCredential(email, password);
 
       await _confirmLogin();
     } on FirebaseAuthException catch (e, s) {
       _log.error('Erro ao realizar login no FirebaseAuth', e, s);
-      if (e.code == 'wrong-password') {
+      if (e.code == 'wrong-password' || e.code == 'user-not-found') {
         throw UserNotFoundException();
       }
       throw Failure(message: 'Erro ao realizar login no FirebaseAuth');
@@ -108,5 +111,12 @@ class AuthServicesImpl implements AuthService {
   @override
   Future<void> resetPassword(String email) async {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
+  Future<void> _saveFirebaseCredential(String email, String password) async {
+    await _localSecurityStorage.write(
+      Constants.firebaseCredentialKey,
+      jsonEncode({'email': email, 'password': password}),
+    );
   }
 }

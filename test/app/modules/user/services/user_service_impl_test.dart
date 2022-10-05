@@ -5,6 +5,9 @@ import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/user/repositories/user_repository.dart';
 import 'package:onde_gastei_app/app/modules/user/services/user_service_impl.dart';
 
+import '../../../../core/local_security_storage/mock_local_security_storage.dart';
+import '../controllers/user_controller_impl_test.dart';
+
 class MockUserRepository extends Mock implements UserRepository {}
 
 void main() {
@@ -13,7 +16,11 @@ void main() {
 
   setUp(() {
     mockUserRepository = MockUserRepository();
-    service = UserServiceImpl(repository: mockUserRepository);
+    service = UserServiceImpl(
+      repository: mockUserRepository,
+      log: MockLog(),
+      localSecurityStorage: MockLocalSecurityStorage(),
+    );
   });
 
   group('Group test fetchUserData', () {
