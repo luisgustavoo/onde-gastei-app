@@ -10,11 +10,11 @@ import 'package:onde_gastei_app/app/modules/user/repositories/user_repository.da
 import 'package:onde_gastei_app/app/modules/user/services/user_service.dart';
 
 class UserServiceImpl implements UserService {
-  UserServiceImpl(
-      {required UserRepository repository,
-      required LocalSecurityStorage localSecurityStorage,
-      required Log log})
-      : _repository = repository,
+  UserServiceImpl({
+    required UserRepository repository,
+    required LocalSecurityStorage localSecurityStorage,
+    required Log log,
+  })  : _repository = repository,
         _log = log,
         _localSecurityStorage = localSecurityStorage;
 
