@@ -175,6 +175,7 @@ class _LoginPageState extends State<LoginPage> {
         final formValid = _formKey.currentState?.validate() ?? false;
         if (formValid) {
           SnackBar? snackBar;
+          final navigatorState = Navigator.of(context);
 
           try {
             await widget._authController.login(
@@ -184,11 +185,7 @@ class _LoginPageState extends State<LoginPage> {
 
             await widget._userController.fetchUserData();
 
-            if (!mounted) {
-              return;
-            }
-
-            await Navigator.of(context).pushReplacementNamed(AppPage.router);
+            await navigatorState.pushReplacementNamed(AppPage.router);
           } on UserNotFoundException {
             snackBar = OndeGasteiSnackBar.buildSnackBar(
               content: const Text('Login ou senha inválidos!'),
