@@ -293,6 +293,8 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
 
                             String message;
 
+                            final themeData = Theme.of(context);
+
                             try {
                               _edited = true;
 
@@ -337,16 +339,12 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                                 message = 'Despesa atualizada com sucesso!';
                               }
 
-                              if (!mounted) {
-                                return;
-                              }
-
                               snackBar = OndeGasteiSnackBar.buildSnackBar(
                                 key: const Key(
                                   'snack_bar_success_key_register_expenses_page',
                                 ),
                                 content: Text(message),
-                                backgroundColor: Theme.of(context).primaryColor,
+                                backgroundColor: themeData.primaryColor,
                                 label: 'Fechar',
                                 onPressed: () {},
                               );
@@ -417,6 +415,9 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                       'delete_button_dialog_register_expenses_page',
                     ),
                     onPressed: () async {
+                      final navigatorState = Navigator.of(context);
+                      final navigatorStateDialog = Navigator.of(dialogContext);
+
                       try {
                         _edited = true;
 
@@ -424,16 +425,12 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                           expenseId: widget._expenseModel?.expenseId ?? 0,
                         );
 
-                        if (!mounted) {
-                          return;
+                        if (navigatorStateDialog.canPop()) {
+                          navigatorStateDialog.pop(_edited);
                         }
 
-                        if (Navigator.of(dialogContext).canPop()) {
-                          Navigator.of(dialogContext).pop(_edited);
-                        }
-
-                        if (Navigator.of(context).canPop()) {
-                          Navigator.of(context).pop(_edited);
+                        if (navigatorState.canPop()) {
+                          navigatorState.pop(_edited);
                         }
                       } on Failure {
                         final snackBar = OndeGasteiSnackBar.buildSnackBar(

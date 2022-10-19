@@ -192,26 +192,24 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                     ),
                     onPressed: () async {
                       // SnackBar snackBar;
+                      final navigatorState = Navigator.of(context);
+                      final navigatorStateDialog = Navigator.of(dialogContext);
                       try {
                         _edited = true;
 
                         await widget._categoriesController
                             .deleteCategory(widget._categoryModel?.id ?? 0);
 
-                        if (!mounted) {
-                          return;
+                        if (navigatorStateDialog.canPop()) {
+                          navigatorStateDialog.pop(_edited);
                         }
 
-                        if (Navigator.of(dialogContext).canPop()) {
-                          Navigator.of(dialogContext).pop(_edited);
-                        }
-
-                        if (Navigator.of(context).canPop()) {
-                          Navigator.of(context).pop(_edited);
+                        if (navigatorState.canPop()) {
+                          navigatorState.pop(_edited);
                         }
                       } on ExpensesExistsException {
-                        if (Navigator.of(dialogContext).canPop()) {
-                          Navigator.of(dialogContext).pop(_edited);
+                        if (navigatorStateDialog.canPop()) {
+                          navigatorStateDialog.pop(_edited);
                         }
 
                         final snackBar = OndeGasteiSnackBar.buildSnackBar(
@@ -298,6 +296,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
           SnackBar snackBar;
 
           String message;
+          final themeData = Theme.of(context);
 
           try {
             if (!widget._isEditing) {
@@ -327,16 +326,12 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
               message = 'Categoria atualizada com sucesso!';
             }
 
-            if (!mounted) {
-              return;
-            }
-
             snackBar = OndeGasteiSnackBar.buildSnackBar(
               key: const Key(
                 'snack_bar_success_key_register_update_categories_page',
               ),
               content: Text(message),
-              backgroundColor: Theme.of(context).primaryColor,
+              backgroundColor: themeData.primaryColor,
               label: 'Fechar',
               onPressed: () {},
             );

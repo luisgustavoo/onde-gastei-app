@@ -238,17 +238,14 @@ class _UserPageState extends State<UserPage> {
                                   ),
                                   onPressed: () async {
                                     // SnackBar snackBar;
+                                    final navigatorStateDialog =
+                                        Navigator.of(dialogContext);
                                     try {
                                       await widget.userController
                                           .deleteAccountUser(user.userId);
 
-                                      if (!mounted) {
-                                        return;
-                                      }
-
-                                      if (Navigator.of(dialogContext)
-                                          .canPop()) {
-                                        Navigator.of(dialogContext).pop();
+                                      if (navigatorStateDialog.canPop()) {
+                                        navigatorStateDialog.pop();
                                       }
 
                                       widget.userController.logout();
