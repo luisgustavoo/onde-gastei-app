@@ -107,6 +107,7 @@ class App extends StatelessWidget {
             create: (context) => UserRepositoryImpl(
               restClient: context.read<DioRestClient>(),
               localStorage: context.read<SharedPreferencesLocalStorageImpl>(),
+              firebaseUser: FirebaseAuth.instance.currentUser,
               log: kReleaseMode
                   ? context.read<FirebaseCrashlyticsImpl>()
                   : context.read<LogImpl>(),

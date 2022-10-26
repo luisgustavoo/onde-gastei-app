@@ -120,9 +120,8 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
           .auth()
           .get<Map<String, dynamic>>('/category/$categoryId/expenses-quantity');
 
-      await _metricsMonitor.stopTrace(trace);
-
       if (result.data != null) {
+        await _metricsMonitor.stopTrace(trace);
         return int.parse(result.data!['quantidade'].toString());
       }
 

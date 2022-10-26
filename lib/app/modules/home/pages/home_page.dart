@@ -499,7 +499,7 @@ class _HomePageState extends State<HomePage> {
               },
             );
 
-            await Future<void>.delayed(const Duration(seconds: 1));
+            await Future<void>.delayed(const Duration(milliseconds: 500));
 
             initialDateController.dispose();
             finalDateController.dispose();

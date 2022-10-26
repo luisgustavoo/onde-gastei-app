@@ -19,6 +19,8 @@ import '../../../../core/log/mock_log.dart';
 import '../../../../core/log/mock_metrics_monitor.dart';
 import '../../../../core/rest_client/mock_rest_client.dart';
 import '../../../../core/rest_client/mock_rest_client_response.dart';
+import '../../auth/mocks/mock_firebase_auth.dart';
+import '../../auth/mocks/mock_user.dart';
 
 class MockLocalStorage extends Mock
     implements SharedPreferencesLocalStorageImpl {}
@@ -30,6 +32,7 @@ void main() {
   late LocalStorage mockLocalStorage;
   late MockMetricsMonitor metricsMonitor;
   late Trace trace;
+  late MockUser firebaseUser;
 
   setUp(() {
     mockLocalStorage = MockLocalStorage();
@@ -37,11 +40,14 @@ void main() {
     mockLog = MockLog();
     metricsMonitor = MockMetricsMonitor();
     trace = MockTrace();
+    firebaseUser =
+        MockUser(displayName: 'Test', email: 'test@domain.com', uid: '123');
     repository = UserRepositoryImpl(
       restClient: mockRestClient,
       log: mockLog,
       localStorage: mockLocalStorage,
       metricsMonitor: metricsMonitor,
+      firebaseUser: firebaseUser,
     );
 
     metricsMonitor.mockCalledMetrics(trace);
@@ -54,7 +60,7 @@ void main() {
         userId: 1,
         name: 'Luis Gustavo',
         email: 'test@domain.com',
-        firebaseUserId: '123',
+        firebaseUserId: 'l0D9NOWcVTPPwe5taAJgy9iO4nQ2',
       );
       final jsonData = FixtureReader.getJsonData(
         'app/modules/user/repositories/fixture/find_user_data_response.json',
