@@ -18,15 +18,18 @@ class UserRepositoryImpl implements UserRepository {
     required LocalStorage localStorage,
     required Log log,
     required MetricsMonitor metricsMonitor,
+    required User? firebaseUser,
   })  : _restClient = restClient,
         _localStorage = localStorage,
         _log = log,
-        _metricsMonitor = metricsMonitor;
+        _metricsMonitor = metricsMonitor,
+        _firebaseUser = firebaseUser;
 
   final RestClient _restClient;
   final Log _log;
   final LocalStorage _localStorage;
   final MetricsMonitor _metricsMonitor;
+  final User? _firebaseUser;
 
   @override
   Future<UserModel> fetchUserData() async {
@@ -47,7 +50,7 @@ class UserRepositoryImpl implements UserRepository {
       final user = UserModel(
         userId: int.parse(result.data!['id_usuario'].toString()),
         name: result.data!['nome'].toString(),
-        email: FirebaseAuth.instance.currentUser?.email ?? '',
+        email: _firebaseUser?.email ?? '',
         firebaseUserId: result.data!['id_usuario_firebase'].toString(),
       );
 

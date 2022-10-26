@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/exceptions/unverified_email_exception.dart';
+import 'package:onde_gastei_app/app/core/exceptions/user_not_found_exception.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_security_storage.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
@@ -235,7 +236,8 @@ void main() {
 
       //Assert
       expect(mockCredentialFirebaseUser.user, isNull);
-      expect(() => call(email, password), throwsA(isA<Failure>()));
+      expect(
+          () => call(email, password), throwsA(isA<UserNotFoundException>()));
     });
 
     test(

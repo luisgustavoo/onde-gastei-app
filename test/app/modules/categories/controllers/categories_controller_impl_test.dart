@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:onde_gastei_app/app/core/exceptions/expenses_exists_exception.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
@@ -91,6 +92,10 @@ void main() {
   group('Group test deleteCategories', () {
     test('Should delete categories with success', () async {
       // Arrange
+      when(
+        () => service.expenseQuantityByCategoryId(any()),
+      ).thenAnswer((_) async => 0);
+
       when(() => service.deleteCategory(any())).thenAnswer((_) async => _);
 
       //Act
@@ -100,15 +105,35 @@ void main() {
       verify(() => service.deleteCategory(any())).called(1);
     });
 
+    test('Should return existing expenses', () async {
+      // Arrange
+      when(
+        () => service.expenseQuantityByCategoryId(any()),
+      ).thenAnswer((_) async => 1);
+
+      when(() => service.deleteCategory(any())).thenAnswer((_) async => _);
+
+      //Act
+      final call = controller.deleteCategory;
+
+      //Assert
+      expect(call(1), throwsA(isA<ExpensesExistsException>()));
+      verifyNever(() => service.deleteCategory(any()));
+    });
+
     test('Should throws exception', () async {
       // Arrange
+      when(
+        () => service.expenseQuantityByCategoryId(any()),
+      ).thenAnswer((_) async => 0);
       when(() => service.deleteCategory(any())).thenThrow(Exception());
 
       //Act
       final call = controller.deleteCategory;
 
       //Assert
-      expect(() => call(1), throwsA(isA<Failure>()));
+      expect(call(1), throwsA(isA<Failure>()));
+      await Future<void>.delayed(const Duration(milliseconds: 500));
       verify(() => service.deleteCategory(any())).called(1);
     });
   });
