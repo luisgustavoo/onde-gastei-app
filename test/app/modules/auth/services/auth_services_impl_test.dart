@@ -237,7 +237,9 @@ void main() {
       //Assert
       expect(mockCredentialFirebaseUser.user, isNull);
       expect(
-          () => call(email, password), throwsA(isA<UserNotFoundException>()));
+        () => call(email, password),
+        throwsA(isA<UserNotFoundException>()),
+      );
     });
 
     test(
