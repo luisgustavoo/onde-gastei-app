@@ -19,7 +19,6 @@ import '../../../../core/log/mock_log.dart';
 import '../../../../core/log/mock_metrics_monitor.dart';
 import '../../../../core/rest_client/mock_rest_client.dart';
 import '../../../../core/rest_client/mock_rest_client_response.dart';
-import '../../auth/mocks/mock_firebase_auth.dart';
 import '../../auth/mocks/mock_user.dart';
 
 class MockLocalStorage extends Mock
