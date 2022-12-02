@@ -55,6 +55,7 @@ dependencies:
   firebase_crashlytics: ^2.8.7
   firebase_analytics: ^9.3.1
   firebase_performance: ^0.8.2+2
+  # convenient_test: ^1.2.1
   
 
 dev_dependencies:
@@ -67,8 +68,31 @@ dev_dependencies:
   strict: ^1.4.0
   flutter_launcher_icons: ^0.9.3
   flutter_native_splash: ^2.2.7
+  flutter_flavorizr: ^2.1.5
+  # convenient_test_dev: ^1.0.0
 
+dependency_overrides: 
+  archive: ^3.3.0
 
+flavorizr:
+  flavors:
+    dev:
+      app:
+        name: "Onde Gastei Dev"
+      android:
+        applicationId: "br.app.ondegastei.onde_gastei_app.dev"
+        firebase:
+          config: "android/app/firebase/uat/google-services.json"
+      ios:
+        bundleId: "br.app.ondegastei.onde_gastei_app.dev"
+
+    prod:
+      app:
+        name: "Onde Gastei"
+      android:
+        applicationId: "br.app.ondegastei.onde_gastei_app"
+      ios:
+        bundleId: "br.app.ondegastei.onde_gastei_app"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
