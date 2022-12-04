@@ -48,3 +48,6 @@ app.*.map.json
 
 # App test
 /coverage/
+
+.tmp
+assets.tmp.zip

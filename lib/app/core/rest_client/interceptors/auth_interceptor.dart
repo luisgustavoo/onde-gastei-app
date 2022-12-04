@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:onde_gastei_app/app/core/helpers/constants.dart';
@@ -5,6 +8,8 @@ import 'package:onde_gastei_app/app/core/local_storages/local_security_storage.d
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
+import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
+import 'package:onde_gastei_app/app/core/rest_client/rest_client_response.dart';
 
 class AuthInterceptor extends Interceptor {
   AuthInterceptor({
@@ -109,30 +114,43 @@ class AuthInterceptor extends Interceptor {
   }
 
   Future<void> _refreshToken() async {
-    try {
-      final refreshToken =
-          await _localSecurityStorage.read(Constants.refreshTokenKey);
-
-      final refreshTokenResult =
-          await _restClient.auth().put<Map<String, dynamic>>(
+    await _localSecurityStorage
+        .read(Constants.refreshTokenKey)
+        .then((refreshToken) async {
+      await _restClient.auth().put<Map<String, dynamic>>(
         '/auth/refresh',
         data: <String, dynamic>{'refresh_token': refreshToken},
-      );
-
-      if (refreshTokenResult.data != null) {
-        await _localSecurityStorage.write(
-          Constants.refreshTokenKey,
-          refreshTokenResult.data!['refresh_token'].toString(),
-        );
-        await _localStorage.write(
-          Constants.accessTokenKey,
-          refreshTokenResult.data!['access_token'].toString(),
+      ).then((refreshTokenResult) async {
+        if (refreshTokenResult.data != null) {
+          await _localSecurityStorage.write(
+            Constants.refreshTokenKey,
+            refreshTokenResult.data!['refresh_token'].toString(),
+          );
+          await _localStorage.write(
+            Constants.accessTokenKey,
+            refreshTokenResult.data!['access_token'].toString(),
+          );
+        }
+      }).catchError((dynamic error) async {
+        if (error is RestClientException) {
+          _log.error(
+            'Erro ao atualizar refresh token',
+            error.error,
+          );
+        }
+        await _localSecurityStorage.clear();
+        await _localStorage.logout();
+      });
+    }).catchError((dynamic error) async {
+      if (error is RestClientException) {
+        _log.error(
+          'Erro ao buscar Access Token para atualizar Refresh token',
+          error.error,
         );
       }
-    } on Exception catch (e, s) {
-      _log.error('Erro ao atualizar refresh token', e, s);
-      _localStorage.logout();
-    }
+      await _localSecurityStorage.clear();
+      await _localStorage.logout();
+    });
   }
 
   Future<void> _retryRequest(

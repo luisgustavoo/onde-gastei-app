@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/core/ui/ui_config.dart';
+import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_button.dart';
+import 'package:onde_gastei_app/app/core/ui/widgets/onde_gastei_text_form.dart';
 import 'package:onde_gastei_app/app/models/category_model.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/expenses/controllers/expenses_controller_impl.dart';
@@ -126,59 +128,8 @@ void main() {
     registerFallbackValue(MockRoute());
   });
 
-  testWidgets('Test if home page shows up', (tester) async {
-    when(() => mockUserControllerImpl.user).thenReturn(userModel);
-
-    when(() => mockHomeControllerImpl.state).thenReturn(HomeState.idle);
-
-    when(() => mockHomeControllerImpl.totalExpenses).thenReturn(1500);
-
-    when(() => mockHomeControllerImpl.totalExpensesCategoriesList)
-        .thenReturn(mockTotalExpensesCategoriesList);
-
-    when(() => mockHomeControllerImpl.percentageCategoriesList)
-        .thenReturn(mockPercentageCategoriesList);
-
-    await tester.pumpWidget(createHomePage());
-
-    expect(find.text('Olá, Test'), findsOneWidget);
-
-    expect(
-      find.text(
-        'R\$${NumberFormat.currency(
-          locale: 'pt-BR',
-          name: '',
-          decimalDigits: 2,
-        ).format(1500)}',
-        findRichText: true,
-      ),
-      findsOneWidget,
-    );
-
-    expect(find.text('Período'), findsOneWidget);
-    expect(find.text('01/01/2022'), findsOneWidget);
-    expect(find.text('01/02/2022'), findsOneWidget);
-    expect(find.byType(IconButton), findsWidgets);
-    expect(find.byType(CircleAvatar), findsWidgets);
-    expect(find.byType(PieChart), findsOneWidget);
-    expect(find.byType(Indicator), findsWidgets);
-  });
-
-  // testWidgets('Test data filter on HomePage', (tester) async {
-  //   userModel = UserModel(userId: 1, name: 'Test', email: 'test@doman.com');
-
-  //   dateFilter = DateFilter(
-  //     initialDate: DateTime(2022),
-  //     finalDate: DateTime(
-  //       DateTime.now().year,
-  //       DateTime.now().month + 1,
-  //     ).subtract(
-  //       const Duration(days: 1),
-  //     ),
-  //   );
-  //   //
-  //   final currentMonth = DateTime.now().month;
-  //   final currentYear = DateTime.now().year;
+  // testWidgets('Test if home page shows up', (tester) async {
+  //   when(() => mockUserControllerImpl.user).thenReturn(userModel);
 
   //   when(() => mockHomeControllerImpl.state).thenReturn(HomeState.idle);
 
@@ -190,147 +141,195 @@ void main() {
   //   when(() => mockHomeControllerImpl.percentageCategoriesList)
   //       .thenReturn(mockPercentageCategoriesList);
 
-  //   when(
-  //     () => mockHomeControllerImpl.fetchHomeData(
-  //       userId: any(named: 'userId'),
-  //       initialDate: any(named: 'initialDate'),
-  //       finalDate: any(named: 'finalDate'),
-  //     ),
-  //   ).thenAnswer((_) async => _);
-
-  //   when(
-  //     () => mockExpensesControllerImpl.findExpensesByPeriod(
-  //       userId: any(named: 'userId'),
-  //       initialDate: any(named: 'initialDate'),
-  //       finalDate: any(named: 'finalDate'),
-  //     ),
-  //   ).thenAnswer((_) async => _);
-
-  //   final buttonDateFilter = find.byKey(const Key('date_filter_key_home_page'));
-
-  //   final applyButton = find.byKey(
-  //     const Key('apply_button_key_home_page'),
-  //   );
-
-  //   final initialDateFilter = find.byKey(
-  //     const Key('initial_date_filter_key_home_page'),
-  //   );
-  //   final finalDateFilter = find.byKey(
-  //     const Key('final_date_filter_key_home_page'),
-  //   );
-
   //   await tester.pumpWidget(createHomePage());
 
-  //   await tester.tap(buttonDateFilter);
-  //   await tester.pumpAndSettle();
-
-  //   expect(find.byType(OndeGasteiTextForm), findsNWidgets(2));
-  //   expect(find.byType(OndeGasteiButton), findsOneWidget);
-  //   expect(
-  //     find.widgetWithText(OndeGasteiTextForm, 'Data Inicial'),
-  //     findsOneWidget,
-  //   );
-  //   expect(
-  //     find.widgetWithText(OndeGasteiTextForm, 'Data Final'),
-  //     findsOneWidget,
-  //   );
-
-  //   // Inicio Data Inicial
-  //   await tester.tap(initialDateFilter.last);
-  //   await tester.pumpAndSettle();
-
-  //   expect(find.byType(Dialog), findsOneWidget);
-
-  //   // final firstDayMonth = find.descendant(
-  //   //   of: find.byType(GridView),
-  //   //   matching: find.widgetWithText(Container, '1'),
-  //   // );
-
-  //   final firstDayMonth = find.text('1');
+  //   expect(find.text('Olá, Test'), findsOneWidget);
 
   //   expect(
-  //     firstDayMonth,
-  //     findsOneWidget,
-  //   );
-
-  //   await tester.tap(firstDayMonth);
-  //   await tester.pumpAndSettle();
-
-  //   await tester.tap(find.widgetWithText(TextButton, 'Ok'));
-  //   await tester.pumpAndSettle();
-
-  //   expect(find.byType(Dialog), findsNothing);
-
-  //   expect(
-  //     find.descendant(
-  //       of: find.byType(OndeGasteiTextForm),
-  //       matching: find.text(
-  //         DateFormat.yMd('pt_BR').format(
-  //           DateTime(currentYear, currentMonth),
-  //         ),
-  //       ),
+  //     find.text(
+  //       'R\$${NumberFormat.currency(
+  //         locale: 'pt-BR',
+  //         name: '',
+  //         decimalDigits: 2,
+  //       ).format(1500)}',
+  //       findRichText: true,
   //     ),
   //     findsOneWidget,
   //   );
 
-  //   expect(dateFilter!.initialDate, DateTime(currentYear, currentMonth));
-  //   // Fim Data Inicial
-
-  //   // Data Final
-  //   await tester.tap(finalDateFilter.last);
-  //   await tester.pumpAndSettle();
-
-  //   // final lastDayMonth = find.descendant(
-  //   //   of: find.byType(GridView),
-  //   //   matching: find.widgetWithText(Container, '28'),
-  //   // );
-
-  //   final lastDayMonth = find.text('28');
-
-  //   expect(
-  //     lastDayMonth,
-  //     findsOneWidget,
-  //   );
-
-  //   await tester.tap(lastDayMonth);
-  //   await tester.pumpAndSettle();
-
-  //   await tester.tap(find.widgetWithText(TextButton, 'Ok'));
-  //   await tester.pumpAndSettle();
-
-  //   expect(find.byType(Dialog), findsNothing);
-
-  //   expect(
-  //     find.descendant(
-  //       of: find.byType(OndeGasteiTextForm),
-  //       matching: find.text(
-  //         DateFormat.yMd('pt_BR').format(
-  //           DateTime(currentYear, currentMonth, 28),
-  //         ),
-  //       ),
-  //     ),
-  //     findsOneWidget,
-  //   );
-
-  //   expect(dateFilter!.finalDate, DateTime(currentYear, currentMonth, 28));
-  //   // Fim Data Final
-
-  //   await tester.tap(applyButton);
-  //   await tester.pumpAndSettle();
-
-  //   verify(
-  //     () => Future.wait([
-  //       mockHomeControllerImpl.fetchHomeData(
-  //         userId: any(named: 'userId'),
-  //         initialDate: any(named: 'initialDate'),
-  //         finalDate: any(named: 'finalDate'),
-  //       ),
-  //       mockExpensesControllerImpl.findExpensesByPeriod(
-  //         userId: any(named: 'userId'),
-  //         initialDate: any(named: 'initialDate'),
-  //         finalDate: any(named: 'finalDate'),
-  //       )
-  //     ]),
-  //   ).called(1);
+  //   expect(find.text('Período'), findsOneWidget);
+  //   expect(find.text('01/01/2022'), findsOneWidget);
+  //   expect(find.text('01/02/2022'), findsOneWidget);
+  //   expect(find.byType(IconButton), findsWidgets);
+  //   expect(find.byType(CircleAvatar), findsWidgets);
+  //   expect(find.byType(PieChart), findsOneWidget);
+  //   expect(find.byType(Indicator), findsWidgets);
   // });
+
+  testWidgets('Test data filter on HomePage', (tester) async {
+    final currentMonth = DateTime.now().month;
+    final currentYear = DateTime.now().year;
+
+    when(() => mockHomeControllerImpl.state).thenReturn(HomeState.idle);
+
+    when(() => mockHomeControllerImpl.totalExpenses).thenReturn(1500);
+
+    when(() => mockHomeControllerImpl.totalExpensesCategoriesList)
+        .thenReturn(mockTotalExpensesCategoriesList);
+
+    when(() => mockHomeControllerImpl.percentageCategoriesList)
+        .thenReturn(mockPercentageCategoriesList);
+
+    when(() => mockUserControllerImpl.user).thenReturn(
+      const UserModel(
+        userId: 1,
+        name: 'Test',
+        email: 'test@domain.com',
+        firebaseUserId: '123456',
+      ),
+    );
+
+    when(
+      () => mockHomeControllerImpl.fetchHomeData(
+        userId: any(named: 'userId'),
+        initialDate: any(named: 'initialDate'),
+        finalDate: any(named: 'finalDate'),
+      ),
+    ).thenAnswer((_) async => _);
+
+    when(
+      () => mockExpensesControllerImpl.findExpensesByPeriod(
+        userId: any(named: 'userId'),
+        initialDate: any(named: 'initialDate'),
+        finalDate: any(named: 'finalDate'),
+      ),
+    ).thenAnswer((_) async => _);
+
+    final buttonDateFilter = find.byKey(const Key('date_filter_key_home_page'));
+
+    final applyButton = find.byKey(
+      const Key('apply_button_key_home_page'),
+    );
+
+    final initialDateFilter = find.byKey(
+      const Key('initial_date_filter_key_home_page'),
+    );
+    final finalDateFilter = find.byKey(
+      const Key('final_date_filter_key_home_page'),
+    );
+
+    await tester.pumpWidget(createHomePage());
+
+    await tester.tap(buttonDateFilter);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(OndeGasteiTextForm), findsNWidgets(2));
+    expect(find.byType(OndeGasteiButton), findsOneWidget);
+    expect(
+      find.widgetWithText(OndeGasteiTextForm, 'Data Inicial'),
+      findsOneWidget,
+    );
+    expect(
+      find.widgetWithText(OndeGasteiTextForm, 'Data Final'),
+      findsOneWidget,
+    );
+
+    // Inicio Data Inicial
+    await tester.tap(initialDateFilter.last);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(Dialog), findsOneWidget);
+
+    // final firstDayMonth = find.descendant(
+    //   of: find.byType(GridView),
+    //   matching: find.widgetWithText(Container, '1'),
+    // );
+
+    final firstDayMonth = find.text('1');
+
+    expect(
+      firstDayMonth,
+      findsOneWidget,
+    );
+
+    await tester.tap(firstDayMonth);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(TextButton, 'OK'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(Dialog), findsNothing);
+
+    expect(
+      find.descendant(
+        of: find.byType(OndeGasteiTextForm),
+        matching: find.text(
+          DateFormat.yMd('pt_BR').format(
+            DateTime(currentYear, currentMonth),
+          ),
+        ),
+      ),
+      findsOneWidget,
+    );
+
+    expect(dateFilter.initialDate, DateTime(currentYear, currentMonth));
+    // Fim Data Inicial
+
+    // Data Final
+    await tester.tap(finalDateFilter.last);
+    await tester.pumpAndSettle();
+
+    // final lastDayMonth = find.descendant(
+    //   of: find.byType(GridView),
+    //   matching: find.widgetWithText(Container, '28'),
+    // );
+
+    final lastDayMonth = find.text('28');
+
+    expect(
+      lastDayMonth,
+      findsOneWidget,
+    );
+
+    await tester.tap(lastDayMonth);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(TextButton, 'OK'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(Dialog), findsNothing);
+
+    expect(
+      find.descendant(
+        of: find.byType(OndeGasteiTextForm),
+        matching: find.text(
+          DateFormat.yMd('pt_BR').format(
+            DateTime(currentYear, currentMonth, 28),
+          ),
+        ),
+      ),
+      findsOneWidget,
+    );
+
+    expect(dateFilter.finalDate, DateTime(currentYear, currentMonth, 28));
+    // Fim Data Final
+
+    await tester.tap(applyButton);
+    await tester.pumpAndSettle();
+
+    verify(
+      () => Future.wait([
+        mockHomeControllerImpl.fetchHomeData(
+          userId: any(named: 'userId'),
+          initialDate: any(named: 'initialDate'),
+          finalDate: any(named: 'finalDate'),
+        ),
+        mockExpensesControllerImpl.findExpensesByPeriod(
+          userId: any(named: 'userId'),
+          initialDate: any(named: 'initialDate'),
+          finalDate: any(named: 'finalDate'),
+        )
+      ]),
+    ).called(1);
+  });
 }
