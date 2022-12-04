@@ -40,7 +40,7 @@ android {
         dev {
             dimension "flavor-type"
             applicationId "br.app.ondegastei.onde_gastei_app.dev"
-            resValue "string", "app_name", "Onde Gastei Dev"
+            resValue "string", "app_name", "Dev"
         }
         prod {
             dimension "flavor-type"
