@@ -16,6 +16,17 @@
             ]
         },
         {
+            "name": "prod",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "-t",
+                "lib/main_prod.dart",
+                "--flavor",
+                "prod",
+            ]
+        },
+        {
             "name": "onde_gastei_app",
             "request": "launch",
             "type": "dart"
@@ -40,7 +51,9 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
-            "args": ["--cache-sksl --purge-persistent-cache"]
+            "args": [
+                "--cache-sksl --purge-persistent-cache"
+            ]
         },
         {
             "name": "onde_gastei_app (release mode)",

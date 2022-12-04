@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +15,6 @@ import 'package:onde_gastei_app/app/modules/home/controllers/home_controller_imp
 import 'package:onde_gastei_app/app/modules/home/pages/home_page.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/percentage_categories_view_model.dart';
 import 'package:onde_gastei_app/app/modules/home/view_model/total_expenses_categories_view_model.dart';
-import 'package:onde_gastei_app/app/modules/home/widgets/indicador.dart';
 import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_impl.dart';
 import 'package:provider/provider.dart';
 
@@ -71,13 +69,6 @@ void main() {
   final dateFilter = DateFilter(
     initialDate: DateTime(2022),
     finalDate: DateTime(2022, 2),
-  );
-
-  const userModel = UserModel(
-    userId: 1,
-    name: 'Test',
-    email: 'test@domain.com',
-    firebaseUserId: '123456',
   );
 
   Widget createHomePage() {
