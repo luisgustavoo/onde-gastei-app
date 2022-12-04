@@ -77,10 +77,11 @@ class SharedPreferencesLocalStorageImpl implements LocalStorage {
   }
 
   @override
-  void logout() {
-    remove(Constants.localUserKey);
-    FirebaseAuth.instance.signOut();
-    OndeGasteiNavigator.to!
+  Future<void> logout() async {
+    // remove(Constants.localUserKey);
+    await clear();
+    await FirebaseAuth.instance.signOut();
+    await OndeGasteiNavigator.to!
         .pushNamedAndRemoveUntil(LoginPage.router, (route) => false);
   }
 }
