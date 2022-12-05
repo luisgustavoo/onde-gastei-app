@@ -17,8 +17,8 @@ class DetailsExpensesCategoriesPage extends StatefulWidget {
     required this.categoryName,
     required this.controller,
     required this.dateFilter,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const router = '/details-expenses-categories';
 

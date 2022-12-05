@@ -23,11 +23,10 @@ class ExpensesRegisterPage extends StatefulWidget {
     required ExpensesControllerImpl expensesController,
     ExpenseModel? expenseModel,
     bool isEditing = false,
-    Key? key,
+    super.key,
   })  : _expensesController = expensesController,
         _expenseModel = expenseModel,
-        _isEditing = isEditing,
-        super(key: key);
+        _isEditing = isEditing;
 
   static const router = '/expenses/register';
   final bool _isEditing;

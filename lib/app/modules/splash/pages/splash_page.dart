@@ -5,7 +5,10 @@ import 'package:onde_gastei_app/app/modules/user/controllers/user_controller.dar
 import 'package:onde_gastei_app/app/pages/app_page.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({required this.userController, Key? key}) : super(key: key);
+  const SplashPage({
+    required this.userController,
+    super.key,
+  });
 
   static const router = '/splash';
 

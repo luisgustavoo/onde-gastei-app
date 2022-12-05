@@ -17,13 +17,12 @@ class OndeGasteiTextForm extends StatelessWidget {
     this.onTap,
     this.readOnly = false,
     this.enabled = true,
-    Key? key,
+    super.key,
   })  : _obscureTextNotifier = ValueNotifier<bool>(obscureText),
         assert(
           !(obscureText == true && suffixIcon != null),
           'obscureText não pode ser adicionado junto com o suffixIcon',
-        ),
-        super(key: key);
+        );
 
   final String label;
   final TextEditingController? controller;

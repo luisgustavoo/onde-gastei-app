@@ -16,8 +16,8 @@ class CategoriesPage extends StatelessWidget {
     required this.expensesController,
     required this.homeController,
     required this.dateFilter,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const router = '/categories';
   final CategoriesController categoriesController;

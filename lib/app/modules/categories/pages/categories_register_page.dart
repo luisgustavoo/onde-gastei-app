@@ -21,11 +21,10 @@ class CategoriesRegisterPage extends StatefulWidget {
     required CategoriesController categoriesController,
     CategoryModel? categoryModel,
     bool isEditing = false,
-    Key? key,
+    super.key,
   })  : _categoriesController = categoriesController,
         _categoryModel = categoryModel,
-        _isEditing = isEditing,
-        super(key: key);
+        _isEditing = isEditing;
 
   static const router = '/categories/register';
 

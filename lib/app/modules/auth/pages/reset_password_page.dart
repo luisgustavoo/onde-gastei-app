@@ -9,8 +9,10 @@ import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_imp
 import 'package:provider/provider.dart';
 
 class ResetPasswordPage extends StatefulWidget {
-  const ResetPasswordPage({required this.authController, Key? key})
-      : super(key: key);
+  const ResetPasswordPage({
+    required this.authController,
+    super.key,
+  });
 
   static const String router = '/reset-password';
 

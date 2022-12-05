@@ -15,16 +15,11 @@ class MockExpensesServices extends Mock implements ExpensesServices {}
 // class MockExpenseModel extends Mock implements ExpenseModel {}
 class MockExpenseModel extends ExpenseModel {
   const MockExpenseModel({
-    required String description,
-    required double value,
-    required DateTime date,
-    required CategoryModel category,
-  }) : super(
-          description: description,
-          value: value,
-          date: date,
-          category: category,
-        );
+    required super.description,
+    required super.value,
+    required super.date,
+    required super.category,
+  });
 }
 
 void main() {

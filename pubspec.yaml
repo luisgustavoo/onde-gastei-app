@@ -65,7 +65,9 @@ dev_dependencies:
     sdk: flutter
 
   mocktail: ^0.3.0
-  strict: ^1.4.0
+  # strict: ^1.4.0
+  strict:
+    path: "C:/Dev/Flutter/strict/"
   flutter_launcher_icons: ^0.9.3
   flutter_native_splash: ^2.2.7
   flutter_flavorizr: ^2.1.5

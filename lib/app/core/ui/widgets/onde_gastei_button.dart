@@ -13,7 +13,7 @@ class OndeGasteiButton extends StatelessWidget {
     VoidCallback? onPressed,
     bool isLoading = false,
     bool disable = false,
-    Key? key,
+    super.key,
   })  : _child = child,
         _height = height,
         _width = width,
@@ -21,8 +21,7 @@ class OndeGasteiButton extends StatelessWidget {
         _borderRadius = borderRadius,
         _onPressed = onPressed,
         _disable = disable,
-        _isLoading = ValueNotifier<bool>(isLoading),
-        super(key: key);
+        _isLoading = ValueNotifier<bool>(isLoading);
 
   final Widget _child;
   final double _height;

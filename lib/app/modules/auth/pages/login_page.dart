@@ -19,10 +19,9 @@ class LoginPage extends StatefulWidget {
   const LoginPage({
     required AuthController authController,
     required UserController userController,
-    Key? key,
+    super.key,
   })  : _authController = authController,
-        _userController = userController,
-        super(key: key);
+        _userController = userController;
 
   static const router = '/login';
 

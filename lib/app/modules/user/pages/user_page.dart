@@ -11,7 +11,10 @@ import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_imp
 import 'package:provider/provider.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({required this.userController, Key? key}) : super(key: key);
+  const UserPage({
+    required this.userController,
+    super.key,
+  });
   static const router = '/user';
 
   final UserController userController;

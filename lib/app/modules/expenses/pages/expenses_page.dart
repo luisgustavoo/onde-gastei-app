@@ -20,8 +20,8 @@ class ExpensesPage extends StatelessWidget {
     required this.expensesController,
     required this.homeController,
     required this.dateFilter,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const router = '/expenses';
   final HomeController homeController;

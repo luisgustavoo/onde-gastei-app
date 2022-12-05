@@ -26,14 +26,10 @@ class MockUserControllerImpl extends Mock implements UserControllerImpl {}
 
 class MockCategoryModel extends CategoryModel {
   const MockCategoryModel({
-    required String description,
-    required int iconCode,
-    required int colorCode,
-  }) : super(
-          description: description,
-          iconCode: iconCode,
-          colorCode: colorCode,
-        );
+    required super.description,
+    required super.iconCode,
+    required super.colorCode,
+  });
 }
 
 void main() {
