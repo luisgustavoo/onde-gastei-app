@@ -42,6 +42,7 @@ import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_imp
 import 'package:onde_gastei_app/app/modules/user/repositories/user_repository_impl.dart';
 import 'package:onde_gastei_app/app/modules/user/services/user_service_impl.dart';
 import 'package:onde_gastei_app/app/pages/app_page.dart';
+import 'package:onde_gastei_app/flavors.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
@@ -278,9 +279,15 @@ class App extends StatelessWidget {
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
+          // debugShowMaterialGrid: true,
+
           title: UiConfig.title,
           initialRoute: SplashPage.router,
-
+          // home: _flavorBanner(
+          //   child: SplashPage(
+          //     userController: context.read(),
+          //   ),
+          // ),
           theme: UiConfig.themeLight,
           // builder: asuka.builder,
           navigatorKey: OndeGasteiNavigator.navigatorKey,
@@ -380,24 +387,24 @@ class App extends StatelessWidget {
     );
   }
 
-  // Widget _flavorBanner({
-  //   required Widget child,
-  //   bool show = true,
-  // }) =>
-  //     show
-  //         ? Banner(
-  //             location: BannerLocation.topStart,
-  //             message: F.name,
-  //             color: Colors.green.withOpacity(0.6),
-  //             textStyle: const TextStyle(
-  //               fontWeight: FontWeight.w700,
-  //               fontSize: 12,
-  //               letterSpacing: 1,
-  //             ),
-  //             textDirection: TextDirection.ltr,
-  //             child: child,
-  //           )
-  //         : Container(
-  //             child: child,
-  //           );
+  Widget _flavorBanner({
+    required Widget child,
+    bool show = true,
+  }) =>
+      show
+          ? Banner(
+              location: BannerLocation.topStart,
+              message: F.name,
+              color: Colors.green.withOpacity(0.6),
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
+                letterSpacing: 1,
+              ),
+              textDirection: TextDirection.ltr,
+              child: child,
+            )
+          : Container(
+              child: child,
+            );
 }
