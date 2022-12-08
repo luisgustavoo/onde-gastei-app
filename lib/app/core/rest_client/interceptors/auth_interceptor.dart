@@ -7,7 +7,6 @@ import 'package:onde_gastei_app/app/core/local_storages/local_security_storage.d
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
-import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
 
 class AuthInterceptor extends Interceptor {
   AuthInterceptor({

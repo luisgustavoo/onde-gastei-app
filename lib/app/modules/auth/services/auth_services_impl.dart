@@ -10,6 +10,7 @@ import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/modules/auth/repositories/auth_repository.dart';
 import 'package:onde_gastei_app/app/modules/auth/services/auth_service.dart';
+import 'package:onde_gastei_app/flavors.dart';
 
 class AuthServicesImpl implements AuthService {
   AuthServicesImpl({
@@ -48,7 +49,7 @@ class AuthServicesImpl implements AuthService {
 
       await _repository.register(name, firebaseAuth.user!.uid);
 
-      if (firebaseAuth.user != null) {
+      if (firebaseAuth.user != null && F.appFlavor != Flavor.dev) {
         await firebaseAuth.user!.sendEmailVerification();
       }
     } on FirebaseAuthException catch (e, s) {
@@ -72,8 +73,10 @@ class AuthServicesImpl implements AuthService {
         );
       }
 
-      if (!firebaseAuth.user!.emailVerified) {
-        throw UnverifiedEmailException();
+      if (F.appFlavor != Flavor.dev) {
+        if (!firebaseAuth.user!.emailVerified) {
+          throw UnverifiedEmailException();
+        }
       }
 
       final accessToken = await _repository.login(firebaseAuth.user!.uid);

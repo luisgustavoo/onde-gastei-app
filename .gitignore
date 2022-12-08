@@ -51,3 +51,4 @@ app.*.map.json
 
 .tmp
 assets.tmp.zip
+.firebase/
