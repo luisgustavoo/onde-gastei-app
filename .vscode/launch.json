@@ -27,11 +27,6 @@
             ]
         },
         {
-            "name": "onde_gastei_app",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
             "name": "onde_gastei_app (test mode)",
             "request": "launch",
             "type": "dart",
@@ -59,7 +54,13 @@
             "name": "onde_gastei_app (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "args": [
+                "-t",
+                "lib/main_prod.dart",
+                "--flavor",
+                "prod",
+            ]
         }
     ]
 }

@@ -45,7 +45,7 @@ import 'package:onde_gastei_app/app/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -278,9 +278,15 @@ class App extends StatelessWidget {
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
+          // debugShowMaterialGrid: true,
+
           title: UiConfig.title,
           initialRoute: SplashPage.router,
-
+          // home: _flavorBanner(
+          //   child: SplashPage(
+          //     userController: context.read(),
+          //   ),
+          // ),
           theme: UiConfig.themeLight,
           // builder: asuka.builder,
           navigatorKey: OndeGasteiNavigator.navigatorKey,

@@ -7,7 +7,6 @@ import 'package:onde_gastei_app/app/core/local_storages/local_security_storage.d
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/core/rest_client/rest_client.dart';
-import 'package:onde_gastei_app/app/core/rest_client/rest_client_exception.dart';
 
 class AuthInterceptor extends Interceptor {
   AuthInterceptor({
@@ -112,43 +111,31 @@ class AuthInterceptor extends Interceptor {
   }
 
   Future<void> _refreshToken() async {
-    await _localSecurityStorage
-        .read(Constants.refreshTokenKey)
-        .then((refreshToken) async {
-      await _restClient.auth().put<Map<String, dynamic>>(
+    try {
+      final refreshToken =
+          await _localSecurityStorage.read(Constants.refreshTokenKey);
+
+      final refreshTokenResult =
+          await _restClient.auth().put<Map<String, dynamic>>(
         '/auth/refresh',
         data: <String, dynamic>{'refresh_token': refreshToken},
-      ).then((refreshTokenResult) async {
-        if (refreshTokenResult.data != null) {
-          await _localSecurityStorage.write(
-            Constants.refreshTokenKey,
-            refreshTokenResult.data!['refresh_token'].toString(),
-          );
-          await _localStorage.write(
-            Constants.accessTokenKey,
-            refreshTokenResult.data!['access_token'].toString(),
-          );
-        }
-      }).catchError((dynamic error) async {
-        if (error is RestClientException) {
-          _log.error(
-            'Erro ao atualizar refresh token',
-            error.error,
-          );
-        }
-        await _localSecurityStorage.clear();
-        await _localStorage.logout();
-      });
-    }).catchError((dynamic error) async {
-      if (error is RestClientException) {
-        _log.error(
-          'Erro ao buscar Access Token para atualizar Refresh token',
-          error.error,
+      );
+
+      if (refreshTokenResult.data != null) {
+        await _localSecurityStorage.write(
+          Constants.refreshTokenKey,
+          refreshTokenResult.data!['refresh_token'].toString(),
+        );
+        await _localStorage.write(
+          Constants.accessTokenKey,
+          refreshTokenResult.data!['access_token'].toString(),
         );
       }
+    } on Exception catch (e, s) {
+      _log.error('Erro ao atualizar refresh token', e, s);
       await _localSecurityStorage.clear();
       await _localStorage.logout();
-    });
+    }
   }
 
   Future<void> _retryRequest(
@@ -180,6 +167,11 @@ class AuthInterceptor extends Interceptor {
     } on DioError catch (e, s) {
       _log.error('Erro ao refazer request', e, s);
       handler.reject(e);
+      await _teste();
     }
+  }
+
+  Future<void> _teste() {
+    return Future.value();
   }
 }

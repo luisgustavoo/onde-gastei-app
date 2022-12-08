@@ -11,9 +11,10 @@ import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_imp
 import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({required AuthController authController, Key? key})
-      : _authController = authController,
-        super(key: key);
+  const RegisterPage({
+    required AuthController authController,
+    super.key,
+  }) : _authController = authController;
 
   static const String router = '/register';
 

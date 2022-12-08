@@ -7,8 +7,8 @@ class ExpensesListTile extends StatelessWidget {
   const ExpensesListTile({
     required this.expenseModel,
     required this.onTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ExpenseModel expenseModel;
   final VoidCallback onTap;

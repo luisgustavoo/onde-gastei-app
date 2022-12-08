@@ -19,8 +19,8 @@ class AppPage extends StatefulWidget {
     required this.homeController,
     required this.expensesController,
     required this.categoriesController,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   static const router = '/app';
 
   final UserController userController;

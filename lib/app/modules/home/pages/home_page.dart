@@ -25,8 +25,8 @@ class HomePage extends StatefulWidget {
     required this.homeController,
     required this.expensesController,
     required this.dateFilter,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const router = '/home';
   final HomeController homeController;

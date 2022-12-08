@@ -7,8 +7,8 @@ class Indicator extends StatelessWidget {
     required this.isSquare,
     this.size = 16,
     this.textColor = const Color(0xff505050),
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Color color;
   final String text;

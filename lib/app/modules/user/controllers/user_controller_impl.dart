@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
+import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/local_storages/local_storage.dart';
 import 'package:onde_gastei_app/app/core/logs/log.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
@@ -74,7 +75,8 @@ class UserControllerImpl extends ChangeNotifier implements UserController {
   @override
   Future<UserModel?> getLocalUser() async {
     try {
-      final localUser = await _localStorage.read<String>('user');
+      final localUser =
+          await _localStorage.read<String>(Constants.localUserKey);
 
       if (localUser != null && localUser.isNotEmpty) {
         return user =
