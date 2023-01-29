@@ -27,12 +27,4 @@ class Environments {
       await dotenv.load();
     }
   }
-
-  static Future<void> getTheme() async {
-    if (kReleaseMode) {
-      await FirebaseRemoteConfig.instance.fetchAndActivate();
-    } else {
-      await dotenv.load();
-    }
-  }
 }

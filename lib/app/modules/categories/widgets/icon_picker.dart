@@ -2051,7 +2051,7 @@ class IconPicker {
     Icons.wallet,
     Icons.water_drop,
     Icons.waving_hand,
-    Icons.whatsapp,
+    // Icons.whatsapp,
     Icons.whatshot,
     Icons.woman,
     Icons.workspace_premium,
