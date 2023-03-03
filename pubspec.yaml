@@ -74,7 +74,9 @@ dev_dependencies:
 
 dependency_overrides: 
   # Por causa da versão ^2.1.5 do flutter_flavorizr
-  image: ^3.2.2
+  # image: ^3.2.2
+  # Por causa da versão ^0.12.0 do flutter_launcher_icons
+  image: ^4.0.15
   # Por causa do flutter_localizations
   intl: ^0.17.0
 
