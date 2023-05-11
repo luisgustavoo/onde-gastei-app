@@ -42,10 +42,10 @@ class UiConfig {
           backgroundColor: Constants.primaryColor,
         ),
         textTheme: const TextTheme(
-          bodyText2: TextStyle(
+          bodyMedium: TextStyle(
             color: Constants.bodyText2Color,
           ),
-          subtitle1: TextStyle(
+          titleMedium: TextStyle(
             color: Constants.subtitle1Color,
           ),
         ),

@@ -15,10 +15,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.1+8
+version: 1.1.0+9
 
 environment:
-  sdk: ">=2.18.2 <3.0.0"
+  sdk: ">=2.19.0 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -36,26 +36,26 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
-  provider: ^6.0.3
+  provider: ^6.0.5
   # google_fonts: ^3.0.1
-  flutter_screenutil: ^5.5.3+2
-  dio: ^4.0.6
-  flutter_secure_storage: ^4.2.1
-  shared_preferences: ^2.0.15
-  firebase_auth: ^3.6.3
-  firebase_core: ^1.20.1
+  flutter_screenutil: ^5.6.1
+  dio: ^5.0.1
+  flutter_secure_storage: ^8.0.0
+  shared_preferences: ^2.0.18
+  firebase_auth: ^4.2.9
+  firebase_core: ^2.7.0
   flutter_dotenv: ^5.0.2
-  firebase_remote_config: ^2.0.14
-  logger: ^1.1.0
+  firebase_remote_config: ^3.0.13
+  logger: ^1.2.2
   # asuka: ^2.0.0+1
   # validatorless: ^1.2.1
-  intl: ^0.17.0
-  fl_chart: ^0.55.1
+  intl: ^0.18.0
+  fl_chart: ^0.61.0
   grouped_list: ^5.1.2
-  firebase_crashlytics: ^2.8.7
-  firebase_analytics: ^9.3.1
-  firebase_performance: ^0.8.2+2
-  # convenient_test: ^1.2.1
+  firebase_crashlytics: ^3.0.15
+  firebase_analytics: ^10.1.4
+  firebase_performance: ^0.9.0+14
+
   
 
 dev_dependencies:
@@ -65,16 +65,20 @@ dev_dependencies:
     sdk: flutter
 
   mocktail: ^0.3.0
-  # strict: ^1.4.0
-  strict:
-    path: "C:/Dev/Flutter/strict/"
-  flutter_launcher_icons: ^0.9.3
-  flutter_native_splash: ^2.2.7
+  hard_analyser: ^1.0.3
+  flutter_launcher_icons: ^0.12.0
+  flutter_native_splash: ^2.2.18
   flutter_flavorizr: ^2.1.5
-  # convenient_test_dev: ^1.0.0
+
+
 
 dependency_overrides: 
-  archive: ^3.3.0
+  # Por causa da versão ^2.1.5 do flutter_flavorizr
+  # image: ^3.2.2
+  # Por causa da versão ^0.12.0 do flutter_launcher_icons
+  image: ^4.0.15
+  # Por causa do flutter_localizations
+  intl: ^0.17.0
 
 flavorizr:
   flavors:
@@ -84,8 +88,7 @@ flavorizr:
       android:
         applicationId: "br.app.ondegastei.onde_gastei_app.dev"
         firebase:
-          config: "android/app/src/dev/google-services.json"
-          
+          config: ".firebase/dev/google-services.json" 
       ios:
         bundleId: "br.app.ondegastei.onde_gastei_app.dev"
 
@@ -138,48 +141,48 @@ flutter:
       fonts:    
         - asset: fonts/Jost-Black.ttf
           weight: 900
-        - asset: fonts/Jost-BlackItalic.ttf
-          weight: 900
-          style: italic
+        # - asset: fonts/Jost-BlackItalic.ttf
+        #   weight: 900
+        #   style: italic
         - asset: fonts/Jost-Bold.ttf
           weight: 700
-        - asset: fonts/Jost-BoldItalic.ttf
-          weight: 700
-          style: italic
-        - asset: fonts/Jost-ExtraBold.ttf
-          weight: 800
-        - asset: fonts/Jost-ExtraBoldItalic.ttf
-          weight: 800
-          style: italic
-        - asset: fonts/Jost-ExtraLight.ttf
-          weight: 200
-        - asset: fonts/Jost-ExtraLightItalic.ttf
-          weight: 200
-          style: italic
-        - asset: fonts/Jost-Italic.ttf
-          style: italic
-        - asset: fonts/Jost-Light.ttf
-          weight: 300
-        - asset: fonts/Jost-LightItalic.ttf
-          weight: 300
-          style: italic
+        # - asset: fonts/Jost-BoldItalic.ttf
+        #   weight: 700
+        #   style: italic
+        # - asset: fonts/Jost-ExtraBold.ttf
+        #   weight: 800
+        # - asset: fonts/Jost-ExtraBoldItalic.ttf
+        #   weight: 800
+        #   style: italic
+        # - asset: fonts/Jost-ExtraLight.ttf
+        #   weight: 200
+        # - asset: fonts/Jost-ExtraLightItalic.ttf
+        #   weight: 200
+        #   style: italic
+        # - asset: fonts/Jost-Italic.ttf
+        #   style: italic
+        # - asset: fonts/Jost-Light.ttf
+        #   weight: 300
+        # - asset: fonts/Jost-LightItalic.ttf
+          # weight: 300
+          # style: italic
         - asset: fonts/Jost-Medium.ttf
           weight: 500
-        - asset: fonts/Jost-MediumItalic.ttf
-          weight: 500
-          style: italic          
+        # - asset: fonts/Jost-MediumItalic.ttf
+        #   weight: 500
+        #   style: italic          
         - asset: fonts/Jost-Regular.ttf
           weight: 400        
-        - asset: fonts/Jost-SemiBold.ttf
-          weight: 600        
-        - asset: fonts/Jost-SemiBoldItalic.ttf
-          weight: 600        
-          style: italic               
-        - asset: fonts/Jost-Thin.ttf
-          weight: 100           
-        - asset: fonts/Jost-ThinItalic.ttf
-          weight: 100           
-          style: italic          
+        # - asset: fonts/Jost-SemiBold.ttf
+        #   weight: 600        
+        # - asset: fonts/Jost-SemiBoldItalic.ttf
+        #   weight: 600        
+        #   style: italic               
+        # - asset: fonts/Jost-Thin.ttf
+        #   weight: 100           
+        # - asset: fonts/Jost-ThinItalic.ttf
+        #   weight: 100           
+        #   style: italic          
     # - family: Trajan Pro
     #   fonts:
     #     - asset: fonts/TrajanPro.ttf

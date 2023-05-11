@@ -167,11 +167,6 @@ class AuthInterceptor extends Interceptor {
     } on DioError catch (e, s) {
       _log.error('Erro ao refazer request', e, s);
       handler.reject(e);
-      await _teste();
     }
-  }
-
-  Future<void> _teste() {
-    return Future.value();
   }
 }

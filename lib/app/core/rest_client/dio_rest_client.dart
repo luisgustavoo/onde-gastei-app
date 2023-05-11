@@ -31,11 +31,15 @@ class DioRestClient implements RestClient {
 
   final _options = BaseOptions(
     baseUrl: Environments.param('base_url') ?? '',
-    connectTimeout: int.parse(
-      Environments.param('rest_connect_timeout') ?? '0',
+    connectTimeout: Duration(
+      milliseconds: int.parse(
+        Environments.param('rest_connect_timeout') ?? '0',
+      ),
     ),
-    receiveTimeout: int.parse(
-      Environments.param('rest_receive_timeout') ?? '0',
+    receiveTimeout: Duration(
+      milliseconds: int.parse(
+        Environments.param('rest_receive_timeout') ?? '0',
+      ),
     ),
   );
 
