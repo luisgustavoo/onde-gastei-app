@@ -37,6 +37,13 @@
             {
               "client_id": "29411662623-99ar0j4f3veoe3u0pf5di94hqrotitid.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "29411662623-qpj6qphu3dvfopas8428ctimc105pvbv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.app.ondegastei.ondeGasteiApp"
+              }
             }
           ]
         }

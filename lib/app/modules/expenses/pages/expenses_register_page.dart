@@ -446,7 +446,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                             .showSnackBar(snackBar);
                       }
                     },
-                    child: expensesDeleteState == CategoriesDeleteState.loading
+                    child: expensesDeleteState == ExpensesDeleteState.loading
                         ? SizedBox(
                             height: 15.h,
                             width: 15.w,

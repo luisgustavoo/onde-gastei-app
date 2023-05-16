@@ -15,7 +15,6 @@ class ApplicationStartConfig {
 
   Future<void> _firebaseConfig() async {
     await Firebase.initializeApp(
-      name: 'Onde Gastei',
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
