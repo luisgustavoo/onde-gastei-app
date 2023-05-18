@@ -20,7 +20,10 @@ Future<void> buildFlavors(Flavor flavor) async {
   };
 
   runApp(
-    _flavorBanner(child: const App()),
+    _flavorBanner(
+      child: const App(),
+      show: flavor != Flavor.prod,
+    ),
   );
 }
 
@@ -32,9 +35,9 @@ Widget _flavorBanner({
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Banner(
-        location: BannerLocation.topStart,
+        location: BannerLocation.topEnd,
         message: F.name,
-        color: Colors.green.withOpacity(0.6),
+        color: Colors.red,
         textStyle: const TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 12,
