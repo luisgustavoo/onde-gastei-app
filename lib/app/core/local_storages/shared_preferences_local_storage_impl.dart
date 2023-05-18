@@ -38,6 +38,7 @@ class SharedPreferencesLocalStorageImpl implements LocalStorage {
       case bool:
         value = sp.getBool(key);
         return value as T?;
+      // ignore: strict_raw_type
       case List:
         value = sp.getStringList(key);
         return value as T?;
@@ -69,6 +70,7 @@ class SharedPreferencesLocalStorageImpl implements LocalStorage {
       case double:
         await sp.setDouble(key, value as double);
         break;
+      // ignore: strict_raw_type
       case List:
         await sp.setStringList(key, value as List<String>);
         break;

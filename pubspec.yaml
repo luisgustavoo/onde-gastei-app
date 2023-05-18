@@ -65,7 +65,7 @@ dev_dependencies:
     sdk: flutter
 
   mocktail: ^0.3.0
-  hard_analyser: ^1.0.3
+  hard_analyser: ^1.1.0
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.3.0
   flutter_flavorizr: ^2.1.6

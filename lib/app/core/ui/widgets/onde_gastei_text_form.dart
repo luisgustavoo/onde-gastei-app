@@ -34,8 +34,8 @@ class OndeGasteiTextForm extends StatelessWidget {
   final TextInputType textInputType;
   final TextAlign textAlign;
   final List<TextInputFormatter>? inputFormatters;
-  final Function(String)? onChanged;
-  final Function()? onTap;
+  final void Function(String)? onChanged;
+  final void Function()? onTap;
   final bool readOnly;
   final bool enabled;
 
