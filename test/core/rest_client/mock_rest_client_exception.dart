@@ -14,5 +14,5 @@ class MockRestClientException extends Mock implements RestClientException {
   @override
   final int? statusCode;
   @override
-  final RestClientResponse? response;
+  final RestClientResponse<dynamic>? response;
 }

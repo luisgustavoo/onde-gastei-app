@@ -237,7 +237,7 @@ class DioRestClient implements RestClient {
     }
   }
 
-  RestClientResponse _dioErrorConvert(Response? response) {
+  RestClientResponse<dynamic> _dioErrorConvert(Response<dynamic>? response) {
     return RestClientResponse<dynamic>(
       data: response?.data,
       statusCode: response?.statusCode,

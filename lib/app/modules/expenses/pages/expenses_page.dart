@@ -41,9 +41,7 @@ class ExpensesPage extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: OndeGasteiTextForm(
-              onChanged: (description) {
-                expensesController.filterExpensesList(description);
-              },
+              onChanged: expensesController.filterExpensesList,
               label: 'Pesquisar',
               prefixIcon: const Icon(Icons.search),
             ),
