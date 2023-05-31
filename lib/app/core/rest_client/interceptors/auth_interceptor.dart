@@ -72,7 +72,9 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onResponse(
-      Response<dynamic> response, ResponseInterceptorHandler handler,) {
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
     //super.onResponse(response, handler);
 
     if (!kReleaseMode) {
