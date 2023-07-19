@@ -75,7 +75,7 @@ class DioRestClient implements RestClient {
         statusCode: response.statusCode,
         statusMessage: response.statusMessage,
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw RestClientException(
         error: e.error,
         message: e.response?.statusMessage,
@@ -103,7 +103,7 @@ class DioRestClient implements RestClient {
         statusCode: response.statusCode,
         statusMessage: response.statusMessage,
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw RestClientException(
         error: e.error,
         message: e.response?.statusMessage,
@@ -133,7 +133,7 @@ class DioRestClient implements RestClient {
         statusCode: response.statusCode,
         statusMessage: response.statusMessage,
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw RestClientException(
         error: e.error,
         message: e.response?.statusMessage,
@@ -163,7 +163,7 @@ class DioRestClient implements RestClient {
         statusCode: response.statusCode,
         statusMessage: response.statusMessage,
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw RestClientException(
         error: e.error,
         message: e.response?.statusMessage,
@@ -193,7 +193,7 @@ class DioRestClient implements RestClient {
         statusCode: response.statusCode,
         statusMessage: response.statusMessage,
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw RestClientException(
         error: e.error,
         message: e.response?.statusMessage,
@@ -227,7 +227,7 @@ class DioRestClient implements RestClient {
         statusCode: response.statusCode,
         statusMessage: response.statusMessage,
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw RestClientException(
         error: e.error,
         message: e.response?.statusMessage,
