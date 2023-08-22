@@ -39,10 +39,46 @@
               "client_type": 3
             },
             {
-              "client_id": "178710813676-k1p44lctteervrpu52phukrgvoffnvl3.apps.googleusercontent.com",
+              "client_id": "178710813676-ifa934c7tlaukonkeuorfd49di40j5uc.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "br.app.ondegastei.ondeGasteiApp"
+                "bundle_id": "br.app.ondegastei.ondegasteiapp.ondeGasteiApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178710813676:android:6c3523c7323fdb6a84bec9",
+        "android_client_info": {
+          "package_name": "br.app.ondegastei.onde_gastei_app.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "178710813676-7d1cc1m954nlak6lf3r0d6fbdkc8u7nj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj22RLL3gML9sg4USTTPhoHso09J8VkPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "178710813676-7d1cc1m954nlak6lf3r0d6fbdkc8u7nj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "178710813676-ifa934c7tlaukonkeuorfd49di40j5uc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.app.ondegastei.ondegasteiapp.ondeGasteiApp"
               }
             }
           ]

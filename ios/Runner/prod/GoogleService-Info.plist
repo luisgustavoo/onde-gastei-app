@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>29411662623-6ifjv58u86cu4lahq3psuh82n2jr8gsp.apps.googleusercontent.com</string>
+	<string>178710813676-k1p44lctteervrpu52phukrgvoffnvl3.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.29411662623-6ifjv58u86cu4lahq3psuh82n2jr8gsp</string>
+	<string>com.googleusercontent.apps.178710813676-k1p44lctteervrpu52phukrgvoffnvl3</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>29411662623-ut08bnrsvs9e8f3mqj4bdv8uq447fq0a.apps.googleusercontent.com</string>
+	<string>178710813676-or7vqevg0jjoh9no700o3d6johu52lnd.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBs_ZNoJGADgn5BNU2uRtgbDBP8d7aWMpk</string>
+	<string>AIzaSyAgcwfBxmtk4_5SXD1dDmKQB9otB7cwExs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>29411662623</string>
+	<string>178710813676</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>br.app.ondegastei.ondeGasteiApp.Dev</string>
+	<string>br.app.ondegastei.ondeGasteiApp</string>
 	<key>PROJECT_ID</key>
-	<string>onde-gaste-dev</string>
+	<string>onde-gastei-d5360</string>
 	<key>STORAGE_BUCKET</key>
-	<string>onde-gaste-dev.appspot.com</string>
+	<string>onde-gastei-d5360.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:29411662623:ios:88eb014ac2492ddd282e2a</string>
+	<string>1:178710813676:ios:04941146d3d92f6984bec9</string>
 </dict>
 </plist>
