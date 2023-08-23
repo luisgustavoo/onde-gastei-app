@@ -2,7 +2,7 @@ name: onde_gastei_app
 description: Aplicativo para registrar despesas pessoais.
 publish_to: 'none' 
 
-version: 1.1.0+9
+version: 1.1.1+10
 
 environment:
   sdk: ">=3.0.3 <4.0.0"
