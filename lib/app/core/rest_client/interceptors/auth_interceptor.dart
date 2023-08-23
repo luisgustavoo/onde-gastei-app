@@ -43,10 +43,10 @@ class AuthInterceptor extends Interceptor {
         //logout
 
         handler.reject(
-          DioError(
+          DioException(
             requestOptions: options,
             error: 'Expired Token',
-            type: DioErrorType.cancel,
+            type: DioExceptionType.cancel,
           ),
         );
       }
@@ -71,7 +71,10 @@ class AuthInterceptor extends Interceptor {
   }
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
     //super.onResponse(response, handler);
 
     if (!kReleaseMode) {
@@ -86,7 +89,10 @@ class AuthInterceptor extends Interceptor {
   }
 
   @override
-  Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
     //super.onError(err, handler);
 
     final statusCode = err.response?.statusCode;
@@ -139,7 +145,7 @@ class AuthInterceptor extends Interceptor {
   }
 
   Future<void> _retryRequest(
-    DioError err,
+    DioException err,
     ErrorInterceptorHandler handler,
   ) async {
     _log
@@ -164,7 +170,7 @@ class AuthInterceptor extends Interceptor {
           statusMessage: response.statusMessage,
         ),
       );
-    } on DioError catch (e, s) {
+    } on DioException catch (e, s) {
       _log.error('Erro ao refazer request', e, s);
       handler.reject(e);
     }

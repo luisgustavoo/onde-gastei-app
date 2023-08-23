@@ -47,6 +47,10 @@
             "type": "dart",
             "flutterMode": "profile",
             "args": [
+                "-t",
+                "lib/main_dev.dart",
+                "--flavor",
+                "dev",
                 "--cache-sksl --purge-persistent-cache"
             ]
         },

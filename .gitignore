@@ -53,3 +53,5 @@ app.*.map.json
 assets.tmp.zip
 .firebase/
 .fvm/flutter_sdk
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist

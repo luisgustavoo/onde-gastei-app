@@ -18,21 +18,21 @@ class LogImpl implements Log {
 
   @override
   void debug(Object message, [Object? error, StackTrace? stackTrace]) {
-    log.d(message, error, stackTrace);
+    log.d(message, error: error, stackTrace: stackTrace);
   }
 
   @override
   void error(Object message, [Object? error, StackTrace? stackTrace]) {
-    log.e(message, error, stackTrace);
+    log.e(message, error: error, stackTrace: stackTrace);
   }
 
   @override
   void info(Object message, [Object? error, StackTrace? stackTrace]) {
-    log.i(message, error, stackTrace);
+    log.i(message, error: error, stackTrace: stackTrace);
   }
 
   @override
   void warning(Object message, [Object? error, StackTrace? stackTrace]) {
-    log.w(message, error, stackTrace);
+    log.w(message, error: error, stackTrace: stackTrace);
   }
 }

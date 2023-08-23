@@ -41,9 +41,8 @@ Widget createSplashPage() {
         routes: {
           SplashPage.router: (context) =>
               SplashPage(userController: mockUserControllerImpl),
-          AppPage.router: (context) => const Scaffold(body: Text('App Page')),
-          LoginPage.router: (context) =>
-              const Scaffold(body: Text('Login Page')),
+          AppPage.router: (context) => const Text('App Page'),
+          LoginPage.router: (context) => const Text('Login Page'),
         },
       ),
     ),
@@ -83,9 +82,13 @@ void main() {
         ),
       ).called(1);
 
-      final appPageFinder = find.byType(Scaffold);
-      final messageFinder = find.text('App Page');
-      find.ancestor(of: appPageFinder, matching: messageFinder);
+      // final appPageFinder = find.byType(Scaffold);
+
+      // final messageFinder = find.text('App Page');
+      expect(
+        find.text('App Page'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Test if splash page navigate to LoginPage', (tester) async {
@@ -97,12 +100,7 @@ void main() {
       ).thenAnswer((_) async => _);
 
       when(() => mockUserControllerImpl.getLocalUser()).thenAnswer(
-        (_) async => const UserModel(
-          userId: 1,
-          name: 'Test',
-          email: 'test@domain.com',
-          firebaseUserId: '123456',
-        ),
+        (_) async => null,
       );
 
       await tester.pumpWidget(createSplashPage());
@@ -116,7 +114,10 @@ void main() {
 
       final appPageFinder = find.byType(Scaffold);
       final messageFinder = find.text('Login Page');
-      find.ancestor(of: appPageFinder, matching: messageFinder);
+      expect(
+        find.descendant(of: appPageFinder, matching: messageFinder),
+        findsOneWidget,
+      );
     });
   });
 }
