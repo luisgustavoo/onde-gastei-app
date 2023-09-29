@@ -1,12 +1,11 @@
 name: onde_gastei_app
 description: Aplicativo para registrar despesas pessoais.
-publish_to: 'none' 
+publish_to: "none"
 
 version: 1.1.1+10
 
 environment:
   sdk: ">=3.0.3 <4.0.0"
-
 
 dependencies:
   flutter:
@@ -14,28 +13,26 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  cupertino_icons: ^1.0.5
+  cupertino_icons: ^1.0.6
   provider: ^6.0.5
   # google_fonts: ^3.0.1
-  flutter_screenutil: ^5.9.0
-  dio: ^5.3.2
-  flutter_secure_storage: ^8.0.0
-  shared_preferences: ^2.2.0
-  firebase_auth: ^4.7.3
-  firebase_core: ^2.15.1
+  flutter_screenutil: ">=5.9.0"
+  dio: ^5.3.3
+  flutter_secure_storage: ^9.0.0
+  shared_preferences: ^2.2.1
+  firebase_auth: ^4.10.0
+  firebase_core: ^2.16.0
   flutter_dotenv: ^5.1.0
-  firebase_remote_config: ^4.2.5
-  logger: ^2.0.1
+  firebase_remote_config: ^4.2.6
+  logger: ^2.0.2+1
   # asuka: ^2.0.0+1
   # validatorless: ^1.2.1
   intl: ^0.18.1
   fl_chart: ^0.63.0
   grouped_list: ^5.1.2
-  firebase_crashlytics: ^3.3.5
-  firebase_analytics: ^10.4.5
-  firebase_performance: ^0.9.2+5
-
-  
+  firebase_crashlytics: ^3.3.6
+  firebase_analytics: ^10.5.0
+  firebase_performance: ^0.9.2+6
 
 dev_dependencies:
   integration_test:
@@ -44,52 +41,14 @@ dev_dependencies:
     sdk: flutter
 
   mocktail: ^0.3.0
-  hard_analyser: ^1.2.0
+  hard_analyser: ^1.5.0
   flutter_launcher_icons: ^0.13.1
-  flutter_native_splash: ^2.3.1
+  flutter_native_splash: ^2.3.2
   flutter_flavorizr: ^2.2.1
 
-
-
-dependency_overrides: 
+dependency_overrides:
   # Por causa do flutter_localizations
   intl: ^0.18.0
-
-flavorizr:
-  flavors:
-    dev:
-      app:
-        name: "Dev"
-      android:
-        applicationId: "br.app.ondegastei.onde_gastei_app.dev"
-        icon: "assets/images/icon_dev.png"
-        launchScreen: "assets/images/splash.png"
-        firebase:
-          config: ".firebase/dev/google-services.json" 
-      ios:
-        bundleId: "br.app.ondegastei.ondeGasteiApp.Dev"
-        icon: "assets/images/icon_ios_dev.png"
-        launchScreen: "assets/images/splash.png"
-        firebase:
-          config: ".firebase/dev/GoogleService-Info.plist"         
-
-
-    prod:
-      app:
-        name: "Onde Gastei"
-      android:
-        applicationId: "br.app.ondegastei.onde_gastei_app"
-        icon: "assets/images/icon.png"
-        launchScreen: "assets/images/splash.png"
-        firebase:
-          config: ".firebase/prod/google-services.json" 
-      ios:
-        bundleId: "br.app.ondegastei.ondeGasteiApp"
-        icon: "assets/images/icon_ios.png"
-        launchScreen: "assets/images/splash.png"
-        firebase:
-          config: ".firebase/prod/GoogleService-Info.plist" 
-
 
 flutter:
   uses-material-design: true
@@ -100,14 +59,12 @@ flutter:
 
   fonts:
     - family: Jost
-      fonts:    
+      fonts:
         - asset: fonts/Jost-Black.ttf
           weight: 900
         - asset: fonts/Jost-Bold.ttf
           weight: 700
         - asset: fonts/Jost-Medium.ttf
-          weight: 500      
+          weight: 500
         - asset: fonts/Jost-Regular.ttf
-          weight: 400        
-
-
+          weight: 400
