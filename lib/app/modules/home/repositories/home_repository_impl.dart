@@ -34,7 +34,7 @@ class HomeRepositoryImpl implements HomeRepository {
         '/users/$userId/total-expenses/categories',
         queryParameters: <String, dynamic>{
           'initial_date': initialDate,
-          'final_date': finalDate
+          'final_date': finalDate,
         },
       );
 
@@ -72,7 +72,7 @@ class HomeRepositoryImpl implements HomeRepository {
         '/users/$userId/percentage/categories',
         queryParameters: <String, dynamic>{
           'initial_date': initialDate,
-          'final_date': finalDate
+          'final_date': finalDate,
         },
       );
 

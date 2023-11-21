@@ -62,7 +62,7 @@ void main() {
         'data': expenseModel.date.toIso8601String(),
         'local': expenseModel.local,
         'id_usuario': expenseModel.userId,
-        'id_categoria': expenseModel.category.id
+        'id_categoria': expenseModel.category.id,
       };
 
       when(
@@ -90,7 +90,7 @@ void main() {
         'data': expenseModel.date.toIso8601String(),
         'local': expenseModel.local,
         'id_usuario': expenseModel.userId,
-        'id_categoria': expenseModel.category.id
+        'id_categoria': expenseModel.category.id,
       };
 
       when(

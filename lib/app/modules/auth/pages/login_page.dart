@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                     _buildForm(context, authControllerState),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

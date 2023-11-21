@@ -2067,7 +2067,7 @@ class IconPicker {
     Icons.star_outline,
     Icons.star_purple500,
     Icons.toggle_off,
-    Icons.toggle_on
+    Icons.toggle_on,
   ];
 
   // static const List<IconData> icons = [

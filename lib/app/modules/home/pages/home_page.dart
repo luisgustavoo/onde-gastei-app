@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(
                               fontSize: 17.sp,
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -172,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                                               expensesCategories.category.id,
                                           'category_name': expensesCategories
                                               .category.description,
-                                          'date_filter': widget.dateFilter
+                                          'date_filter': widget.dateFilter,
                                         },
                                       );
                                     },
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             );
@@ -206,9 +206,9 @@ class _HomePageState extends State<HomePage> {
                       homeController,
                       widget.dateFilter,
                     ),
-                    _buildChartSubtitle(homeController)
+                    _buildChartSubtitle(homeController),
                   ],
-                )
+                ),
               ],
             );
           },
@@ -322,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 20.sp, fontWeight: FontWeight.bold,
                     // fontFamily: 'Jost',
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -484,14 +484,14 @@ class _HomePageState extends State<HomePage> {
                                           userId: user.userId,
                                           initialDate: dateFilter.initialDate,
                                           finalDate: dateFilter.finalDate,
-                                        )
+                                        ),
                                       ];
 
                                       await Future.wait(futures);
                                     },
                             );
                           },
-                        )
+                        ),
                       ],
                     ),
                   ),

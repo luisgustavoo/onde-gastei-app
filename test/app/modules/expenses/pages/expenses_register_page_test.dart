@@ -111,7 +111,7 @@ void main() {
               return ExpensesRegisterPage(
                 expensesController: mockExpensesControllerImpl,
               );
-            }
+            },
           },
         ),
       ),

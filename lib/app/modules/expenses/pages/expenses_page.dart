@@ -160,7 +160,7 @@ class ExpensesPage extends StatelessWidget {
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       );

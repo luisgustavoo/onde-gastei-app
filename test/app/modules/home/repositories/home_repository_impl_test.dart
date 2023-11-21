@@ -67,7 +67,7 @@ void main() {
           any(),
           queryParameters: <String, dynamic>{
             'initial_date': initialDate,
-            'final_date': finalDate
+            'final_date': finalDate,
           },
         ),
       ).thenAnswer((_) async => mockResponse);
@@ -92,7 +92,7 @@ void main() {
           any(),
           queryParameters: <String, dynamic>{
             'initial_date': initialDate,
-            'final_date': finalDate
+            'final_date': finalDate,
           },
         ),
       ).thenAnswer((_) async => mockResponse);
@@ -114,7 +114,7 @@ void main() {
           any(),
           queryParameters: <String, dynamic>{
             'initial_date': initialDate,
-            'final_date': finalDate
+            'final_date': finalDate,
           },
         ),
       ).thenThrow(RestClientException(error: 'Error'));
@@ -155,7 +155,7 @@ void main() {
           any(),
           queryParameters: <String, dynamic>{
             'initial_date': initialDate,
-            'final_date': finalDate
+            'final_date': finalDate,
           },
         ),
       ).thenAnswer((_) async => mockResponse);
@@ -182,7 +182,7 @@ void main() {
           any(),
           queryParameters: <String, dynamic>{
             'initial_date': initialDate,
-            'final_date': finalDate
+            'final_date': finalDate,
           },
         ),
       ).thenAnswer((_) async => mockResponse);
@@ -208,7 +208,7 @@ void main() {
           any(),
           queryParameters: <String, dynamic>{
             'initial_date': initialDate,
-            'final_date': finalDate
+            'final_date': finalDate,
           },
         ),
       ).thenThrow(RestClientException(error: 'Error'));

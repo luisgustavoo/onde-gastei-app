@@ -50,7 +50,7 @@ void main() {
         'descricao': category.description,
         'codigo_icone': category.iconCode,
         'codigo_cor': category.colorCode,
-        'id_usuario': category.userId
+        'id_usuario': category.userId,
       };
 
       when(() => restClient.post(any(), data: mockData))
@@ -76,7 +76,7 @@ void main() {
         'descricao': category.description,
         'codigo_icone': category.iconCode,
         'codigo_cor': category.colorCode,
-        'id_usuario': category.userId
+        'id_usuario': category.userId,
       };
 
       when(() => restClient.post(any(), data: mockData))
@@ -101,7 +101,7 @@ void main() {
       final mockData = <String, dynamic>{
         'descricao': categoryInputModel.description,
         'codigo_icone': categoryInputModel.iconCode,
-        'codigo_cor': categoryInputModel.colorCode
+        'codigo_cor': categoryInputModel.colorCode,
       };
 
       when(() => restClient.put(any(), data: mockData))
@@ -123,7 +123,7 @@ void main() {
       final mockData = <String, dynamic>{
         'descricao': categoryInputModel.description,
         'codigo_icone': categoryInputModel.iconCode,
-        'codigo_cor': categoryInputModel.colorCode
+        'codigo_cor': categoryInputModel.colorCode,
       };
 
       when(() => restClient.put(any(), data: mockData))

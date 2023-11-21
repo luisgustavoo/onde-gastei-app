@@ -101,14 +101,14 @@ class _UserPageState extends State<UserPage> {
                             'Sair',
                             style: TextStyle(color: Colors.red),
                           ),
-                        )
+                        ),
                       ],
                     );
                   },
                 );
               },
               icon: const Icon(Icons.logout_outlined),
-            )
+            ),
           ],
         ),
         body: Padding(
@@ -253,9 +253,8 @@ class _UserPageState extends State<UserPage> {
 
                                       widget.userController.logout();
                                     } on Failure {
-                                      if (Navigator.of(dialogContext)
-                                          .canPop()) {
-                                        Navigator.of(dialogContext).pop();
+                                      if (navigatorStateDialog.canPop()) {
+                                        navigatorStateDialog.pop();
                                       }
 
                                       final snackBar =

@@ -89,10 +89,9 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
       key: _scaffoldMessagedKey,
       child: IgnorePointer(
         ignoring: categoriesControllerState == CategoriesState.loading,
-        child: WillPopScope(
-          onWillPop: () async {
+        child: PopScope(
+          onPopInvoked: (didPop) {
             Navigator.of(context).pop(_edited);
-            return _edited;
           },
           child: Scaffold(
             appBar: AppBar(
@@ -143,7 +142,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                         context,
                         categoriesControllerState,
                         user,
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -226,8 +225,8 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                         _scaffoldMessagedKey.currentState!
                             .showSnackBar(snackBar);
                       } on Failure {
-                        if (Navigator.of(dialogContext).canPop()) {
-                          Navigator.of(dialogContext).pop(_edited);
+                        if (navigatorStateDialog.canPop()) {
+                          navigatorStateDialog.pop(_edited);
                         }
 
                         final snackBar = OndeGasteiSnackBar.buildSnackBar(
@@ -257,7 +256,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                             'Deletar',
                             style: TextStyle(color: Colors.red),
                           ),
-                  )
+                  ),
                 ],
               );
             },

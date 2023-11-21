@@ -58,7 +58,7 @@ class CategoriesPage extends StatelessWidget {
                 size: 30.sp,
               ),
               splashRadius: 20.r,
-            )
+            ),
           ],
         ),
         body: Consumer<CategoriesControllerImpl>(

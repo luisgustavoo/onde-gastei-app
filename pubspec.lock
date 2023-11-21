@@ -435,10 +435,10 @@ packages:
     dependency: "direct dev"
     description:
       name: hard_analyser
-      sha256: e95e5158f355cd319aa0b4d7188f2138b228841d0c30691c8d17964ef7ea6ded
+      sha256: "64d47de043a98956b931226fcc5b0c641b01e7f1a2395a1cf656a872c12b9f36"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.0"
+    version: "1.6.1"
   html:
     dependency: transitive
     description:

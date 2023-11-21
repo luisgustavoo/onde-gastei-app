@@ -55,9 +55,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
   void initState() {
     super.initState();
     descriptionController = TextEditingController(
-      text: widget._expenseModel != null
-          ? widget._expenseModel!.description
-          : null,
+      text: widget._expenseModel?.description,
     );
 
     dateController = TextEditingController(
@@ -109,10 +107,9 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
 
     return ScaffoldMessenger(
       key: _scaffoldMessagedKey,
-      child: WillPopScope(
-        onWillPop: () async {
+      child: PopScope(
+        onPopInvoked: (didPop) {
           Navigator.of(context).pop(_edited);
-          return _edited;
         },
         child: Scaffold(
           appBar: AppBar(
@@ -370,7 +367,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                         key: const Key(
                           'register_button_key_expenses_register_page',
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -459,7 +456,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                             'Deletar',
                             style: TextStyle(color: Colors.red),
                           ),
-                  )
+                  ),
                 ],
               );
             },

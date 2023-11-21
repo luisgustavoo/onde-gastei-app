@@ -155,7 +155,7 @@ void main() {
         (_) async => MockRestClientResponse(
           statusCode: 200,
           data: <String, dynamic>{
-            'message': 'Nome do usuário atualizado com sucesso'
+            'message': 'Nome do usuário atualizado com sucesso',
           },
         ),
       );

@@ -101,7 +101,12 @@ void main() {
     test('Should find categories with success', () async {
       //Arrange
       const categoriesExpected = [
-        CategoryModel(id: 1, description: 'Test', iconCode: 1, colorCode: 1)
+        CategoryModel(
+          id: 1,
+          description: 'Test',
+          iconCode: 1,
+          colorCode: 1,
+        ),
       ];
       when(() => repository.findCategories(any()))
           .thenAnswer((_) async => categoriesExpected);

@@ -119,19 +119,21 @@ class _RegisterPageState extends State<RegisterPage> {
               label: 'Confirmar senha',
               obscureText: true,
               prefixIcon: const Icon(Icons.lock_outline),
-              validator: Validators.multiple([
-                Validators.required('Confirmar senha obrigatório'),
-                Validators.compare(
-                  passwordController,
-                  'Senha e confirmar senha não são iguais',
-                )
-              ]),
+              validator: Validators.multiple(
+                [
+                  Validators.required('Confirmar senha obrigatório'),
+                  Validators.compare(
+                    passwordController,
+                    'Senha e confirmar senha não são iguais',
+                  ),
+                ],
+              ),
             ),
           ),
           SizedBox(
             height: 32.h,
           ),
-          _buildOndeGasteiButton(context, authControllerState)
+          _buildOndeGasteiButton(context, authControllerState),
         ],
       ),
     );

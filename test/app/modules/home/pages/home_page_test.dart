@@ -342,18 +342,20 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(
-        () => Future.wait([
-          mockHomeControllerImpl.fetchHomeData(
-            userId: any(named: 'userId'),
-            initialDate: any(named: 'initialDate'),
-            finalDate: any(named: 'finalDate'),
-          ),
-          mockExpensesControllerImpl.findExpensesByPeriod(
-            userId: any(named: 'userId'),
-            initialDate: any(named: 'initialDate'),
-            finalDate: any(named: 'finalDate'),
-          )
-        ]),
+        () => Future.wait(
+          [
+            mockHomeControllerImpl.fetchHomeData(
+              userId: any(named: 'userId'),
+              initialDate: any(named: 'initialDate'),
+              finalDate: any(named: 'finalDate'),
+            ),
+            mockExpensesControllerImpl.findExpensesByPeriod(
+              userId: any(named: 'userId'),
+              initialDate: any(named: 'initialDate'),
+              finalDate: any(named: 'finalDate'),
+            ),
+          ],
+        ),
       ).called(1);
     });
   });
