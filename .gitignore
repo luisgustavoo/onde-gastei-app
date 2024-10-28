@@ -55,3 +55,4 @@ assets.tmp.zip
 .fvm/flutter_sdk
 /android/app/google-services.json
 /ios/Runner/GoogleService-Info.plist
+.key/
