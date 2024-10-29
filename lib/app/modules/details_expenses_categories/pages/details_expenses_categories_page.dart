@@ -128,7 +128,7 @@ class _DetailsExpensesCategoriesPageState
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
-                    )
+                    ),
                   ],
                 ),
               );

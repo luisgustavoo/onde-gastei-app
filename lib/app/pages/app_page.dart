@@ -82,34 +82,28 @@ class _AppPageState extends State<AppPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 600),
-        transitionBuilder: (child, animation) {
-          return ScaleTransition(scale: animation, child: child);
-        },
-        child: IndexedStack(
-          key: ValueKey<int>(currentIndex),
-          index: currentIndex,
-          children: [
-            HomePage(
-              homeController: widget.homeController,
-              expensesController: widget.expensesController,
-              dateFilter: dateFilter,
-            ),
-            ExpensesPage(
-              expensesController: widget.expensesController,
-              homeController: widget.homeController,
-              dateFilter: dateFilter,
-            ),
-            CategoriesPage(
-              categoriesController: widget.categoriesController,
-              expensesController: widget.expensesController,
-              homeController: widget.homeController,
-              dateFilter: dateFilter,
-            ),
-            UserPage(userController: widget.userController),
-          ],
-        ),
+      body: IndexedStack(
+        key: ValueKey<int>(currentIndex),
+        index: currentIndex,
+        children: [
+          HomePage(
+            homeController: widget.homeController,
+            expensesController: widget.expensesController,
+            dateFilter: dateFilter,
+          ),
+          ExpensesPage(
+            expensesController: widget.expensesController,
+            homeController: widget.homeController,
+            dateFilter: dateFilter,
+          ),
+          CategoriesPage(
+            categoriesController: widget.categoriesController,
+            expensesController: widget.expensesController,
+            homeController: widget.homeController,
+            dateFilter: dateFilter,
+          ),
+          UserPage(userController: widget.userController),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

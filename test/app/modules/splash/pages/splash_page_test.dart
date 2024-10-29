@@ -41,8 +41,16 @@ Widget createSplashPage() {
         routes: {
           SplashPage.router: (context) =>
               SplashPage(userController: mockUserControllerImpl),
-          AppPage.router: (context) => const Text('App Page'),
-          LoginPage.router: (context) => const Text('Login Page'),
+          AppPage.router: (context) {
+            return const Scaffold(
+              body: Text('App Page'),
+            );
+          },
+          LoginPage.router: (context) {
+            return const Scaffold(
+              body: Text('Login Page'),
+            );
+          },
         },
       ),
     ),
@@ -56,7 +64,7 @@ void main() {
   });
 
   group('Group test splash page', () {
-    testWidgets('Test if login page shows up', (tester) async {
+    testWidgets('Test if app page shows up', (tester) async {
       when(
         () => mockNavigatorObserver.didReplace(
           oldRoute: any(named: 'oldRoute'),
@@ -85,6 +93,7 @@ void main() {
       // final appPageFinder = find.byType(Scaffold);
 
       // final messageFinder = find.text('App Page');
+      await tester.pumpAndSettle();
       expect(
         find.text('App Page'),
         findsOneWidget,
@@ -114,6 +123,7 @@ void main() {
 
       final appPageFinder = find.byType(Scaffold);
       final messageFinder = find.text('Login Page');
+      await tester.pumpAndSettle();
       expect(
         find.descendant(of: appPageFinder, matching: messageFinder),
         findsOneWidget,
