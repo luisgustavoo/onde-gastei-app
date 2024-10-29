@@ -39,6 +39,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       key: _scaffoldMessengerKey,
       child: Scaffold(
         appBar: AppBar(
+          forceMaterialTransparency: true,
           leading: IconButton(
             splashRadius: 20.r,
             icon: const Icon(Icons.close),

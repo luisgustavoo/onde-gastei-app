@@ -305,6 +305,7 @@ class _HomePageState extends State<HomePage> {
     DateFilter dateFilter,
   ) {
     return AppBar(
+      forceMaterialTransparency: true,
       title: Row(
         children: [
           Text.rich(
