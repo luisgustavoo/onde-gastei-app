@@ -27,8 +27,10 @@ void main() {
   late UserControllerImpl mockUserControllerImpl;
 
   final dateFilter = DateFilter(
-    initialDate: DateTime(2022),
-    finalDate: DateTime(2022, 2),
+    initialDate: DateTime(
+      DateTime.now().year,
+    ),
+    finalDate: DateTime(DateTime.now().year, 2),
   );
 
   final mockExpensesList = List<ExpenseModel>.generate(
@@ -94,7 +96,8 @@ void main() {
 
   group('group test ExpensesPage', () {
     testWidgets('Test if expense page shows up', (tester) async {
-      when(() => mockExpensesController.state).thenReturn(ExpensesState.idle);
+      when(() => mockExpensesController.state)
+          .thenReturn(ExpensesState.success);
 
       when(() => mockExpensesController.expensesList)
           .thenReturn(mockExpensesList);
@@ -109,7 +112,7 @@ void main() {
       );
 
       when(
-        () => mockExpensesController.totalValueByDay(dateFilter.initialDate),
+        () => mockExpensesController.totalValueByDay(any()),
       ).thenReturn(
         100,
       );

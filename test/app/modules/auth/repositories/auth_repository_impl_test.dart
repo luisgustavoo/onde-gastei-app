@@ -100,7 +100,7 @@ void main() {
       const firebaseUserId = '123456';
       const requestData = <String, dynamic>{
         'nome': name,
-        'id_usuario_firebase': firebaseUserId
+        'id_usuario_firebase': firebaseUserId,
       };
 
       final mockResponse =
@@ -133,7 +133,7 @@ void main() {
       const accessTokenExpected = 'Bla bla bla bla';
 
       const responseData = <String, dynamic>{
-        'access_token': accessTokenExpected
+        'access_token': accessTokenExpected,
       };
 
       final mockResponse = MockRestClientResponse<Map<String, dynamic>>(

@@ -199,9 +199,9 @@ class _UserPageState extends State<UserPage> {
                 ),
                 TextButton(
                   style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                    overlayColor: WidgetStateProperty.resolveWith<Color?>(
                       (states) {
-                        if (states.contains(MaterialState.pressed)) {
+                        if (states.contains(WidgetState.pressed)) {
                           return Colors.red.withOpacity(0.5);
                         }
 

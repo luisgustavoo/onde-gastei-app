@@ -39,21 +39,21 @@ class OndeGasteiButton extends StatelessWidget {
       builder: (context, isLoading, _) {
         return ElevatedButton(
           style: ButtonStyle(
-            fixedSize: MaterialStateProperty.all<Size>(
+            fixedSize: WidgetStateProperty.all<Size>(
               Size(_width!.w, _height.h),
             ),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(_borderRadius.r),
               ),
             ),
-            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            backgroundColor: WidgetStateProperty.resolveWith<Color>(
               (states) {
                 if (_disable) {
                   return Constants.buttonColorDisabled;
                 }
 
-                if (states.contains(MaterialState.pressed)) {
+                if (states.contains(WidgetState.pressed)) {
                   return _color != null
                       ? _color.withOpacity(0.5)
                       : context.primaryColor.withOpacity(0.5);

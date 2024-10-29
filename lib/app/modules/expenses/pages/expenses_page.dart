@@ -95,26 +95,26 @@ class ExpensesPage extends StatelessWidget {
                 ],
               ),
             ),
-            Expanded(
-              child: Consumer<ExpensesControllerImpl>(
-                builder: (context, expensesController, _) {
-                  if (expensesController.state == ExpensesState.error) {
-                    return const Center(
-                      child: Text('Erro ao buscar despesas'),
-                    );
-                  }
+            Consumer<ExpensesControllerImpl>(
+              builder: (context, expensesController, _) {
+                if (expensesController.state == ExpensesState.error) {
+                  return const Center(
+                    child: Text('Erro ao buscar despesas'),
+                  );
+                }
 
-                  if (expensesController.state == ExpensesState.loading) {
-                    return const OndeGasteiLoading();
-                  }
+                if (expensesController.state == ExpensesState.loading) {
+                  return const OndeGasteiLoading();
+                }
 
-                  if (expensesController.expensesList.isEmpty) {
-                    return const Center(
-                      child: Text('Nenhuma informação'),
-                    );
-                  }
+                if (expensesController.expensesList.isEmpty) {
+                  return const Center(
+                    child: Text('Nenhuma informação'),
+                  );
+                }
 
-                  return GroupedListView<ExpenseModel, String>(
+                return Expanded(
+                  child: GroupedListView<ExpenseModel, String>(
                     groupBy: (element) => element.date.toString(),
                     elements: expensesController.expensesList,
                     sort: false,
@@ -172,9 +172,9 @@ class ExpensesPage extends StatelessWidget {
                         user,
                       );
                     },
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ],
         ),
