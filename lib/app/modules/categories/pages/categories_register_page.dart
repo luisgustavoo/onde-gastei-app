@@ -91,6 +91,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
         ignoring: categoriesControllerState == CategoriesState.loading,
         child: Scaffold(
           appBar: AppBar(
+            forceMaterialTransparency: true,
             title: const Text(
               'Categoria',
               // style: TextStyle(fontFamily: 'Jost'),

@@ -109,6 +109,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
       key: _scaffoldMessagedKey,
       child: Scaffold(
         appBar: AppBar(
+          forceMaterialTransparency: true,
           leading: IconButton(
             splashRadius: 20.r,
             onPressed: () {

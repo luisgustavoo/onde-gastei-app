@@ -45,6 +45,7 @@ class _UserPageState extends State<UserPage> {
       key: _scaffoldMessengerKey,
       child: Scaffold(
         appBar: AppBar(
+          forceMaterialTransparency: true,
           actions: [
             IconButton(
               onPressed: () async {
