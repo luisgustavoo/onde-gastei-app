@@ -34,7 +34,7 @@ void main() {
             iconCode: 1,
             colorCode: 1,
           ),
-        )
+        ),
       ];
       when(
         () => repository.findTotalExpensesByCategories(
@@ -84,7 +84,7 @@ void main() {
             iconCode: 1,
             colorCode: 1,
           ),
-        )
+        ),
       ];
 
       when(

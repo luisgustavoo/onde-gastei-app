@@ -148,7 +148,7 @@ void main() {
           iconCode: 1,
           colorCode: 1,
           userId: 1,
-        )
+        ),
       ];
 
       when(() => service.findCategories(any()))

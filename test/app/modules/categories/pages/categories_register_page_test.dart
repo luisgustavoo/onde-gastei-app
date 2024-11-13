@@ -65,7 +65,7 @@ void main() {
               return CategoriesRegisterPage(
                 categoriesController: mockCategoriesControllerImpl,
               );
-            }
+            },
           },
         ),
       ),

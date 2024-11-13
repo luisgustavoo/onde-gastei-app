@@ -24,13 +24,14 @@ class SplashPageState extends State<SplashPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final nav = Navigator.of(context);
       await widget.userController.getLocalUser().then((user) {
         if (user != null) {
-          Navigator.of(context).pushReplacementNamed(
+          nav.pushReplacementNamed(
             AppPage.router,
           );
         } else {
-          Navigator.of(context).pushReplacementNamed(LoginPage.router);
+          nav.pushReplacementNamed(LoginPage.router);
         }
       });
     });

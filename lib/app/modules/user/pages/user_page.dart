@@ -45,6 +45,7 @@ class _UserPageState extends State<UserPage> {
       key: _scaffoldMessengerKey,
       child: Scaffold(
         appBar: AppBar(
+          forceMaterialTransparency: true,
           actions: [
             IconButton(
               onPressed: () async {
@@ -101,14 +102,14 @@ class _UserPageState extends State<UserPage> {
                             'Sair',
                             style: TextStyle(color: Colors.red),
                           ),
-                        )
+                        ),
                       ],
                     );
                   },
                 );
               },
               icon: const Icon(Icons.logout_outlined),
-            )
+            ),
           ],
         ),
         body: Padding(
@@ -199,9 +200,9 @@ class _UserPageState extends State<UserPage> {
                 ),
                 TextButton(
                   style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                    overlayColor: WidgetStateProperty.resolveWith<Color?>(
                       (states) {
-                        if (states.contains(MaterialState.pressed)) {
+                        if (states.contains(WidgetState.pressed)) {
                           return Colors.red.withOpacity(0.5);
                         }
 
@@ -253,9 +254,8 @@ class _UserPageState extends State<UserPage> {
 
                                       widget.userController.logout();
                                     } on Failure {
-                                      if (Navigator.of(dialogContext)
-                                          .canPop()) {
-                                        Navigator.of(dialogContext).pop();
+                                      if (navigatorStateDialog.canPop()) {
+                                        navigatorStateDialog.pop();
                                       }
 
                                       final snackBar =

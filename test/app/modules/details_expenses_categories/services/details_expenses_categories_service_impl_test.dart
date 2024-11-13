@@ -33,7 +33,7 @@ void main() {
             iconCode: 58266,
             colorCode: 4294924066,
           ),
-        )
+        ),
       ];
 
       when(

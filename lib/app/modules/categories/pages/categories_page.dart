@@ -36,6 +36,7 @@ class CategoriesPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          forceMaterialTransparency: true,
           title: const Text(
             'Categorias',
             // style: TextStyle(fontFamily: 'Jost'),
@@ -58,7 +59,7 @@ class CategoriesPage extends StatelessWidget {
                 size: 30.sp,
               ),
               splashRadius: 20.r,
-            )
+            ),
           ],
         ),
         body: Consumer<CategoriesControllerImpl>(

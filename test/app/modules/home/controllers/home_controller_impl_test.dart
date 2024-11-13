@@ -37,7 +37,7 @@ void main() {
             iconCode: 1,
             colorCode: 1,
           ),
-        )
+        ),
       ];
 
       final percentageCategoriesExpected = [
@@ -50,7 +50,7 @@ void main() {
             iconCode: 1,
             colorCode: 1,
           ),
-        )
+        ),
       ];
 
       when(() => service.findTotalExpensesByCategories(any(), any(), any()))

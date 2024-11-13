@@ -24,7 +24,7 @@ void main() {
       providers: [
         ChangeNotifierProvider<UserControllerImpl>(
           create: (context) => mockUserControllerImpl,
-        )
+        ),
       ],
       child: ScreenUtilInit(
         minTextAdapt: true,

@@ -1,0 +1,1 @@
+fvm flutter build appbundle --release --no-tree-shake-icons --flavor prod --target=lib/main_prod.dart --obfuscate --split-debug-info=build/app/outputs/symbols

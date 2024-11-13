@@ -26,7 +26,7 @@ void main() {
               return RegisterPage(
                 authController: mockAuthControllerImpl,
               );
-            }
+            },
           },
         ),
       ),

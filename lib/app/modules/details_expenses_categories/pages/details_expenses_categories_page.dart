@@ -56,6 +56,7 @@ class _DetailsExpensesCategoriesPageState
 
     return Scaffold(
       appBar: AppBar(
+        forceMaterialTransparency: true,
         leading: IconButton(
           splashRadius: 20.r,
           onPressed: () {
@@ -128,7 +129,7 @@ class _DetailsExpensesCategoriesPageState
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
-                    )
+                    ),
                   ],
                 ),
               );

@@ -32,7 +32,7 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
           'descricao': categoryModel.description,
           'codigo_icone': categoryModel.iconCode,
           'codigo_cor': categoryModel.colorCode,
-          'id_usuario': categoryModel.userId
+          'id_usuario': categoryModel.userId,
         },
       );
       await _metricsMonitor.stopTrace(trace);
@@ -57,7 +57,7 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
         data: <String, dynamic>{
           'descricao': categoryInputModel.description,
           'codigo_icone': categoryInputModel.iconCode,
-          'codigo_cor': categoryInputModel.colorCode
+          'codigo_cor': categoryInputModel.colorCode,
         },
       );
       await _metricsMonitor.stopTrace(trace);

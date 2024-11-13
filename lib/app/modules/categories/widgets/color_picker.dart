@@ -41,6 +41,6 @@ class ColorPicker {
     Colors.teal,
     Colors.tealAccent,
     Colors.yellow,
-    Colors.yellowAccent
+    Colors.yellowAccent,
   ];
 }
