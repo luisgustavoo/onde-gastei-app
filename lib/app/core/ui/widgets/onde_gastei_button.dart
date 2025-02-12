@@ -55,8 +55,8 @@ class OndeGasteiButton extends StatelessWidget {
 
                 if (states.contains(WidgetState.pressed)) {
                   return _color != null
-                      ? _color.withOpacity(0.5)
-                      : context.primaryColor.withOpacity(0.5);
+                      ? _color.withValues(alpha: 0.5)
+                      : context.primaryColor.withValues(alpha: 0.5);
                 }
 
                 return _color ?? context.primaryColor;

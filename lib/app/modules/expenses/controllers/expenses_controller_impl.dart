@@ -197,8 +197,6 @@ class ExpensesControllerImpl extends ChangeNotifier
       case ExpensesOrderBy.menorValor:
         expensesList.sort((a, b) => a.value.compareTo(b.value));
         break;
-      default:
-        expensesList.sort((a, b) => b.date.compareTo(a.date));
     }
     notifyListeners();
   }
