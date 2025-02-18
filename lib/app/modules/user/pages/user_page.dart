@@ -203,7 +203,7 @@ class _UserPageState extends State<UserPage> {
                     overlayColor: WidgetStateProperty.resolveWith<Color?>(
                       (states) {
                         if (states.contains(WidgetState.pressed)) {
-                          return Colors.red.withOpacity(0.5);
+                          return Colors.red.withValues(alpha: 0.5);
                         }
 
                         return null;

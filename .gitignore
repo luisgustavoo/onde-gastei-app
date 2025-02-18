@@ -52,7 +52,9 @@ app.*.map.json
 .tmp
 assets.tmp.zip
 .firebase/
-.fvm/flutter_sdk
 /android/app/google-services.json
 /ios/Runner/GoogleService-Info.plist
 .key/
+
+# FVM Version Cache
+.fvm/

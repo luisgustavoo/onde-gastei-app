@@ -246,8 +246,7 @@ class _HomePageState extends State<HomePage> {
             PieChartData(
               sections: _buildPieChartSection(homeController),
             ),
-            swapAnimationDuration:
-                const Duration(milliseconds: 1000), // Optional
+            duration: const Duration(milliseconds: 1000), // Optional
             // swapAnimationCurve: Curves.easeIn, // Optional
           ),
           Column(
