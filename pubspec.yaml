@@ -24,7 +24,7 @@ dependencies:
   firebase_core: ^3.12.0
   flutter_dotenv: ^5.2.1
   firebase_remote_config: ^5.4.1
-  logger: ^2.4.0
+  logger: ^2.5.0
   # asuka: ^2.0.0+1
   # validatorless: ^1.2.1
   intl: ^0.19.0
