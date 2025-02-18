@@ -32,7 +32,7 @@ dependencies:
   grouped_list: ^6.0.0
   firebase_crashlytics: ^4.3.3
   firebase_analytics: ^11.4.3
-  firebase_performance: ^0.10.0+8
+  firebase_performance: ^0.10.1
 
 dev_dependencies:
   integration_test:
