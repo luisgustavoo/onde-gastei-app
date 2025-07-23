@@ -31,9 +31,9 @@ void main() {
         email: 'test@domain.com',
         firebaseUserId: '123456',
       );
-      when(() => mockUserRepository.fetchUserData()).thenAnswer(
-        (_) async => userExpected,
-      );
+      when(
+        () => mockUserRepository.fetchUserData(),
+      ).thenAnswer((_) async => userExpected);
 
       final user = await service.fetchUserData();
 
@@ -46,12 +46,7 @@ void main() {
 
       final call = service.fetchUserData;
 
-      expect(
-        call,
-        throwsA(
-          isA<Failure>(),
-        ),
-      );
+      expect(call, throwsA(isA<Failure>()));
       verify(() => mockUserRepository.fetchUserData()).called(1);
     });
   });
@@ -61,17 +56,12 @@ void main() {
       // Arrange
       when(
         () => mockUserRepository.updateUserName(any(), any()),
-      ).thenAnswer((_) async => _);
+      ).thenAnswer((invocation) async => invocation);
       //Act
       await service.updateUserName(1, 'Test');
 
       //Assert
-      verify(
-        () => mockUserRepository.updateUserName(
-          any(),
-          any(),
-        ),
-      ).called(1);
+      verify(() => mockUserRepository.updateUserName(any(), any())).called(1);
     });
 
     test('Should update user name with exception', () async {
@@ -84,12 +74,7 @@ void main() {
 
       //Assert
       expect(() => call(1, 'Test'), throwsA(isA<Failure>()));
-      verify(
-        () => mockUserRepository.updateUserName(
-          any(),
-          any(),
-        ),
-      ).called(1);
+      verify(() => mockUserRepository.updateUserName(any(), any())).called(1);
     });
   });
 
@@ -98,15 +83,13 @@ void main() {
       // Arrange
       when(
         () => mockUserRepository.removeLocalUserData(),
-      ).thenAnswer((_) async => _);
+      ).thenAnswer((invocation) async => invocation);
 
       //Act
       await service.removeLocalUserData();
 
       //Assert
-      verify(
-        () => mockUserRepository.removeLocalUserData(),
-      ).called(1);
+      verify(() => mockUserRepository.removeLocalUserData()).called(1);
     });
   });
 }

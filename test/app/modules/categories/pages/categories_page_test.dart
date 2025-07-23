@@ -44,9 +44,7 @@ void main() {
     finalDate: DateTime(
       DateTime.now().year,
       DateTime.now().month + 1,
-    ).subtract(
-      const Duration(days: 1),
-    ),
+    ).subtract(const Duration(days: 1)),
   );
 
   Widget createCategoriesPage() {
@@ -70,11 +68,11 @@ void main() {
           initialRoute: CategoriesPage.router,
           routes: {
             CategoriesPage.router: (context) => CategoriesPage(
-                  categoriesController: mockCategoriesControllerImpl,
-                  expensesController: mockExpensesControllerImpl,
-                  homeController: mockHomeControllerImpl,
-                  dateFilter: dateFilter,
-                ),
+              categoriesController: mockCategoriesControllerImpl,
+              expensesController: mockExpensesControllerImpl,
+              homeController: mockHomeControllerImpl,
+              dateFilter: dateFilter,
+            ),
           },
         ),
       ),
@@ -90,14 +88,17 @@ void main() {
 
   group('Group test categories page', () {
     testWidgets('Test if categories page shows up', (tester) async {
-      when(() => mockCategoriesControllerImpl.findCategories(any()))
-          .thenAnswer((_) async => _);
+      when(
+        () => mockCategoriesControllerImpl.findCategories(any()),
+      ).thenAnswer((invocation) async => invocation);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
-      when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(CategoriesState.success);
+      when(
+        () => mockCategoriesControllerImpl.state,
+      ).thenReturn(CategoriesState.success);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -120,14 +121,17 @@ void main() {
     });
 
     testWidgets('Should show categories page loading', (tester) async {
-      when(() => mockCategoriesControllerImpl.findCategories(any()))
-          .thenAnswer((_) async => _);
+      when(
+        () => mockCategoriesControllerImpl.findCategories(any()),
+      ).thenAnswer((invocation) async => invocation);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
-      when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(CategoriesState.loading);
+      when(
+        () => mockCategoriesControllerImpl.state,
+      ).thenReturn(CategoriesState.loading);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -147,16 +151,20 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('Should show error when loading categories page',
-        (tester) async {
-      when(() => mockCategoriesControllerImpl.findCategories(any()))
-          .thenAnswer((_) async => _);
+    testWidgets('Should show error when loading categories page', (
+      tester,
+    ) async {
+      when(
+        () => mockCategoriesControllerImpl.findCategories(any()),
+      ).thenAnswer((invocation) async => invocation);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
-      when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(CategoriesState.error);
+      when(
+        () => mockCategoriesControllerImpl.state,
+      ).thenReturn(CategoriesState.error);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -177,14 +185,17 @@ void main() {
     });
 
     testWidgets('Must test list scrolling', (tester) async {
-      when(() => mockCategoriesControllerImpl.findCategories(any()))
-          .thenAnswer((_) async => _);
+      when(
+        () => mockCategoriesControllerImpl.findCategories(any()),
+      ).thenAnswer((invocation) async => invocation);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
-      when(() => mockCategoriesControllerImpl.state)
-          .thenReturn(CategoriesState.success);
+      when(
+        () => mockCategoriesControllerImpl.state,
+      ).thenReturn(CategoriesState.success);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -202,11 +213,7 @@ void main() {
       final listFinder = find.byType(Scrollable);
       final itemFinder = find.text('Test 50');
 
-      await tester.scrollUntilVisible(
-        itemFinder,
-        90,
-        scrollable: listFinder,
-      );
+      await tester.scrollUntilVisible(itemFinder, 90, scrollable: listFinder);
 
       expect(itemFinder, findsOneWidget);
     });

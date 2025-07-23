@@ -23,9 +23,7 @@ void main() {
           initialRoute: RegisterPage.router,
           routes: {
             RegisterPage.router: (context) {
-              return RegisterPage(
-                authController: mockAuthControllerImpl,
-              );
+              return RegisterPage(authController: mockAuthControllerImpl);
             },
           },
         ),
@@ -60,33 +58,25 @@ void main() {
         findsOneWidget,
       );
 
-      expect(
-        find.byType(
-          ElevatedButton,
-        ),
-        findsOneWidget,
-      );
+      expect(find.byType(ElevatedButton), findsOneWidget);
 
       expect(find.widgetWithText(ElevatedButton, 'Cadastrar'), findsOneWidget);
 
-      expect(
-        find.byType(
-          TextFormField,
-        ),
-        findsNWidgets(4),
-      );
+      expect(find.byType(TextFormField), findsNWidgets(4));
     });
 
     testWidgets('Should TextFormFields is empty', (tester) async {
       when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
-      when(() => mockAuthControllerImpl.register(any(), any(), any()))
-          .thenAnswer((_) async => _);
+      when(
+        () => mockAuthControllerImpl.register(any(), any(), any()),
+      ).thenAnswer((invocation) async => invocation);
 
       await tester.pumpWidget(createRegisterPage());
 
-      final registerButton =
-          find.byKey(const ValueKey('register_button_key_register_page'));
+      final registerButton = find.byKey(
+        const ValueKey('register_button_key_register_page'),
+      );
 
       await tester.tap(registerButton);
       await tester.pumpAndSettle();
@@ -100,8 +90,9 @@ void main() {
     testWidgets('Should E-mail invalid ', (tester) async {
       when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
-      when(() => mockAuthControllerImpl.register(any(), any(), any()))
-          .thenAnswer((_) async => _);
+      when(
+        () => mockAuthControllerImpl.register(any(), any(), any()),
+      ).thenAnswer((invocation) async => invocation);
 
       await tester.pumpWidget(createRegisterPage());
 
@@ -111,11 +102,13 @@ void main() {
 
       final password = find.byKey(const ValueKey('password_key_register_page'));
 
-      final confirmPassword =
-          find.byKey(const ValueKey('confirm_password_key_register_page'));
+      final confirmPassword = find.byKey(
+        const ValueKey('confirm_password_key_register_page'),
+      );
 
-      final buttonRegister =
-          find.byKey(const ValueKey('register_button_key_register_page'));
+      final buttonRegister = find.byKey(
+        const ValueKey('register_button_key_register_page'),
+      );
 
       await tester.enterText(name, 'Test');
       await tester.enterText(email, 'test');

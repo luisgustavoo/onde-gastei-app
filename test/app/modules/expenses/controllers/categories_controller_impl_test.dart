@@ -30,10 +30,7 @@ void main() {
   setUp(() {
     mockServices = MockExpensesServices();
     mockLog = MockLog();
-    controller = ExpensesControllerImpl(
-      services: mockServices,
-      log: mockLog,
-    );
+    controller = ExpensesControllerImpl(services: mockServices, log: mockLog);
 
     registerFallbackValue(
       MockExpenseModel(
@@ -54,7 +51,9 @@ void main() {
   group('Group test register', () {
     test('Should register expense with success', () async {
       // Arrange
-      when(() => mockServices.register(any())).thenAnswer((_) async => _);
+      when(
+        () => mockServices.register(any()),
+      ).thenAnswer((invocation) async => invocation);
 
       //Act
       await controller.register(
@@ -108,7 +107,9 @@ void main() {
   group('Group test update', () {
     test('Should update expense with success', () async {
       // Arrange
-      when(() => mockServices.update(any(), any())).thenAnswer((_) async => _);
+      when(
+        () => mockServices.update(any(), any()),
+      ).thenAnswer((invocation) async => invocation);
 
       //Act
       await controller.update(
@@ -163,17 +164,15 @@ void main() {
   group('Group test delete', () {
     test('Should delete expense with success', () async {
       // Arrange
-      when(() => mockServices.delete(any())).thenAnswer((_) async => _);
+      when(
+        () => mockServices.delete(any()),
+      ).thenAnswer((invocation) async => invocation);
 
       //Act
-      await controller.delete(
-        expenseId: 1,
-      );
+      await controller.delete(expenseId: 1);
 
       //Assert
-      verify(
-        () => mockServices.delete(any()),
-      ).called(1);
+      verify(() => mockServices.delete(any())).called(1);
     });
 
     test('Should throws exception', () async {
@@ -184,12 +183,7 @@ void main() {
       final call = controller.delete;
 
       //Assert
-      expect(
-        () => call(
-          expenseId: 1,
-        ),
-        throwsA(isA<Failure>()),
-      );
+      expect(() => call(expenseId: 1), throwsA(isA<Failure>()));
       verify(() => mockServices.delete(any())).called(1);
     });
   });
