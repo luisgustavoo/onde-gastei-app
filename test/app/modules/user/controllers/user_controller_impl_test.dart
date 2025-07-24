@@ -43,8 +43,9 @@ void main() {
         firebaseUserId: '123456',
       );
 
-      when(() => mockUserService.fetchUserData())
-          .thenAnswer((_) async => userExpected);
+      when(
+        () => mockUserService.fetchUserData(),
+      ).thenAnswer((_) async => userExpected);
 
       //Act
       await controller.fetchUserData();
@@ -78,14 +79,17 @@ void main() {
         firebaseUserId: '123456',
       );
 
-      when(() => mockUserService.updateUserName(any(), any()))
-          .thenAnswer((_) async => _);
+      when(
+        () => mockUserService.updateUserName(any(), any()),
+      ).thenAnswer((invocation) async => invocation);
 
-      when(() => mockUserService.removeLocalUserData())
-          .thenAnswer((_) async => _);
+      when(
+        () => mockUserService.removeLocalUserData(),
+      ).thenAnswer((invocation) async => invocation);
 
-      when(() => mockUserService.fetchUserData())
-          .thenAnswer((_) async => userExpected);
+      when(
+        () => mockUserService.fetchUserData(),
+      ).thenAnswer((_) async => userExpected);
 
       //Act
       await controller.updateUserName(1, 'Test');
@@ -99,8 +103,9 @@ void main() {
     test('Should updateUserName with exception', () async {
       //Arrange
 
-      when(() => mockUserService.updateUserName(any(), any()))
-          .thenThrow(Exception());
+      when(
+        () => mockUserService.updateUserName(any(), any()),
+      ).thenThrow(Exception());
 
       //Act
       final call = controller.updateUserName;
@@ -122,20 +127,16 @@ void main() {
         firebaseUserId: '123456',
       );
 
-      when(() => mockLocalStorage.read<String>(any())).thenAnswer(
-        (_) async => jsonEncode(
-          localUser.toMap(),
-        ),
-      );
+      when(
+        () => mockLocalStorage.read<String>(any()),
+      ).thenAnswer((_) async => jsonEncode(localUser.toMap()));
 
       //Act
       final user = await controller.getLocalUser();
 
       //Assert
       expect(user, localUser);
-      verify(
-        () => mockLocalStorage.read<String>(any()),
-      ).called(1);
+      verify(() => mockLocalStorage.read<String>(any())).called(1);
     });
 
     test('Should get user with exception', () async {
@@ -148,16 +149,8 @@ void main() {
 
       //Assert
       expect(call, throwsA(isA<Failure>()));
-      verify(
-        () => mockLocalStorage.read<String>(any()),
-      ).called(1);
-      verify(
-        () => mockLog.error(
-          any(),
-          any(),
-          any(),
-        ),
-      ).called(1);
+      verify(() => mockLocalStorage.read<String>(any())).called(1);
+      verify(() => mockLog.error(any(), any(), any())).called(1);
     });
   });
 }

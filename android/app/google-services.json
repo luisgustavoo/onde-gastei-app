@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "178710813676",
     "project_id": "onde-gastei-d5360",
-    "storage_bucket": "onde-gastei-d5360.appspot.com"
+    "storage_bucket": "onde-gastei-d5360.firebasestorage.app"
   },
   "client": [
     {
@@ -51,7 +51,7 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:178710813676:android:6c3523c7323fdb6a84bec9",
+        "mobilesdk_app_id": "1:178710813676:android:5edbfa5a7054233984bec9",
         "android_client_info": {
           "package_name": "br.app.ondegastei.onde_gastei_app.dev"
         }

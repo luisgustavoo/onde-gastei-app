@@ -34,22 +34,16 @@ Widget createSplashPage() {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: const [
-          Locale('pt', 'BR'),
-        ],
+        supportedLocales: const [Locale('pt', 'BR')],
         initialRoute: SplashPage.router,
         routes: {
           SplashPage.router: (context) =>
               SplashPage(userController: mockUserControllerImpl),
           AppPage.router: (context) {
-            return const Scaffold(
-              body: Text('App Page'),
-            );
+            return const Scaffold(body: Text('App Page'));
           },
           LoginPage.router: (context) {
-            return const Scaffold(
-              body: Text('Login Page'),
-            );
+            return const Scaffold(body: Text('Login Page'));
           },
         },
       ),
@@ -70,10 +64,10 @@ void main() {
           oldRoute: any(named: 'oldRoute'),
           newRoute: any(named: 'newRoute'),
         ),
-      ).thenAnswer((_) async => _);
+      ).thenAnswer((invocation) async => invocation);
 
       when(() => mockUserControllerImpl.getLocalUser()).thenAnswer(
-        (_) async => const UserModel(
+        (invocation) async => const UserModel(
           userId: 1,
           name: 'Test',
           email: 'test@domain.com',
@@ -94,10 +88,7 @@ void main() {
 
       // final messageFinder = find.text('App Page');
       await tester.pumpAndSettle();
-      expect(
-        find.text('App Page'),
-        findsOneWidget,
-      );
+      expect(find.text('App Page'), findsOneWidget);
     });
 
     testWidgets('Test if splash page navigate to LoginPage', (tester) async {
@@ -106,11 +97,11 @@ void main() {
           oldRoute: any(named: 'oldRoute'),
           newRoute: any(named: 'newRoute'),
         ),
-      ).thenAnswer((_) async => _);
+      ).thenAnswer((invocation) async => invocation);
 
-      when(() => mockUserControllerImpl.getLocalUser()).thenAnswer(
-        (_) async => null,
-      );
+      when(
+        () => mockUserControllerImpl.getLocalUser(),
+      ).thenAnswer((_) async => null);
 
       await tester.pumpWidget(createSplashPage());
 

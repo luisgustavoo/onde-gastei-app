@@ -95,9 +95,7 @@ void main() {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [
-            Locale('pt', 'BR'),
-          ],
+          supportedLocales: const [Locale('pt', 'BR')],
           initialRoute: ExpensesRegisterPage.router,
           routes: {
             ExpensesRegisterPage.router: (context) {
@@ -133,14 +131,17 @@ void main() {
 
   group('Group test ExpensesRegisterPage', () {
     testWidgets('Test if register expense page shows up', (tester) async {
-      when(() => mockExpensesControllerImpl.state)
-          .thenReturn(ExpensesState.idle);
+      when(
+        () => mockExpensesControllerImpl.state,
+      ).thenReturn(ExpensesState.idle);
 
-      when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(ExpensesDeleteState.idle);
+      when(
+        () => mockExpensesControllerImpl.deleteState,
+      ).thenReturn(ExpensesDeleteState.idle);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -153,9 +154,7 @@ void main() {
 
       await tester.pumpWidget(createExpensesRegisterPage());
 
-      final initialDate = DateFormat.yMd('pt_BR').format(
-        DateTime.now(),
-      );
+      final initialDate = DateFormat.yMd('pt_BR').format(DateTime.now());
 
       final initialValue = NumberFormat.currency(
         locale: 'pt-BR',
@@ -186,10 +185,7 @@ void main() {
         ),
         findsOneWidget,
       );
-      expect(
-        find.widgetWithText(OndeGasteiButton, 'Salvar'),
-        findsOneWidget,
-      );
+      expect(find.widgetWithText(OndeGasteiButton, 'Salvar'), findsOneWidget);
 
       expect(
         find.widgetWithText(OndeGasteiTextForm, initialDate),
@@ -198,14 +194,17 @@ void main() {
     });
 
     testWidgets('Should TextFormFields is empty', (tester) async {
-      when(() => mockExpensesControllerImpl.state)
-          .thenReturn(ExpensesState.idle);
+      when(
+        () => mockExpensesControllerImpl.state,
+      ).thenReturn(ExpensesState.idle);
 
-      when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(ExpensesDeleteState.idle);
+      when(
+        () => mockExpensesControllerImpl.deleteState,
+      ).thenReturn(ExpensesDeleteState.idle);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -222,9 +221,7 @@ void main() {
         const Key('description_key_expenses_register_page'),
       );
 
-      final value = find.byKey(
-        const Key('value_key_expenses_register_page'),
-      );
+      final value = find.byKey(const Key('value_key_expenses_register_page'));
 
       // final date = find.byKey(
       //   const Key('date_key_expenses_register_page'),
@@ -249,14 +246,17 @@ void main() {
     });
 
     testWidgets('Should date e value invalid', (tester) async {
-      when(() => mockExpensesControllerImpl.state)
-          .thenReturn(ExpensesState.idle);
+      when(
+        () => mockExpensesControllerImpl.state,
+      ).thenReturn(ExpensesState.idle);
 
-      when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(ExpensesDeleteState.idle);
+      when(
+        () => mockExpensesControllerImpl.deleteState,
+      ).thenReturn(ExpensesDeleteState.idle);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -273,9 +273,7 @@ void main() {
         const Key('description_key_expenses_register_page'),
       );
 
-      final value = find.byKey(
-        const Key('value_key_expenses_register_page'),
-      );
+      final value = find.byKey(const Key('value_key_expenses_register_page'));
 
       // final date = find.byKey(
       //   const Key('date_key_expenses_register_page'),
@@ -298,14 +296,17 @@ void main() {
     });
 
     testWidgets('Should register expenses with success', (tester) async {
-      when(() => mockExpensesControllerImpl.state)
-          .thenReturn(ExpensesState.idle);
+      when(
+        () => mockExpensesControllerImpl.state,
+      ).thenReturn(ExpensesState.idle);
 
-      when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(ExpensesDeleteState.idle);
+      when(
+        () => mockExpensesControllerImpl.deleteState,
+      ).thenReturn(ExpensesDeleteState.idle);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -325,7 +326,7 @@ void main() {
           category: any<CategoryModel>(named: 'category'),
           userId: any<int>(named: 'userId'),
         ),
-      ).thenAnswer((_) async => _);
+      ).thenAnswer((invocation) async => invocation);
 
       await tester.pumpWidget(createExpensesRegisterPage());
 
@@ -333,9 +334,7 @@ void main() {
         const Key('description_key_expenses_register_page'),
       );
 
-      final value = find.byKey(
-        const Key('value_key_expenses_register_page'),
-      );
+      final value = find.byKey(const Key('value_key_expenses_register_page'));
 
       // final date = find.byKey(
       //   const Key('date_key_expenses_register_page'),
@@ -371,16 +370,20 @@ void main() {
       expect(find.text('Despesa registrada com sucesso!'), findsOneWidget);
     });
 
-    testWidgets('Should throws exception when register expenses',
-        (tester) async {
-      when(() => mockExpensesControllerImpl.state)
-          .thenReturn(ExpensesState.idle);
+    testWidgets('Should throws exception when register expenses', (
+      tester,
+    ) async {
+      when(
+        () => mockExpensesControllerImpl.state,
+      ).thenReturn(ExpensesState.idle);
 
-      when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(ExpensesDeleteState.idle);
+      when(
+        () => mockExpensesControllerImpl.deleteState,
+      ).thenReturn(ExpensesDeleteState.idle);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -408,13 +411,9 @@ void main() {
         const Key('description_key_expenses_register_page'),
       );
 
-      final value = find.byKey(
-        const Key('value_key_expenses_register_page'),
-      );
+      final value = find.byKey(const Key('value_key_expenses_register_page'));
 
-      final date = find.byKey(
-        const Key('date_key_expenses_register_page'),
-      );
+      final date = find.byKey(const Key('date_key_expenses_register_page'));
 
       final categories = find.byKey(
         const Key('categories_key_expenses_register_page'),
@@ -443,14 +442,17 @@ void main() {
 
     testWidgets('Should update expenses with success', (tester) async {
       isEditing = true;
-      when(() => mockExpensesControllerImpl.state)
-          .thenReturn(ExpensesState.idle);
+      when(
+        () => mockExpensesControllerImpl.state,
+      ).thenReturn(ExpensesState.idle);
 
-      when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(ExpensesDeleteState.idle);
+      when(
+        () => mockExpensesControllerImpl.deleteState,
+      ).thenReturn(ExpensesDeleteState.idle);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -471,7 +473,7 @@ void main() {
           userId: any(named: 'userId'),
           expenseId: any(named: 'expenseId'),
         ),
-      ).thenAnswer((_) async => _);
+      ).thenAnswer((invocation) async => invocation);
 
       await tester.pumpWidget(createExpensesRegisterPage());
 
@@ -494,14 +496,17 @@ void main() {
 
     testWidgets('Should throw exception when updating expense', (tester) async {
       isEditing = true;
-      when(() => mockExpensesControllerImpl.state)
-          .thenReturn(ExpensesState.idle);
+      when(
+        () => mockExpensesControllerImpl.state,
+      ).thenReturn(ExpensesState.idle);
 
-      when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(ExpensesDeleteState.idle);
+      when(
+        () => mockExpensesControllerImpl.deleteState,
+      ).thenReturn(ExpensesDeleteState.idle);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -546,14 +551,17 @@ void main() {
     testWidgets('Should delete expense with success', (tester) async {
       isEditing = true;
 
-      when(() => mockExpensesControllerImpl.state)
-          .thenReturn(ExpensesState.idle);
+      when(
+        () => mockExpensesControllerImpl.state,
+      ).thenReturn(ExpensesState.idle);
 
-      when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(ExpensesDeleteState.idle);
+      when(
+        () => mockExpensesControllerImpl.deleteState,
+      ).thenReturn(ExpensesDeleteState.idle);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -568,7 +576,7 @@ void main() {
         () => mockExpensesControllerImpl.delete(
           expenseId: any(named: 'expenseId'),
         ),
-      ).thenAnswer((_) async => _);
+      ).thenAnswer((invocation) async => invocation);
 
       await tester.pumpWidget(createExpensesRegisterPage());
 
@@ -594,14 +602,17 @@ void main() {
     testWidgets('Should throws when delete expense', (tester) async {
       isEditing = true;
 
-      when(() => mockExpensesControllerImpl.state)
-          .thenReturn(ExpensesState.idle);
+      when(
+        () => mockExpensesControllerImpl.state,
+      ).thenReturn(ExpensesState.idle);
 
-      when(() => mockExpensesControllerImpl.deleteState)
-          .thenReturn(ExpensesDeleteState.idle);
+      when(
+        () => mockExpensesControllerImpl.deleteState,
+      ).thenReturn(ExpensesDeleteState.idle);
 
-      when(() => mockCategoriesControllerImpl.categoriesList)
-          .thenReturn(mockCategoriesList);
+      when(
+        () => mockCategoriesControllerImpl.categoriesList,
+      ).thenReturn(mockCategoriesList);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(

@@ -36,14 +36,11 @@ void main() {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            supportedLocales: const [
-              Locale('pt', 'BR'),
-            ],
+            supportedLocales: const [Locale('pt', 'BR')],
             initialRoute: UserPage.router,
             routes: {
-              UserPage.router: (context) => UserPage(
-                    userController: mockUserControllerImpl,
-                  ),
+              UserPage.router: (context) =>
+                  UserPage(userController: mockUserControllerImpl),
             },
           );
         },
@@ -75,11 +72,8 @@ void main() {
 
       when(() => mockUserControllerImpl.state).thenReturn(UserState.idle);
       when(
-        () => mockUserControllerImpl.updateUserName(
-          any(),
-          any(),
-        ),
-      ).thenAnswer((_) async => _);
+        () => mockUserControllerImpl.updateUserName(any(), any()),
+      ).thenAnswer((invocation) async => invocation);
 
       final saveButton = find.byType(OndeGasteiButton);
 
@@ -107,10 +101,7 @@ void main() {
 
       when(() => mockUserControllerImpl.state).thenReturn(UserState.idle);
       when(
-        () => mockUserControllerImpl.updateUserName(
-          any(),
-          any(),
-        ),
+        () => mockUserControllerImpl.updateUserName(any(), any()),
       ).thenThrow(Exception());
 
       final saveButton = find.byType(OndeGasteiButton);

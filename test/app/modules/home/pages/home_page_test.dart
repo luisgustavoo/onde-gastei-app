@@ -43,34 +43,34 @@ void main() {
 
   final mockTotalExpensesCategoriesList =
       List<TotalExpensesCategoriesViewModel>.generate(
-    10,
-    (index) => TotalExpensesCategoriesViewModel(
-      totalValue: double.parse(index.toString()),
-      category: CategoryModel(
-        id: index,
-        description: 'Test $index',
-        iconCode: 58261,
-        colorCode: 4284513675,
-        userId: 1,
-      ),
-    ),
-  );
+        10,
+        (index) => TotalExpensesCategoriesViewModel(
+          totalValue: double.parse(index.toString()),
+          category: CategoryModel(
+            id: index,
+            description: 'Test $index',
+            iconCode: 58261,
+            colorCode: 4284513675,
+            userId: 1,
+          ),
+        ),
+      );
 
   final mockPercentageCategoriesList =
       List<PercentageCategoriesViewModel>.generate(
-    10,
-    (index) => PercentageCategoriesViewModel(
-      value: double.parse(index.toString()),
-      percentage: double.parse(index.toString()),
-      category: CategoryModel(
-        id: index,
-        description: 'Test $index',
-        iconCode: 58261,
-        colorCode: 4284513675,
-        userId: 1,
-      ),
-    ),
-  );
+        10,
+        (index) => PercentageCategoriesViewModel(
+          value: double.parse(index.toString()),
+          percentage: double.parse(index.toString()),
+          category: CategoryModel(
+            id: index,
+            description: 'Test $index',
+            iconCode: 58261,
+            colorCode: 4284513675,
+            userId: 1,
+          ),
+        ),
+      );
 
   Widget createHomePage() {
     return MultiProvider(
@@ -95,16 +95,14 @@ void main() {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [
-            Locale('pt', 'BR'),
-          ],
+          supportedLocales: const [Locale('pt', 'BR')],
           initialRoute: HomePage.router,
           routes: {
             HomePage.router: (context) => HomePage(
-                  homeController: mockHomeControllerImpl,
-                  expensesController: mockExpensesControllerImpl,
-                  dateFilter: dateFilter,
-                ),
+              homeController: mockHomeControllerImpl,
+              expensesController: mockExpensesControllerImpl,
+              dateFilter: dateFilter,
+            ),
           },
         ),
       ),
@@ -125,11 +123,13 @@ void main() {
 
       when(() => mockHomeControllerImpl.totalExpenses).thenReturn(1500);
 
-      when(() => mockHomeControllerImpl.totalExpensesCategoriesList)
-          .thenReturn(mockTotalExpensesCategoriesList);
+      when(
+        () => mockHomeControllerImpl.totalExpensesCategoriesList,
+      ).thenReturn(mockTotalExpensesCategoriesList);
 
-      when(() => mockHomeControllerImpl.percentageCategoriesList)
-          .thenReturn(mockPercentageCategoriesList);
+      when(
+        () => mockHomeControllerImpl.percentageCategoriesList,
+      ).thenReturn(mockPercentageCategoriesList);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -146,11 +146,7 @@ void main() {
 
       expect(
         find.text(
-          'R\$${NumberFormat.currency(
-            locale: 'pt-BR',
-            name: '',
-            decimalDigits: 2,
-          ).format(1500)}',
+          'R\$${NumberFormat.currency(locale: 'pt-BR', name: '', decimalDigits: 2).format(1500)}',
           findRichText: true,
         ),
         findsOneWidget,
@@ -169,11 +165,13 @@ void main() {
 
       when(() => mockHomeControllerImpl.totalExpenses).thenReturn(1);
 
-      when(() => mockHomeControllerImpl.totalExpensesCategoriesList)
-          .thenReturn(mockTotalExpensesCategoriesList);
+      when(
+        () => mockHomeControllerImpl.totalExpensesCategoriesList,
+      ).thenReturn(mockTotalExpensesCategoriesList);
 
-      when(() => mockHomeControllerImpl.percentageCategoriesList)
-          .thenReturn(mockPercentageCategoriesList);
+      when(
+        () => mockHomeControllerImpl.percentageCategoriesList,
+      ).thenReturn(mockPercentageCategoriesList);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -197,11 +195,13 @@ void main() {
 
       when(() => mockHomeControllerImpl.totalExpenses).thenReturn(1500);
 
-      when(() => mockHomeControllerImpl.totalExpensesCategoriesList)
-          .thenReturn(mockTotalExpensesCategoriesList);
+      when(
+        () => mockHomeControllerImpl.totalExpensesCategoriesList,
+      ).thenReturn(mockTotalExpensesCategoriesList);
 
-      when(() => mockHomeControllerImpl.percentageCategoriesList)
-          .thenReturn(mockPercentageCategoriesList);
+      when(
+        () => mockHomeControllerImpl.percentageCategoriesList,
+      ).thenReturn(mockPercentageCategoriesList);
 
       when(() => mockUserControllerImpl.user).thenReturn(
         const UserModel(
@@ -218,7 +218,7 @@ void main() {
           initialDate: any(named: 'initialDate'),
           finalDate: any(named: 'finalDate'),
         ),
-      ).thenAnswer((_) async => _);
+      ).thenAnswer((invocation) async => invocation);
 
       when(
         () => mockExpensesControllerImpl.findExpensesByPeriod(
@@ -226,14 +226,13 @@ void main() {
           initialDate: any(named: 'initialDate'),
           finalDate: any(named: 'finalDate'),
         ),
-      ).thenAnswer((_) async => _);
+      ).thenAnswer((invocation) async => invocation);
 
-      final buttonDateFilter =
-          find.byKey(const Key('date_filter_key_home_page'));
-
-      final applyButton = find.byKey(
-        const Key('apply_button_key_home_page'),
+      final buttonDateFilter = find.byKey(
+        const Key('date_filter_key_home_page'),
       );
+
+      final applyButton = find.byKey(const Key('apply_button_key_home_page'));
 
       final initialDateFilter = find.byKey(
         const Key('initial_date_filter_key_home_page'),
@@ -271,10 +270,7 @@ void main() {
 
       final firstDayMonth = find.text('1');
 
-      expect(
-        firstDayMonth,
-        findsOneWidget,
-      );
+      expect(firstDayMonth, findsOneWidget);
 
       await tester.tap(firstDayMonth);
       await tester.pumpAndSettle();
@@ -288,9 +284,7 @@ void main() {
         find.descendant(
           of: find.byType(OndeGasteiTextForm),
           matching: find.text(
-            DateFormat.yMd('pt_BR').format(
-              DateTime(currentYear, currentMonth),
-            ),
+            DateFormat.yMd('pt_BR').format(DateTime(currentYear, currentMonth)),
           ),
         ),
         findsOneWidget,
@@ -310,10 +304,7 @@ void main() {
 
       final lastDayMonth = find.text('28');
 
-      expect(
-        lastDayMonth,
-        findsOneWidget,
-      );
+      expect(lastDayMonth, findsOneWidget);
 
       await tester.tap(lastDayMonth);
       await tester.pumpAndSettle();
@@ -327,9 +318,9 @@ void main() {
         find.descendant(
           of: find.byType(OndeGasteiTextForm),
           matching: find.text(
-            DateFormat.yMd('pt_BR').format(
-              DateTime(currentYear, currentMonth, 28),
-            ),
+            DateFormat.yMd(
+              'pt_BR',
+            ).format(DateTime(currentYear, currentMonth, 28)),
           ),
         ),
         findsOneWidget,
@@ -342,20 +333,18 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(
-        () => Future.wait(
-          [
-            mockHomeControllerImpl.fetchHomeData(
-              userId: any(named: 'userId'),
-              initialDate: any(named: 'initialDate'),
-              finalDate: any(named: 'finalDate'),
-            ),
-            mockExpensesControllerImpl.findExpensesByPeriod(
-              userId: any(named: 'userId'),
-              initialDate: any(named: 'initialDate'),
-              finalDate: any(named: 'finalDate'),
-            ),
-          ],
-        ),
+        () => Future.wait([
+          mockHomeControllerImpl.fetchHomeData(
+            userId: any(named: 'userId'),
+            initialDate: any(named: 'initialDate'),
+            finalDate: any(named: 'finalDate'),
+          ),
+          mockExpensesControllerImpl.findExpensesByPeriod(
+            userId: any(named: 'userId'),
+            initialDate: any(named: 'initialDate'),
+            finalDate: any(named: 'finalDate'),
+          ),
+        ]),
       ).called(1);
     });
   });

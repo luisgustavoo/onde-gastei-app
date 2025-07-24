@@ -39,8 +39,9 @@ void main() {
       const email = 'test@test.com';
       const password = 'password';
 
-      when(() => service.register(any(), any(), any()))
-          .thenAnswer((_) async => _);
+      when(
+        () => service.register(any(), any(), any()),
+      ).thenAnswer((invocation) async => invocation);
 
       //Act
       await controller.register(name, email, password);
@@ -55,8 +56,9 @@ void main() {
       const email = 'test@test.com';
       const password = 'password';
 
-      when(() => service.register(any(), any(), any()))
-          .thenThrow(UserExistsException());
+      when(
+        () => service.register(any(), any(), any()),
+      ).thenThrow(UserExistsException());
 
       //Act
       final call = controller.register;
@@ -90,8 +92,9 @@ void main() {
       //Assert
       expect(() => call(name, email, password), throwsA(isA<Failure>()));
       verify(() => service.register(any(), any(), any())).called(1);
-      verify(() => log.error('Erro ao registrar usuário', any(), any()))
-          .called(1);
+      verify(
+        () => log.error('Erro ao registrar usuário', any(), any()),
+      ).called(1);
     });
   });
 
@@ -101,7 +104,9 @@ void main() {
       const email = 'Test';
       const password = 'password';
 
-      when(() => service.login(any(), any())).thenAnswer((_) async => _);
+      when(
+        () => service.login(any(), any()),
+      ).thenAnswer((invocation) async => invocation);
 
       //Act
       await controller.login(email, password);
@@ -114,8 +119,9 @@ void main() {
       // Arrange
       const email = 'Test';
       const password = 'password';
-      when(() => service.login(any(), any()))
-          .thenThrow(UserNotFoundException());
+      when(
+        () => service.login(any(), any()),
+      ).thenThrow(UserNotFoundException());
       //Act
       final call = controller.login;
 
@@ -124,16 +130,18 @@ void main() {
         () => call(email, password),
         throwsA(isA<UserNotFoundException>()),
       );
-      verify(() => log.error('Login e senha inválidos', any(), any()))
-          .called(1);
+      verify(
+        () => log.error('Login e senha inválidos', any(), any()),
+      ).called(1);
     });
 
     test('Should throws UnverifiedEmailException', () async {
       // Arrange
       const email = 'Test';
       const password = 'password';
-      when(() => service.login(any(), any()))
-          .thenThrow(UnverifiedEmailException());
+      when(
+        () => service.login(any(), any()),
+      ).thenThrow(UnverifiedEmailException());
       //Act
       final call = controller.login;
 
@@ -146,24 +154,25 @@ void main() {
     });
 
     test(
-        'Should throw generic exception when logging in with email and password ',
-        () async {
-      // Arrange
-      const email = 'Test';
-      const password = 'password';
-      when(() => service.login(any(), any())).thenThrow(Exception());
-      //Act
-      final call = controller.login;
+      'Should throw generic exception when logging in with email and password ',
+      () async {
+        // Arrange
+        const email = 'Test';
+        const password = 'password';
+        when(() => service.login(any(), any())).thenThrow(Exception());
+        //Act
+        final call = controller.login;
 
-      //Assert
-      expect(() => call(email, password), throwsA(isA<Failure>()));
-      verify(
-        () => log.error(
-          'Erro ao realizar login tente novamente mais tarde!!!',
-          any(),
-          any(),
-        ),
-      ).called(1);
-    });
+        //Assert
+        expect(() => call(email, password), throwsA(isA<Failure>()));
+        verify(
+          () => log.error(
+            'Erro ao realizar login tente novamente mais tarde!!!',
+            any(),
+            any(),
+          ),
+        ).called(1);
+      },
+    );
   });
 }

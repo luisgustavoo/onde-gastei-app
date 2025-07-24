@@ -21,9 +21,15 @@ void main() {
   group('Group test register', () {
     test('Should register with success', () async {
       // Arrange
-      const categoryModel =
-          CategoryModel(id: 1, description: 'Test', iconCode: 1, colorCode: 1);
-      when(() => repository.register(categoryModel)).thenAnswer((_) async => _);
+      const categoryModel = CategoryModel(
+        id: 1,
+        description: 'Test',
+        iconCode: 1,
+        colorCode: 1,
+      );
+      when(
+        () => repository.register(categoryModel),
+      ).thenAnswer((invocation) async => invocation);
       //Act
       await service.register(categoryModel);
 
@@ -33,8 +39,12 @@ void main() {
 
     test('Should throws exception', () async {
       // Arrange
-      const categoryModel =
-          CategoryModel(id: 1, description: 'Test', iconCode: 1, colorCode: 1);
+      const categoryModel = CategoryModel(
+        id: 1,
+        description: 'Test',
+        iconCode: 1,
+        colorCode: 1,
+      );
       when(() => repository.register(categoryModel)).thenThrow(Failure());
       //Act
       final call = service.register;
@@ -48,10 +58,14 @@ void main() {
   group('Group test updateCategory', () {
     test('Should update category with success', () async {
       // Arrange
-      const categoryInputModel =
-          CategoryInputModel(description: 'Test', iconCode: 1, colorCode: 1);
-      when(() => repository.updateCategory(1, categoryInputModel))
-          .thenAnswer((_) async => _);
+      const categoryInputModel = CategoryInputModel(
+        description: 'Test',
+        iconCode: 1,
+        colorCode: 1,
+      );
+      when(
+        () => repository.updateCategory(1, categoryInputModel),
+      ).thenAnswer((invocation) async => invocation);
       //Act
       await service.updateCategory(1, categoryInputModel);
 
@@ -61,10 +75,14 @@ void main() {
 
     test('Should throws exception', () async {
       // Arrange
-      const categoryInputModel =
-          CategoryInputModel(description: 'Test', iconCode: 1, colorCode: 1);
-      when(() => repository.updateCategory(1, categoryInputModel))
-          .thenThrow(Failure());
+      const categoryInputModel = CategoryInputModel(
+        description: 'Test',
+        iconCode: 1,
+        colorCode: 1,
+      );
+      when(
+        () => repository.updateCategory(1, categoryInputModel),
+      ).thenThrow(Failure());
       //Act
       final call = service.updateCategory;
 
@@ -77,7 +95,9 @@ void main() {
   group('group test delete category', () {
     test('Should deleteCategory with success', () async {
       // Arrange
-      when(() => repository.deleteCategory(1)).thenAnswer((_) async => _);
+      when(
+        () => repository.deleteCategory(1),
+      ).thenAnswer((invocation) async => invocation);
       //Act
       await service.deleteCategory(1);
 
@@ -101,15 +121,11 @@ void main() {
     test('Should find categories with success', () async {
       //Arrange
       const categoriesExpected = [
-        CategoryModel(
-          id: 1,
-          description: 'Test',
-          iconCode: 1,
-          colorCode: 1,
-        ),
+        CategoryModel(id: 1, description: 'Test', iconCode: 1, colorCode: 1),
       ];
-      when(() => repository.findCategories(any()))
-          .thenAnswer((_) async => categoriesExpected);
+      when(
+        () => repository.findCategories(any()),
+      ).thenAnswer((_) async => categoriesExpected);
       //Act
       await service.findCategories(1);
 
@@ -121,8 +137,9 @@ void main() {
   group('Group test expenseQuantityByCategoryId', () {
     test('Should to fetch the amount of expenses from a category', () async {
       //Arrange
-      when(() => repository.expenseQuantityByCategoryId(1))
-          .thenAnswer((_) async => 1);
+      when(
+        () => repository.expenseQuantityByCategoryId(1),
+      ).thenAnswer((_) async => 1);
 
       //Act
       final quantity = await service.expenseQuantityByCategoryId(1);
@@ -133,8 +150,9 @@ void main() {
 
     test('Should return exception', () async {
       //Arrange
-      when(() => repository.expenseQuantityByCategoryId(1))
-          .thenThrow(Failure());
+      when(
+        () => repository.expenseQuantityByCategoryId(1),
+      ).thenThrow(Failure());
 
       //Act
       final call = service.expenseQuantityByCategoryId;
