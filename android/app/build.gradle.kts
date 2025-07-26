@@ -74,12 +74,12 @@ android {
         create("dev") {
             dimension = "flavor-type"
             applicationId = "br.app.ondegastei.onde_gastei_app.dev"
-            resValue("string", "app_name", "Dev")
+            resValue(type = "string", name = "app_name", value = "Dev")
         }
         create("prod") {
             dimension = "flavor-type"
             applicationId = "br.app.ondegastei.onde_gastei_app"
-            resValue("string", "app_name", "Onde Gastei")
+            resValue(type = "string", name = "app_name", value = "Onde Gastei")
         }
     }
     // ----- END flavorDimensions -----
