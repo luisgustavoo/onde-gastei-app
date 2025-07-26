@@ -3,7 +3,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:onde_gastei_app/app/core/helpers/environments.dart';
 import 'package:onde_gastei_app/firebase_options.dart';
-import 'package:onde_gastei_app/flavors.dart';
 
 class ApplicationStartConfig {
   Future<void> configureApp() async {
@@ -15,10 +14,17 @@ class ApplicationStartConfig {
   }
 
   Future<void> _firebaseConfig() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-      name: F.appFlavor?.name,
-    );
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } on FirebaseException catch (e) {
+      if (e.code == 'duplicate-app') {
+        debugPrint('[FIREBASE] Firebase já inicializado: ${e.message}');
+      } else {
+        rethrow;
+      }
+    }
   }
 
   Future<void> _loadEnvs() async => Environments.loadEnvs();
