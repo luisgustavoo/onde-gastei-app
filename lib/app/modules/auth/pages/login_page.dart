@@ -20,8 +20,8 @@ class LoginPage extends StatefulWidget {
     required AuthController authController,
     required UserController userController,
     super.key,
-  })  : _authController = authController,
-        _userController = userController;
+  }) : _authController = authController,
+       _userController = userController;
 
   static const router = '/login';
 
@@ -57,15 +57,9 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 100.h,
-                    ),
-                    const Logo(
-                      key: Key('logo_key_login_page'),
-                    ),
-                    SizedBox(
-                      height: 32.h,
-                    ),
+                    SizedBox(height: 100.h),
+                    const Logo(key: Key('logo_key_login_page')),
+                    SizedBox(height: 32.h),
                     _buildForm(context, authControllerState),
                   ],
                 ),
@@ -93,9 +87,7 @@ class _LoginPageState extends State<LoginPage> {
               Validators.email('Email inválido'),
             ]),
           ),
-          SizedBox(
-            height: 32.h,
-          ),
+          SizedBox(height: 32.h),
           OndeGasteiTextForm(
             key: const Key('password_key_login_page'),
             controller: _passwordController,
@@ -104,15 +96,10 @@ class _LoginPageState extends State<LoginPage> {
             prefixIcon: const Icon(Icons.lock_outline),
             validator: Validators.multiple([
               Validators.required('Senha obrigatória'),
-              Validators.min(
-                6,
-                'A senha tem que ter no mínimo 6 caracteres',
-              ),
+              Validators.min(6, 'A senha tem que ter no mínimo 6 caracteres'),
             ]),
           ),
-          SizedBox(
-            height: 16.h,
-          ),
+          SizedBox(height: 16.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -132,13 +119,9 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ],
           ),
-          SizedBox(
-            height: 32.h,
-          ),
+          SizedBox(height: 32.h),
           _buildSaveButton(context, authControllerState),
-          SizedBox(
-            height: 32.h,
-          ),
+          SizedBox(height: 32.h),
           TextButton(
             key: const Key('register_button_key_login_page'),
             style: ElevatedButton.styleFrom(
@@ -149,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () {
               Navigator.of(context).pushNamed(RegisterPage.router);
             },
-            child: const Text('Cadastre-se'),
+            child: Text('Cadastre-se', style: TextStyle(fontSize: 12.sp)),
           ),
         ],
       ),
@@ -161,11 +144,12 @@ class _LoginPageState extends State<LoginPage> {
     AuthState authControllerState,
   ) {
     return OndeGasteiButton(
+      width: MediaQuery.sizeOf(context).width,
       Text(
         'Entrar',
         style: TextStyle(
           color: Colors.white,
-          fontSize: 17.sp,
+          fontSize: 12.sp,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -199,9 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     TextSpan(
                       text: 'E-mail não verificado!\n\n',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
                       text: 'Acesse o seu e-mail para fazer a verificação',

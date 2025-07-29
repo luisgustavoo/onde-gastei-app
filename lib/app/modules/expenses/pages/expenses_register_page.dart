@@ -24,9 +24,9 @@ class ExpensesRegisterPage extends StatefulWidget {
     ExpenseModel? expenseModel,
     bool isEditing = false,
     super.key,
-  })  : _expensesController = expensesController,
-        _expenseModel = expenseModel,
-        _isEditing = isEditing;
+  }) : _expensesController = expensesController,
+       _expenseModel = expenseModel,
+       _isEditing = isEditing;
 
   static const router = '/expenses/register';
   final bool _isEditing;
@@ -71,9 +71,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
         locale: 'pt-BR',
         symbol: r'R$',
         decimalDigits: 2,
-      ).format(
-        widget._expenseModel != null ? widget._expenseModel!.value : 0,
-      ),
+      ).format(widget._expenseModel != null ? widget._expenseModel!.value : 0),
     );
 
     localController = TextEditingController(
@@ -87,19 +85,19 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final expensesControllerState =
-        context.select<ExpensesControllerImpl, ExpensesState>(
-      (expensesController) => expensesController.state,
-    );
-    final expensesControllerDeleteState =
-        context.select<ExpensesControllerImpl, ExpensesDeleteState>(
-      (expensesController) => expensesController.deleteState,
-    );
+    final expensesControllerState = context
+        .select<ExpensesControllerImpl, ExpensesState>(
+          (expensesController) => expensesController.state,
+        );
+    final expensesControllerDeleteState = context
+        .select<ExpensesControllerImpl, ExpensesDeleteState>(
+          (expensesController) => expensesController.deleteState,
+        );
 
-    final categoriesList =
-        context.select<CategoriesControllerImpl, List<CategoryModel>>(
-      (categoriesController) => categoriesController.categoriesList,
-    );
+    final categoriesList = context
+        .select<CategoriesControllerImpl, List<CategoryModel>>(
+          (categoriesController) => categoriesController.categoriesList,
+        );
 
     final user = context.select<UserControllerImpl, UserModel?>(
       (userController) => userController.user,
@@ -111,19 +109,16 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
         appBar: AppBar(
           forceMaterialTransparency: true,
           leading: IconButton(
-            splashRadius: 20.r,
             onPressed: () {
               Navigator.of(context).pop(_edited);
             },
-            icon: const Icon(Icons.close),
+            icon: Icon(Icons.close, size: 20.h),
           ),
           title: const Text(
             'Despesa',
             // style: TextStyle(fontFamily: 'Jost'),
           ),
-          actions: [
-            _buildDeleteButton(context, expensesControllerDeleteState),
-          ],
+          actions: [_buildDeleteButton(context, expensesControllerDeleteState)],
         ),
         body: IgnorePointer(
           ignoring: expensesControllerState == ExpensesState.loading,
@@ -148,9 +143,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                         return null;
                       },
                     ),
-                    SizedBox(
-                      height: 32.h,
-                    ),
+                    SizedBox(height: 32.h),
                     OndeGasteiTextForm(
                       key: const Key('value_key_expenses_register_page'),
                       controller: valueController,
@@ -160,9 +153,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                       inputFormatters: [CurrencyInputFormatterPtBr()],
                       validator: Validators.value(),
                     ),
-                    SizedBox(
-                      height: 32.h,
-                    ),
+                    SizedBox(height: 32.h),
                     OndeGasteiTextForm(
                       key: const Key('date_key_expenses_register_page'),
                       controller: dateController,
@@ -178,8 +169,9 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                         );
 
                         if (result != null) {
-                          dateController.text =
-                              DateFormat.yMd('pt_BR').format(result);
+                          dateController.text = DateFormat.yMd(
+                            'pt_BR',
+                          ).format(result);
                         }
                       },
                       // suffixIcon: IconButton(
@@ -206,19 +198,17 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                       ],
                       validator: Validators.date(),
                     ),
-                    SizedBox(
-                      height: 32.h,
-                    ),
+                    SizedBox(height: 32.h),
                     OndeGasteiTextForm(
                       key: const Key('local_key_expenses_register_page'),
                       controller: localController,
                       label: 'Local',
                       prefixIcon: const Icon(Icons.location_on_outlined),
                     ),
-                    SizedBox(
-                      height: 32.h,
-                    ),
+                    SizedBox(height: 32.h),
                     DropdownButtonFormField<CategoryModel>(
+                      isExpanded: true,
+                      isDense: false,
                       key: const Key('categories_key_expenses_register_page'),
                       validator: (category) {
                         if (category == null) {
@@ -232,28 +222,46 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                         });
                       },
                       value: _selectedCategory,
-                      hint: const Text(
+                      hint: Text(
                         'Selecione a categoria',
                         style: TextStyle(
-                          color: Constants.hintStyleColor,
+                          color: Colors.black,
+                          // Constants.hintStyleColor,
+                          fontSize: 12.sp,
+                          fontFamily: 'Jost',
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
+
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 2.h,
-                          horizontal: _selectedCategory == null ? 8.h : 0,
-                        ),
+                        prefixIcon: _selectedCategory == null
+                            ? Padding(
+                                padding: EdgeInsets.only(left: 8.w),
+                                child: const Icon(Icons.category_outlined),
+                              )
+                            : null,
+                        // hintStyle: const TextStyle(
+                        //   color: Constants.hintStyleColor,
+                        //   fontFamily: 'Jost',
+                        // ),
+                        // contentPadding: EdgeInsets.symmetric(
+                        //   vertical: 16.h,
+                        //   horizontal: 16.w,
+                        // ),
                       ),
-                      isExpanded: true,
-                      isDense: false,
                       items: categoriesList.map((category) {
                         return DropdownMenuItem<CategoryModel>(
                           value: category,
                           child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            dense: false,
+                            visualDensity: VisualDensity.compact,
+
                             // key: Key(
                             //   'list_tile_items_key_${category.id}_expenses_register_page',
                             // ),
                             leading: CircleAvatar(
+                              radius: 20.r,
                               backgroundColor: Color(category.colorCode),
                               child: Icon(
                                 IconData(
@@ -261,20 +269,23 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                                   fontFamily: 'MaterialIcons',
                                 ),
                                 color: Colors.white,
+                                size: 20.h,
                               ),
                             ),
-                            title: Text(category.description),
+                            title: Text(
+                              category.description,
+                              style: TextStyle(fontSize: 12.sp),
+                            ),
                           ),
                         );
                       }).toList(),
                     ),
-                    SizedBox(
-                      height: 32.h,
-                    ),
+                    SizedBox(height: 32.h),
                     OndeGasteiButton(
-                      const Text(
+                      width: MediaQuery.sizeOf(context).width,
+                      Text(
                         'Salvar',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 12.sp),
                       ),
                       onPressed: () async {
                         final formValid =
@@ -295,8 +306,8 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                                 description: descriptionController.text.trim(),
                                 value:
                                     Validators.parseLocalFormatValueToIso4217(
-                                  valueController.text,
-                                ),
+                                      valueController.text,
+                                    ),
                                 date: Validators.parseLocalFormatDateToIso8601(
                                   dateController.text,
                                 ),
@@ -313,8 +324,8 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                                 description: descriptionController.text.trim(),
                                 value:
                                     Validators.parseLocalFormatValueToIso4217(
-                                  valueController.text,
-                                ),
+                                      valueController.text,
+                                    ),
                                 date: Validators.parseLocalFormatDateToIso8601(
                                   dateController.text,
                                 ),
@@ -349,8 +360,9 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                             );
                           }
 
-                          _scaffoldMessagedKey.currentState!
-                              .showSnackBar(snackBar);
+                          _scaffoldMessagedKey.currentState!.showSnackBar(
+                            snackBar,
+                          );
                         }
                       },
                       isLoading:
@@ -385,16 +397,20 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                 key: const Key(
                   'alert_delete_dialog_key_register_expenses_page',
                 ),
-                title: const Text('Deletar despesa'),
+                title: Text(
+                  'Deletar despesa',
+                  style: TextStyle(fontSize: 12.sp),
+                ),
                 content: Text(
                   'Deseja deletar a despesa ${widget._expenseModel?.description}?',
+                  style: TextStyle(fontSize: 12.sp),
                 ),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(dialogContext).pop();
                     },
-                    child: const Text('Cancelar'),
+                    child: Text('Cancelar', style: TextStyle(fontSize: 12.sp)),
                   ),
                   TextButton(
                     key: const Key(
@@ -429,8 +445,9 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                           onPressed: () {},
                         );
 
-                        _scaffoldMessagedKey.currentState!
-                            .showSnackBar(snackBar);
+                        _scaffoldMessagedKey.currentState!.showSnackBar(
+                          snackBar,
+                        );
                       }
                     },
                     child: expensesDeleteState == ExpensesDeleteState.loading
@@ -442,9 +459,12 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                               strokeWidth: 1.w,
                             ),
                           )
-                        : const Text(
+                        : Text(
                             'Deletar',
-                            style: TextStyle(color: Colors.red),
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12.sp,
+                            ),
                           ),
                   ),
                 ],
@@ -453,10 +473,11 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
           );
         },
         splashRadius: 20.r,
-        icon: const Icon(
+        icon: Icon(
+          key: const Key('icon_delete_key_register_expenses_page'),
           Icons.delete,
           color: Colors.red,
-          key: Key('icon_delete_key_register_expenses_page'),
+          size: 20.h,
         ),
       ),
     );
@@ -466,9 +487,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
     descriptionController.clear();
 
     dateController = TextEditingController(
-      text: DateFormat.yMd('pt_BR').format(
-        DateTime.now(),
-      ),
+      text: DateFormat.yMd('pt_BR').format(DateTime.now()),
     );
 
     valueController = TextEditingController(

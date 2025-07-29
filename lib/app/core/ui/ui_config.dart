@@ -9,73 +9,64 @@ class UiConfig {
   static String get title => 'OndeGastei';
 
   static ThemeData get themeLight => ThemeData(
-        // useMaterial3: true,
+    // useMaterial3: true,
+    fontFamily: 'Jost',
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        // statusBarBrightness: Brightness.dark,
+      ),
+      color: Colors.transparent,
+      elevation: 0,
+      titleTextStyle: TextStyle(
+        color: Constants.titleTextStyleColor,
+        fontSize: 18.sp,
+        fontWeight: FontWeight.w500,
         fontFamily: 'Jost',
-        appBarTheme: AppBarTheme(
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
-            // statusBarBrightness: Brightness.dark,
-          ),
-          color: Colors.transparent,
-          elevation: 0,
-          titleTextStyle: TextStyle(
-            color: Constants.titleTextStyleColor,
-            fontSize: 23.sp,
-            fontWeight: FontWeight.w500,
-            fontFamily: 'Jost',
-          ),
-          centerTitle: true,
-          iconTheme: const IconThemeData(
-            color: Constants.iconThemeColor,
-          ),
-        ),
+      ),
+      centerTitle: true,
+      iconTheme: const IconThemeData(color: Constants.iconThemeColor),
+    ),
 
-        iconTheme: const IconThemeData(
-          color: Constants.iconThemeColor,
-        ),
-        primaryColor: Constants.primaryColor,
-        primaryColorDark: Constants.primaryColorDark,
-        primaryColorLight: Constants.primaryColorLight,
-        primarySwatch: Constants.primarySwatch,
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Constants.primaryColor,
-        ),
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(
-            color: Constants.bodyText2Color,
-          ),
-          titleMedium: TextStyle(
-            color: Constants.subtitle1Color,
-          ),
-        ),
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: Constants.primaryColor,
-          primary: Constants.primaryColor,
-          brightness: Brightness.light,
-        ),
-        textSelectionTheme: TextSelectionThemeData(
-          cursorColor: Constants.primaryColor,
-          selectionColor: Constants.primaryColor.withAlpha(50),
-          selectionHandleColor: Constants.primaryColor,
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          hintStyle: const TextStyle(
-            color: Constants.hintStyleColor,
-            fontFamily: 'Jost',
-          ),
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          fillColor: Constants.fillColor,
-          filled: true,
-          labelStyle: TextStyle(
-            color: Constants.labelStyleColor,
-            fontSize: 12.sp,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.r),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding: EdgeInsets.symmetric(vertical: 16.h),
-        ),
-      );
+    iconTheme: const IconThemeData(color: Constants.iconThemeColor),
+    primaryColor: Constants.primaryColor,
+    primaryColorDark: Constants.primaryColorDark,
+    primaryColorLight: Constants.primaryColorLight,
+    primarySwatch: Constants.primarySwatch,
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: Constants.primaryColor,
+    ),
+    textTheme: const TextTheme(
+      bodyMedium: TextStyle(color: Constants.bodyText2Color),
+      titleMedium: TextStyle(color: Constants.subtitle1Color),
+    ),
+    colorScheme: ColorScheme.fromSwatch().copyWith(
+      secondary: Constants.primaryColor,
+      primary: Constants.primaryColor,
+      brightness: Brightness.light,
+    ),
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: Constants.primaryColor,
+      selectionColor: Constants.primaryColor.withAlpha(50),
+      selectionHandleColor: Constants.primaryColor,
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      errorStyle: TextStyle(fontSize: 12.sp),
+
+      hintStyle: const TextStyle(
+        color: Constants.hintStyleColor,
+        fontFamily: 'Jost',
+      ),
+      floatingLabelBehavior: FloatingLabelBehavior.never,
+      fillColor: Constants.fillColor,
+      filled: true,
+      labelStyle: TextStyle(color: Constants.labelStyleColor, fontSize: 20.sp),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16.r),
+        borderSide: BorderSide.none,
+      ),
+      contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+    ),
+  );
 }

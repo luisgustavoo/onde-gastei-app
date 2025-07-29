@@ -3,9 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/ui/extensions/theme_extension.dart';
 
 class Logo extends StatelessWidget {
-  const Logo({
-    super.key,
-  });
+  const Logo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +22,7 @@ class Logo extends StatelessWidget {
         Text(
           '?',
           style: TextStyle(
-            fontSize: 85,
+            fontSize: 85.sp,
             color: context.primaryColor,
             fontWeight: FontWeight.bold,
             // height: 0.8.h,
@@ -33,7 +31,7 @@ class Logo extends StatelessWidget {
         Text(
           'Gastei',
           style: TextStyle(
-            fontSize: 45,
+            fontSize: 45.sp,
             color: context.primaryColor,
             fontWeight: FontWeight.bold,
             // height: 0.8.h,

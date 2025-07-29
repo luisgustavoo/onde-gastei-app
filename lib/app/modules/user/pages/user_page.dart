@@ -11,10 +11,7 @@ import 'package:onde_gastei_app/app/modules/user/controllers/user_controller_imp
 import 'package:provider/provider.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({
-    required this.userController,
-    super.key,
-  });
+  const UserPage({required this.userController, super.key});
   static const router = '/user';
 
   final UserController userController;
@@ -54,27 +51,30 @@ class _UserPageState extends State<UserPage> {
                   barrierDismissible: false,
                   builder: (dialogContext) {
                     return AlertDialog(
-                      key: const Key(
-                        'alert_logout_dialog_key_user_page',
+                      key: const Key('alert_logout_dialog_key_user_page'),
+                      title: Text(
+                        'Sair do aplicativo',
+                        style: TextStyle(fontSize: 12.sp),
                       ),
-                      title: const Text('Sair do aplicativo'),
-                      content: const Text(
+                      content: Text(
                         'Deseja sair do aplicativo?',
+                        style: TextStyle(fontSize: 12.sp),
                       ),
                       actions: [
                         TextButton(
                           onPressed: () {
                             Navigator.of(dialogContext).pop();
                           },
-                          child: const Text(
+                          child: Text(
                             'Cancelar',
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12.sp,
+                            ),
                           ),
                         ),
                         TextButton(
-                          key: const Key(
-                            'logout_dialog_user_page',
-                          ),
+                          key: const Key('logout_dialog_user_page'),
                           onPressed: () async {
                             // SnackBar snackBar;
                             try {
@@ -94,13 +94,17 @@ class _UserPageState extends State<UserPage> {
                                 onPressed: () {},
                               );
 
-                              _scaffoldMessengerKey.currentState!
-                                  .showSnackBar(snackBar);
+                              _scaffoldMessengerKey.currentState!.showSnackBar(
+                                snackBar,
+                              );
                             }
                           },
-                          child: const Text(
+                          child: Text(
                             'Sair',
-                            style: TextStyle(color: Colors.red),
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12.sp,
+                            ),
                           ),
                         ),
                       ],
@@ -108,7 +112,7 @@ class _UserPageState extends State<UserPage> {
                   },
                 );
               },
-              icon: const Icon(Icons.logout_outlined),
+              icon: Icon(Icons.logout_outlined, size: 20.h),
             ),
           ],
         ),
@@ -125,9 +129,7 @@ class _UserPageState extends State<UserPage> {
                   prefixIcon: const Icon(Icons.email_outlined),
                   enabled: false,
                 ),
-                SizedBox(
-                  height: 20.h,
-                ),
+                SizedBox(height: 20.h),
                 OndeGasteiTextForm(
                   label: 'Nome',
                   controller: _userNameController,
@@ -141,16 +143,14 @@ class _UserPageState extends State<UserPage> {
                     return null;
                   },
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
+                const SizedBox(height: 16),
                 Selector<UserControllerImpl, UserState>(
                   selector: (_, userController) => userController.state,
                   builder: (_, state, __) {
                     return OndeGasteiButton(
                       Text(
                         'Salvar',
-                        style: TextStyle(color: Colors.white, fontSize: 17.sp),
+                        style: TextStyle(color: Colors.white, fontSize: 12.sp),
                       ),
                       width: MediaQuery.of(context).size.width,
                       isLoading: state == UserState.loading,
@@ -167,20 +167,17 @@ class _UserPageState extends State<UserPage> {
                             );
 
                             snackBar = OndeGasteiSnackBar.buildSnackBar(
-                              key: const Key(
-                                'snack_bar_success_key_user_page',
+                              key: const Key('snack_bar_success_key_user_page'),
+                              content: const Text(
+                                'Nome atualizado com sucesso!',
                               ),
-                              content:
-                                  const Text('Nome atualizado com sucesso!'),
                               backgroundColor: Constants.primaryColor,
                               label: 'Fechar',
                               onPressed: () {},
                             );
                           } on Exception {
                             snackBar = OndeGasteiSnackBar.buildSnackBar(
-                              key: const Key(
-                                'snack_bar_error_key_user_page',
-                              ),
+                              key: const Key('snack_bar_error_key_user_page'),
                               content: const Text('Erro ao atualizar nome'),
                               backgroundColor: Colors.red,
                               label: 'Fechar',
@@ -188,27 +185,26 @@ class _UserPageState extends State<UserPage> {
                             );
                           }
 
-                          _scaffoldMessengerKey.currentState!
-                              .showSnackBar(snackBar);
+                          _scaffoldMessengerKey.currentState!.showSnackBar(
+                            snackBar,
+                          );
                         }
                       },
                     );
                   },
                 ),
-                SizedBox(
-                  height: 50.h,
-                ),
+                SizedBox(height: 50.h),
                 TextButton(
                   style: ButtonStyle(
-                    overlayColor: WidgetStateProperty.resolveWith<Color?>(
-                      (states) {
-                        if (states.contains(WidgetState.pressed)) {
-                          return Colors.red.withValues(alpha: 0.5);
-                        }
+                    overlayColor: WidgetStateProperty.resolveWith<Color?>((
+                      states,
+                    ) {
+                      if (states.contains(WidgetState.pressed)) {
+                        return Colors.red.withValues(alpha: 0.5);
+                      }
 
-                        return null;
-                      },
-                    ),
+                      return null;
+                    }),
                   ),
                   onPressed: () async {
                     await showDialog<void>(
@@ -219,22 +215,31 @@ class _UserPageState extends State<UserPage> {
                           key: const Key(
                             'alert_delete_account_dialog_key_user_page',
                           ),
-                          title: const Text('Deletar conta'),
-                          content: const Text(
+                          title: Text(
+                            'Deletar conta',
+                            style: TextStyle(fontSize: 12.sp),
+                          ),
+                          content: Text(
                             'Deseja deletar a conta?\nEssa ação não poderá ser desfeita',
+                            style: TextStyle(fontSize: 12.sp),
                           ),
                           actions: [
                             TextButton(
                               onPressed: () {
                                 Navigator.of(dialogContext).pop();
                               },
-                              child: const Text(
+                              child: Text(
                                 'Cancelar',
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.sp,
+                                ),
                               ),
                             ),
-                            Selector<UserControllerImpl,
-                                UserDeleteAccountState>(
+                            Selector<
+                              UserControllerImpl,
+                              UserDeleteAccountState
+                            >(
                               builder: (_, stateDelete, __) {
                                 return TextButton(
                                   key: const Key(
@@ -242,8 +247,9 @@ class _UserPageState extends State<UserPage> {
                                   ),
                                   onPressed: () async {
                                     // SnackBar snackBar;
-                                    final navigatorStateDialog =
-                                        Navigator.of(dialogContext);
+                                    final navigatorStateDialog = Navigator.of(
+                                      dialogContext,
+                                    );
                                     try {
                                       await widget.userController
                                           .deleteAccountUser(user.userId);
@@ -260,34 +266,40 @@ class _UserPageState extends State<UserPage> {
 
                                       final snackBar =
                                           OndeGasteiSnackBar.buildSnackBar(
-                                        key: const Key(
-                                          'snack_bar_fail_delete_account_key_user_page',
-                                        ),
-                                        content:
-                                            const Text('Erro ao deletar conta'),
-                                        backgroundColor: Colors.red,
-                                        label: 'Fechar',
-                                        onPressed: () {},
-                                      );
+                                            key: const Key(
+                                              'snack_bar_fail_delete_account_key_user_page',
+                                            ),
+                                            content: const Text(
+                                              'Erro ao deletar conta',
+                                            ),
+                                            backgroundColor: Colors.red,
+                                            label: 'Fechar',
+                                            onPressed: () {},
+                                          );
 
                                       _scaffoldMessengerKey.currentState!
                                           .showSnackBar(snackBar);
                                     }
                                   },
-                                  child: stateDelete ==
+                                  child:
+                                      stateDelete ==
                                           UserDeleteAccountState.loading
                                       ? SizedBox(
                                           height: 15.h,
                                           width: 15.w,
                                           child: CircularProgressIndicator(
-                                            color:
-                                                Theme.of(context).primaryColor,
+                                            color: Theme.of(
+                                              context,
+                                            ).primaryColor,
                                             strokeWidth: 1.w,
                                           ),
                                         )
-                                      : const Text(
+                                      : Text(
                                           'Deletar',
-                                          style: TextStyle(color: Colors.red),
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 12.sp,
+                                          ),
                                         ),
                                 );
                               },
@@ -300,9 +312,9 @@ class _UserPageState extends State<UserPage> {
                       },
                     );
                   },
-                  child: const Text(
+                  child: Text(
                     'Excluir conta',
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(color: Colors.red, fontSize: 12.sp),
                   ),
                 ),
               ],
