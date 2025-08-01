@@ -54,7 +54,7 @@ class ExpensesPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Text('Ordenar por'),
+                  Text('Ordenar por', style: TextStyle(fontSize: 12.sp)),
                   SizedBox(
                     height: 30.h,
                     width: 30.w,
@@ -62,31 +62,47 @@ class ExpensesPage extends StatelessWidget {
                       itemBuilder: (context) => [
                         PopupMenuItem<String>(
                           onTap: () {
-                            expensesController
-                                .sortExpenseList(ExpensesOrderBy.maiorData);
+                            expensesController.sortExpenseList(
+                              ExpensesOrderBy.maiorData,
+                            );
                           },
-                          child: const Text('Maior data'),
+                          child: Text(
+                            'Maior data',
+                            style: TextStyle(fontSize: 12.sp),
+                          ),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            expensesController
-                                .sortExpenseList(ExpensesOrderBy.menorData);
+                            expensesController.sortExpenseList(
+                              ExpensesOrderBy.menorData,
+                            );
                           },
-                          child: const Text('Menor data'),
+                          child: Text(
+                            'Menor data',
+                            style: TextStyle(fontSize: 12.sp),
+                          ),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            expensesController
-                                .sortExpenseList(ExpensesOrderBy.maiorValor);
+                            expensesController.sortExpenseList(
+                              ExpensesOrderBy.maiorValor,
+                            );
                           },
-                          child: const Text('Maior valor'),
+                          child: Text(
+                            'Maior valor',
+                            style: TextStyle(fontSize: 12.sp),
+                          ),
                         ),
                         PopupMenuItem<String>(
                           onTap: () {
-                            expensesController
-                                .sortExpenseList(ExpensesOrderBy.menorValor);
+                            expensesController.sortExpenseList(
+                              ExpensesOrderBy.menorValor,
+                            );
                           },
-                          child: const Text('Menor valor'),
+                          child: Text(
+                            'Menor valor',
+                            style: TextStyle(fontSize: 12.sp),
+                          ),
                         ),
                       ],
                       icon: const Icon(Icons.arrow_drop_down),
@@ -98,8 +114,11 @@ class ExpensesPage extends StatelessWidget {
             Consumer<ExpensesControllerImpl>(
               builder: (context, expensesController, _) {
                 if (expensesController.state == ExpensesState.error) {
-                  return const Center(
-                    child: Text('Erro ao buscar despesas'),
+                  return Center(
+                    child: Text(
+                      'Erro ao buscar despesas',
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
                   );
                 }
 
@@ -108,8 +127,11 @@ class ExpensesPage extends StatelessWidget {
                 }
 
                 if (expensesController.expensesList.isEmpty) {
-                  return const Center(
-                    child: Text('Nenhuma informação'),
+                  return Center(
+                    child: Text(
+                      'Nenhuma informação',
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
                   );
                 }
 
@@ -125,22 +147,21 @@ class ExpensesPage extends StatelessWidget {
                         child: Row(
                           children: [
                             Text(
-                              DateFormat.E('pt_BR').format(
-                                DateTime.parse(groupByValue),
-                              ),
+                              DateFormat.E(
+                                'pt_BR',
+                              ).format(DateTime.parse(groupByValue)),
                               style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const Text(','),
-                            SizedBox(
-                              width: 5.w,
-                            ),
+                            SizedBox(width: 5.w),
                             Text(
-                              DateFormat('dd/MM/y', 'pt_BR').format(
-                                DateTime.parse(groupByValue),
-                              ),
+                              DateFormat(
+                                'dd/MM/y',
+                                'pt_BR',
+                              ).format(DateTime.parse(groupByValue)),
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
@@ -166,11 +187,7 @@ class ExpensesPage extends StatelessWidget {
                       );
                     },
                     itemBuilder: (context, expense) {
-                      return _buildExpensesListTile(
-                        context,
-                        expense,
-                        user,
-                      );
+                      return _buildExpensesListTile(context, expense, user);
                     },
                   ),
                 );
@@ -189,10 +206,11 @@ class ExpensesPage extends StatelessWidget {
   ) {
     return ExpensesListTile(
       onTap: () async {
-        final edited = await Navigator.of(context).pushNamed(
-          ExpensesRegisterPage.router,
-          arguments: expense,
-        ) as bool?;
+        final edited =
+            await Navigator.of(
+                  context,
+                ).pushNamed(ExpensesRegisterPage.router, arguments: expense)
+                as bool?;
 
         if (edited != null) {
           if (edited) {

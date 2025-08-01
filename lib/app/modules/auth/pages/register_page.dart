@@ -11,10 +11,8 @@ import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_imp
 import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({
-    required AuthController authController,
-    super.key,
-  }) : _authController = authController;
+  const RegisterPage({required AuthController authController, super.key})
+    : _authController = authController;
 
   static const String router = '/register';
 
@@ -48,9 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
           child: IgnorePointer(
             ignoring: authControllerState == AuthState.loading,
             child: ListView(
-              children: [
-                _buildForm(context, authControllerState),
-              ],
+              children: [_buildForm(context, authControllerState)],
             ),
           ),
         ),
@@ -64,9 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(
-              top: 32.h,
-            ),
+            padding: EdgeInsets.only(top: 32.h),
             child: OndeGasteiTextForm(
               key: const Key('name_key_register_page'),
               controller: nameController,
@@ -75,9 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(
-              top: 32.h,
-            ),
+            padding: EdgeInsets.only(top: 32.h),
             child: OndeGasteiTextForm(
               key: const Key('email_key_register_page'),
               controller: emailController,
@@ -91,9 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(
-              top: 32.h,
-            ),
+            padding: EdgeInsets.only(top: 32.h),
             child: OndeGasteiTextForm(
               key: const Key('password_key_register_page'),
               controller: passwordController,
@@ -102,37 +92,28 @@ class _RegisterPageState extends State<RegisterPage> {
               prefixIcon: const Icon(Icons.lock_outline),
               validator: Validators.multiple([
                 Validators.required('Senha obrigatória'),
-                Validators.min(
-                  6,
-                  'A senha tem que ter no mínimo 6 caracteres',
-                ),
+                Validators.min(6, 'A senha tem que ter no mínimo 6 caracteres'),
               ]),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(
-              top: 32.h,
-            ),
+            padding: EdgeInsets.only(top: 32.h),
             child: OndeGasteiTextForm(
               key: const Key('confirm_password_key_register_page'),
               controller: confirmPasswordController,
               label: 'Confirmar senha',
               obscureText: true,
               prefixIcon: const Icon(Icons.lock_outline),
-              validator: Validators.multiple(
-                [
-                  Validators.required('Confirmar senha obrigatório'),
-                  Validators.compare(
-                    passwordController,
-                    'Senha e confirmar senha não são iguais',
-                  ),
-                ],
-              ),
+              validator: Validators.multiple([
+                Validators.required('Confirmar senha obrigatório'),
+                Validators.compare(
+                  passwordController,
+                  'Senha e confirmar senha não são iguais',
+                ),
+              ]),
             ),
           ),
-          SizedBox(
-            height: 32.h,
-          ),
+          SizedBox(height: 32.h),
           _buildOndeGasteiButton(context, authControllerState),
         ],
       ),
@@ -144,11 +125,12 @@ class _RegisterPageState extends State<RegisterPage> {
     AuthState authControllerState,
   ) {
     return OndeGasteiButton(
+      width: MediaQuery.sizeOf(context).width,
       Text(
         'Cadastrar',
         style: TextStyle(
           color: Colors.white,
-          fontSize: 17.sp,
+          fontSize: 12.sp,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -174,9 +156,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     TextSpan(
                       text: 'Usuário registrado com sucesso!\n\n',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
                       text:
@@ -230,17 +210,15 @@ class _RegisterPageState extends State<RegisterPage> {
   AppBar _buildAppBar() {
     return AppBar(
       leading: IconButton(
-        splashRadius: 20.r,
-        icon: const Icon(Icons.close),
+        // splashRadius: 20.r,
+        icon: Icon(Icons.close, size: 20.h),
         onPressed: () {
           if (Navigator.of(context).canPop()) {
             Navigator.of(context).pop();
           }
         },
       ),
-      title: const Text(
-        'Cadastro',
-      ),
+      title: const Text('Cadastro'),
     );
   }
 

@@ -18,13 +18,12 @@ class ExpensesListTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       leading: CircleAvatar(
+        radius: 20.r,
         backgroundColor: Color(expenseModel.category.colorCode),
         child: Icon(
-          IconData(
-            expenseModel.category.iconCode,
-            fontFamily: 'MaterialIcons',
-          ),
+          IconData(expenseModel.category.iconCode, fontFamily: 'MaterialIcons'),
           color: Colors.white,
+          size: 20.h,
         ),
       ),
       title: Text(

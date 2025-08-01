@@ -6,7 +6,7 @@ import 'package:onde_gastei_app/app/core/ui/extensions/theme_extension.dart';
 class OndeGasteiButton extends StatelessWidget {
   OndeGasteiButton(
     Widget child, {
-    double height = 60,
+    double height = 50,
     double? width = 300,
     double borderRadius = 20,
     Color? color,
@@ -14,14 +14,14 @@ class OndeGasteiButton extends StatelessWidget {
     bool isLoading = false,
     bool disable = false,
     super.key,
-  })  : _child = child,
-        _height = height,
-        _width = width,
-        _color = color,
-        _borderRadius = borderRadius,
-        _onPressed = onPressed,
-        _disable = disable,
-        _isLoading = ValueNotifier<bool>(isLoading);
+  }) : _child = child,
+       _height = height,
+       _width = width,
+       _color = color,
+       _borderRadius = borderRadius,
+       _onPressed = onPressed,
+       _disable = disable,
+       _isLoading = ValueNotifier<bool>(isLoading);
 
   final Widget _child;
   final double _height;
@@ -47,27 +47,25 @@ class OndeGasteiButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(_borderRadius.r),
               ),
             ),
-            backgroundColor: WidgetStateProperty.resolveWith<Color>(
-              (states) {
-                if (_disable) {
-                  return Constants.buttonColorDisabled;
-                }
+            backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+              if (_disable) {
+                return Constants.buttonColorDisabled;
+              }
 
-                if (states.contains(WidgetState.pressed)) {
-                  return _color != null
-                      ? _color.withValues(alpha: 0.5)
-                      : context.primaryColor.withValues(alpha: 0.5);
-                }
+              if (states.contains(WidgetState.pressed)) {
+                return _color != null
+                    ? _color.withValues(alpha: 0.5)
+                    : context.primaryColor.withValues(alpha: 0.5);
+              }
 
-                return _color ?? context.primaryColor;
-              },
-            ),
+              return _color ?? context.primaryColor;
+            }),
           ),
           onPressed: isLoading ? null : _onPressed,
           child: isLoading
               ? SizedBox(
-                  height: 25.h,
-                  width: 25.w,
+                  height: 20.h,
+                  width: 20.w,
                   child: CircularProgressIndicator(
                     color: Colors.white,
                     strokeWidth: 1.w,

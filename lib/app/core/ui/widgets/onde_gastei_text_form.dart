@@ -18,11 +18,11 @@ class OndeGasteiTextForm extends StatelessWidget {
     this.readOnly = false,
     this.enabled = true,
     super.key,
-  })  : _obscureTextNotifier = ValueNotifier<bool>(obscureText),
-        assert(
-          !(obscureText == true && suffixIcon != null),
-          'obscureText não pode ser adicionado junto com o suffixIcon',
-        );
+  }) : _obscureTextNotifier = ValueNotifier<bool>(obscureText),
+       assert(
+         !(obscureText == true && suffixIcon != null),
+         'obscureText não pode ser adicionado junto com o suffixIcon',
+       );
 
   final String label;
   final TextEditingController? controller;
@@ -56,22 +56,38 @@ class OndeGasteiTextForm extends StatelessWidget {
           onTap: onTap,
           readOnly: readOnly,
           enabled: enabled,
+          style: TextStyle(fontSize: 12.sp),
           decoration: InputDecoration(
             hintText: label,
-            prefixIcon: prefixIcon,
-            labelStyle: const TextStyle(color: Colors.red),
+            hintStyle: TextStyle(fontSize: 12.sp),
+            prefixIcon: Padding(
+              padding: EdgeInsets.only(left: 8.w),
+              child: prefixIcon,
+            ),
+
             fillColor: enabled ? null : Colors.grey[300],
             // labelStyle: const TextStyle(color: Constants.textColorDisabled),
             // contentPadding: const EdgeInsets.only(left: 8),
+            suffixStyle: TextStyle(fontSize: 10.sp),
             suffixIcon: obscureText
-                ? IconButton(
-                    onPressed: () {
-                      _obscureTextNotifier.value = !_obscureTextNotifier.value;
-                    },
-                    icon: Icon(value ? Icons.visibility_off : Icons.visibility),
-                    splashRadius: 20.r,
+                ? Padding(
+                    padding: EdgeInsets.only(right: 8.w),
+                    child: IconButton(
+                      onPressed: () {
+                        _obscureTextNotifier.value =
+                            !_obscureTextNotifier.value;
+                      },
+                      icon: Icon(
+                        value ? Icons.visibility_off : Icons.visibility,
+                      ),
+                      // splashRadius: 30.r,
+                      // iconSize: 18.h,
+                    ),
                   )
-                : suffixIcon,
+                : Padding(
+                    padding: EdgeInsets.only(right: 8.w),
+                    child: suffixIcon,
+                  ),
           ),
         );
       },

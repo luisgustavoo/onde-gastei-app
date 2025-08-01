@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:onde_gastei_app/app/core/dtos/date_filter.dart';
 import 'package:onde_gastei_app/app/models/user_model.dart';
 import 'package:onde_gastei_app/app/modules/categories/controllers/categories_controller.dart';
@@ -39,9 +40,7 @@ class _AppPageState extends State<AppPage> {
     finalDate: DateTime(
       DateTime.now().year,
       DateTime.now().month + 1,
-    ).subtract(
-      const Duration(days: 1),
-    ),
+    ).subtract(const Duration(days: 1)),
   );
 
   late UserModel user;
@@ -115,23 +114,21 @@ class _AppPageState extends State<AppPage> {
           });
           // widget.appController.tabIndex = index;
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_outlined,
-            ),
+            icon: Icon(Icons.home_outlined, size: 20.h),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt_outlined),
+            icon: Icon(Icons.list_alt_outlined, size: 20.h),
             label: 'Despesas',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.category_outlined),
+            icon: Icon(Icons.category_outlined, size: 20.h),
             label: 'Categorias',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
+            icon: Icon(Icons.person_outline, size: 20.h),
             label: 'Perfil',
           ),
         ],
@@ -172,31 +169,40 @@ class _AppPageState extends State<AppPage> {
       //     );
       //   },
       // ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final edited = await Navigator.of(context)
-              .pushNamed(ExpensesRegisterPage.router) as bool?;
-          if (edited != null) {
-            if (edited) {
-              final futures = [
-                widget.homeController.fetchHomeData(
-                  userId: user.userId,
-                  initialDate: dateFilter.initialDate,
-                  finalDate: dateFilter.finalDate,
-                ),
-                // widget.categoriesController.findCategories(user.userId),
-                widget.expensesController.findExpensesByPeriod(
-                  userId: user.userId,
-                  initialDate: dateFilter.initialDate,
-                  finalDate: dateFilter.finalDate,
-                ),
-              ];
+      floatingActionButton: SizedBox(
+        height: 46.h,
+        width: 46.w,
+        child: FittedBox(
+          child: FloatingActionButton(
+            onPressed: () async {
+              final edited =
+                  await Navigator.of(
+                        context,
+                      ).pushNamed(ExpensesRegisterPage.router)
+                      as bool?;
+              if (edited != null) {
+                if (edited) {
+                  final futures = [
+                    widget.homeController.fetchHomeData(
+                      userId: user.userId,
+                      initialDate: dateFilter.initialDate,
+                      finalDate: dateFilter.finalDate,
+                    ),
+                    // widget.categoriesController.findCategories(user.userId),
+                    widget.expensesController.findExpensesByPeriod(
+                      userId: user.userId,
+                      initialDate: dateFilter.initialDate,
+                      finalDate: dateFilter.finalDate,
+                    ),
+                  ];
 
-              await Future.wait(futures);
-            }
-          }
-        },
-        child: const Icon(Icons.add),
+                  await Future.wait(futures);
+                }
+              }
+            },
+            child: Icon(Icons.add, size: 20.sp),
+          ),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );

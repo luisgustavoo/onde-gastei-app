@@ -20,13 +20,13 @@ flavors:
       name: "Onde Gastei"
     android:
       applicationId: "br.app.ondegastei.onde_gastei_app"
-      icon: "assets/images/icon_ios.png"
-      launchScreen: "assets/images/splash.png"
-      firebase:
-        config: ".firebase/prod/google-services.json"
+      # icon: "assets/images/icon_ios.png"
+      # launchScreen: "assets/images/splash.png"
+      # firebase:
+      #   config: ".firebase/prod/google-services.json"
     ios:
       bundleId: "br.app.ondegastei.ondeGasteiApp"
-      icon: "assets/images/icon_ios.png"
-      launchScreen: "assets/images/splash.png"
-      firebase:
-        config: ".firebase/prod/GoogleService-Info.plist"
+      # icon: "assets/images/icon_ios.png"
+      # launchScreen: "assets/images/splash.png"
+      # firebase:
+      #   config: ".firebase/prod/GoogleService-Info.plist"

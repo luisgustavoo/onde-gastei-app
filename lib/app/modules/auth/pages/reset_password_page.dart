@@ -9,10 +9,7 @@ import 'package:onde_gastei_app/app/modules/auth/controllers/auth_controller_imp
 import 'package:provider/provider.dart';
 
 class ResetPasswordPage extends StatefulWidget {
-  const ResetPasswordPage({
-    required this.authController,
-    super.key,
-  });
+  const ResetPasswordPage({required this.authController, super.key});
 
   static const String router = '/reset-password';
 
@@ -41,17 +38,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         appBar: AppBar(
           forceMaterialTransparency: true,
           leading: IconButton(
-            splashRadius: 20.r,
-            icon: const Icon(Icons.close),
+            icon: Icon(Icons.close, size: 20.h),
             onPressed: () {
               if (Navigator.of(context).canPop()) {
                 Navigator.of(context).pop();
               }
             },
           ),
-          title: const Text(
-            'Recuperar senha',
-          ),
+          title: const Text('Recuperar senha'),
         ),
         body: Padding(
           padding: EdgeInsets.only(left: 16.w, right: 16.w),
@@ -74,9 +68,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   },
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               Selector<AuthControllerImpl, AuthState>(
                 selector: (_, authController) => authController.state,
                 builder: (_, state, __) {
@@ -119,8 +111,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           );
                         }
 
-                        _scaffoldMessengerKey.currentState!
-                            .showSnackBar(snackBar);
+                        _scaffoldMessengerKey.currentState!.showSnackBar(
+                          snackBar,
+                        );
                       }
                     },
                   );
