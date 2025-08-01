@@ -240,42 +240,35 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                                 child: const Icon(Icons.category_outlined),
                               )
                             : null,
-                        // hintStyle: const TextStyle(
-                        //   color: Constants.hintStyleColor,
-                        //   fontFamily: 'Jost',
-                        // ),
-                        // contentPadding: EdgeInsets.symmetric(
-                        //   vertical: 16.h,
-                        //   horizontal: 16.w,
-                        // ),
+
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 6.h,
+                          horizontal: 16.w,
+                        ),
                       ),
                       items: categoriesList.map((category) {
                         return DropdownMenuItem<CategoryModel>(
                           value: category,
-                          child: ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            dense: false,
-                            visualDensity: VisualDensity.compact,
-
-                            // key: Key(
-                            //   'list_tile_items_key_${category.id}_expenses_register_page',
-                            // ),
-                            leading: CircleAvatar(
-                              radius: 20.r,
-                              backgroundColor: Color(category.colorCode),
-                              child: Icon(
-                                IconData(
-                                  category.iconCode,
-                                  fontFamily: 'MaterialIcons',
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 20.r,
+                                backgroundColor: Color(category.colorCode),
+                                child: Icon(
+                                  IconData(
+                                    category.iconCode,
+                                    fontFamily: 'MaterialIcons',
+                                  ),
+                                  color: Colors.white,
+                                  size: 20.h,
                                 ),
-                                color: Colors.white,
-                                size: 20.h,
                               ),
-                            ),
-                            title: Text(
-                              category.description,
-                              style: TextStyle(fontSize: 12.sp),
-                            ),
+                              const SizedBox(width: 16),
+                              Text(
+                                category.description,
+                                style: TextStyle(fontSize: 12.sp),
+                              ),
+                            ],
                           ),
                         );
                       }).toList(),
