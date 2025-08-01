@@ -22,9 +22,9 @@ class CategoriesRegisterPage extends StatefulWidget {
     CategoryModel? categoryModel,
     bool isEditing = false,
     super.key,
-  })  : _categoriesController = categoriesController,
-        _categoryModel = categoryModel,
-        _isEditing = isEditing;
+  }) : _categoriesController = categoriesController,
+       _categoryModel = categoryModel,
+       _isEditing = isEditing;
 
   static const router = '/categories/register';
 
@@ -54,8 +54,9 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
   @override
   void initState() {
     super.initState();
-    categoriesTextController =
-        TextEditingController(text: widget._categoryModel?.description);
+    categoriesTextController = TextEditingController(
+      text: widget._categoryModel?.description,
+    );
 
     _icon = ValueNotifier<IconData>(
       IconData(
@@ -71,15 +72,15 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final categoriesControllerState =
-        context.select<CategoriesControllerImpl, CategoriesState>(
-      (categoriesController) => categoriesController.state,
-    );
+    final categoriesControllerState = context
+        .select<CategoriesControllerImpl, CategoriesState>(
+          (categoriesController) => categoriesController.state,
+        );
 
-    final categoriesControllerDeleteState =
-        context.select<CategoriesControllerImpl, CategoriesDeleteState>(
-      (categoriesController) => categoriesController.stateDelete,
-    );
+    final categoriesControllerDeleteState = context
+        .select<CategoriesControllerImpl, CategoriesDeleteState>(
+          (categoriesController) => categoriesController.stateDelete,
+        );
 
     final user = context.select<UserControllerImpl, UserModel?>(
       (userController) => userController.user,
@@ -98,7 +99,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
             ),
             leading: IconButton(
               splashRadius: 20.r,
-              icon: const Icon(Icons.close),
+              icon: Icon(Icons.close, size: 20.h),
               onPressed: () => Navigator.of(context).pop(_edited),
             ),
             actions: [
@@ -128,18 +129,10 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                         },
                       ),
                     ),
-                    SizedBox(
-                      height: 16.h,
-                    ),
+                    SizedBox(height: 16.h),
                     _buildIconAndColor(),
-                    SizedBox(
-                      height: 40.h,
-                    ),
-                    _buildSaveButton(
-                      context,
-                      categoriesControllerState,
-                      user,
-                    ),
+                    SizedBox(height: 40.h),
+                    _buildSaveButton(context, categoriesControllerState, user),
                   ],
                 ),
               ),
@@ -166,18 +159,22 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                 key: const Key(
                   'alert_delete_dialog_key_register_categories_page',
                 ),
-                title: const Text('Deletar categoria'),
+                title: Text(
+                  'Deletar categoria',
+                  style: TextStyle(fontSize: 12.sp),
+                ),
                 content: Text(
                   'Deseja deletar a categoria ${widget._categoryModel?.description}?',
+                  style: TextStyle(fontSize: 12.sp),
                 ),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(dialogContext).pop();
                     },
-                    child: const Text(
+                    child: Text(
                       'Cancelar',
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(color: Colors.black, fontSize: 12.sp),
                     ),
                   ),
                   TextButton(
@@ -191,8 +188,9 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                       try {
                         _edited = true;
 
-                        await widget._categoriesController
-                            .deleteCategory(widget._categoryModel?.id ?? 0);
+                        await widget._categoriesController.deleteCategory(
+                          widget._categoryModel?.id ?? 0,
+                        );
 
                         if (navigatorStateDialog.canPop()) {
                           navigatorStateDialog.pop(_edited);
@@ -218,8 +216,9 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                           onPressed: () {},
                         );
 
-                        _scaffoldMessagedKey.currentState!
-                            .showSnackBar(snackBar);
+                        _scaffoldMessagedKey.currentState!.showSnackBar(
+                          snackBar,
+                        );
                       } on Failure {
                         if (navigatorStateDialog.canPop()) {
                           navigatorStateDialog.pop(_edited);
@@ -235,8 +234,9 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                           onPressed: () {},
                         );
 
-                        _scaffoldMessagedKey.currentState!
-                            .showSnackBar(snackBar);
+                        _scaffoldMessagedKey.currentState!.showSnackBar(
+                          snackBar,
+                        );
                       }
                     },
                     child: stateDelete == CategoriesDeleteState.loading
@@ -248,9 +248,12 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                               strokeWidth: 1.w,
                             ),
                           )
-                        : const Text(
+                        : Text(
                             'Deletar',
-                            style: TextStyle(color: Colors.red),
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12.sp,
+                            ),
                           ),
                   ),
                 ],
@@ -259,10 +262,11 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
           );
         },
         splashRadius: 20.r,
-        icon: const Icon(
+        icon: Icon(
           Icons.delete,
           color: Colors.red,
-          key: Key('icon_delete_key_register_categories_page'),
+          key: const Key('icon_delete_key_register_categories_page'),
+          size: 20.h,
         ),
       ),
     );
@@ -276,10 +280,10 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
     return OndeGasteiButton(
       Text(
         'Salvar',
-        style: TextStyle(color: Colors.white, fontSize: 17.sp),
+        style: TextStyle(color: Colors.white, fontSize: 12.sp),
       ),
       key: const Key('save_button_register_categories_page'),
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: MediaQuery.sizeOf(context).width,
       isLoading: state == CategoriesState.loading,
       onPressed: () async {
         final formValid = _formKey.currentState?.validate() ?? false;
@@ -359,10 +363,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
             return GestureDetector(
               key: const Key('gesture_icon_key_register_categories_page'),
               onTap: () {
-                showDialog<void>(
-                  context: context,
-                  builder: _buildDialogIcons,
-                );
+                showDialog<void>(context: context, builder: _buildDialogIcons);
               },
               child: ValueListenableBuilder<Color>(
                 valueListenable: _color,
@@ -372,9 +373,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
             );
           },
         ),
-        SizedBox(
-          width: 50.w,
-        ),
+        SizedBox(width: 50.w),
         ValueListenableBuilder<Color>(
           valueListenable: _color,
           builder: (context, color, _) {
@@ -392,47 +391,34 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
   }
 
   Column _buildIcon({
-    IconData icon =
-        const IconData(Constants.defaultIconCode, fontFamily: 'MaterialIcons'),
+    IconData icon = const IconData(
+      Constants.defaultIconCode,
+      fontFamily: 'MaterialIcons',
+    ),
     Color color = Colors.grey,
   }) {
     return Column(
       children: [
-        Container(
+        CircleAvatar(
+          radius: 20.r,
+          backgroundColor: color,
           key: const Key('build_icon_key_register_categories_page'),
-          height: 55,
-          width: 55,
-          decoration: BoxDecoration(
-            color: color,
-            border: Border.all(color: Colors.grey[300]!),
-            borderRadius: BorderRadius.all(Radius.circular(100.r)),
-          ),
-          child: Icon(
-            icon,
-            color: Colors.white,
-          ),
+          child: Icon(icon, color: Colors.white, size: 20.h),
         ),
-        const Text('Ícone'),
+        Text('Ícone', style: TextStyle(fontSize: 12.sp)),
       ],
     );
   }
 
-  Column _buildColor({
-    Color color = Colors.grey,
-  }) {
+  Column _buildColor({Color color = Colors.grey}) {
     return Column(
       children: [
-        Container(
+        CircleAvatar(
+          radius: 20.r,
+          backgroundColor: color,
           key: const Key('build_color_key_register_categories_page'),
-          height: 55,
-          width: 55,
-          decoration: BoxDecoration(
-            color: color,
-            border: Border.all(color: Colors.grey[300]!),
-            borderRadius: BorderRadius.all(Radius.circular(100.r)),
-          ),
         ),
-        const Text('Cor'),
+        Text('Cor', style: TextStyle(fontSize: 12.sp)),
       ],
     );
   }
@@ -449,8 +435,8 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount:
                 MediaQuery.of(context).orientation == Orientation.portrait
-                    ? 4
-                    : 10,
+                ? 4
+                : 10,
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
           ),
@@ -462,11 +448,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                 Navigator.of(context).pop();
               },
               borderRadius: BorderRadius.circular(50),
-              child: Icon(
-                icons[index],
-                color: Colors.grey,
-                size: 30,
-              ),
+              child: Icon(icons[index], color: Colors.grey, size: 30),
             );
           },
         ),
@@ -487,8 +469,8 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount:
                 MediaQuery.of(context).orientation == Orientation.portrait
-                    ? 4
-                    : 10,
+                ? 4
+                : 10,
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
           ),
@@ -503,10 +485,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
               },
               borderRadius: BorderRadius.circular(50),
               child: DecoratedBox(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: color,
-                ),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
               ),
             );
           },
@@ -522,8 +501,6 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
       const IconData(Constants.defaultIconCode, fontFamily: 'MaterialIcons'),
     );
 
-    _color = ValueNotifier<Color>(
-      const Color(Constants.defaultColorCode),
-    );
+    _color = ValueNotifier<Color>(const Color(Constants.defaultColorCode));
   }
 }

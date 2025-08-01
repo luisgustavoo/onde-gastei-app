@@ -15,9 +15,9 @@ class AuthControllerImpl extends ChangeNotifier implements AuthController {
     required AuthService service,
     required Log log,
     required LocalStorage localStorage,
-  })  : _service = service,
-        _log = log,
-        _localStorage = localStorage;
+  }) : _service = service,
+       _log = log,
+       _localStorage = localStorage;
 
   final AuthService _service;
   final Log _log;

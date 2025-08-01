@@ -56,9 +56,7 @@ class _HomePageState extends State<HomePage> {
         body: Consumer<HomeControllerImpl>(
           builder: (_, homeController, __) {
             if (homeController.state == HomeState.error) {
-              return const Center(
-                child: Text('Erro ao buscar dados'),
-              );
+              return const Center(child: Text('Erro ao buscar dados'));
             }
 
             if (homeController.state == HomeState.loading) {
@@ -66,17 +64,17 @@ class _HomePageState extends State<HomePage> {
             }
 
             if (homeController.totalExpensesCategoriesList.isEmpty) {
-              return const Center(
-                child: Text('Nenhuma informação'),
+              return Center(
+                child: Text(
+                  'Nenhuma informação',
+                  style: TextStyle(fontSize: 12.sp),
+                ),
               );
             }
 
             return ListView(
               physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.only(
-                left: 16.w,
-                right: 16.w,
-              ),
+              padding: EdgeInsets.only(left: 16.w, right: 16.w),
               children: [
                 // _BuildAppBarHomePage(
                 //   initialDateController: initialDateController,
@@ -87,9 +85,7 @@ class _HomePageState extends State<HomePage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 16.h,
-                    ),
+                    SizedBox(height: 16.h),
                     Text.rich(
                       TextSpan(
                         text: r'R$',
@@ -114,9 +110,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           TextSpan(
-                            text: NumberFormat.compact(
-                              locale: 'pt-BR',
-                            )
+                            text: NumberFormat.compact(locale: 'pt-BR')
                                 .format(
                                   (homeController.totalExpenses -
                                           homeController.totalExpenses
@@ -124,9 +118,7 @@ class _HomePageState extends State<HomePage> {
                                       100,
                                 )
                                 .padLeft(2, '0'),
-                            style: TextStyle(
-                              fontSize: 17.sp,
-                            ),
+                            style: TextStyle(fontSize: 17.sp),
                           ),
                         ],
                       ),
@@ -160,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                                           fontFamily: 'MaterialIcons',
                                         ),
                                         color: Colors.white,
-                                        size: 30,
+                                        size: 25.h,
                                       ),
                                     ),
                                     onTap: () {
@@ -171,7 +163,8 @@ class _HomePageState extends State<HomePage> {
                                           'category_id':
                                               expensesCategories.category.id,
                                           'category_name': expensesCategories
-                                              .category.description,
+                                              .category
+                                              .description,
                                           'date_filter': widget.dateFilter,
                                         },
                                       );
@@ -198,14 +191,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 16.h,
-                    ),
-                    _buildChart(
-                      context,
-                      homeController,
-                      widget.dateFilter,
-                    ),
+                    SizedBox(height: 16.h),
+                    _buildChart(context, homeController, widget.dateFilter),
                     _buildChartSubtitle(homeController),
                   ],
                 ),
@@ -224,6 +211,7 @@ class _HomePageState extends State<HomePage> {
             (e) => Indicator(
               color: Color(e.category.colorCode),
               text: e.category.description,
+
               isSquare: true,
             ),
           )
@@ -243,11 +231,8 @@ class _HomePageState extends State<HomePage> {
         alignment: Alignment.center,
         children: [
           PieChart(
-            PieChartData(
-              sections: _buildPieChartSection(homeController),
-            ),
-            swapAnimationDuration:
-                const Duration(milliseconds: 1000), // Optional
+            PieChartData(sections: _buildPieChartSection(homeController)),
+            duration: const Duration(milliseconds: 1000), // Optional
             // swapAnimationCurve: Curves.easeIn, // Optional
           ),
           Column(
@@ -255,20 +240,15 @@ class _HomePageState extends State<HomePage> {
             children: [
               Text(
                 'Período',
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
               ),
               Text(
-                DateFormat.yMd('pt_BR').format(
-                  dateFilter.initialDate,
-                ),
+                DateFormat.yMd('pt_BR').format(dateFilter.initialDate),
+                style: TextStyle(fontSize: 12.sp),
               ),
               Text(
-                DateFormat.yMd('pt_BR').format(
-                  dateFilter.finalDate,
-                ),
+                DateFormat.yMd('pt_BR').format(dateFilter.finalDate),
+                style: TextStyle(fontSize: 12.sp),
               ),
             ],
           ),
@@ -320,7 +300,8 @@ class _HomePageState extends State<HomePage> {
                   // text: userModel!.name,
                   text: user.name,
                   style: TextStyle(
-                    fontSize: 20.sp, fontWeight: FontWeight.bold,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
                     // fontFamily: 'Jost',
                   ),
                 ),
@@ -332,7 +313,6 @@ class _HomePageState extends State<HomePage> {
       actions: [
         IconButton(
           key: const Key('date_filter_key_home_page'),
-          splashRadius: 20.r,
           onPressed: () async {
             final initialDateController = TextEditingController();
             final finalDateController = TextEditingController();
@@ -389,8 +369,9 @@ class _HomePageState extends State<HomePage> {
                                   if (result != null) {
                                     dateFilter.initialDate = result;
 
-                                    initialDateController.text =
-                                        DateFormat.yMd('pt_BR').format(result);
+                                    initialDateController.text = DateFormat.yMd(
+                                      'pt_BR',
+                                    ).format(result);
 
                                     if (initialDateController.text.isNotEmpty &&
                                         finalDateController.text.isNotEmpty) {
@@ -410,9 +391,7 @@ class _HomePageState extends State<HomePage> {
                                 validator: Validators.date(),
                               ),
                             ),
-                            SizedBox(
-                              width: 8.w,
-                            ),
+                            SizedBox(width: 8.w),
                             Expanded(
                               child: OndeGasteiTextForm(
                                 key: const Key(
@@ -429,8 +408,9 @@ class _HomePageState extends State<HomePage> {
                                   if (result != null) {
                                     dateFilter.finalDate = result;
 
-                                    finalDateController.text =
-                                        DateFormat.yMd('pt_BR').format(result);
+                                    finalDateController.text = DateFormat.yMd(
+                                      'pt_BR',
+                                    ).format(result);
 
                                     if (initialDateController.text.isNotEmpty &&
                                         finalDateController.text.isNotEmpty) {
@@ -452,9 +432,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 16,
-                        ),
+                        const SizedBox(height: 16),
                         ValueListenableBuilder<bool>(
                           valueListenable: disableApplyFilterButton,
                           builder: (context, disable, _) {
@@ -465,6 +443,7 @@ class _HomePageState extends State<HomePage> {
                                   color: disable
                                       ? Colors.grey.shade700
                                       : Colors.white,
+                                  fontSize: 12.sp,
                                 ),
                               ),
                               key: const Key('apply_button_key_home_page'),
@@ -505,10 +484,7 @@ class _HomePageState extends State<HomePage> {
             initialDateController.dispose();
             finalDateController.dispose();
           },
-          icon: const Icon(
-            Icons.date_range,
-            size: 22,
-          ),
+          icon: Icon(Icons.date_range, size: 15.sp),
         ),
       ],
     );

@@ -14,9 +14,17 @@ class ApplicationStartConfig {
   }
 
   Future<void> _firebaseConfig() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } on FirebaseException catch (e) {
+      if (e.code == 'duplicate-app') {
+        debugPrint('[FIREBASE] Firebase já inicializado: ${e.message}');
+      } else {
+        rethrow;
+      }
+    }
   }
 
   Future<void> _loadEnvs() async => Environments.loadEnvs();

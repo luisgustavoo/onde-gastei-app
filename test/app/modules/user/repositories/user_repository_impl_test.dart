@@ -39,8 +39,11 @@ void main() {
     mockLog = MockLog();
     metricsMonitor = MockMetricsMonitor();
     trace = MockTrace();
-    firebaseUser =
-        MockUser(displayName: 'Test', email: 'test@domain.com', uid: '123');
+    firebaseUser = MockUser(
+      displayName: 'Test',
+      email: 'test@domain.com',
+      uid: '123',
+    );
     repository = UserRepositoryImpl(
       restClient: mockRestClient,
       log: mockLog,
@@ -67,41 +70,29 @@ void main() {
 
       final responseData = jsonDecode(jsonData) as Map<String, dynamic>;
 
-      when(
-        () => mockRestClient.get<Map<String, dynamic>>(
-          any(),
-        ),
-      ).thenAnswer(
+      when(() => mockRestClient.get<Map<String, dynamic>>(any())).thenAnswer(
         (_) async =>
             MockRestClientResponse(statusCode: 200, data: responseData),
       );
 
       when(
         () => mockLocalStorage.write<String>(any(), any()),
-      ).thenAnswer((_) async => _);
+      ).thenAnswer((invocation) async => invocation);
 
       //Act
       final userModel = await repository.fetchUserData();
 
       //Assert
       expect(userModel, userModelExpected);
-      verify(
-        () => mockRestClient.get<Map<String, dynamic>>(
-          any(),
-        ),
-      ).called(1);
+      verify(() => mockRestClient.get<Map<String, dynamic>>(any())).called(1);
       metricsMonitor.checkCalledMetrics(trace);
     });
 
     test('Should user not found', () async {
       //Arrange
       when(
-        () => mockRestClient.get<Map<String, dynamic>>(
-          any(),
-        ),
-      ).thenAnswer(
-        (_) async => MockRestClientResponse(statusCode: 200),
-      );
+        () => mockRestClient.get<Map<String, dynamic>>(any()),
+      ).thenAnswer((_) async => MockRestClientResponse(statusCode: 200));
 
       //Act
       final call = repository.fetchUserData;
@@ -109,11 +100,7 @@ void main() {
       //Assert
       expect(call(), throwsA(isA<UserNotFoundException>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      verify(
-        () => mockRestClient.get<Map<String, dynamic>>(
-          any(),
-        ),
-      ).called(1);
+      verify(() => mockRestClient.get<Map<String, dynamic>>(any())).called(1);
       verifyNever(() => mockLocalStorage.write<String>(any(), any()));
       metricsMonitor.checkCalledMetrics(trace);
     });
@@ -121,9 +108,7 @@ void main() {
     test('Should throws exception', () async {
       //Arrange
       when(
-        () => mockRestClient.get<Map<String, dynamic>>(
-          any(),
-        ),
+        () => mockRestClient.get<Map<String, dynamic>>(any()),
       ).thenThrow(RestClientException(error: 'Erro'));
 
       //Act
@@ -132,11 +117,7 @@ void main() {
       //Assert
       expect(call(), throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      verify(
-        () => mockRestClient.get<Map<String, dynamic>>(
-          any(),
-        ),
-      ).called(1);
+      verify(() => mockRestClient.get<Map<String, dynamic>>(any())).called(1);
       verifyNever(() => mockLocalStorage.write<String>(any(), any()));
       metricsMonitor.checkCalledMetrics(trace);
     });
@@ -146,12 +127,7 @@ void main() {
     test('Should update user with success', () async {
       // Arrange
       const mockData = <String, dynamic>{'nome': 'Test'};
-      when(
-        () => mockRestClient.put(
-          any(),
-          data: mockData,
-        ),
-      ).thenAnswer(
+      when(() => mockRestClient.put(any(), data: mockData)).thenAnswer(
         (_) async => MockRestClientResponse(
           statusCode: 200,
           data: <String, dynamic>{
@@ -163,12 +139,7 @@ void main() {
       await repository.updateUserName(1, 'Test');
 
       //Assert
-      verify(
-        () => mockRestClient.put(
-          any(),
-          data: mockData,
-        ),
-      ).called(1);
+      verify(() => mockRestClient.put(any(), data: mockData)).called(1);
 
       metricsMonitor.checkCalledMetrics(trace);
     });
@@ -177,10 +148,7 @@ void main() {
       // Arrange
       const mockData = <String, dynamic>{'nome': 'Test'};
       when(
-        () => mockRestClient.put(
-          any(),
-          data: mockData,
-        ),
+        () => mockRestClient.put(any(), data: mockData),
       ).thenThrow(RestClientException(error: 'Erro'));
 
       //Act
@@ -189,12 +157,7 @@ void main() {
       //Assert
       expect(call(1, 'Test'), throwsA(isA<Failure>()));
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      verify(
-        () => mockRestClient.put(
-          any(),
-          data: mockData,
-        ),
-      ).called(1);
+      verify(() => mockRestClient.put(any(), data: mockData)).called(1);
       metricsMonitor.checkCalledMetrics(trace);
     });
   });
@@ -202,7 +165,9 @@ void main() {
   group('Group test remove local user', () {
     test('Should remove user with success', () async {
       //Arrange
-      when(() => mockLocalStorage.remove(any())).thenAnswer((_) async => _);
+      when(
+        () => mockLocalStorage.remove(any()),
+      ).thenAnswer((invocation) async => invocation);
 
       //Act
       await repository.removeLocalUserData();

@@ -11,8 +11,8 @@ class MockMetricsMonitor extends Mock implements MetricsMonitor {
 
   void mockCalledMetrics(Trace trace) {
     when(() => addTrace(any())).thenAnswer((_) => trace);
-    when(() => startTrace(trace)).thenAnswer((_) async => _);
-    when(() => stopTrace(trace)).thenAnswer((_) async => _);
+    when(() => startTrace(trace)).thenAnswer((invocation) async => invocation);
+    when(() => stopTrace(trace)).thenAnswer((invocation) async => invocation);
   }
 }
 

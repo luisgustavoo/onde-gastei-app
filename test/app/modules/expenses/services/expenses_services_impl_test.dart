@@ -35,7 +35,9 @@ void main() {
   group('Group test register', () {
     test('Should register expense with success', () async {
       // Arrange
-      when(() => repository.register(expenseModel)).thenAnswer((_) async => _);
+      when(
+        () => repository.register(expenseModel),
+      ).thenAnswer((invocation) async => invocation);
       //Act
       await services.register(expenseModel);
 
@@ -58,7 +60,9 @@ void main() {
   group('Group test update', () {
     test('Should update expense with success', () async {
       // Arrange
-      when(() => repository.update(expenseModel, 1)).thenAnswer((_) async => _);
+      when(
+        () => repository.update(expenseModel, 1),
+      ).thenAnswer((invocation) async => invocation);
       //Act
       await services.update(expenseModel, 1);
 
@@ -81,7 +85,9 @@ void main() {
   group('Group test delete', () {
     test('Should delete expense with success', () async {
       // Arrange
-      when(() => repository.delete(any())).thenAnswer((_) async => _);
+      when(
+        () => repository.delete(any()),
+      ).thenAnswer((invocation) async => invocation);
       //Act
       await services.delete(1);
 

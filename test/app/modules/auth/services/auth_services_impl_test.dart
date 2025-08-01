@@ -50,16 +50,16 @@ void main() {
       const email = 'teste@somedomain.com';
       const password = 'password';
       const firebaseUserId = '123456';
-      final mockFirebaseUser =
-          MockUser(uid: firebaseUserId, displayName: 'Test');
-      final mockCredentialFirebaseUser =
-          MockUserCredential(mockUser: mockFirebaseUser);
+      final mockFirebaseUser = MockUser(
+        uid: firebaseUserId,
+        displayName: 'Test',
+      );
+      final mockCredentialFirebaseUser = MockUserCredential(
+        mockUser: mockFirebaseUser,
+      );
       when(
-        () => repository.register(
-          any(),
-          any(),
-        ),
-      ).thenAnswer((_) async => _);
+        () => repository.register(any(), any()),
+      ).thenAnswer((invocation) async => invocation);
 
       when(
         () => firebaseAuth.createUserWithEmailAndPassword(
@@ -68,7 +68,9 @@ void main() {
         ),
       ).thenAnswer((_) async => mockCredentialFirebaseUser);
 
-      when(mockFirebaseUser.sendEmailVerification).thenAnswer((_) async => _);
+      when(
+        mockFirebaseUser.sendEmailVerification,
+      ).thenAnswer((invocation) async => invocation);
       //Act
       await service.register(name, email, password);
 
@@ -90,11 +92,8 @@ void main() {
       const password = 'password';
       final mockCredentialFirebaseUser = MockUserCredential();
       when(
-        () => repository.register(
-          any(),
-          any(),
-        ),
-      ).thenAnswer((_) async => _);
+        () => repository.register(any(), any()),
+      ).thenAnswer((invocation) async => invocation);
 
       when(
         () => firebaseAuth.createUserWithEmailAndPassword(
@@ -117,11 +116,8 @@ void main() {
       const password = 'password';
 
       when(
-        () => repository.register(
-          any(),
-          any(),
-        ),
-      ).thenAnswer((_) async => _);
+        () => repository.register(any(), any()),
+      ).thenAnswer((invocation) async => invocation);
 
       when(
         () => firebaseAuth.createUserWithEmailAndPassword(
@@ -135,12 +131,7 @@ void main() {
 
       //Assert
       expect(() => call(name, email, password), throwsA(isA<Failure>()));
-      verifyNever(
-        () => repository.register(
-          any(),
-          any(),
-        ),
-      );
+      verifyNever(() => repository.register(any(), any()));
       verifyNever(() => MockUser().sendEmailVerification());
     });
   });
@@ -151,21 +142,21 @@ void main() {
       const email = 'test@somedomain.com';
       const password = 'password';
       final mockFirebaseUser = MockUser(uid: 'uid', displayName: 'Test');
-      final mockCredentialFirebaseUser =
-          MockUserCredential(mockUser: mockFirebaseUser);
+      final mockCredentialFirebaseUser = MockUserCredential(
+        mockUser: mockFirebaseUser,
+      );
 
       const confirmLoginModel = ConfirmLoginModel(
         accessToken: 'Bearer test',
         refreshToken: 'Bearer test',
       );
 
-      when(() => mockCredentialFirebaseUser.user?.emailVerified)
-          .thenReturn(true);
+      when(
+        () => mockCredentialFirebaseUser.user?.emailVerified,
+      ).thenReturn(true);
 
       when(
-        () => repository.login(
-          any(),
-        ),
+        () => repository.login(any()),
       ).thenAnswer((_) async => 'Bearer test');
 
       when(
@@ -175,24 +166,23 @@ void main() {
         ),
       ).thenAnswer((_) async => mockCredentialFirebaseUser);
 
-      when(() => repository.confirmLogin())
-          .thenAnswer((_) async => confirmLoginModel);
+      when(
+        () => repository.confirmLogin(),
+      ).thenAnswer((_) async => confirmLoginModel);
 
-      when(() => localStorage.write(any(), any<String>()))
-          .thenAnswer((_) async => _);
+      when(
+        () => localStorage.write(any(), any<String>()),
+      ).thenAnswer((invocation) async => invocation);
 
-      when(() => localSecurityStorage.write(any(), any()))
-          .thenAnswer((_) async => _);
+      when(
+        () => localSecurityStorage.write(any(), any()),
+      ).thenAnswer((invocation) async => invocation);
       //Act
       await service.login(email, password);
 
       //Assert
       expect(mockCredentialFirebaseUser.user, isNotNull);
-      verify(
-        () => repository.login(
-          any(),
-        ),
-      ).called(1);
+      verify(() => repository.login(any())).called(1);
       verify(
         () => firebaseAuth.signInWithEmailAndPassword(
           email: email,
@@ -213,8 +203,9 @@ void main() {
         refreshToken: 'Bearer test',
       );
 
-      when(() => repository.login(any()))
-          .thenAnswer((_) async => 'Bearer test');
+      when(
+        () => repository.login(any()),
+      ).thenAnswer((_) async => 'Bearer test');
 
       when(
         () => firebaseAuth.signInWithEmailAndPassword(
@@ -223,14 +214,17 @@ void main() {
         ),
       ).thenAnswer((_) async => mockCredentialFirebaseUser);
 
-      when(() => repository.confirmLogin())
-          .thenAnswer((_) async => confirmLoginModel);
+      when(
+        () => repository.confirmLogin(),
+      ).thenAnswer((_) async => confirmLoginModel);
 
-      when(() => localStorage.write(any(), any<String>()))
-          .thenAnswer((_) async => _);
+      when(
+        () => localStorage.write(any(), any<String>()),
+      ).thenAnswer((invocation) async => invocation);
 
-      when(() => localSecurityStorage.write(any(), any()))
-          .thenAnswer((_) async => _);
+      when(
+        () => localSecurityStorage.write(any(), any()),
+      ).thenAnswer((invocation) async => invocation);
       //Act
       final call = service.login;
 
@@ -243,40 +237,44 @@ void main() {
     });
 
     test(
-        'Should Firebase User email is not verified (UnverifiedEmailException)',
-        () async {
-      const email = 'test@somedomain.com';
-      const password = 'password';
-      const firebaseUserId = '123456';
+      'Should Firebase User email is not verified (UnverifiedEmailException)',
+      () async {
+        const email = 'test@somedomain.com';
+        const password = 'password';
+        const firebaseUserId = '123456';
 
-      final mockFirebaseUser = MockUser(uid: 'uid', displayName: 'Test');
-      final mockCredentialFirebaseUser =
-          MockUserCredential(mockUser: mockFirebaseUser);
+        final mockFirebaseUser = MockUser(uid: 'uid', displayName: 'Test');
+        final mockCredentialFirebaseUser = MockUserCredential(
+          mockUser: mockFirebaseUser,
+        );
 
-      when(() => mockCredentialFirebaseUser.user!.emailVerified)
-          .thenReturn(false);
+        when(
+          () => mockCredentialFirebaseUser.user!.emailVerified,
+        ).thenReturn(false);
 
-      when(() => repository.login(firebaseUserId))
-          .thenAnswer((_) async => 'Bearer test');
+        when(
+          () => repository.login(firebaseUserId),
+        ).thenAnswer((_) async => 'Bearer test');
 
-      when(
-        () => firebaseAuth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        ),
-      ).thenAnswer((_) async => mockCredentialFirebaseUser);
+        when(
+          () => firebaseAuth.signInWithEmailAndPassword(
+            email: email,
+            password: password,
+          ),
+        ).thenAnswer((_) async => mockCredentialFirebaseUser);
 
-      //Act
-      final call = service.login;
+        //Act
+        final call = service.login;
 
-      //Assert
+        //Assert
 
-      expect(
-        () => call(email, password),
-        throwsA(isA<UnverifiedEmailException>()),
-      );
-      expect(mockCredentialFirebaseUser.user, isNotNull);
-    });
+        expect(
+          () => call(email, password),
+          throwsA(isA<UnverifiedEmailException>()),
+        );
+        expect(mockCredentialFirebaseUser.user, isNotNull);
+      },
+    );
 
     test('Should Should throws FirebaseAuthException', () async {
       // Arrange
@@ -285,8 +283,9 @@ void main() {
 
       const firebaseUserId = '123456';
 
-      when(() => repository.login(firebaseUserId))
-          .thenAnswer((_) async => 'Bearer test');
+      when(
+        () => repository.login(firebaseUserId),
+      ).thenAnswer((_) async => 'Bearer test');
 
       when(
         () => firebaseAuth.signInWithEmailAndPassword(
@@ -308,8 +307,9 @@ void main() {
       const password = 'password';
       const firebaseUserId = '123456';
 
-      when(() => repository.login(firebaseUserId))
-          .thenAnswer((_) async => 'Bearer test');
+      when(
+        () => repository.login(firebaseUserId),
+      ).thenAnswer((_) async => 'Bearer test');
 
       when(
         () => firebaseAuth.signInWithEmailAndPassword(

@@ -83,8 +83,9 @@ void main() {
 
       final password = find.byKey(const ValueKey('password_key_login_page'));
 
-      final loginButton =
-          find.byKey(const ValueKey('button_login_key_login_page'));
+      final loginButton = find.byKey(
+        const ValueKey('button_login_key_login_page'),
+      );
 
       await tester.enterText(email, '');
       await tester.enterText(password, '');
@@ -105,8 +106,9 @@ void main() {
 
       final password = find.byKey(const ValueKey('password_key_login_page'));
 
-      final loginButton =
-          find.byKey(const ValueKey('button_login_key_login_page'));
+      final loginButton = find.byKey(
+        const ValueKey('button_login_key_login_page'),
+      );
 
       await tester.enterText(email, 'test');
       await tester.enterText(password, '');
@@ -120,8 +122,9 @@ void main() {
       expect(find.text('Senha obrigatória'), findsOneWidget);
     });
 
-    testWidgets('Should password must be at least 6 characters long',
-        (tester) async {
+    testWidgets('Should password must be at least 6 characters long', (
+      tester,
+    ) async {
       when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
       await tester.pumpWidget(createLoginPagePage());
@@ -130,8 +133,9 @@ void main() {
 
       final password = find.byKey(const ValueKey('password_key_login_page'));
 
-      final loginButton =
-          find.byKey(const ValueKey('button_login_key_login_page'));
+      final loginButton = find.byKey(
+        const ValueKey('button_login_key_login_page'),
+      );
 
       await tester.enterText(email, 'test@teste.com');
       await tester.enterText(password, '123');
@@ -150,18 +154,20 @@ void main() {
     testWidgets('Should login with success', (tester) async {
       when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
-      when(() => mockAuthControllerImpl.login(any(), any()))
-          .thenAnswer((_) async => _);
+      when(
+        () => mockAuthControllerImpl.login(any(), any()),
+      ).thenAnswer((invocation) async => invocation);
 
-      when(() => mockUserControllerImpl.fetchUserData())
-          .thenAnswer((_) async => _);
+      when(
+        () => mockUserControllerImpl.fetchUserData(),
+      ).thenAnswer((invocation) async => invocation);
 
       when(
         () => mockNavigatorObserver.didReplace(
           oldRoute: any(named: 'oldRoute'),
           newRoute: any(named: 'newRoute'),
         ),
-      ).thenAnswer((_) async => _);
+      ).thenAnswer((invocation) async => invocation);
 
       await tester.pumpWidget(createLoginPagePage());
 
@@ -169,8 +175,9 @@ void main() {
 
       final password = find.byKey(const ValueKey('password_key_login_page'));
 
-      final loginButton =
-          find.byKey(const ValueKey('button_login_key_login_page'));
+      final loginButton = find.byKey(
+        const ValueKey('button_login_key_login_page'),
+      );
 
       await tester.enterText(email, 'test@test.com');
       await tester.enterText(password, '123456');
@@ -191,8 +198,9 @@ void main() {
     testWidgets('Should trows UserNotFoundException', (tester) async {
       when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
-      when(() => mockAuthControllerImpl.login(any(), any()))
-          .thenThrow(UserNotFoundException());
+      when(
+        () => mockAuthControllerImpl.login(any(), any()),
+      ).thenThrow(UserNotFoundException());
 
       await tester.pumpWidget(createLoginPagePage());
 
@@ -200,8 +208,9 @@ void main() {
 
       final password = find.byKey(const ValueKey('password_key_login_page'));
 
-      final loginButton =
-          find.byKey(const ValueKey('button_login_key_login_page'));
+      final loginButton = find.byKey(
+        const ValueKey('button_login_key_login_page'),
+      );
 
       await tester.enterText(email, 'test@teste.com');
       await tester.enterText(password, '123456');
@@ -220,8 +229,9 @@ void main() {
     testWidgets('Should trows UnverifiedEmailException', (tester) async {
       when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
-      when(() => mockAuthControllerImpl.login(any(), any()))
-          .thenThrow(UnverifiedEmailException());
+      when(
+        () => mockAuthControllerImpl.login(any(), any()),
+      ).thenThrow(UnverifiedEmailException());
 
       await tester.pumpWidget(createLoginPagePage());
 
@@ -229,8 +239,9 @@ void main() {
 
       final password = find.byKey(const ValueKey('password_key_login_page'));
 
-      final loginButton =
-          find.byKey(const ValueKey('button_login_key_login_page'));
+      final loginButton = find.byKey(
+        const ValueKey('button_login_key_login_page'),
+      );
 
       await tester.enterText(email, 'test@teste.com');
       await tester.enterText(password, '123456');
@@ -252,8 +263,9 @@ void main() {
     testWidgets('Should trows generic Exception', (tester) async {
       when(() => mockAuthControllerImpl.state).thenReturn(AuthState.idle);
 
-      when(() => mockAuthControllerImpl.login(any(), any()))
-          .thenThrow(Exception());
+      when(
+        () => mockAuthControllerImpl.login(any(), any()),
+      ).thenThrow(Exception());
 
       await tester.pumpWidget(createLoginPagePage());
 
@@ -261,8 +273,9 @@ void main() {
 
       final password = find.byKey(const ValueKey('password_key_login_page'));
 
-      final loginButton =
-          find.byKey(const ValueKey('button_login_key_login_page'));
+      final loginButton = find.byKey(
+        const ValueKey('button_login_key_login_page'),
+      );
 
       await tester.enterText(email, 'test@teste.com');
       await tester.enterText(password, '123456');

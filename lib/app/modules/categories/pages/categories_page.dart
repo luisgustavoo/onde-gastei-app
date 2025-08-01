@@ -44,8 +44,11 @@ class CategoriesPage extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () async {
-                final edited = await Navigator.of(context)
-                    .pushNamed(CategoriesRegisterPage.router) as bool?;
+                final edited =
+                    await Navigator.of(
+                          context,
+                        ).pushNamed(CategoriesRegisterPage.router)
+                        as bool?;
 
                 if (edited != null) {
                   if (edited == true) {
@@ -56,18 +59,15 @@ class CategoriesPage extends StatelessWidget {
               icon: Icon(
                 Icons.add_circle,
                 color: Theme.of(context).primaryColor,
-                size: 30.sp,
+                size: 20.h,
               ),
-              splashRadius: 20.r,
             ),
           ],
         ),
         body: Consumer<CategoriesControllerImpl>(
           builder: (context, categoriesController, _) {
             if (categoriesController.state == CategoriesState.error) {
-              return const Center(
-                child: Text('Erro ao buscar categorias'),
-              );
+              return const Center(child: Text('Erro ao buscar categorias'));
             }
 
             if (categoriesController.state == CategoriesState.loading) {
@@ -75,9 +75,7 @@ class CategoriesPage extends StatelessWidget {
             }
 
             if (categoriesController.categoriesList.isEmpty) {
-              return const Center(
-                child: Text('Nenhuma informação'),
-              );
+              return const Center(child: Text('Nenhuma informação'));
             }
 
             return ListView.builder(
@@ -89,13 +87,15 @@ class CategoriesPage extends StatelessWidget {
                 return ListTile(
                   key: Key('list_tile_key_${index}_categories_page'),
                   onTap: () async {
-                    final edited = await Navigator.of(context).pushNamed(
-                      CategoriesRegisterPage.router,
-                      arguments: <String, dynamic>{
-                        'category': category,
-                        'editing': true,
-                      },
-                    ) as bool?;
+                    final edited =
+                        await Navigator.of(context).pushNamed(
+                              CategoriesRegisterPage.router,
+                              arguments: <String, dynamic>{
+                                'category': category,
+                                'editing': true,
+                              },
+                            )
+                            as bool?;
 
                     if (edited != null) {
                       if (edited == true) {
@@ -118,15 +118,17 @@ class CategoriesPage extends StatelessWidget {
                     }
                   },
                   leading: CircleAvatar(
+                    radius: 20.r,
                     backgroundColor: Color(category.colorCode),
                     child: Icon(
                       IconData(category.iconCode, fontFamily: 'MaterialIcons'),
                       color: Colors.white,
+                      size: 20.h,
                     ),
                   ),
                   title: Text(
                     category.description,
-                    // style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 13.sp),
                   ),
                 );
               },

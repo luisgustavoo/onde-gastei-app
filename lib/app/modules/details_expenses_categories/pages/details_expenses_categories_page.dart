@@ -51,18 +51,20 @@ class _DetailsExpensesCategoriesPageState
 
   @override
   Widget build(BuildContext context) {
-    final state = context.select<DetailsExpensesCategoriesControllerImpl,
-        DetailsExpensesCategoriesState>((controller) => controller.state);
+    final state = context
+        .select<
+          DetailsExpensesCategoriesControllerImpl,
+          DetailsExpensesCategoriesState
+        >((controller) => controller.state);
 
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
         leading: IconButton(
-          splashRadius: 20.r,
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: const Icon(Icons.close),
+          icon: Icon(Icons.close, size: 20.h),
         ),
         title: Text(
           widget.categoryName,
@@ -73,9 +75,7 @@ class _DetailsExpensesCategoriesPageState
         builder: (_, expensesController, __) {
           if (state == DetailsExpensesCategoriesState.error) {
             return const Center(
-              child: Text(
-                'Erro a buscar despesas por categoria',
-              ),
+              child: Text('Erro a buscar despesas por categoria'),
             );
           }
 
@@ -94,22 +94,21 @@ class _DetailsExpensesCategoriesPageState
                 child: Row(
                   children: [
                     Text(
-                      DateFormat.E('pt_BR').format(
-                        DateTime.parse(groupByValue),
-                      ),
+                      DateFormat.E(
+                        'pt_BR',
+                      ).format(DateTime.parse(groupByValue)),
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const Text(','),
-                    SizedBox(
-                      width: 5.w,
-                    ),
+                    SizedBox(width: 5.w),
                     Text(
-                      DateFormat('dd/MM/y', 'pt_BR').format(
-                        DateTime.parse(groupByValue),
-                      ),
+                      DateFormat(
+                        'dd/MM/y',
+                        'pt_BR',
+                      ).format(DateTime.parse(groupByValue)),
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
@@ -135,10 +134,7 @@ class _DetailsExpensesCategoriesPageState
               );
             },
             itemBuilder: (context, expense) {
-              return ExpensesListTile(
-                onTap: () {},
-                expenseModel: expense,
-              );
+              return ExpensesListTile(onTap: () {}, expenseModel: expense);
             },
           );
 

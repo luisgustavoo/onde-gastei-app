@@ -27,10 +27,16 @@ void main() {
   group('group test register', () {
     test('Should register category with success', () async {
       // Arrange
-      const categoryModel =
-          CategoryModel(id: 1, description: 'Test', iconCode: 1, colorCode: 1);
+      const categoryModel = CategoryModel(
+        id: 1,
+        description: 'Test',
+        iconCode: 1,
+        colorCode: 1,
+      );
 
-      when(() => service.register(categoryModel)).thenAnswer((_) async => _);
+      when(
+        () => service.register(categoryModel),
+      ).thenAnswer((invocation) async => invocation);
       //Act
       await controller.register(categoryModel);
 
@@ -40,8 +46,12 @@ void main() {
 
     test('Should throws exception', () async {
       // Arrange
-      const categoryModel =
-          CategoryModel(id: 1, description: 'Test', iconCode: 1, colorCode: 1);
+      const categoryModel = CategoryModel(
+        id: 1,
+        description: 'Test',
+        iconCode: 1,
+        colorCode: 1,
+      );
 
       when(() => service.register(categoryModel)).thenThrow(Exception());
       //Act
@@ -57,25 +67,34 @@ void main() {
     test('Should update category with success', () async {
       // Arrange
       const categoryId = 1;
-      const categoryInputModel =
-          CategoryInputModel(description: 'Test', iconCode: 1, colorCode: 1);
-      when(() => service.updateCategory(categoryId, categoryInputModel))
-          .thenAnswer((_) async => _);
+      const categoryInputModel = CategoryInputModel(
+        description: 'Test',
+        iconCode: 1,
+        colorCode: 1,
+      );
+      when(
+        () => service.updateCategory(categoryId, categoryInputModel),
+      ).thenAnswer((invocation) async => invocation);
       //Act
       await controller.updateCategory(categoryId, categoryInputModel);
 
       //Assert
-      verify(() => service.updateCategory(categoryId, categoryInputModel))
-          .called(1);
+      verify(
+        () => service.updateCategory(categoryId, categoryInputModel),
+      ).called(1);
     });
 
     test('Should throws exception', () async {
       // Arrange
       const categoryId = 1;
-      const categoryInputModel =
-          CategoryInputModel(description: 'Test', iconCode: 1, colorCode: 1);
-      when(() => service.updateCategory(categoryId, categoryInputModel))
-          .thenThrow(Exception());
+      const categoryInputModel = CategoryInputModel(
+        description: 'Test',
+        iconCode: 1,
+        colorCode: 1,
+      );
+      when(
+        () => service.updateCategory(categoryId, categoryInputModel),
+      ).thenThrow(Exception());
       //Act
       final call = controller.updateCategory;
 
@@ -84,8 +103,9 @@ void main() {
         () => call(categoryId, categoryInputModel),
         throwsA(isA<Failure>()),
       );
-      verify(() => service.updateCategory(categoryId, categoryInputModel))
-          .called(1);
+      verify(
+        () => service.updateCategory(categoryId, categoryInputModel),
+      ).called(1);
     });
   });
 
@@ -96,7 +116,9 @@ void main() {
         () => service.expenseQuantityByCategoryId(any()),
       ).thenAnswer((_) async => 0);
 
-      when(() => service.deleteCategory(any())).thenAnswer((_) async => _);
+      when(
+        () => service.deleteCategory(any()),
+      ).thenAnswer((invocation) async => invocation);
 
       //Act
       await controller.deleteCategory(1);
@@ -111,7 +133,9 @@ void main() {
         () => service.expenseQuantityByCategoryId(any()),
       ).thenAnswer((_) async => 1);
 
-      when(() => service.deleteCategory(any())).thenAnswer((_) async => _);
+      when(
+        () => service.deleteCategory(any()),
+      ).thenAnswer((invocation) async => invocation);
 
       //Act
       final call = controller.deleteCategory;
@@ -151,8 +175,9 @@ void main() {
         ),
       ];
 
-      when(() => service.findCategories(any()))
-          .thenAnswer((_) async => categoriesExpected);
+      when(
+        () => service.findCategories(any()),
+      ).thenAnswer((_) async => categoriesExpected);
 
       //Act
 
