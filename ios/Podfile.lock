@@ -287,7 +287,7 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfigInterop: 98897a64aa372eac3c5b3fe2816594ccfaac55ef
   FirebaseSessions: c4d40a97f88f9eaff2834d61b4fea0a522d62123
   FirebaseSharedSwift: 672954eac7b141d6954fab9a32d45d6b1d922df8
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_native_splash: 35ddbc7228eafcb3969dcc5f1fbbe27c1145a4f0
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
   GoogleAppMeasurement: fc0817122bd4d4189164f85374e06773b9561896

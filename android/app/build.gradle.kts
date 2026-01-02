@@ -29,13 +29,13 @@ val keystoreProperties = Properties().apply {
 
 android {
     namespace = "br.app.ondegastei.onde_gastei_app"
-    compileSdk = localProperties.getProperty("flutter.compileSdkVersion")?.toInt() ?: 35
+    compileSdk = localProperties.getProperty("flutter.compileSdkVersion")?.toInt() ?: 36
     ndkVersion = flutter.ndkVersion
 
     defaultConfig {
         applicationId = "br.app.ondegastei.onde_gastei_app"
-        minSdk = localProperties.getProperty("flutter.minSdkVersion")?.toInt() ?: 21
-        targetSdk =  localProperties.getProperty("flutter.targetSdkVersion")?.toInt() ?: 35
+        minSdk = localProperties.getProperty("flutter.minSdkVersion")?.toInt() ?: 24
+        targetSdk =  localProperties.getProperty("flutter.targetSdkVersion")?.toInt() ?: 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
