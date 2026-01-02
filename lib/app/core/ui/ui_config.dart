@@ -17,7 +17,7 @@ class UiConfig {
         statusBarIconBrightness: Brightness.dark,
         // statusBarBrightness: Brightness.dark,
       ),
-      color: Colors.transparent,
+      backgroundColor: Colors.transparent,
       elevation: 0,
       titleTextStyle: TextStyle(
         color: Constants.titleTextStyleColor,

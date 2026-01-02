@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:onde_gastei_app/app/core/exceptions/failure.dart';
-import 'package:onde_gastei_app/app/core/helpers/constants.dart';
 import 'package:onde_gastei_app/app/core/helpers/input_formatter/currency_input_formatter_ptbr.dart';
 import 'package:onde_gastei_app/app/core/helpers/input_formatter/date_input_formatter_ptbr.dart';
 import 'package:onde_gastei_app/app/core/helpers/validators/validators.dart';
@@ -221,7 +220,7 @@ class _ExpensesRegisterPageState extends State<ExpensesRegisterPage> {
                           _selectedCategory = category;
                         });
                       },
-                      value: _selectedCategory,
+                      initialValue: _selectedCategory,
                       hint: Text(
                         'Selecione a categoria',
                         style: TextStyle(
