@@ -301,7 +301,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
               final categoryModel = CategoryModel(
                 description: categoriesTextController.text,
                 iconCode: _icon.value.codePoint,
-                colorCode: _color.value.value,
+                colorCode: _color.value.toARGB32(),
                 userId: user?.userId ?? 0,
               );
 
@@ -314,7 +314,7 @@ class _CategoriesRegisterPageState extends State<CategoriesRegisterPage> {
                 id: widget._categoryModel!.id,
                 description: categoriesTextController.text,
                 iconCode: _icon.value.codePoint,
-                colorCode: _color.value.value,
+                colorCode: _color.value.toARGB32(),
               );
 
               await widget._categoriesController.updateCategory(
