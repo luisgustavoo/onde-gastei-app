@@ -14,10 +14,10 @@ class AuthInterceptor extends Interceptor {
     required LocalStorage localStorage,
     required LocalSecurityStorage localSecurityStorage,
     required Log log,
-  })  : _restClient = restClient,
-        _localStorage = localStorage,
-        _localSecurityStorage = localSecurityStorage,
-        _log = log;
+  }) : _restClient = restClient,
+       _localStorage = localStorage,
+       _localSecurityStorage = localSecurityStorage,
+       _log = log;
 
   final LocalStorage _localStorage;
 
@@ -37,8 +37,9 @@ class AuthInterceptor extends Interceptor {
         options.extra[Constants.restClientAuthRequiredKey] as bool? ?? false;
 
     if (authRequired == true) {
-      final accessToken =
-          await _localStorage.read<String>(Constants.accessTokenKey);
+      final accessToken = await _localStorage.read<String>(
+        Constants.accessTokenKey,
+      );
       if (accessToken == null) {
         //logout
 
@@ -51,7 +52,7 @@ class AuthInterceptor extends Interceptor {
         );
       }
 
-      options.headers['Authorization'] = accessToken;
+      options.headers['Authorization'] = 'Bearer $accessToken';
     } else {
       options.headers.remove('Authorization');
     }
@@ -118,14 +119,16 @@ class AuthInterceptor extends Interceptor {
 
   Future<void> _refreshToken() async {
     try {
-      final refreshToken =
-          await _localSecurityStorage.read(Constants.refreshTokenKey);
-
-      final refreshTokenResult =
-          await _restClient.auth().put<Map<String, dynamic>>(
-        '/auth/refresh',
-        data: <String, dynamic>{'refresh_token': refreshToken},
+      final refreshToken = await _localSecurityStorage.read(
+        Constants.refreshTokenKey,
       );
+
+      final refreshTokenResult = await _restClient
+          .auth()
+          .put<Map<String, dynamic>>(
+            '/auth/refresh',
+            data: <String, dynamic>{'refresh_token': 'Bearer $refreshToken'},
+          );
 
       if (refreshTokenResult.data != null) {
         await _localSecurityStorage.write(
@@ -155,12 +158,12 @@ class AuthInterceptor extends Interceptor {
       final requestOptions = err.requestOptions;
 
       final response = await _restClient.auth().request<dynamic>(
-            requestOptions.path,
-            method: requestOptions.method,
-            data: requestOptions.data,
-            headers: requestOptions.headers,
-            queryParameters: requestOptions.queryParameters,
-          );
+        requestOptions.path,
+        method: requestOptions.method,
+        data: requestOptions.data,
+        headers: requestOptions.headers,
+        queryParameters: requestOptions.queryParameters,
+      );
 
       handler.resolve(
         Response<dynamic>(

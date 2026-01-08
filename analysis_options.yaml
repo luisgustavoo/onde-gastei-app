@@ -11,6 +11,8 @@
 
 # include: package:flutter_lints/flutter.yaml
 include: package:hard_analyser/analysis_options.yaml
+formatter: 
+  trailing_commas: preserve
 
 
 linter:

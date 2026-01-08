@@ -111,32 +111,32 @@ class ExpensesPage extends StatelessWidget {
                 ],
               ),
             ),
-            Consumer<ExpensesControllerImpl>(
-              builder: (context, expensesController, _) {
-                if (expensesController.state == ExpensesState.error) {
-                  return Center(
-                    child: Text(
-                      'Erro ao buscar despesas',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  );
-                }
+            Expanded(
+              child: Consumer<ExpensesControllerImpl>(
+                builder: (context, expensesController, _) {
+                  if (expensesController.state == ExpensesState.error) {
+                    return Center(
+                      child: Text(
+                        'Erro ao buscar despesas',
+                        style: TextStyle(fontSize: 12.sp),
+                      ),
+                    );
+                  }
 
-                if (expensesController.state == ExpensesState.loading) {
-                  return const OndeGasteiLoading();
-                }
+                  if (expensesController.state == ExpensesState.loading) {
+                    return const OndeGasteiLoading();
+                  }
 
-                if (expensesController.expensesList.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'Nenhuma informação',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  );
-                }
+                  if (expensesController.expensesList.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'Nenhuma informação',
+                        style: TextStyle(fontSize: 12.sp),
+                      ),
+                    );
+                  }
 
-                return Expanded(
-                  child: GroupedListView<ExpenseModel, String>(
+                  return GroupedListView<ExpenseModel, String>(
                     groupBy: (element) => element.date.toString(),
                     elements: expensesController.expensesList,
                     sort: false,
@@ -189,9 +189,9 @@ class ExpensesPage extends StatelessWidget {
                     itemBuilder: (context, expense) {
                       return _buildExpensesListTile(context, expense, user);
                     },
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ],
         ),

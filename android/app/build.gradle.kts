@@ -10,12 +10,12 @@ plugins {
     id("com.google.firebase.firebase-perf") version "1.4.2" apply false
 }
 
-val localProperties = Properties().apply {
-    val file = rootProject.file("local.properties")
-    if (file.exists()) {
-        file.inputStream().use { load(it) }
-    }
-}
+// val localProperties = Properties().apply {
+//     val file = rootProject.file("local.properties")
+//     if (file.exists()) {
+//         file.inputStream().use { load(it) }
+//     }
+// }
 
 val keystoreProperties = Properties().apply {
     val file = rootProject.file("key.properties")
@@ -29,13 +29,13 @@ val keystoreProperties = Properties().apply {
 
 android {
     namespace = "br.app.ondegastei.onde_gastei_app"
-    compileSdk = localProperties.getProperty("flutter.compileSdkVersion")?.toInt() ?: 36
+    compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     defaultConfig {
         applicationId = "br.app.ondegastei.onde_gastei_app"
-        minSdk = localProperties.getProperty("flutter.minSdkVersion")?.toInt() ?: 24
-        targetSdk =  localProperties.getProperty("flutter.targetSdkVersion")?.toInt() ?: 36
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
